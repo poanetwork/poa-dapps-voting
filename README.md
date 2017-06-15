@@ -32,11 +32,6 @@ Path: `./assets/javascripts/config.json`
 {
   "environment": "live",
   "Ethereum": {
-    "dev": {
-      "rpc": "http://127.0.0.1:8545",
-      "account": "Oracles_contract_owner_address",
-      "contractAddress": "Oracles_contract_address"
-    },
     "live": {
       "rpc": "http://127.0.0.1:8540",
       "account": "Oracles_contract_owner_address",
