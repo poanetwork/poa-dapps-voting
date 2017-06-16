@@ -46,7 +46,7 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
           <div class="vote-header">
             <div class="vote-person left">
               <img src="./assets/images/person.png" alt="" class="vote-person-img">
-              <p class="vote-person-name">` + (ballotPropsObj["owner"]?ballotPropsObj["owner"]:`Allison Williams`) + `</p>
+              <p class="vote-person-name">` + (ballotPropsObj["owner"]?ballotPropsObj["owner"]:``) + `</p>
               <div class="vote-person-create">` + formatDate(new Date(parseInt(ballotPropsObj["createdAt"])*1000), "MM/dd/yyyy h:mm TT") + `</div>
             </div>
             <div class="vote-time right">

@@ -83,7 +83,7 @@ function formatDate(date, format, utc) {
 };
 
 function getDateDiff(dateStart, dateEnd) {
-    var periodInMinutes = Math.floor((dateEnd - dateStart)/60);
+    var periodInMinutes = Math.floor((dateEnd - dateStart)/60) + 1;
     if (periodInMinutes <= 0) {
         return "00:00";
     }
@@ -92,7 +92,7 @@ function getDateDiff(dateStart, dateEnd) {
     var hoursStr = hours.toString();
     if (hours < 9)
         hoursStr = "0" + hours.toString();
-    var minutes = periodInMinutes%60;
+    var minutes = periodInMinutes%60 + 1;
     var minutesStr = minutes.toString();
     if (minutes < 9)
         minutesStr = "0" + minutes.toString();

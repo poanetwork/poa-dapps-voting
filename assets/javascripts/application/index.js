@@ -121,7 +121,7 @@ $(function() {
 				var isAddress = web3.isAddress($("#key").val());
 				if (!isAddress) {
 					$(".loading-container").hide();
-					showAlert(err, "Incorrect mining key");
+					showAlert(null, "Incorrect mining key");
 					return;
 				}
 

@@ -95,12 +95,21 @@ function addValidator(api, func, validatorViewObj, address, contractAddr, cb) {
   });
 }
 function showAlert(err, msg) {
-	if (err.type != "REQUEST_REJECTED") {
+	if (!err) {
 		swal({
 		  title: "Error",
 		  text: msg,
 		  type: "error"
 		});
+	}
+	else {
+		if (err.type != "REQUEST_REJECTED") {
+			swal({
+			  title: "Error",
+			  text: msg,
+			  type: "error"
+			});
+		}
 	}
 }
 function generateBallotID() {
@@ -433,7 +442,7 @@ function formatDate(date, format, utc) {
 };
 
 function getDateDiff(dateStart, dateEnd) {
-    var periodInMinutes = Math.floor((dateEnd - dateStart)/60);
+    var periodInMinutes = Math.floor((dateEnd - dateStart)/60) + 1;
     if (periodInMinutes <= 0) {
         return "00:00";
     }
@@ -442,7 +451,7 @@ function getDateDiff(dateStart, dateEnd) {
     var hoursStr = hours.toString();
     if (hours < 9)
         hoursStr = "0" + hours.toString();
-    var minutes = periodInMinutes%60;
+    var minutes = periodInMinutes%60 + 1;
     var minutesStr = minutes.toString();
     if (minutes < 9)
         minutesStr = "0" + minutes.toString();
@@ -752,7 +761,7 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
           <div class="vote-header">
             <div class="vote-person left">
               <img src="./assets/images/person.png" alt="" class="vote-person-img">
-              <p class="vote-person-name">` + (ballotPropsObj["owner"]?ballotPropsObj["owner"]:`Allison Williams`) + `</p>
+              <p class="vote-person-name">` + (ballotPropsObj["owner"]?ballotPropsObj["owner"]:``) + `</p>
               <div class="vote-person-create">` + formatDate(new Date(parseInt(ballotPropsObj["createdAt"])*1000), "MM/dd/yyyy h:mm TT") + `</div>
             </div>
             <div class="vote-time right">
@@ -946,7 +955,7 @@ $(function() {
 				var isAddress = web3.isAddress($("#key").val());
 				if (!isAddress) {
 					$(".loading-container").hide();
-					showAlert(err, "Incorrect mining key");
+					showAlert(null, "Incorrect mining key");
 					return;
 				}
 
