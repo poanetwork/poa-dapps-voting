@@ -137,24 +137,31 @@ $(function() {
 							return;
 						}
 
-						addValidator(api, 
-							"addValidator(address,uint256,uint256,uint256,string,string,string)",
-							validatorViewObj,
-							votingKey,
-							config.Ethereum[config.environment].contractAddress,
-							function(txHash, err) {
-								if (err) {
-									$(".loading-container").hide();
-									showAlert(err, err.message);
-									return;
-								}
+						if (!ballotViewObj.addAction) {
+							getTxCallBack(txHash, function() {
+								$(".loading-container").hide();
+								$(".back").trigger("click");
+							});
+						} else {
+							addValidator(api, 
+								"addValidator(address,uint256,uint256,uint256,string,string,string)",
+								validatorViewObj,
+								votingKey,
+								config.Ethereum[config.environment].contractAddress,
+								function(txHash, err) {
+									if (err) {
+										$(".loading-container").hide();
+										showAlert(err, err.message);
+										return;
+									}
 
-								getTxCallBack(txHash, function() {
-									$(".loading-container").hide();
-									$(".back").trigger("click");
-								});
-							}
-						);
+									getTxCallBack(txHash, function() {
+										$(".loading-container").hide();
+										$(".back").trigger("click");
+									});
+								}
+							);
+						}
 					}
 				);
 			});
