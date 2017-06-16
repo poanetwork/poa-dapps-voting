@@ -9,13 +9,15 @@ function addBallot(api, func, ballotViewObj, address, contractAddr, cb) {
 
     if (ballotViewObj.miningKey.indexOf("0x") > -1)
       ballotViewObj.miningKey = ballotViewObj.miningKey.substr(2);
-
     ballotViewObj.miningKey = ballotViewObj.miningKey.toLowerCase();
 
     if (ballotViewObj.owner.indexOf("0x") > -1)
       ballotViewObj.owner = ballotViewObj.owner.substr(2);
-
     ballotViewObj.owner = ballotViewObj.owner.toLowerCase();
+
+    if (ballotViewObj.affectedKey.indexOf("0x") > -1)
+      ballotViewObj.affectedKey = ballotViewObj.affectedKey.substr(2);
+    ballotViewObj.affectedKey = ballotViewObj.affectedKey.toLowerCase();
 
     ballotViewObj.addAction = JSON.parse(ballotViewObj.addAction);
 

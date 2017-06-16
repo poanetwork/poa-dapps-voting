@@ -210,7 +210,7 @@ $(function() {
 			function(txHash, err) {
 				if (err) {
 					$(".loading-container").hide();
-					showAlert(err, "You are already voted");
+					showAlert(err, "You are already voted or have no rights to vote");
 					return;
 				}
 
