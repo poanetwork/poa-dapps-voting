@@ -28,7 +28,7 @@ function getBallots(api, func, acc, contractAddress, cb) {
 
 			var ballotsArrayOut = [];
 			var iasync = [];
-			var ballotDataCount = 10;
+			var ballotDataCount = 12;
 			for (var i = 0; i < ballotsArray.length; i++) {
 				iasync.push(0);
 				getBallotMemo(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
@@ -74,6 +74,16 @@ function getBallots(api, func, acc, contractAddress, cb) {
 				getBallotMiningKey(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
 					iasync[_i]++;
 					ballotsArrayOut = getBallotsPropertyCallback("miningKey", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
+				});
+
+				getBallotAffectedKey(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
+					iasync[_i]++;
+					ballotsArrayOut = getBallotsPropertyCallback("affectedKey", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
+				});
+
+				getBallotAffectedKeyType(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
+					iasync[_i]++;
+					ballotsArrayOut = getBallotsPropertyCallback("affectedKeyType", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
 				});
 
 				getBallotOwner(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {

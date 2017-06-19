@@ -28,13 +28,22 @@
       }
     }
 
-    &-title {
+    %title {
       position: relative;
       margin-bottom: 20px;
       color: #8197a2;
       text-transform: uppercase;
       font-size: 12px;
       font-weight: bold;
+    }
+
+    &-title {
+      @extend %title;
+
+      &-secondary {
+        @extend %title;
+        margin-top: 30px;
+      }
     }
 
     &-description {

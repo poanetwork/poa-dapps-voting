@@ -22,10 +22,15 @@
         and a reason.
       </div>
       <label for="key">Mining key</label>
-      <input type="text" id="key">
-      <div class="new-ballot-description">
-        Affected mining key
-      </div>
+      <input type="text" id="mining-key">
+      <label for="affected-key-type">Affected key type</label>
+      <select type="text" id="affected-key-type" class="key-select">
+        <option name="affected-key-type-select" value="0">mining key</option>
+        <option name="affected-key-type-select" value="1">voting key</option>
+        <option name="affected-key-type-select" value="2" selected>payout key</option>
+      </select>
+      <label for="affected-key">Affected key</label>
+      <input type="text" id="affected-key">
       <input type="radio" name="type" id="type_add" value=1 checked>
       <label class="radio" for="type_add">Add</label>
       <input type="radio" name="type" id="type_remove" value=0>

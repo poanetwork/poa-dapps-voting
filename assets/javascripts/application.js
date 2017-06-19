@@ -514,7 +514,7 @@ function getBallots(api, func, acc, contractAddress, cb) {
 
 			var ballotsArrayOut = [];
 			var iasync = [];
-			var ballotDataCount = 10;
+			var ballotDataCount = 12;
 			for (var i = 0; i < ballotsArray.length; i++) {
 				iasync.push(0);
 				getBallotMemo(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
@@ -560,6 +560,16 @@ function getBallots(api, func, acc, contractAddress, cb) {
 				getBallotMiningKey(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
 					iasync[_i]++;
 					ballotsArrayOut = getBallotsPropertyCallback("miningKey", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
+				});
+
+				getBallotAffectedKey(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
+					iasync[_i]++;
+					ballotsArrayOut = getBallotsPropertyCallback("affectedKey", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
+				});
+
+				getBallotAffectedKeyType(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
+					iasync[_i]++;
+					ballotsArrayOut = getBallotsPropertyCallback("affectedKeyType", api, contractAddress, resp, _i, iasync, ballotsArray, ballotDataCount, ballotsArrayOut, cb);
 				});
 
 				getBallotOwner(api, acc, ballotsArray[i], i, contractAddress, function(_i, resp) {
@@ -642,6 +652,16 @@ function getBallotMiningKey(api, acc, ballotID, i, contractAddr, cb) {
 	getContractAddressDataFromAddressKey(api, acc, func, ballotID, i, contractAddr, cb);
 }
 
+function getBallotAffectedKey(api, acc, ballotID, i, contractAddr, cb) {
+	var func = "getBallotAffectedKey(uint256)";
+	getContractAddressDataFromAddressKey(api, acc, func, ballotID, i, contractAddr, cb);
+}
+
+function getBallotAffectedKeyType(api, acc, ballotID, i, contractAddr, cb) {
+	var func = "getBallotAffectedKeyType(uint256)";
+	getContractIntDataFromAddressKey(api, acc, func, ballotID, i, contractAddr, cb);
+}
+
 function getBallotOwner(api, acc, ballotID, i, contractAddr, cb) {
 	var func = "getBallotOwner(uint256)";
 	getContractStringDataFromAddressKey(api, acc, func, ballotID, i, contractAddr, cb);
@@ -649,7 +669,7 @@ function getBallotOwner(api, acc, ballotID, i, contractAddr, cb) {
 
 function getBallotData(api, acc, ballotID, contractAddress, cb) {
 	var iasync = 0;
-	var ballotDataCount = 10;
+	var ballotDataCount = 12;
 	var ballot = {};
 	getBallotMemo(api, acc, ballotID, null, contractAddress, function(_i, resp) {
 		iasync++;
@@ -694,6 +714,16 @@ function getBallotData(api, acc, ballotID, contractAddress, cb) {
 	getBallotMiningKey(api, acc, ballotID, null, contractAddress, function(_i, resp) {
 		iasync++;
 		ballot = getBallotPropertyCallback("miningKey", api, contractAddress, ballotID, resp, iasync, ballot, ballotDataCount, cb);
+	});
+
+	getBallotAffectedKey(api, acc, ballotID, null, contractAddress, function(_i, resp) {
+		iasync++;
+		ballot = getBallotPropertyCallback("affectedKey", api, contractAddress, ballotID, resp, iasync, ballot, ballotDataCount, cb);
+	});
+
+	getBallotAffectedKeyType(api, acc, ballotID, null, contractAddress, function(_i, resp) {
+		iasync++;
+		ballot = getBallotPropertyCallback("affectedKeyType", api, contractAddress, ballotID, resp, iasync, ballot, ballotDataCount, cb);
 	});
 
 	getBallotOwner(api, acc, ballotID, null, contractAddress, function(_i, resp) {
@@ -747,6 +777,22 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
   //miningKey
   var miningKey = ballotPropsObj["miningKey"];
   if (miningKey.length > 40) miningKey = "0x" + miningKey.substr(miningKey.length - 40);
+  //affectedKey
+  var affectedKey = ballotPropsObj["affectedKey"];
+  if (affectedKey.length > 40) affectedKey = "0x" + affectedKey.substr(affectedKey.length - 40);
+  //affectedKeyType
+  var affectedKeyType;
+  switch(ballotPropsObj["affectedKeyType"]) {
+    case 0:
+      affectedKeyType = "mining key";
+      break;
+    case 1:
+      affectedKeyType = "voting key";
+      break;
+    case 2:
+      affectedKeyType = "payout key";
+      break;
+  }
   //time to start/end
   var timeToVotingStart = getDateDiff(Math.floor(Date.now() / 1000), parseInt(ballotPropsObj["votingStart"]));
   var timeToVotingEnd = getDateDiff(Math.floor(Date.now() / 1000), parseInt(ballotPropsObj["votingEnd"]));
@@ -797,6 +843,10 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
               <p class="vote-body-title">Mining key</p>
               <p class="vote-body-description">
                 ` + miningKey + `
+              </p>
+              <p class="vote-body-title-secondary">Affected key (` + affectedKeyType + `)</p>
+              <p class="vote-body-description">
+                ` + affectedKey + `
               </p>
             </div>
             <div class="vote-body-i">
@@ -937,14 +987,14 @@ $(function() {
 				var ballotViewObj = {
 					ballotID: generateBallotID(),
 					memo: $("#memo").val(),
-					miningKey: $("#key").val(),
-					affectedKey: $("#key").val(),
-					affectedKeyType: 0,
+					miningKey: $("#mining-key").val(),
+					affectedKey: $("#affected-key").val(),
+					affectedKeyType: parseInt($("#affected-key-type").val()),
 					owner: votingKey,
 					addAction: $("input[name=type]:checked").val()
 				};
 				var validatorViewObj = {
-					miningKey: $("#key").val(),
+					miningKey: $("#mining-key").val(),
 					fullName:  $("#full-name").val(),
 					streetName: $("#address").val(),
 					state: $("#state").val(),
@@ -952,10 +1002,11 @@ $(function() {
 					licenseID: $("#license-id").val(),
 					licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
 				};
-				var isAddress = web3.isAddress($("#key").val());
-				if (!isAddress) {
+				var isAddress1 = web3.isAddress($("#mining-key").val());
+				var isAddress2 = web3.isAddress($("#affected-key").val());
+				if (!isAddress1 || !isAddress2) {
 					$(".loading-container").hide();
-					showAlert(null, "Incorrect mining key");
+					showAlert(null, "One or both keys are incorrect");
 					return;
 				}
 

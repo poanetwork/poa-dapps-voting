@@ -103,14 +103,14 @@ $(function() {
 				var ballotViewObj = {
 					ballotID: generateBallotID(),
 					memo: $("#memo").val(),
-					miningKey: $("#key").val(),
-					affectedKey: $("#key").val(),
-					affectedKeyType: 0,
+					miningKey: $("#mining-key").val(),
+					affectedKey: $("#affected-key").val(),
+					affectedKeyType: parseInt($("#affected-key-type").val()),
 					owner: votingKey,
 					addAction: $("input[name=type]:checked").val()
 				};
 				var validatorViewObj = {
-					miningKey: $("#key").val(),
+					miningKey: $("#mining-key").val(),
 					fullName:  $("#full-name").val(),
 					streetName: $("#address").val(),
 					state: $("#state").val(),
@@ -118,10 +118,11 @@ $(function() {
 					licenseID: $("#license-id").val(),
 					licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
 				};
-				var isAddress = web3.isAddress($("#key").val());
-				if (!isAddress) {
+				var isAddress1 = web3.isAddress($("#mining-key").val());
+				var isAddress2 = web3.isAddress($("#affected-key").val());
+				if (!isAddress1 || !isAddress2) {
 					$(".loading-container").hide();
-					showAlert(null, "Incorrect mining key");
+					showAlert(null, "One or both keys are incorrect");
 					return;
 				}
 

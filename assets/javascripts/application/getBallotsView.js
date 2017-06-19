@@ -32,6 +32,22 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
   //miningKey
   var miningKey = ballotPropsObj["miningKey"];
   if (miningKey.length > 40) miningKey = "0x" + miningKey.substr(miningKey.length - 40);
+  //affectedKey
+  var affectedKey = ballotPropsObj["affectedKey"];
+  if (affectedKey.length > 40) affectedKey = "0x" + affectedKey.substr(affectedKey.length - 40);
+  //affectedKeyType
+  var affectedKeyType;
+  switch(ballotPropsObj["affectedKeyType"]) {
+    case 0:
+      affectedKeyType = "mining key";
+      break;
+    case 1:
+      affectedKeyType = "voting key";
+      break;
+    case 2:
+      affectedKeyType = "payout key";
+      break;
+  }
   //time to start/end
   var timeToVotingStart = getDateDiff(Math.floor(Date.now() / 1000), parseInt(ballotPropsObj["votingStart"]));
   var timeToVotingEnd = getDateDiff(Math.floor(Date.now() / 1000), parseInt(ballotPropsObj["votingEnd"]));
@@ -82,6 +98,10 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
               <p class="vote-body-title">Mining key</p>
               <p class="vote-body-description">
                 ` + miningKey + `
+              </p>
+              <p class="vote-body-title-secondary">Affected key (` + affectedKeyType + `)</p>
+              <p class="vote-body-description">
+                ` + affectedKey + `
               </p>
             </div>
             <div class="vote-body-i">
