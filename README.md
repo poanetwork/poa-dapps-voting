@@ -21,7 +21,9 @@ Here you can vote for or against notary. If total number of votes > 3, notary wi
 ## New ballot page
 Click **NEW BALLOT** button from any page to create a new ballot. 
 
-![](./new_ballot.png)
+![](./new_ballot_1.png)
+
+![](./new_ballot_2.png)
 
 ## Configuration file
 It is configured with [Oracles network contract](https://github.com/oraclesorg/oracles-contract)

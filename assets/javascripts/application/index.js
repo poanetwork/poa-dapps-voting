@@ -79,8 +79,15 @@ $(function() {
 
 	//back button onclick event
 	$(".back").on("click", function() {
-		ballotsNavPan();
-		getBallotsArray();
+		if ($(".new-ballot-add").attr("step") == 2) {
+			$(".new-ballot-inputs").removeClass("hidden");
+			$(".personal-data-inputs").addClass("hidden");
+			$(".new-ballot-add").attr("step", 1);
+			$(".new-ballot-add").html("Continue");
+		} else {
+			ballotsNavPan();
+			getBallotsArray();
+		}
 	});
 
 	//settings button onclick event
@@ -98,8 +105,29 @@ $(function() {
 		$(".container.new-ballot").empty();
 		$(".container.new-ballot").load("./newBallot.html", function() {
 			newBallotNavPan();
+
+
+			$("#type_add").click(function() {
+				$(".new-ballot-add").attr("step", 1);
+				$(".new-ballot-add").html("Continue");
+			});
+
+			$("#type_remove").click(function() {
+				$(".new-ballot-add").attr("step", 2);
+				$(".new-ballot-add").html("Add Ballot");
+			});
+
 			$(".new-ballot-add").on("click", function() {
+				if ($(this).attr("step") == 1) {
+					$(".new-ballot-inputs").addClass("hidden");
+					$(".personal-data-inputs").removeClass("hidden");
+					$(".new-ballot-add").attr("step", 2);
+					$(".new-ballot-add").html("Add Ballot");
+					return;
+				}
+
 				$(".loading-container").show();
+				var addAction = $("input[name=type]:checked").val();
 				var ballotViewObj = {
 					ballotID: generateBallotID(),
 					memo: $("#memo").val(),
@@ -107,17 +135,9 @@ $(function() {
 					affectedKey: $("#affected-key").val(),
 					affectedKeyType: parseInt($("#affected-key-type").val()),
 					owner: votingKey,
-					addAction: $("input[name=type]:checked").val()
+					addAction: addAction
 				};
-				var validatorViewObj = {
-					miningKey: $("#mining-key").val(),
-					fullName:  $("#full-name").val(),
-					streetName: $("#address").val(),
-					state: $("#state").val(),
-					zip: $("#zip").val(),
-					licenseID: $("#license-id").val(),
-					licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
-				};
+
 				var isAddress1 = web3.isAddress($("#mining-key").val());
 				var isAddress2 = web3.isAddress($("#affected-key").val());
 				if (!isAddress1 || !isAddress2) {
@@ -126,48 +146,66 @@ $(function() {
 					return;
 				}
 
-				addBallot(api, 
-					"addBallot(uint256,address,address,address,uint256,bool,string)",
-					ballotViewObj,
-					votingKey,
-					config.Ethereum[config.environment].contractAddress,
-					function(txHash, err) {
-						if (err) {
-							$(".loading-container").hide();
-							showAlert(err, err.message);
-							return;
-						}
+				if (!addAction) {
+					newBallotClickCallback(ballotViewObj);
+				} else {
+					var validatorViewObj = {
+						miningKey: $("#mining-key").val(),
+						fullName:  $("#full-name").val(),
+						streetName: $("#address").val(),
+						state: $("#state").val(),
+						zip: $("#zip").val(),
+						licenseID: $("#license-id").val(),
+						licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
+					};
 
-						if (!ballotViewObj.addAction) {
+					newBallotClickCallback(ballotViewObj);
+				}
+			});
+		});
+	});
+
+	function newBallotClickCallback(ballotViewObj) {
+		addBallot(api, 
+			"addBallot(uint256,address,address,address,uint256,bool,string)",
+			ballotViewObj,
+			votingKey,
+			config.Ethereum[config.environment].contractAddress,
+			function(txHash, err) {
+				if (err) {
+					$(".loading-container").hide();
+					showAlert(err, err.message);
+					return;
+				}
+
+				if (!ballotViewObj.addAction) {
+					getTxCallBack(txHash, function() {
+						$(".loading-container").hide();
+						$(".back").trigger("click");
+					});
+				} else {
+					addValidator(api, 
+						"addValidator(address,uint256,uint256,uint256,string,string,string)",
+						validatorViewObj,
+						votingKey,
+						config.Ethereum[config.environment].contractAddress,
+						function(txHash, err) {
+							if (err) {
+								$(".loading-container").hide();
+								showAlert(err, err.message);
+								return;
+							}
+
 							getTxCallBack(txHash, function() {
 								$(".loading-container").hide();
 								$(".back").trigger("click");
 							});
-						} else {
-							addValidator(api, 
-								"addValidator(address,uint256,uint256,uint256,string,string,string)",
-								validatorViewObj,
-								votingKey,
-								config.Ethereum[config.environment].contractAddress,
-								function(txHash, err) {
-									if (err) {
-										$(".loading-container").hide();
-										showAlert(err, err.message);
-										return;
-									}
-
-									getTxCallBack(txHash, function() {
-										$(".loading-container").hide();
-										$(".back").trigger("click");
-									});
-								}
-							);
 						}
-					}
-				);
-			});
-		});
-	});
+					);
+				}
+			}
+		);
+	}
 
 	function getBallotsCallBack(_ballotsArray) {
 		for(var i = 0; i < _ballotsArray.length; i++) {
