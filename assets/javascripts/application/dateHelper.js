@@ -88,11 +88,17 @@ function getDateDiff(dateStart, dateEnd) {
         return "00:00";
     }
 
+
     var hours = Math.floor(periodInMinutes/60);
+    var minutes = periodInMinutes%60;
+    if (minutes == 60) {
+        hours++;
+        minutes = 0;
+    }
+
     var hoursStr = hours.toString();
     if (hours < 9)
         hoursStr = "0" + hours.toString();
-    var minutes = periodInMinutes%60 + 1;
     var minutesStr = minutes.toString();
     if (minutes < 9)
         minutesStr = "0" + minutes.toString();

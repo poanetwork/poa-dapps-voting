@@ -33,16 +33,15 @@ function addBallot(web3, func, ballotViewObj, address, contractAddr, cb) {
     + toUnifiedLengthLeft(parameterLocation.toString(16))
     + toUnifiedLengthLeft(bytesCount(ballotViewObj.memo).toString(16)) + memoHex.substring(2);
 
-    //estimateGas(web3, address, contractAddr, data, function(estimatedGas, err) {
-      //console.log(estimatedGas);
-      //if (err) return cb(null, err);
+    estimateGas(web3, address, contractAddr, data, function(estimatedGas, err) {
+      console.log(estimatedGas);
+      if (err) return cb(null, err);
 
-      //estimatedGas += 100000;
-      estimatedGas = 300000;
+      estimatedGas += 100000;
       sendTx(web3, address, contractAddr, data, estimatedGas, function(txHash, err) {
         if (err) return cb(txHash, err);
         cb(txHash);
       });
-    //});
+    });
   });
 }

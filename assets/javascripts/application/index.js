@@ -61,10 +61,12 @@ function startDapp(web3) {
 			if (readCookie('votingKey'))
 				votingKey = readCookie('votingKey');
 			for (var i = 0; i < accounts.length; i++) {
-				if (readCookie('votingKey') == accounts[i] || (!readCookie('votingKey') && i == 0))
-					$option = "<option name='key' value=" + accounts[i] + " selected>" + accounts[i] + "</option>"
-				else
-					$option = "<option name='key' value=" + accounts[i] + ">" + accounts[i] + "</option>"
+				if (i == 0) votingKey = accounts[i];
+				if (readCookie('votingKey') == accounts[i] || (!readCookie('votingKey') && i == 0)) {
+					$option = "<option name='key' value=" + accounts[i] + " selected>" + accounts[i] + "</option>";
+					votingKey = accounts[i];
+				} else 
+					$option = "<option name='key' value=" + accounts[i] + ">" + accounts[i] + "</option>";
 				$(".key-select").append($option);
 			}
 
@@ -76,6 +78,19 @@ function startDapp(web3) {
 
 			$.getJSON("./assets/javascripts/config.json", function(_config) {
 				config = _config;
+
+				if (accounts.length == 1) {
+					var possiblePayoutKey = accounts[0];
+					checkVotingKey(web3,
+					"checkVotingKeyValidity(address)", 
+					possiblePayoutKey,
+					config.Ethereum[config.environment].contractAddress,
+					function(_isActive) {
+						_isActive = !!+_isActive;
+						if (!_isActive) swal("Warning", "Current key isn't valid voting key. Please, add your voting key to client (MetaMask or Parity) and reload the page", "warning");
+						else $(".choose-key-button").trigger("click");
+					});
+				}
 
 				//choose key button onclick event
 				$(".choose-key-button").on("click", function() {
@@ -197,7 +212,7 @@ function startDapp(web3) {
 						}
 
 						if (!addAction) {
-							newBallotClickCallback(ballotViewObj);
+							newBallotClickCallback(ballotViewObj, null);
 						} else {
 							var validatorViewObj = {
 								miningKey: $("#mining-key").val(),
@@ -208,14 +223,13 @@ function startDapp(web3) {
 								licenseID: $("#license-id").val(),
 								licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
 							};
-
-							newBallotClickCallback(ballotViewObj);
+							newBallotClickCallback(ballotViewObj, validatorViewObj);
 						}
 					});
 				});
 			});
 
-			function newBallotClickCallback(ballotViewObj) {
+			function newBallotClickCallback(ballotViewObj, validatorViewObj) {
 				addBallot(web3, 
 					"addBallot(uint256,address,address,address,uint256,bool,string)",
 					ballotViewObj,
@@ -248,7 +262,9 @@ function startDapp(web3) {
 
 									getTxCallBack(txHash, function() {
 										$(".loading-container").hide();
-										$(".back").trigger("click");
+										//$(".back").trigger("click");
+										ballotsNavPan();
+										getBallotsArray();
 									});
 								}
 							);

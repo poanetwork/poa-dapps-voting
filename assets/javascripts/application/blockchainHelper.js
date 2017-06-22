@@ -4,16 +4,13 @@ function SHA3Encrypt(web3, str, cb) {
 }
 
 function estimateGas(web3, acc, contractAddr, data, cb) {
-  console.log(web3);
-  console.log(acc);
-  console.log(contractAddr);
-  console.log(data);
   web3.eth.estimateGas({
       from: acc, 
       data: data,
       to: contractAddr
   }, function(err, estimatedGas) {
-    console.log(err);
+    if (err)
+      console.log(err);
     console.log(estimatedGas);
     cb(estimatedGas);
   });
@@ -26,6 +23,8 @@ function sendTx(web3, acc, contractAddr, data, estimatedGas, cb) {
     to: contractAddr,
     gas: estimatedGas
   }, function(err, txHash) {
+    if (err)
+      console.log(err);
     cb(txHash, err);
   });
 }
@@ -36,6 +35,8 @@ function call(web3, acc, contractAddr, data, cb) {
   else props = { data: data, to: contractAddr };
   
   web3.eth.call(props, function(err, data) {
+    if (err)
+      console.log(err);
     cb(data);
   });
 }
@@ -55,13 +56,12 @@ function getTxCallBack(txHash, cb) {
 
 
 function getContractStringDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
-  var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(web3, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, func, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
@@ -75,13 +75,12 @@ function getContractStringDataFromAddressKey(web3, acc, func, inputVal, i, contr
 }
 
 function getContractIntDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
-  var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(web3, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, func, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
@@ -94,13 +93,12 @@ function getContractIntDataFromAddressKey(web3, acc, func, inputVal, i, contract
 }
 
 function getContractAddressDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
-  var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(web3, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, func, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
