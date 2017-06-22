@@ -1,9 +1,9 @@
-function addBallot(api, func, ballotViewObj, address, contractAddr, cb) {
-  var funcHex = func.hexEncode();
+function addBallot(web3, func, ballotViewObj, address, contractAddr, cb) {
+  console.log(ballotViewObj);
   var funcParamsNumber = 7;
   var standardLength = 32;
 
-  SHA3Encrypt(api, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, func, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     var parameterLocation = standardLength * funcParamsNumber;
 
@@ -33,14 +33,16 @@ function addBallot(api, func, ballotViewObj, address, contractAddr, cb) {
     + toUnifiedLengthLeft(parameterLocation.toString(16))
     + toUnifiedLengthLeft(bytesCount(ballotViewObj.memo).toString(16)) + memoHex.substring(2);
 
-    estimateGas(api, address, contractAddr, data, function(estimatedGas, err) {
-      if (err) return cb(null, err);
+    //estimateGas(web3, address, contractAddr, data, function(estimatedGas, err) {
+      //console.log(estimatedGas);
+      //if (err) return cb(null, err);
 
-      estimatedGas += 100000;
-      sendTx(api, address, contractAddr, data, estimatedGas, function(txHash, err) {
+      //estimatedGas += 100000;
+      estimatedGas = 300000;
+      sendTx(web3, address, contractAddr, data, estimatedGas, function(txHash, err) {
         if (err) return cb(txHash, err);
         cb(txHash);
       });
-    });
+    //});
   });
 }

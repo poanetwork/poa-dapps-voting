@@ -1,52 +1,42 @@
-function SHA3Encrypt(api, str, cb) {
-  api._web3.sha3(str).then(function(strEncode) {
-    cb(strEncode, null);
-  }).catch(function(err) {
-    console.log(err);
-    cb("", err);
-  });
+function SHA3Encrypt(web3, str, cb) {
+  var strEncode = web3.sha3(str);
+  cb(strEncode);
 }
 
-function estimateGas(api, acc, contractAddr, data, cb) {
-  api.eth.estimateGas({
+function estimateGas(web3, acc, contractAddr, data, cb) {
+  console.log(web3);
+  console.log(acc);
+  console.log(contractAddr);
+  console.log(data);
+  web3.eth.estimateGas({
       from: acc, 
       data: data,
       to: contractAddr
-  }).then(function(res) {
-    var gasWillUsed = res.c[0];
-    gasWillUsed += 10000;
-    cb(gasWillUsed);
-  }).catch(function(err) {
+  }, function(err, estimatedGas) {
     console.log(err);
-    cb(null, err);
+    console.log(estimatedGas);
+    cb(estimatedGas);
   });
 }
 
-function sendTx(api, acc, contractAddr, data, estimatedGas, cb) {
-  api.eth.sendTransaction({
+function sendTx(web3, acc, contractAddr, data, estimatedGas, cb) {
+  web3.eth.sendTransaction({
     from: acc,
     data: data,
     to: contractAddr,
     gas: estimatedGas
-  }).then(function(txHash) {
-    cb(txHash);
-  }).catch(function(err) {
-    console.log(err);
-    cb(null, err);
+  }, function(err, txHash) {
+    cb(txHash, err);
   });
 }
 
-function call(api, acc, contractAddr, data, cb) {
+function call(web3, acc, contractAddr, data, cb) {
   var props;
   if (acc) props = { from: acc, data: data, to: contractAddr };
   else props = { data: data, to: contractAddr };
   
-  api.eth.call(props)
-  .then(function(data) {
+  web3.eth.call(props, function(err, data) {
     cb(data);
-  }).catch(function(err) {
-    console.log(err);
-    cb(null, err);
   });
 }
 
@@ -64,59 +54,59 @@ function getTxCallBack(txHash, cb) {
 };
 
 
-function getContractStringDataFromAddressKey(api, acc, func, inputVal, i, contractAddr, cb) {
+function getContractStringDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
   var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(api, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, funcHex, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
     + toUnifiedLengthLeft(inputVal);
 
-    call(api, acc, contractAddr, data, function(respHex) {
+    call(web3, acc, contractAddr, data, function(respHex) {
       console.log(respHex);
       cb(i, hex2a(respHex));
     });
   });
 }
 
-function getContractIntDataFromAddressKey(api, acc, func, inputVal, i, contractAddr, cb) {
+function getContractIntDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
   var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(api, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, funcHex, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
     + toUnifiedLengthLeft(inputVal);
 
-    call(api, acc, contractAddr, data, function(respHex) {
+    call(web3, acc, contractAddr, data, function(respHex) {
       cb(i, parseInt(respHex, 16));
     });
   });
 }
 
-function getContractAddressDataFromAddressKey(api, acc, func, inputVal, i, contractAddr, cb) {
+function getContractAddressDataFromAddressKey(web3, acc, func, inputVal, i, contractAddr, cb) {
   var funcHex = func.hexEncode();
   var funcParamsNumber = 1;
   var standardLength = 32;
 
   var parameterLocation = standardLength * funcParamsNumber;
 
-  SHA3Encrypt(api, funcHex, function(funcEncode) {
+  SHA3Encrypt(web3, funcHex, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
     
     var data = funcEncodePart
     + toUnifiedLengthLeft(inputVal);
 
-    call(api, acc, contractAddr, data, function(respHex) {
+    call(web3, acc, contractAddr, data, function(respHex) {
       cb(i, respHex);
     });
   });

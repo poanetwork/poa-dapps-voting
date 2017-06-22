@@ -13,7 +13,7 @@ function vote(api, func, ballotID, action, address, contractAddr, cb) {
     estimateGas(api, address, contractAddr, data, function(estimatedGas, err) {
       if (err) return cb(null, err);
       estimatedGas += 100000;
-
+      
       sendTx(api, address, contractAddr, data, estimatedGas, function(txHash, err) {
         if (err) return cb(txHash, err);
         cb(txHash);
