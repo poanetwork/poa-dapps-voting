@@ -4,6 +4,7 @@ function getWeb3(callback) {
     console.error("Please use a web3 browser");
     var msgNotEthereum = "You are not connected to Ethereum. Please, switch on Parity or MetaMask client and refresh the page.";
     swal("Warning", msgNotEthereum, "warning");
+    callback(myWeb3, false);
   } else {
     // window.web3 == web3 most of the time. Don't override the provided,
     // web3, just wrap it in your Web3.
@@ -13,13 +14,13 @@ function getWeb3(callback) {
     // new instance
     myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
 
-    checkNetworkVersion(myWeb3);
-
-    callback(myWeb3);
+    checkNetworkVersion(myWeb3, function(isOraclesNetwork) {
+    	callback(myWeb3, isOraclesNetwork);
+    });
   }
 }
 
-function checkNetworkVersion(web3) {
+function checkNetworkVersion(web3, cb) {
 	var msgNotOracles = "You are not connected to Oracles network. Please, switch on Parity or MetaMask client and refresh the page.";
 	web3.version.getNetwork(function(err, netId) {
 		console.log(netId);
@@ -27,30 +28,35 @@ function checkNetworkVersion(web3) {
 	    case "1": {
 	      console.log('This is mainnet');
 	      swal("Warning", msgNotOracles, "warning"); 
+	      cb(false);
 	    } break;
 	    case "2": {
 	      console.log('This is the deprecated Morden test network.');
 	      swal("Warning", msgNotOracles, "warning");
+	      cb(false);
 	    } break;
 	    case "3": {
 	      console.log('This is the ropsten test network.');
 	      swal("Warning", msgNotOracles, "warning");
+	      cb(false);
 	    }  break;
 	     case "8995": {
 	       console.log('This is Oracles from Metamask');
+	       cb(true);
 	    }  break;
 	    default: {
 	      console.log('This is an unknown network.');
 	      swal("Warning", msgNotOracles, "warning");
+	      cb(false);
 	  	} break;
 	  }
 	})
 }
 
-function startDapp(web3) {
+function startDapp(web3, isOraclesNetwork) {
   	$(function() {
-
 		$(".loading-container").hide();
+		if (!isOraclesNetwork) return;
 		var config;
 		var ballotsArrayFiltered = [];
 
