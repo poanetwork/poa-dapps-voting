@@ -989,6 +989,8 @@ function startDapp(web3, isOraclesNetwork) {
 						if (!_isActive) swal("Warning", "Current key isn't valid voting key. Please, choose your voting key in MetaMask client and reload the page. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.", "warning");
 						else $(".choose-key-button").trigger("click");
 					});
+				} else if (accounts.length == 0) {
+					swal("Warning", "You haven't chosen any account in MetaMask. Please, choose your voting key in MetaMask client and reload the page. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.", "warning");
 				}
 
 				//choose key button onclick event
