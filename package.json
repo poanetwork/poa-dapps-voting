@@ -1,10 +1,9 @@
 {
-  "name": "",
+  "name": "oracles-dapps-voting",
   "version": "1.0.0",
-  "description": "",
+  "description": "Oracles network Governance Dapp",
   "main": "gulpfile.js",
   "devDependencies": {
-    "web3": "^0.18.2",
     "gulp": "^3.9.1",
     "gulp-add-src": "^0.2.0",
     "gulp-autoprefixer": "^3.1.1",
@@ -16,7 +15,9 @@
     "gulp-sass-glob": "^1.0.6",
     "gulp-uglify": "^2.0.0",
     "gulp-uglifycss": "^1.0.6",
-    "http-server": "^0.9.0"
+    "gulp-util": "^3.0.8",
+    "http-server": "^0.9.0",
+    "web3": "^0.18.4"
   },
   "scripts": {
     "sass": "gulp sass",
@@ -26,13 +27,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/oraclesorg/oracles-dapps-voting"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "/issues"
-  },
-  "homepage": "#README"
+  "author": "oraclesorg",
+  "license": "MIT",
+  "homepage": "https://oracles.org/"
 }
