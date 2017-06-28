@@ -1016,7 +1016,6 @@ function startDapp(web3, isOraclesNetwork) {
 					votingKey,
 					contractAddress,
 					function(_ballotsArray) {
-						$(".loading-container").hide();
 						ballotsArrayFiltered = _ballotsArray;
 						showBallotsPage(_ballotsArray, web3, contractAddress);
 					}
@@ -1223,6 +1222,8 @@ function startDapp(web3, isOraclesNetwork) {
 					$(".container.vote").append(ballotView);
 				}
 			}
+
+			$(".loading-container").hide();
 
 			//vote now button onclick event
 			$(".vote-now").on("click", function() {
