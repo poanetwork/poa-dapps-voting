@@ -9,10 +9,9 @@ function estimateGas(web3, acc, contractAddr, data, cb) {
       data: data,
       to: contractAddr
   }, function(err, estimatedGas) {
-    if (err)
-      console.log(err);
+    if (err) console.log(err);
     console.log(estimatedGas);
-    cb(estimatedGas);
+    cb(estimatedGas, err);
   });
 }
 
@@ -23,8 +22,7 @@ function sendTx(web3, acc, contractAddr, data, estimatedGas, cb) {
     to: contractAddr,
     gas: estimatedGas
   }, function(err, txHash) {
-    if (err)
-      console.log(err);
+    if (err) console.log(err);
     cb(txHash, err);
   });
 }
@@ -35,16 +33,14 @@ function call(web3, acc, contractAddr, data, cb) {
   else props = { data: data, to: contractAddr };
   
   web3.eth.call(props, function(err, data) {
-    if (err)
-      console.log(err);
+    if (err) console.log(err);
     cb(data);
   });
 }
 
 function getTxCallBack(txHash, cb) {
   web3.eth.getTransaction(txHash, function(err, txDetails) {
-    if (err)
-      console.log(err);
+    if (err) console.log(err);
 
     if (!txDetails.blockNumber) {
       setTimeout(function() {
@@ -68,7 +64,6 @@ function getContractStringDataFromAddressKey(web3, acc, func, inputVal, i, contr
     + toUnifiedLengthLeft(inputVal);
 
     call(web3, acc, contractAddr, data, function(respHex) {
-      console.log(respHex);
       cb(i, hex2a(respHex));
     });
   });
