@@ -225,7 +225,7 @@ function getContractAddressDataFromAddressKey(web3, acc, func, inputVal, i, cont
 
 //check current network page is connected to. Alerts, if not Oracles network
 function checkNetworkVersion(web3, cb) {
-  var msgNotOracles = "You aren't connected to Oracles network. Please, switch on Parity or MetaMask client and choose Oracles network. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
+  var msgNotOracles = "You aren't connected to Oracles network. Please, switch on Oracles plugin and choose Oracles network. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
   web3.version.getNetwork(function(err, netId) {
     if (err)
       console.log(err);
@@ -943,7 +943,7 @@ function getWeb3(callback) {
   if (typeof window.web3 === 'undefined') {
     // no web3, use fallback
     console.error("Please use a web3 browser");
-    var msgNotEthereum = "You aren't connected to Ethereum. Please, switch on Parity or MetaMask client and refresh the page. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
+    var msgNotEthereum = "You aren't connected to Oracles Network. Please, switch on Oracles plugin and refresh the page. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
     swal("Warning", msgNotEthereum, "warning");
     callback(myWeb3, false);
   } else {

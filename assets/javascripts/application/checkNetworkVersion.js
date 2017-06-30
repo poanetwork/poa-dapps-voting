@@ -1,6 +1,6 @@
 //check current network page is connected to. Alerts, if not Oracles network
 function checkNetworkVersion(web3, cb) {
-  var msgNotOracles = "You aren't connected to Oracles network. Please, switch on Parity or MetaMask client and choose Oracles network. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
+  var msgNotOracles = "You aren't connected to Oracles network. Please, switch on Oracles plugin and choose Oracles network. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.";
   web3.version.getNetwork(function(err, netId) {
     if (err)
       console.log(err);
