@@ -877,7 +877,7 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
                       <span class="vote-tooltip-description">
                         If you are a validator in Oracles network you can sign a vote with your voting key.
                         Please refer to voting FAQ on
-                        <a href="https://forums.notarycoin.com">https://forums.notarycoin.com</a>
+                        <a href="https://forum.oracles.org/">https://forum.oracles.org/</a>
                       </span>
                     </span>
                     <span class="vote-tooltip-shadow"></span>
