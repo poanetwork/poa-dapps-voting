@@ -4,15 +4,15 @@
 
 * Google Chrome v 59.0.3071.115+
 
-## Oracles plugin setup
+## MetaMask plugin setup
 
-* Choose Oracles network in Oracles plugin (See [Choosing of Oralces Network from wiki](https://github.com/oraclesorg/oracles-wiki#choosing-of-oralces-network))
+* Connect to Oracles network in MetaMask plugin (See [Connect to Oracles network via MetaMask](https://github.com/oraclesorg/oracles-wiki/blob/master/MetaMask-connect.md#connect-to-oracles-network-via-metamask))
 
-* Import your voting key to Oracles Plugin (See [Governance section from wiki](https://github.com/oraclesorg/oracles-wiki#governance)).
+* Import your voting key to MetaMask Plugin (See [Governance section from wiki](https://github.com/oraclesorg/oracles-wiki/blob/master/governance.md)).
 
 ## Governance Dapp lifecycle
 
-Check [Governance Dapp section from wiki](https://github.com/oraclesorg/oracles-wiki#governance)
+Check [Governance Dapp section from wiki](https://github.com/oraclesorg/oracles-wiki/blob/master/governance.md)
 
 ## Ballots page
 You'll see the page with the list of all ballots. Here you can switch to see only your **UNANSWERED** or **EXPIRED** ballots. 
