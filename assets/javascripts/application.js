@@ -55,47 +55,87 @@ function addBallot(web3, func, ballotViewObj, address, contractAddr, cb) {
     });
   });
 }
-function addValidator(web3, func, validatorViewObj, address, contractAddr, cb) {
-  var funcParamsNumber = 7;
+function addValidator(web3, func, validatorViewObj, address, contractAddr, abi, cb) {
+
+
+  attachToContract(web3, abi, contractAddr, function(err, oraclesContract) {
+    console.log("attach to oracles contract");
+    if (err) {
+      console.log(err)
+      return cb();
+    }
+
+    console.log(validatorViewObj);
+    
+    oraclesContract.addValidator.sendTransaction(
+      validatorViewObj.miningKey, 
+      validatorViewObj.zip, 
+      validatorViewObj.licenseExpiredAt,
+      validatorViewObj.licenseID,
+      validatorViewObj.fullName,
+      validatorViewObj.streetName,
+      validatorViewObj.state,
+      function(err, txHash) {
+        if (err) {
+          cb(txHash, err);
+          return;
+        }
+        cb(txHash);
+    });
+  });
+
+  /*var funcParamsNumber = 7;
   var standardLength = 32;
 
   SHA3Encrypt(web3, func, function(funcEncode) {
     var funcEncodePart = funcEncode.substring(0,10);
-    if (validatorViewObj.miningKey.indexOf("0x") > -1)
+    if (validatorViewObj.miningKey.indexOf("0x") > -1) {
       validatorViewObj.miningKey = validatorViewObj.miningKey.substr(2);
-
+    }
     validatorViewObj.miningKey = validatorViewObj.miningKey.toLowerCase();
 
+    var licenseIDHex = "0x" + toUnifiedLengthRight(toHexString(toUTF8Array(validatorViewObj.licenseID)));
     var fullNameHex = "0x" + toUnifiedLengthRight(toHexString(toUTF8Array(validatorViewObj.fullName)));
     var streetNameHex = "0x" + toUnifiedLengthRight(toHexString(toUTF8Array(validatorViewObj.streetName)));
     var stateHex = "0x" + toUnifiedLengthRight(toHexString(toUTF8Array(validatorViewObj.state)));
 
-    var parameterLocation1 = standardLength * funcParamsNumber;
-    var parameterLocation2 = parameterLocation1 + standardLength*(countRows(fullNameHex));
-    var parameterLocation3 = parameterLocation2 + standardLength*(countRows(streetNameHex));
+    var parameterLocation1 = standardLength*funcParamsNumber;
+    var parameterLocation2 = parameterLocation1 + standardLength*(countRows(licenseIDHex));
+    var parameterLocation3 = parameterLocation2 + standardLength*(countRows(fullNameHex));
+    var parameterLocation4 = parameterLocation3 + standardLength*(countRows(streetNameHex));
 
     var data = funcEncodePart
     + toUnifiedLengthLeft(validatorViewObj.miningKey)
     + toUnifiedLengthLeft(validatorViewObj.zip.toString(16))
-    + toUnifiedLengthLeft(validatorViewObj.licenseID.toString(16))
     + toUnifiedLengthLeft(validatorViewObj.licenseExpiredAt.toString(16))
     + toUnifiedLengthLeft(parameterLocation1.toString(16))
     + toUnifiedLengthLeft(parameterLocation2.toString(16))
     + toUnifiedLengthLeft(parameterLocation3.toString(16))
+    + toUnifiedLengthLeft(parameterLocation4.toString(16))
+    + toUnifiedLengthLeft(bytesCount(validatorViewObj.licenseID).toString(16)) + licenseIDHex.substring(2)
     + toUnifiedLengthLeft(bytesCount(validatorViewObj.fullName).toString(16)) + fullNameHex.substring(2)
     + toUnifiedLengthLeft(bytesCount(validatorViewObj.streetName).toString(16)) + streetNameHex.substring(2)
     + toUnifiedLengthLeft(bytesCount(validatorViewObj.state).toString(16)) + stateHex.substring(2);
 
-    estimateGas(web3, address, contractAddr, data, function(estimatedGas, err) {
-      if (err) return cb(null, err);
+    getGasPrice(function(gasPrice) {
+      console.log(gasPrice);
+      estimateGas(web3, address, contractAddr, data, null, function(estimatedGas, err) {
+        if (err) {
+          cb(null, err);
+          return;
+        }
+        estimatedGas += 100000;
 
-      estimatedGas += 100000;
-      sendTx(web3, address, contractAddr, data, estimatedGas, function(txHash, err) {
-        if (err) return cb(txHash, err);
-        cb(txHash);
+        sendTx(web3, address, contractAddr, data, null, estimatedGas, gasPrice, function(txHash, err) {
+          if (err) {
+            cb(txHash, err);
+            return;
+          }
+          cb(txHash);
+        });
       });
     });
-  });
+  });*/
 }
 function showAlert(err, msg) {
 	if (!err) {
@@ -225,6 +265,21 @@ function getContractAddressDataFromAddressKey(web3, acc, func, inputVal, i, cont
       cb(i, respHex);
     });
   });
+}
+
+function attachToContract(web3, abi, addr, cb) {
+  if(!web3.isConnected()) {
+    if (cb) cb({code: 200, title: "Error", message: "check RPC availability"});
+  } else {
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+    console.log("web3.eth.defaultAccount:" + web3.eth.defaultAccount);
+    
+    var MyContract = web3.eth.contract(abi);
+
+    var contractInstance = MyContract.at(addr);
+    
+    if (cb) cb(null, contractInstance);
+  }
 }
 
 //check current network page is connected to. Alerts, if not Oracles network
@@ -939,7 +994,8 @@ function ballotViewObject(ballotID, ballotPropsObj, isVotingEnabled) {
 function getConfig(cb) {
   $.getJSON("./assets/javascripts/config.json", function(config) {
     var contractAddress = config.Ethereum[config.environment].contractAddress;
-    cb(contractAddress);
+    var abi = config.Ethereum[config.environment].abi;
+    cb(contractAddress, abi);
   });
 }
 //gets web3 object from MetaMask or Parity
@@ -975,13 +1031,13 @@ function startDapp(web3, isOraclesNetwork) {
 		var votingKey;
 
 		getAccounts(function(accounts) {
-			getConfig(function(contractAddress) {
-				getConfigCallBack(web3, accounts, contractAddress);	
+			getConfig(function(contractAddress, abi) {
+				getConfigCallBack(web3, accounts, contractAddress, abi);	
 			})
 		});
 
 		//getting of config callback
-		function getConfigCallBack(web3, accounts, contractAddress) {
+		function getConfigCallBack(web3, accounts, contractAddress, abi) {
 			//checks if chosen account is valid voting key
 			if (accounts.length == 1) {
 				var possiblePayoutKey = accounts[0];
@@ -1142,7 +1198,7 @@ function startDapp(web3, isOraclesNetwork) {
 						}
 
 						if (!addAction) {
-							addBallotClick(web3, ballotViewObj, null, contractAddress);
+							addBallotClick(web3, ballotViewObj, null, contractAddress, abi);
 						} else {
 							var validatorViewObj = {
 								miningKey: $("#mining-key").val(),
@@ -1153,7 +1209,7 @@ function startDapp(web3, isOraclesNetwork) {
 								licenseID: $("#license-id").val(),
 								licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
 							};
-							addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress);
+							addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress, abi);
 						}
 					});
 				});
@@ -1161,20 +1217,20 @@ function startDapp(web3, isOraclesNetwork) {
 		}
 
 		//triggers after clicking "Add Ballot" button
-		function addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress) {
+		function addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress, abi) {
 			addBallot(web3, 
 				"addBallot(uint256,address,address,address,uint256,bool,string)",
 				ballotViewObj,
 				votingKey,
 				contractAddress,
 				function(txHash, err) {
-					addBallotCallBack(err, web3, txHash, ballotViewObj.addAction, validatorViewObj, contractAddress);
+					addBallotCallBack(err, web3, txHash, ballotViewObj.addAction, validatorViewObj, contractAddress, abi);
 				}
 			);
 		}
 
 		//Adding of ballot to contract callback
-		function addBallotCallBack(err, web3, txHash, addAction, validatorViewObj, contractAddress) {
+		function addBallotCallBack(err, web3, txHash, addAction, validatorViewObj, contractAddress, abi) {
 			if (err) {
 				$(".loading-container").hide();
 				showAlert(err, err.message);
@@ -1188,10 +1244,11 @@ function startDapp(web3, isOraclesNetwork) {
 				});
 			} else {
 				addValidator(web3, 
-					"addValidator(address,uint256,uint256,uint256,string,string,string)",
+					"addValidator(address,uint256,uint256,string,string,string,string)",
 					validatorViewObj,
 					votingKey,
 					contractAddress,
+					abi,
 					function(txHash, err) {
 						addValidatorCallBack(err, txHash, web3, contractAddress);
 					}

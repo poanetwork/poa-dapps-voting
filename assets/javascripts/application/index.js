@@ -9,13 +9,13 @@ function startDapp(web3, isOraclesNetwork) {
 		var votingKey;
 
 		getAccounts(function(accounts) {
-			getConfig(function(contractAddress) {
-				getConfigCallBack(web3, accounts, contractAddress);	
+			getConfig(function(contractAddress, abi) {
+				getConfigCallBack(web3, accounts, contractAddress, abi);	
 			})
 		});
 
 		//getting of config callback
-		function getConfigCallBack(web3, accounts, contractAddress) {
+		function getConfigCallBack(web3, accounts, contractAddress, abi) {
 			//checks if chosen account is valid voting key
 			if (accounts.length == 1) {
 				var possiblePayoutKey = accounts[0];
@@ -176,7 +176,7 @@ function startDapp(web3, isOraclesNetwork) {
 						}
 
 						if (!addAction) {
-							addBallotClick(web3, ballotViewObj, null, contractAddress);
+							addBallotClick(web3, ballotViewObj, null, contractAddress, abi);
 						} else {
 							var validatorViewObj = {
 								miningKey: $("#mining-key").val(),
@@ -187,7 +187,7 @@ function startDapp(web3, isOraclesNetwork) {
 								licenseID: $("#license-id").val(),
 								licenseExpiredAt: new Date($("#license-expiration").val()).getTime() / 1000,
 							};
-							addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress);
+							addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress, abi);
 						}
 					});
 				});
@@ -195,20 +195,20 @@ function startDapp(web3, isOraclesNetwork) {
 		}
 
 		//triggers after clicking "Add Ballot" button
-		function addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress) {
+		function addBallotClick(web3, ballotViewObj, validatorViewObj, contractAddress, abi) {
 			addBallot(web3, 
 				"addBallot(uint256,address,address,address,uint256,bool,string)",
 				ballotViewObj,
 				votingKey,
 				contractAddress,
 				function(txHash, err) {
-					addBallotCallBack(err, web3, txHash, ballotViewObj.addAction, validatorViewObj, contractAddress);
+					addBallotCallBack(err, web3, txHash, ballotViewObj.addAction, validatorViewObj, contractAddress, abi);
 				}
 			);
 		}
 
 		//Adding of ballot to contract callback
-		function addBallotCallBack(err, web3, txHash, addAction, validatorViewObj, contractAddress) {
+		function addBallotCallBack(err, web3, txHash, addAction, validatorViewObj, contractAddress, abi) {
 			if (err) {
 				$(".loading-container").hide();
 				showAlert(err, err.message);
@@ -222,10 +222,11 @@ function startDapp(web3, isOraclesNetwork) {
 				});
 			} else {
 				addValidator(web3, 
-					"addValidator(address,uint256,uint256,uint256,string,string,string)",
+					"addValidator(address,uint256,uint256,string,string,string,string)",
 					validatorViewObj,
 					votingKey,
 					contractAddress,
+					abi,
 					function(txHash, err) {
 						addValidatorCallBack(err, txHash, web3, contractAddress);
 					}
