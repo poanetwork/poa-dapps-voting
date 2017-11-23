@@ -1,5 +1,5 @@
 function SHA3Encrypt(web3, str, cb) {
-  var strEncode = web3.sha3(str);
+  var strEncode = web3.utils.sha3(str);
   cb(strEncode);
 }
 

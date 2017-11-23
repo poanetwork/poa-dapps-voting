@@ -8,10 +8,9 @@ function startDapp(web3, isOraclesNetwork) {
 		var ballotsArrayFiltered = [];
 		var votingKey;
 
-		getAccounts(function(accounts) {
-			getConfig(function(contractAddress) {
-				getConfigCallBack(web3, accounts, contractAddress);	
-			})
+		getAccounts(async function(accounts) {
+			let config = await getConfig()
+			getConfigCallBack(web3, accounts, config.contractAddress);	
 		});
 
 		//getting of config callback

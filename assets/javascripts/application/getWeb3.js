@@ -15,8 +15,7 @@ function getWeb3(callback) {
     // new instance
     myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
 
-    checkNetworkVersion(myWeb3, function(isOraclesNetwork) {
-      callback(myWeb3, isOraclesNetwork);
-    });
+    let isOraclesNetwork = checkNetworkVersion(myWeb3)
+    callback(myWeb3, isOraclesNetwork);
   }
 }
