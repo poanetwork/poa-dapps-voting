@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./assets/stylesheets/application.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="#" class="header-logo"></a>
+      <a href="#" class="header-new-ballot">New ballot</a>
+      <a href="#" class="header-settings">Settings</a>
+    </div>
+  </header>
+  <section class="container new">
+    <h1 class="title">New Ballot</h1>
+    <form action="" class="new-form">
+      <div class="hidden">
+        <div class="left">
+          <div class="radio-container">
+            <input type="radio" name="ballot-type" id="ballot-for-validators" checked>
+            <label for="ballot-for-validators" class="radio">Ballot for validators</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="radio-container">
+            <input type="radio" name="ballot-type" id="ballot-for-consensus">
+            <label for="ballot-for-consensus" class="radio">Ballot for consensus</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="hidden">
+        <div class="left">
+          <div class="form-el">
+            <label for="full-name">Full Name</label>
+            <input type="text" id="full-name">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="form-el">
+            <label for="address">Address</label>
+            <input type="text" id="address">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="left">
+          <div class="form-el">
+            <label for="state">State</label>
+            <select id="state">
+              <option value=""></option>
+              <option value="">Alabama</option>
+              <option value="">Florida</option>
+              <option value="">New York</option>
+              <option value="">Washington</option>
+            </select>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="form-el">
+            <label for="zip-code">Zip Code</label>
+            <input type="text" id="zip-code">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="left">
+          <div class="form-el">
+            <label for="license-id">License ID</label>
+            <input type="text" id="license-id">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="form-el">
+            <label for="license-expiration">License Expiration</label>
+            <input type="text" id="license-expiration">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="hidden">
+        <div class="left">
+          <div class="radio-container">
+            <input type="radio" name="key-control" id="add-key" checked>
+            <label for="add-key" class="radio radio_icon radio_add">Add key</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+          <div class="radio-container">
+            <input type="radio" name="key-control" id="remove-key">
+            <label for="remove-key" class="radio radio_icon radio_remove">Remove key</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="radio-container">
+            <input type="radio" name="keys" id="mining-key" checked>
+            <label for="mining-key" class="radio">Mining Key</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+          <div class="radio-container">
+            <input type="radio" name="keys" id="payout-key">
+            <label for="payout-key" class="radio">Payout Key</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+          <div class="radio-container">
+            <input type="radio" name="keys" id="voting-key">
+            <label for="voting-key" class="radio">Voting Key</label>
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="hidden">
+        <div class="left">
+          <div class="form-el">
+            <label for="memo">Memo</label>
+            <input type="text" id="memo">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="form-el">
+            <label for="key">Key</label>
+            <input type="text" id="key">
+            <p class="hint">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="new-form-footer">
+        <div class="info">
+          Minimum 3 from 12 validators  required to pass the proposal
+        </div>
+        <button type="button" class="add-ballot">Add ballot</button>
+      </div>
+    </form>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-rights">2017 Oracles Network. All rights reserved.</p>
+      <a href="#" class="footer-logo"></a>
+      <div class="socials">
+        <a href="#" class="socials-i socials-i_reddit"></a>
+        <a href="#" class="socials-i socials-i_twitter"></a>
+        <a href="#" class="socials-i socials-i_oracles"></a>
+        <a href="#" class="socials-i socials-i_telegram"></a>
+        <a href="#" class="socials-i socials-i_github"></a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
