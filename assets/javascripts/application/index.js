@@ -166,8 +166,8 @@ function startDapp(web3, isOraclesNetwork) {
 							addAction: addAction
 						};
 
-						var isAddress1 = web3.isAddress($("#mining-key").val());
-						var isAddress2 = web3.isAddress($("#affected-key").val());
+						var isAddress1 = web3.utils.isAddress($("#mining-key").val());
+						var isAddress2 = web3.utils.isAddress($("#affected-key").val());
 						if (!isAddress1 || !isAddress2) {
 							$(".loading-container").hide();
 							showAlert(null, "One or both keys are incorrect");
