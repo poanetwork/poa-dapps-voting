@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const Footer = () => (
   <footer className="footer">
     <div className="container">
-      <p className="footer-rights">2017 Oracles Network. All rights reserved.</p>
+      <p className="footer-rights">2017 POA Network. All rights reserved.</p>
       <Link to="/" className="footer-logo"></Link>
       <div className="socials">
         <a href="#" className="socials-i socials-i_reddit"></a>
