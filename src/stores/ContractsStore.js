@@ -4,15 +4,21 @@ import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
 import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
 
+import "babel-polyfill";
+
 class ContractsStore {
 	@observable votingToChangeKeys;
 	@observable votingToChangeMinThreshold;
 	@observable votingToChangeProxy;
+	@observable votingKey;
+	@observable miningKey;
 
 	constructor() {
 		this.votingToChangeKeys = null;
 		this.votingToChangeMinThreshold = null;
 		this.votingToChangeProxy = null;
+		this.votingKey = null;
+		this.miningKey = null;
 	}
 
 	@action("Set VotingToChangeKeys contract")
@@ -34,6 +40,21 @@ class ContractsStore {
 		this.votingToChangeProxy = new VotingToChangeProxy({
         	web3: web3Config.web3Instance
       	});
+	}
+
+	@action("Set voting key")
+	setVotingKey = (web3Config) => {
+		this.votingKey = web3Config.defaultAccount;
+	}
+
+	@action("Set mining key")
+	setMiningKey = async (web3Config) => {
+		try {
+			this.miningKey = await this.votingToChangeKeys.votingToChangeKeysInstance.methods.getMiningByVotingKey(web3Config.defaultAccount).call();
+		}
+		catch(e) {
+			console.log(e)
+		}
 	}
 }
 

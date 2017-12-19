@@ -4,13 +4,14 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'mobx-react';
-import newBallotStore from './stores/NewBallotStore';
+import validatorStore from './stores/ValidatorStore';
+import ballotStore from './stores/BallotStore';
 import contractsStore from './stores/ContractsStore';
 import swal from 'sweetalert2';
 import getWeb3 from './getWeb3'
 import "babel-polyfill";
 
-const stores = { contractsStore, newBallotStore };
+const stores = { contractsStore, ballotStore, validatorStore };
 
 function generateElement(msg){
   let errorNode = document.createElement("div");
@@ -29,6 +30,10 @@ class AppMainRouter extends Component {
       contractsStore.setVotingToChangeKeys(web3Config);
       contractsStore.setVotingToChangeMinThreshold(web3Config);
       contractsStore.setVotingToChangeProxy(web3Config);
+      contractsStore.setVotingKey(web3Config);
+      await contractsStore.setMiningKey(web3Config);
+      console.log("votingKey", contractsStore.votingKey)
+      console.log("miningKey", contractsStore.miningKey)
     }).catch((error) => {
       console.error(error.message);
       swal({

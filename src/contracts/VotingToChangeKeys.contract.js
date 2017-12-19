@@ -1,4 +1,4 @@
-import votingToChangeKeysABI from './votingToChangeKeysABI.json'
+import votingToChangeKeysABI from './votingToChangeKeys.abi.json'
 import Web3 from 'web3';
 import {VOTING_TO_CHANGE_KEYS_ADDRESS} from './addresses'
 

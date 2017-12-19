@@ -1,4 +1,4 @@
-import votingToChangeProxyABI from './votingToChangeProxyABI.json'
+import votingToChangeProxyABI from './votingToChangeProxy.abi.json'
 import Web3 from 'web3';
 import {VOTING_TO_CHANGE_PROXY} from './addresses'
 

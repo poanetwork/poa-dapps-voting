@@ -1,4 +1,4 @@
-import votingToChangeMinThresholdABI from './votingToChangeMinThresholdABI.json'
+import votingToChangeMinThresholdABI from './votingToChangeMinThreshold.abi.json'
 import Web3 from 'web3';
 import {VOTING_TO_CHANGE_MIN_THRESHOLD} from './addresses'
 

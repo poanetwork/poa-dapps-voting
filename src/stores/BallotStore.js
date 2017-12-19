@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 
-class NewBallotStore {
+class BallotStore {
 	BallotType = {
 		keys: 1,
 		minThreshold: 2,
@@ -19,26 +19,20 @@ class NewBallotStore {
 	@observable ballotType;
 	@observable keysBallotType;
 	@observable keyType;
-	
-	@observable validatorMetadata;
-	@observable ballotMetadata;
+	@observable memo;
+	@observable affectedKey;
+	@observable miningKey;
+	@observable endTime;
+
 
 	constructor() {
 		this.ballotType = this.BallotType.keys;
 		this.keyType = this.KeyType.mining;
 		this.keysBallotType = this.KeysBallotType.add;
-		this.ballotMetadata = {
-			memo: "",
-			affectedKey: ""
-		};
-		this.validatorMetadata = {
-			fullName: "",
-			address: "",
-			state: "",
-			zipCode: "",
-			licenseID: "",
-			licenseExpiration: ""
-		};
+		this.memo = "";
+		this.affectedKey = "";
+		this.miningKey = "";
+		this.endTime = 0;
 	}
 
 	@computed get isBallotForKey() {
@@ -97,19 +91,12 @@ class NewBallotStore {
 
 	@action("change ballot metadata")
 	changeBallotMetadata = (e, field) => {
-		this.ballotMetadata[field] = e.target.value;
-		console.log("ballot metadata", field, this.ballotMetadata[field])
-	}
-
-	@action("change validator metadata")
-	changeValidatorMetadata = (e, field) => {
-		console.log(e)
-		this.validatorMetadata[field] = e?(e.target?e.target.value:e.label):"";
-		console.log("validator metadata", field, this.validatorMetadata[field])
+		this[field] = e.target.value;
+		console.log("ballot metadata", field, this[field])
 	}
 }
 
-const newBallotStore = new NewBallotStore();
+const ballotStore = new BallotStore();
 
-export default newBallotStore;
-export { NewBallotStore };
+export default ballotStore;
+export { BallotStore };
