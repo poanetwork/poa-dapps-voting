@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'mobx-react';
+import newBallotStore from './stores/NewBallotStore';
 import swal from 'sweetalert2';
+
+const stores = { newBallotStore };
 
 if (window.web3) {
   ReactDOM.render((
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider { ...stores }>
+      <BrowserRouter>
+        <App/>
+      </BrowserRouter>
+    </Provider>
   ), document.getElementById('root'));
 } else {
   swal(
