@@ -1,6 +1,14 @@
 import React from 'react';
 
+/* stores */
+import NewBallotStore from "../stores/new-ballot.js";
+
+
 export class NewBallot extends React.Component {
+  onClick() {
+    console.log("create ballot");
+  }
+
   render() {
     return (
       <section className="container new">
@@ -165,7 +173,7 @@ export class NewBallot extends React.Component {
             <div className="info">
               Minimum 3 from 12 validators  required to pass the proposal
             </div>
-            <button type="button" className="add-ballot">Add ballot</button>
+            <button type="button" className="add-ballot" onClick={this.onClick}>Add ballot</button>
           </div>
         </form>
       </section>
