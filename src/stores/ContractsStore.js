@@ -22,6 +22,11 @@ class ContractsStore {
 		this.miningKey = null;
 	}
 
+	@computed get isValidVotingKey() {
+		if (this.miningKey != "0x0000000000000000000000000000000000000000") return true;
+		return false
+	}
+
 	@action("Set web3Instance")
 	setWeb3Instance = (web3Config) => {
 		this.web3Instance = web3Config.web3Instance;

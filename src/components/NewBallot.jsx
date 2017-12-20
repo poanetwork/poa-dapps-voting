@@ -149,6 +149,12 @@ export class NewBallot extends React.Component {
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore } = this.props;
     commonStore.showLoading();
+    const isValidVotingKey = contractsStore.isValidVotingKey;
+    if (!isValidVotingKey) {
+      commonStore.hideLoading();
+      swal("Warning!", "The key is not valid voting Key! Please make sure you have loaded correct voting key in metamask", "warning");
+      return;
+    }
     const isFormValid = this.checkValidation();
     if (isFormValid) {
       let methodToCreateBallot;
