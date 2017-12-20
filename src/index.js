@@ -4,14 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'mobx-react';
+import commonStore from './stores/CommonStore';
 import validatorStore from './stores/ValidatorStore';
 import ballotStore from './stores/BallotStore';
 import contractsStore from './stores/ContractsStore';
 import swal from 'sweetalert2';
-import getWeb3 from './getWeb3'
+import getWeb3 from './getWeb3';
 import "babel-polyfill";
 
-const stores = { contractsStore, ballotStore, validatorStore };
+const stores = { commonStore, contractsStore, ballotStore, validatorStore };
 
 function generateElement(msg){
   let errorNode = document.createElement("div");
@@ -27,6 +28,7 @@ class AppMainRouter extends Component {
     super(props);
 
     getWeb3().then(async (web3Config) => {
+      contractsStore.setWeb3Instance(web3Config);
       contractsStore.setVotingToChangeKeys(web3Config);
       contractsStore.setVotingToChangeMinThreshold(web3Config);
       contractsStore.setVotingToChangeProxy(web3Config);

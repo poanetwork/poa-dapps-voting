@@ -1,8 +1,14 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
-import Select from 'react-select';
+import moment from 'moment';
+import swal from 'sweetalert2';
+import { Validator } from './Validator';
+import { KeysTypes } from './KeysTypes';
+import { BallotKeysMetadata } from './BallotKeysMetadata';
+import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
+import { BallotProxyMetadata } from './BallotProxyMetadata';
 
-@inject("ballotStore", "validatorStore", "contractsStore")
+@inject("commonStore", "ballotStore", "validatorStore", "contractsStore")
 @observer
 export class NewBallot extends React.Component {
   constructor(props) {
@@ -10,23 +16,118 @@ export class NewBallot extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
 
+  checkValidation() {
+    const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
+    const isAfter = moment(ballotStore.endTime).isAfter(moment());
+
+    if (ballotStore.isNewValidatorPersonalData) {
+      for (let validatorProp in validatorStore) {
+        if (validatorStore[validatorProp].length === 0) {
+          swal("Warning!", `Validator ${validatorProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
+      }
+    }
+
+    if (!isAfter) {
+      swal("Warning!", "Ballot end time should be greater than now", "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    if (ballotStore.isBallotForKey) {
+      for (let ballotKeysProp in ballotStore.ballotKeys) {
+        if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
+          swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
+      }
+
+      let isAffectedKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.affectedKey);
+
+      if (!isAffectedKeyAddress) {
+        swal("Warning!", `Ballot affectedKey isn't address`, "warning");
+        commonStore.hideLoading();
+        return false;
+      }
+
+      let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey);
+
+      if (!isMiningKeyAddress) {
+        swal("Warning!", `Ballot miningKey isn't address`, "warning");
+        commonStore.hideLoading();
+        return false;
+      }
+    }
+
+    if (ballotStore.isBallotForMinThreshold) {
+      for (let ballotMinThresholdProp in ballotStore.ballotMinThreshold) {
+        if (ballotStore.ballotMinThreshold[ballotMinThresholdProp].length === 0) {
+          swal("Warning!", `Ballot ${ballotMinThresholdProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
+      }
+    }
+
+    if (ballotStore.isBallotForProxy) {
+      for (let ballotProxyProp in ballotStore.ballotProxy) {
+        if (ballotStore.ballotProxy[ballotProxyProp].length === 0) {
+          swal("Warning!", `Ballot ${ballotProxyProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   onClick() {
-    const { contractsStore, ballotStore } = this.props;
-    const curDate = new Date();
-    const curDateInSeconds = curDate.getSeconds()/1000;
-    contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.createVotingForKeys(
-      curDateInSeconds,
-      curDateInSeconds,
-      ballotStore.affectedKey, 
-      ballotStore.keyType, 
-      ballotStore.miningKey,
-      ballotStore.ballotType  
-    )
-    .send({from: contractsStore.votingKey});
+    const { commonStore, contractsStore, ballotStore } = this.props;
+    commonStore.showLoading();
+    const isFormValid = this.checkValidation();
+    if (isFormValid) {
+      const curDate = new Date();
+      const curDateInSeconds = moment(curDate).unix();
+      const inputToMethod = [
+        curDateInSeconds,
+        ballotStore.endTimeUnix,
+        ballotStore.ballotKeys.affectedKey, 
+        ballotStore.ballotKeys.keyType, 
+        ballotStore.ballotKeys.miningKey,
+        ballotStore.ballotType
+      ];
+      console.log(inputToMethod)
+      contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.createVotingForKeys(
+        ...inputToMethod
+      )
+      .send({from: contractsStore.votingKey})
+      .on("error", (e) => {
+        commonStore.hideLoading();
+        swal("Error!", e.message, "error");
+      });
+    }
   }
 
   render() {
-    const { ballotStore, validatorStore } = this.props;
+    const { ballotStore } = this.props;
+    let validator = ballotStore.isNewValidatorPersonalData ? <Validator />: "";
+    let keysTypes = ballotStore.isBallotForKey ? <KeysTypes />: "";
+    let metadata
+    switch (ballotStore.ballotType) {
+      case ballotStore.BallotType.keys: 
+        metadata = <BallotKeysMetadata />;
+        break;
+      case ballotStore.BallotType.minThreshold: 
+        metadata = <BallotMinThresholdMetadata />;
+        break;
+      case ballotStore.BallotType.proxy: 
+        metadata = <BallotProxyMetadata />;
+        break;
+    }
     return (
       <section className="container new">
         <h1 className="title">New Ballot</h1>
@@ -60,212 +161,25 @@ export class NewBallot extends React.Component {
                 </p>
               </div>
             </div>
-          </div>
-          <hr />
-          <div className="hidden">
             <div className="left">
-              <div className="form-el">
-                <label for="full-name">Full Name</label>
-                <input type="text" id="full-name" 
-                  value={validatorStore.fullName} 
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "fullName")}
+              <div className="radio-container">
+                <input type="radio" name="ballot-type" id="ballot-for-proxy" 
+                  value={ballotStore.BallotType.proxy}
+                  checked={ballotStore.isBallotForProxy} 
+                  onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
                 />
+                <label for="ballot-for-proxy" className="radio">Ballot for proxy</label>
                 <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="form-el">
-                <label for="address">Address</label>
-                <input type="text" id="address" 
-                  value={validatorStore.address} 
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "address")}
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="left">
-              <div className="form-el">
-                <label for="us-state">State</label>
-                <Select id="us-state"
-                  value={validatorStore.state}
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "state")}
-                  options={[
-                    { value: '', label: '' },
-                    { value: 'Alabama', label: 'Alabama' },
-                    { value: 'Florida', label: 'Florida' },
-                  ]}
-                >
-                </Select>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="form-el">
-                <label for="zip-code">Zip Code</label>
-                <input type="number" id="zip-code" 
-                  value={validatorStore.zipCode} 
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "zipCode")}
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="left">
-              <div className="form-el">
-                <label for="license-id">License ID</label>
-                <input type="text" id="license-id" 
-                  value={validatorStore.licenseID} 
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "licenseID")}
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="form-el">
-                <label for="license-expiration">License Expiration</label>
-                <input type="date" id="license-expiration" 
-                  value={validatorStore.licenseExpiration} 
-                  onChange={e => validatorStore.changeValidatorMetadata(e, "licenseExpiration")}
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                  eiusmod tempor incididunt ut labore
                 </p>
               </div>
             </div>
           </div>
           <hr />
-          <div className="hidden">
-            <div className="left">
-              <div className="radio-container">
-                <input type="radio" name="key-control" id="add-key" 
-                  value={ballotStore.KeysBallotType.add}
-                  checked={ballotStore.isAddKeysBallotType} 
-                  onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.add)}
-                />
-                <label for="add-key" className="radio radio_icon radio_add">Add key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-              <div className="radio-container">
-                <input type="radio" name="key-control" id="remove-key" 
-                  value={ballotStore.KeysBallotType.remove}
-                  checked={ballotStore.isRemoveKeysBallotType} 
-                  onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.remove)}
-                />
-                <label for="remove-key" className="radio radio_icon radio_remove">Remove key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-              <div className="radio-container">
-                <input type="radio" name="key-control" id="swap-key" 
-                  value={ballotStore.KeysBallotType.swap}
-                  checked={ballotStore.isSwapKeysBallotType} 
-                  onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.swap)}
-                />
-                <label for="swap-key" className="radio radio_icon radio_swap">Swap key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="radio-container">
-                <input type="radio" name="keys" id="mining-key" 
-                  value={ballotStore.KeyType.mining}
-                  checked={ballotStore.isMiningKeyType} 
-                  onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.mining)}
-                />
-                <label for="mining-key" className="radio">Mining Key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-              <div className="radio-container">
-                <input type="radio" name="keys" id="payout-key" 
-                  value={ballotStore.KeyType.payout}
-                  checked={ballotStore.isPayoutKeyType} 
-                  onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.payout)}
-                />
-                <label for="payout-key" className="radio">Payout Key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-              <div className="radio-container">
-                <input type="radio" name="keys" id="voting-key" 
-                  value={ballotStore.KeyType.voting}
-                  checked={ballotStore.isVotingKeyType} 
-                  onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.voting)}
-                />
-                <label for="voting-key" className="radio">Voting Key</label>
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="hidden">
-            <div className="left">
-              <div className="form-el">
-                <label for="memo">Memo</label>
-                <input type="text" id="memo" 
-                  value={ballotStore.memo} 
-                  onChange={e => ballotStore.changeBallotMetadata(e, "memo")} 
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="form-el">
-                <label for="key">Affected Key</label>
-                <input type="text" id="key" 
-                  value={ballotStore.affectedKey} 
-                  onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey")} 
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="left">
-              <div className="form-el">
-                <label for="key">Mining Key</label>
-                <input type="text" id="key" 
-                  value={ballotStore.miningKey} 
-                  onChange={e => ballotStore.changeBallotMetadata(e, "miningKey")} 
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-            <div className="right">
-              <div className="form-el">
-                <label for="key">Ballot End</label>
-                <input type="date" id="key" 
-                  value={ballotStore.endTime} 
-                  onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
-                />
-                <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                </p>
-              </div>
-            </div>
-          </div>
-          <hr />
+          {validator}
+          {keysTypes}
+          {metadata}
           <div className="new-form-footer">
             <div className="info">
               Minimum 3 from 12 validators  required to pass the proposal

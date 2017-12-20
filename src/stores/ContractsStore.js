@@ -12,6 +12,7 @@ class ContractsStore {
 	@observable votingToChangeProxy;
 	@observable votingKey;
 	@observable miningKey;
+	@observable web3Instance;
 
 	constructor() {
 		this.votingToChangeKeys = null;
@@ -19,6 +20,11 @@ class ContractsStore {
 		this.votingToChangeProxy = null;
 		this.votingKey = null;
 		this.miningKey = null;
+	}
+
+	@action("Set web3Instance")
+	setWeb3Instance = (web3Config) => {
+		this.web3Instance = web3Config.web3Instance;
 	}
 
 	@action("Set VotingToChangeKeys contract")

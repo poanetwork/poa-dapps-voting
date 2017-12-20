@@ -1,4 +1,5 @@
 import { observable, computed, action } from 'mobx';
+import moment from 'moment';
 
 class BallotStore {
 	BallotType = {
@@ -17,22 +18,37 @@ class BallotStore {
 		payout: 3
 	};
 	@observable ballotType;
-	@observable keysBallotType;
-	@observable keyType;
-	@observable memo;
-	@observable affectedKey;
-	@observable miningKey;
 	@observable endTime;
+
+	@observable ballotKeys;
+	@observable ballotMinThreshold;
+	@observable ballotProxy;
 
 
 	constructor() {
 		this.ballotType = this.BallotType.keys;
-		this.keyType = this.KeyType.mining;
-		this.keysBallotType = this.KeysBallotType.add;
-		this.memo = "";
-		this.affectedKey = "";
-		this.miningKey = "";
-		this.endTime = 0;
+		this.endTime = "";
+
+		this.ballotKeys = {
+			keyType: this.KeyType.mining,
+			keysBallotType: this.KeysBallotType.add,
+			memo: "",
+			affectedKey: "",
+			miningKey: ""
+		};
+
+		this.ballotMinThreshold = {
+			proposedValue: ""
+		};
+
+		this.ballotProxy = {
+			proposedAddress: ""
+		};
+	}
+
+	@computed get endTimeUnix() {
+		console.log(this.endTime)
+		return moment(this.endTime).unix();
 	}
 
 	@computed get isBallotForKey() {
@@ -48,27 +64,33 @@ class BallotStore {
 	}
 
 	@computed get isAddKeysBallotType() {
-		return this.keysBallotType === this.KeysBallotType.add
+		return this.ballotKeys.keysBallotType === this.KeysBallotType.add
 	}
 
 	@computed get isRemoveKeysBallotType() {
-		return this.keysBallotType === this.KeysBallotType.remove
+		return this.ballotKeys.keysBallotType === this.KeysBallotType.remove
 	}
 
 	@computed get isSwapKeysBallotType() {
-		return this.keysBallotType === this.KeysBallotType.swap
+		return this.ballotKeys.keysBallotType === this.KeysBallotType.swap
 	}
 
 	@computed get isMiningKeyType() {
-		return this.keyType === this.KeyType.mining
+		return this.ballotKeys.keyType === this.KeyType.mining
 	}
 
 	@computed get isVotingKeyType() {
-		return this.keyType === this.KeyType.voting
+		return this.ballotKeys.keyType === this.KeyType.voting
 	}
 
 	@computed get isPayoutKeyType() {
-		return this.keyType === this.KeyType.payout
+		return this.ballotKeys.keyType === this.KeyType.payout
+	}
+
+	@computed get isNewValidatorPersonalData() {
+		return ballotStore.isBallotForKey 
+			&& ballotStore.isAddKeysBallotType 
+			&& ballotStore.isMiningKeyType;
 	}
 
 	@action("change ballot type")
@@ -80,18 +102,21 @@ class BallotStore {
 	@action("change keys ballot type")
 	changeKeysBallotType = (e, _keysBallotType) => {
 		console.log("change keys ballot type", _keysBallotType);
-		this.keysBallotType = _keysBallotType;
+		this.ballotKeys.keysBallotType = _keysBallotType;
 	}
 
 	@action("change affected key type")
 	changeKeyType = (e, _keyType) => {
 		console.log("change affected key type", _keyType);
-		this.keyType = _keyType;
+		this.ballotKeys.keyType = _keyType;
 	}
 
 	@action("change ballot metadata")
-	changeBallotMetadata = (e, field) => {
-		this[field] = e.target.value;
+	changeBallotMetadata = (e, field, parent) => {
+		if (parent)
+			this[parent][field] = e.target.value;
+		else
+			this[field] = e.target.value;
 		console.log("ballot metadata", field, this[field])
 	}
 }
