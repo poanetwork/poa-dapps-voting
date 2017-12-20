@@ -13,8 +13,8 @@ export class BallotMinThresholdMetadata extends React.Component {
             <div className="form-el">
               <label for="key">Proposed Value</label>
               <input type="number" id="key" 
-                value={ballotStore.affectedKey} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue")} 
+                value={ballotStore.ballotMinThreshold.proposedValue} 
+                onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue", "ballotMinThreshold")} 
               />
               <p className="hint">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

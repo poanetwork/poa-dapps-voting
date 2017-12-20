@@ -42,7 +42,8 @@ class BallotStore {
 		};
 
 		this.ballotProxy = {
-			proposedAddress: ""
+			proposedAddress: "",
+			contractType: ""
 		};
 	}
 
@@ -113,11 +114,12 @@ class BallotStore {
 
 	@action("change ballot metadata")
 	changeBallotMetadata = (e, field, parent) => {
+		let newVal = e?(e.target?e.target.value:e.value):"";
 		if (parent)
-			this[parent][field] = e.target.value;
+			this[parent][field] = newVal;
 		else
-			this[field] = e.target.value;
-		console.log("ballot metadata", field, this[field])
+			this[field] = newVal;
+		console.log("ballot metadata", field, parent?this[parent][field]:this[field])
 	}
 }
 

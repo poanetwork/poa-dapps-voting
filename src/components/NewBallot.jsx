@@ -80,31 +80,90 @@ export class NewBallot extends React.Component {
           return false;
         }
       }
+
+      let isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress);
+
+      if (!isAddress) {
+        swal("Warning!", `Ballot proposedAddress isn't address`, "warning");
+        commonStore.hideLoading();
+        return false;
+      }
     }
 
     return true;
   }
 
-  onClick() {
+  createBallotForKeys = () => {
+    const { ballotStore, contractsStore } = this.props;
+    const curDate = new Date();
+    const curDateInSeconds = moment(curDate).unix();
+    const inputToMethod = [
+      curDateInSeconds,
+      ballotStore.endTimeUnix,
+      ballotStore.ballotKeys.affectedKey, 
+      ballotStore.ballotKeys.keyType, 
+      ballotStore.ballotKeys.miningKey,
+      ballotStore.ballotType
+    ];
+    console.log(inputToMethod)
+    let method = contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.createVotingForKeys(
+      ...inputToMethod
+    ).send({from: contractsStore.votingKey});
+    return method;
+  }
+
+  createBallotForMinThreshold = () => {
+    const { ballotStore, contractsStore } = this.props;
+    const curDate = new Date();
+    const curDateInSeconds = moment(curDate).unix();
+    const inputToMethod = [
+      curDateInSeconds,
+      ballotStore.endTimeUnix,
+      ballotStore.ballotMinThreshold.proposedValue, 
+    ];
+    console.log(inputToMethod)
+    let method = contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(
+      ...inputToMethod
+    ).send({from: contractsStore.votingKey});
+    return method;
+  }
+
+  createBallotForProxy = () => {
+    const { ballotStore, contractsStore } = this.props;
+    const curDate = new Date();
+    const curDateInSeconds = moment(curDate).unix();
+    const inputToMethod = [
+      curDateInSeconds,
+      ballotStore.endTimeUnix,
+      ballotStore.ballotProxy.proposedAddress, 
+      ballotStore.ballotProxy.contractType,
+    ];
+    console.log(inputToMethod)
+    console.log(contractsStore.votingToChangeProxy)
+    let method = contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(
+      ...inputToMethod
+    ).send({from: contractsStore.votingKey})
+    return method;
+  }
+
+  onClick = async () => {
     const { commonStore, contractsStore, ballotStore } = this.props;
     commonStore.showLoading();
     const isFormValid = this.checkValidation();
     if (isFormValid) {
-      const curDate = new Date();
-      const curDateInSeconds = moment(curDate).unix();
-      const inputToMethod = [
-        curDateInSeconds,
-        ballotStore.endTimeUnix,
-        ballotStore.ballotKeys.affectedKey, 
-        ballotStore.ballotKeys.keyType, 
-        ballotStore.ballotKeys.miningKey,
-        ballotStore.ballotType
-      ];
-      console.log(inputToMethod)
-      contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.createVotingForKeys(
-        ...inputToMethod
-      )
-      .send({from: contractsStore.votingKey})
+      let methodToCreateBallot;
+      switch (ballotStore.ballotType) {
+        case ballotStore.BallotType.keys: 
+          methodToCreateBallot = this.createBallotForKeys;
+          break;
+        case ballotStore.BallotType.minThreshold: 
+          methodToCreateBallot = this.createBallotForMinThreshold;
+          break;
+        case ballotStore.BallotType.proxy: 
+          methodToCreateBallot = this.createBallotForProxy;
+          break;
+      }
+      methodToCreateBallot()
       .on("error", (e) => {
         commonStore.hideLoading();
         swal("Error!", e.message, "error");

@@ -13,7 +13,7 @@ export class BallotKeysMetadata extends React.Component {
             <div className="form-el">
               <label for="key">Affected Key</label>
               <input type="text" id="key" 
-                value={ballotStore.affectedKey} 
+                value={ballotStore.ballotKeys.affectedKey} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")} 
               />
               <p className="hint">
@@ -25,7 +25,7 @@ export class BallotKeysMetadata extends React.Component {
             <div className="form-el">
               <label for="key">Mining Key</label>
               <input type="text" id="key" 
-                value={ballotStore.miningKey} 
+                value={ballotStore.ballotKeys.miningKey} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "miningKey", "ballotKeys")} 
               />
               <p className="hint">
@@ -37,7 +37,7 @@ export class BallotKeysMetadata extends React.Component {
             <div className="form-el">
               <label for="memo">Memo</label>
               <input type="text" id="memo" 
-                value={ballotStore.memo} 
+                value={ballotStore.ballotKeys.memo} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "memo", "ballotKeys")} 
               />
               <p className="hint">

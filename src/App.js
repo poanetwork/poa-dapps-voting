@@ -11,7 +11,6 @@ import { inject, observer } from 'mobx-react';
 class App extends Component {
   render() {
     const { commonStore } = this.props;
-    console.log(commonStore.loading)
     const loading = commonStore.loading ? <Loading /> : ''
     return (
       <div>

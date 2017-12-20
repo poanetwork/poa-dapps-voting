@@ -20,7 +20,7 @@ class ValidatorStore {
 
 	@action("change validator metadata")
 	changeValidatorMetadata = (e, field) => {
-		this[field] = e?(e.target?e.target.value:e.label):"";
+		this[field] = e?(e.target?e.target.value:e.value):"";
 		console.log("validator metadata", field, this[field])
 	}
 }
