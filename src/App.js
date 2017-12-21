@@ -22,16 +22,15 @@ class App extends Component {
   }
 
   render() {
-    this.rootPath = '/poa-dapps-voting'
     const { commonStore } = this.props;
     const loading = commonStore.loading ? <Loading /> : ''
     return (
       <div>
         {loading}
         <Header />
-        <Route exact path={`${this.rootPath}/`} render={this.onBallotsRender}/>
-        <Route path={`${this.rootPath}/new`} render={this.onNewBallotRender}/>
-        <Route path={`${this.rootPath}/settings`} render={this.onSettingsRender}/>
+        <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
+        <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
+        {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         <Footer />
         <DevTools />
       </div>

@@ -2,9 +2,11 @@ import { observable, computed, action } from 'mobx';
 
 class CommonStore {
 	@observable loading;
+	@observable rootPath;
 
 	constructor() {
 		this.loading = false;
+		this.rootPath = '/poa-dapps-voting'
 	}
 
 	@action("show loading")

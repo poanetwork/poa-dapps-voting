@@ -7,8 +7,12 @@ import { KeysTypes } from './KeysTypes';
 import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
+import { browserHistory } from 'react-router';
 
-@inject("commonStore", "ballotStore", "validatorStore", "contractsStore")
+console.log("browserHistory:")
+console.log(browserHistory)
+
+@inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
 export class NewBallot extends React.Component {
   constructor(props) {
@@ -142,6 +146,7 @@ export class NewBallot extends React.Component {
 
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore } = this.props;
+    const { location, push, goBack } = this.props.routing;
     commonStore.showLoading();
     const isValidVotingKey = contractsStore.isValidVotingKey;
     if (!isValidVotingKey) {
@@ -166,6 +171,12 @@ export class NewBallot extends React.Component {
       const curDate = new Date();
       let curDateInSeconds = moment(curDate).add(5, 'minute').unix();
       methodToCreateBallot(curDateInSeconds)
+      .on("receipt", () => {
+        commonStore.hideLoading();
+        swal("Congratulations!", "You successfully created a new ballot", "success").then((result) => {
+          push(`${commonStore.rootPath}`);
+        });
+      })
       .on("error", (e) => {
         commonStore.hideLoading();
         swal("Error!", e.message, "error");

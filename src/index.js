@@ -4,6 +4,7 @@ import { Router, Route } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'mobx-react';
+import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 import commonStore from './stores/CommonStore';
 import validatorStore from './stores/ValidatorStore';
 import ballotStore from './stores/BallotStore';
@@ -13,8 +14,10 @@ import getWeb3 from './getWeb3';
 import "babel-polyfill";
 import createBrowserHistory from 'history/createBrowserHistory'
 
-const history = createBrowserHistory()
-const stores = { commonStore, contractsStore, ballotStore, validatorStore };
+const browserHistory = createBrowserHistory();
+const routingStore = new RouterStore();
+const stores = { commonStore, contractsStore, ballotStore, validatorStore, routing: routingStore };
+const history = syncHistoryWithStore(browserHistory, routingStore);
 
 function generateElement(msg){
   let errorNode = document.createElement("div");

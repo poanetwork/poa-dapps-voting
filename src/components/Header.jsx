@@ -6,7 +6,7 @@ export const Header = () => (
     <div className="container">
       <Link to="/poa-dapps-voting" className="header-logo"></Link>
       <Link to="/poa-dapps-voting/new" className="header-new-ballot">New ballot</Link>
-      <Link to="/poa-dapps-voting/settings" className="header-settings">Settings</Link>
+      {/*<Link to="/poa-dapps-voting/settings" className="header-settings">Settings</Link>*/}
     </div>
   </header>
 );
