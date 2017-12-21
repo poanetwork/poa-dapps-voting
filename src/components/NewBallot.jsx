@@ -93,10 +93,8 @@ export class NewBallot extends React.Component {
     return true;
   }
 
-  createBallotForKeys = () => {
+  createBallotForKeys = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const curDate = new Date();
-    const curDateInSeconds = moment(curDate).unix();
     const inputToMethod = [
       curDateInSeconds,
       ballotStore.endTimeUnix,
@@ -112,10 +110,8 @@ export class NewBallot extends React.Component {
     return method;
   }
 
-  createBallotForMinThreshold = () => {
+  createBallotForMinThreshold = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const curDate = new Date();
-    const curDateInSeconds = moment(curDate).unix();
     const inputToMethod = [
       curDateInSeconds,
       ballotStore.endTimeUnix,
@@ -128,10 +124,8 @@ export class NewBallot extends React.Component {
     return method;
   }
 
-  createBallotForProxy = () => {
+  createBallotForProxy = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const curDate = new Date();
-    const curDateInSeconds = moment(curDate).unix();
     const inputToMethod = [
       curDateInSeconds,
       ballotStore.endTimeUnix,
@@ -169,7 +163,9 @@ export class NewBallot extends React.Component {
           methodToCreateBallot = this.createBallotForProxy;
           break;
       }
-      methodToCreateBallot()
+      const curDate = new Date();
+      let curDateInSeconds = moment(curDate).add(5, 'minute').unix();
+      methodToCreateBallot(curDateInSeconds)
       .on("error", (e) => {
         commonStore.hideLoading();
         swal("Error!", e.message, "error");
