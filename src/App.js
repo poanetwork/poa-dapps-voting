@@ -9,16 +9,29 @@ import { inject, observer } from 'mobx-react';
 @inject("commonStore")
 @observer
 class App extends Component {
+  onBallotsRender = () => {
+    return <Ballots/>;
+  }
+
+  onNewBallotRender = () => {
+    return <NewBallot/>;
+  }
+
+  onSettingsRender = () => {
+    return <Settings/>;
+  }
+
   render() {
+    this.rootPath = '/poa-dapps-voting'
     const { commonStore } = this.props;
     const loading = commonStore.loading ? <Loading /> : ''
     return (
       <div>
         {loading}
         <Header />
-        <Route exact path="/" component={Ballots}/>
-        <Route path="/new" component={NewBallot}/>
-        <Route path="/settings" component={Settings}/>
+        <Route exact path={`${this.rootPath}/`} render={this.onBallotsRender}/>
+        <Route path={`${this.rootPath}/new`} render={this.onNewBallotRender}/>
+        <Route path={`${this.rootPath}/settings`} render={this.onSettingsRender}/>
         <Footer />
         <DevTools />
       </div>

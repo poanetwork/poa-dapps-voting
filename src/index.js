@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'mobx-react';
@@ -11,7 +11,9 @@ import contractsStore from './stores/ContractsStore';
 import swal from 'sweetalert2';
 import getWeb3 from './getWeb3';
 import "babel-polyfill";
+import createBrowserHistory from 'history/createBrowserHistory'
 
+const history = createBrowserHistory()
 const stores = { commonStore, contractsStore, ballotStore, validatorStore };
 
 function generateElement(msg){
@@ -49,9 +51,9 @@ class AppMainRouter extends Component {
   render(){
     return (
       <Provider { ...stores }>
-        <BrowserRouter>
-          <App/>
-        </BrowserRouter>
+        <Router history={history}>
+          <Route component={App} />
+        </Router>
       </Provider>
     )
   }
