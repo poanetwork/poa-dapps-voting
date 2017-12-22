@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 
 @inject("commonStore", "contractsStore", "ballotsStore")
 @observer
-export class BallotCard extends React.Component {
+export class BallotKeysCard extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -21,18 +21,25 @@ export class BallotCard extends React.Component {
               <p className="ballots-i--created">31/10/2017 7:22 AM</p>
             </div>
           </div>
-          <div className="ballots-about-i ballots-about-i_proposal">
+          <div className="ballots-about-i ballots-about-i_action">
             <div className="ballots-about-td">
-              <p className="ballots-about-i--title">Proposal</p>
+              <p className="ballots-about-i--title">Action</p>
             </div>
             <div className="ballots-about-td">
-              <p>Remove notary Shawn Grey, Vermont ID: 55512345 ...</p>
-              <a href="#" className="ballots-i--see-all-proposal">See All</a>
+              <p>Remove</p>
+            </div>
+          </div>
+          <div className="ballots-about-i ballots-about-i_type">
+            <div className="ballots-about-td">
+              <p className="ballots-about-i--title">Key type</p>
+            </div>
+            <div className="ballots-about-td">
+              <p>Mining</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_mining-key">
             <div className="ballots-about-td">
-              <p className="ballots-about-i--title">Mining key</p>
+              <p className="ballots-about-i--title">Affected key</p>
             </div>
             <div className="ballots-about-td">
               <p>0xA1Cf735Ab55e9840Be820261D9b404959fcB5e41</p>

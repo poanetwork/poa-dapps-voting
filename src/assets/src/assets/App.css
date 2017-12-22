@@ -637,9 +637,22 @@ button {
         width: 100% !important; } }
     .ballots-about-i_name {
       width: 25%; }
+    .ballots-about-i_action {
+      width: 15%; }
+    .ballots-about-i_type {
+      width: 15%; }
     .ballots-about-i_proposal {
       width: 30%; }
     .ballots-about-i_mining-key {
+      width: 30%;
+      word-break: break-all; }
+    .ballots-about-i_proposed-min-threshold {
+      width: 60%;
+      word-break: break-all; }
+    .ballots-about-i_contract-type {
+      width: 30%;
+      word-break: break-all; }
+    .ballots-about-i_proposed-address {
       width: 30%;
       word-break: break-all; }
     .ballots-about-i_time {

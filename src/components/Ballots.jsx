@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer, observable } from "mobx-react";
-import { BallotCard } from "./BallotCard";
 import "babel-polyfill";
 
 @inject("commonStore", "contractsStore", "ballotStore", "ballotsStore")

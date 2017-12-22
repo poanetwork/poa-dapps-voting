@@ -7,7 +7,9 @@ import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
 import ballotStore from './BallotStore'
 import ballotsStore from './BallotsStore'
 import getWeb3 from '../getWeb3';
-import { BallotCard } from "../components/BallotCard";
+import { BallotKeysCard } from "../components/BallotKeysCard";
+import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
+import { BallotProxyCard } from "../components/BallotProxyCard";
 
 import "babel-polyfill";
 
@@ -88,7 +90,7 @@ class ContractsStore {
     	console.log("allKeysBallotsIDs:", allKeysBallotsIDs)
 	    this.activeKeysBallotsIDs = allKeysBallotsIDs;
 	    for (let i = 0; i < allKeysBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotCard id={this.activeKeysBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotKeysCard id={this.activeKeysBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
 	    }
 	}
 
@@ -100,7 +102,7 @@ class ContractsStore {
     	console.log("allMinThresholdBallotsIDs:", allMinThresholdBallotsIDs)
 	    this.activeMinThresholdBallotsIDs = allMinThresholdBallotsIDs;
 	    for (let i = 0; i < allMinThresholdBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotCard id={this.activeMinThresholdBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotMinThresholdCard id={this.activeMinThresholdBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
 	    }
 	}
 
@@ -112,7 +114,7 @@ class ContractsStore {
     	console.log("allProxyBallotsIDs:", allProxyBallotsIDs)
 	    this.activeProxyBallotsIDs = allProxyBallotsIDs;
 	    for (let i = 0; i < allProxyBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotCard id={this.activeProxyBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotProxyCard id={this.activeProxyBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
 	    }
 	}
 }

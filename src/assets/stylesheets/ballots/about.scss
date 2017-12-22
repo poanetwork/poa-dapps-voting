@@ -35,11 +35,34 @@
       width: 25%;
     }
 
+    &_action {
+      width: 15%;
+    }
+
+    &_type {
+      width: 15%;
+    }
+
     &_proposal {
       width: 30%;
     }
 
     &_mining-key {
+      width: 30%;
+      word-break: break-all;
+    }
+
+    &_proposed-min-threshold {
+      width: 60%;
+      word-break: break-all;
+    }
+
+    &_contract-type {
+      width: 30%;
+      word-break: break-all;
+    }
+
+    &_proposed-address {
       width: 30%;
       word-break: break-all;
     }
