@@ -12,13 +12,32 @@ export class BallotKeysCard extends React.Component {
   @observable affectedKey;
   @observable affectedKeyType;
   @observable affectedKeyTypeDisplayName;
+  @observable ballotType;
+  @observable ballotTypeDisplayName;
 
+  @action("Get ballotTypeDisplayName")
+  getBallotTypeDisplayName(ballotType) {
+    const { ballotStore } = this.props;
+    switch(parseInt(ballotType)) {
+      case ballotStore.KeysBallotType.add: 
+        this.ballotTypeDisplayName = "add";
+        break;
+      case ballotStore.KeysBallotType.remove: 
+        this.ballotTypeDisplayName = "remove";
+        break;
+      case ballotStore.KeysBallotType.swap: 
+        this.ballotTypeDisplayName = "swap";
+        break;
+      default:
+        this.ballotTypeDisplayName =  "";
+        break;
+    }
+  }
 
   @action("Get affectedKeyTypeDisplayName")
   getAffectedKeyTypeDisplayName(affectedKeyType) {
     const { ballotStore } = this.props;
-    console.log("this.affectedKeyType:", affectedKeyType)
-    switch(affectedKeyType) {
+    switch(parseInt(affectedKeyType)) {
       case ballotStore.KeyType.mining: 
         this.affectedKeyTypeDisplayName = "mining";
         break;
@@ -63,6 +82,15 @@ export class BallotKeysCard extends React.Component {
       this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm");
   }
 
+  @action("Get ballot type of keys ballot")
+  getBallotType = async (_id) => {
+    const { contractsStore } = this.props;
+    let ballotType = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getBallotType(_id).call()
+    console.log(ballotType)
+    this.ballotType = ballotType;
+    this.getBallotTypeDisplayName(ballotType);
+  }
+
   @action("Get affected key type of keys ballot")
   getAffectedKeyType = async (_id) => {
     const { contractsStore } = this.props;
@@ -87,6 +115,8 @@ export class BallotKeysCard extends React.Component {
     this.getEndTime(this.props.id);
     this.getAffectedKey(this.props.id);
     this.getAffectedKeyType(this.props.id);
+    this.getBallotType(this.props.id);
+    this.calcTimeToFinish(this.props.id);
   }
 
   render () {
@@ -107,7 +137,7 @@ export class BallotKeysCard extends React.Component {
               <p className="ballots-about-i--title">Action</p>
             </div>
             <div className="ballots-about-td">
-              <p>Remove</p>
+              <p>{this.ballotTypeDisplayName}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_type">

@@ -53,6 +53,7 @@ export class BallotMinThresholdCard extends React.Component {
     this.getStartTime(this.props.id);
     this.getEndTime(this.props.id);
     this.getProposedValue(this.props.id);
+    this.calcTimeToFinish(this.props.id);
   }
 
   render () {
