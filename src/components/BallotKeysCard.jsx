@@ -1,11 +1,92 @@
 import React from 'react';
+import moment from 'moment';
+import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 
-@inject("commonStore", "contractsStore", "ballotsStore")
+@inject("contractsStore", "ballotStore")
 @observer
 export class BallotKeysCard extends React.Component {
+  @observable startTime;
+  @observable endTime;
+  @observable timeToFinish;
+  @observable affectedKey;
+  @observable affectedKeyType;
+  @observable affectedKeyTypeDisplayName;
+
+
+  @action("Get affectedKeyTypeDisplayName")
+  getAffectedKeyTypeDisplayName(affectedKeyType) {
+    const { ballotStore } = this.props;
+    console.log("this.affectedKeyType:", affectedKeyType)
+    switch(affectedKeyType) {
+      case ballotStore.KeyType.mining: 
+        this.affectedKeyTypeDisplayName = "mining";
+        break;
+      case ballotStore.KeyType.voting: 
+        this.affectedKeyTypeDisplayName = "voting";
+        break;
+      case ballotStore.KeyType.payout: 
+        this.affectedKeyTypeDisplayName = "payout";
+        break;
+      default:
+        this.affectedKeyTypeDisplayName =  "";
+        break;
+    }
+  }
+
+  @action("Get start time of keys ballot")
+  getStartTime = async (_id) => {
+    const { contractsStore } = this.props;
+    let startTime = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getStartTime(_id).call()
+    console.log(startTime)
+    this.startTime = moment.utc(startTime*1000).format('DD/MM/YYYY h:mm A');
+  }
+
+  @action("Get end time of keys ballot")
+  getEndTime = async (_id) => {
+    const { contractsStore } = this.props;
+    let endTime = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getEndTime(_id).call()
+    console.log(endTime)
+    this.endTime = moment.utc(endTime*1000).format('DD/MM/YYYY h:mm A');
+  }
+
+  @action("Calculate time to finish")
+  calcTimeToFinish = (_id) => {
+    const now = moment();
+    const finish = moment.utc(this.endTime*1000);
+    const totalHours = moment.duration(finish.diff(now)).hours();
+    const totalMinutes = moment.duration(finish.diff(now)).minutes();
+    const minutes = totalMinutes - totalHours * 60;
+    if (finish > now)
+      this.timeToFinish = moment(totalHours, "h").format("HH") + ":" + moment(minutes, "m").format("mm");
+    else
+      this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm");
+  }
+
+  @action("Get affected key type of keys ballot")
+  getAffectedKeyType = async (_id) => {
+    const { contractsStore } = this.props;
+    let affectedKeyType = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getAffectedKeyType(_id).call()
+    console.log(affectedKeyType)
+    this.affectedKeyType = affectedKeyType;
+    this.getAffectedKeyTypeDisplayName(affectedKeyType);
+  }
+
+
+  @action("Get affected key of keys ballot")
+  getAffectedKey = async (_id) => {
+    const { contractsStore } = this.props;
+    let affectedKey = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getAffectedKey(_id).call()
+    console.log(affectedKey)
+    this.affectedKey = affectedKey;
+  }
+
   constructor(props) {
     super(props);
+    this.getStartTime(this.props.id);
+    this.getEndTime(this.props.id);
+    this.getAffectedKey(this.props.id);
+    this.getAffectedKeyType(this.props.id);
   }
 
   render () {
@@ -18,7 +99,7 @@ export class BallotKeysCard extends React.Component {
             </div>
             <div className="ballots-about-td">
               <p className="ballots-i--name">Suleyman Duyar</p>
-              <p className="ballots-i--created">31/10/2017 7:22 AM</p>
+              <p className="ballots-i--created">{this.startTime}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_action">
@@ -34,7 +115,7 @@ export class BallotKeysCard extends React.Component {
               <p className="ballots-about-i--title">Key type</p>
             </div>
             <div className="ballots-about-td">
-              <p>Mining</p>
+              <p>{this.affectedKeyTypeDisplayName}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_mining-key">
@@ -42,7 +123,7 @@ export class BallotKeysCard extends React.Component {
               <p className="ballots-about-i--title">Affected key</p>
             </div>
             <div className="ballots-about-td">
-              <p>0xA1Cf735Ab55e9840Be820261D9b404959fcB5e41</p>
+              <p>{this.affectedKey}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_time">
@@ -50,7 +131,7 @@ export class BallotKeysCard extends React.Component {
               <p className="ballots-about-i--title">Time</p>
             </div>
             <div className="ballots-about-td">
-              <p className="ballots-i--time">17:49</p>
+              <p className="ballots-i--time">{this.timeToFinish}</p>
               <p className="ballots-i--to-close">To close</p>
             </div>
           </div>

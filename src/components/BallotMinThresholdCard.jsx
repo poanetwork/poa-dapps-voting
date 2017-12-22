@@ -1,11 +1,58 @@
 import React from 'react';
+import moment from 'moment';
+import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 
-@inject("commonStore", "contractsStore", "ballotsStore")
+@inject("contractsStore")
 @observer
 export class BallotMinThresholdCard extends React.Component {
+  @observable startTime;
+  @observable endTime;
+  @observable timeToFinish;
+  @observable proposedValue;
+
+  @action("Get start time of min threshold ballot")
+  getStartTime = async (_id) => {
+    const { contractsStore } = this.props;
+    let startTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call()
+    console.log(startTime)
+    this.startTime = moment.utc(startTime*1000).format('DD/MM/YYYY h:mm A');
+  }
+
+  @action("Get end time of min threshold ballot")
+  getEndTime = async (_id) => {
+    const { contractsStore } = this.props;
+    let endTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call()
+    console.log(endTime)
+    this.endTime = moment.utc(endTime*1000).format('DD/MM/YYYY h:mm A');
+  }
+
+  @action("Calculate time to finish")
+  calcTimeToFinish = (_id) => {
+    const now = moment();
+    const finish = moment.utc(this.endTime*1000);
+    const totalHours = moment.duration(finish.diff(now)).hours();
+    const totalMinutes = moment.duration(finish.diff(now)).minutes();
+    const minutes = totalMinutes - totalHours * 60;
+    if (finish > now)
+      this.timeToFinish = moment(totalHours, "h").format("HH") + ":" + moment(minutes, "m").format("mm");
+    else
+      this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm");
+  }
+
+  @action("Get proposed value of min threshold ballot")
+  getProposedValue = async (_id) => {
+    const { contractsStore } = this.props;
+    let proposedValue = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call()
+    console.log(proposedValue)
+    this.proposedValue = proposedValue;
+  }
+
   constructor(props) {
     super(props);
+    this.getStartTime(this.props.id);
+    this.getEndTime(this.props.id);
+    this.getProposedValue(this.props.id);
   }
 
   render () {
@@ -18,15 +65,15 @@ export class BallotMinThresholdCard extends React.Component {
             </div>
             <div className="ballots-about-td">
               <p className="ballots-i--name">Suleyman Duyar</p>
-              <p className="ballots-i--created">31/10/2017 7:22 AM</p>
+              <p className="ballots-i--created">{this.startTime}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
             <div className="ballots-about-td">
-              <p className="ballots-about-i--title">Proposed min gthreshold</p>
+              <p className="ballots-about-i--title">Proposed min threshold</p>
             </div>
             <div className="ballots-about-td">
-              <p>0xA1Cf735Ab55e9840Be820261D9b404959fcB5e41</p>
+              <p>{this.proposedValue}</p>
             </div>
           </div>
           <div className="ballots-about-i ballots-about-i_time">
@@ -34,7 +81,7 @@ export class BallotMinThresholdCard extends React.Component {
               <p className="ballots-about-i--title">Time</p>
             </div>
             <div className="ballots-about-td">
-              <p className="ballots-i--time">17:49</p>
+              <p className="ballots-i--time">{this.timeToFinish}</p>
               <p className="ballots-i--to-close">To close</p>
             </div>
           </div>

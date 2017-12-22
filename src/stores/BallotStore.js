@@ -17,6 +17,13 @@ class BallotStore {
 		voting: 2,
 		payout: 3
 	};
+	ProxyBallotType = {
+		1: 'KeysManager',
+		2: 'VotingToChangeKeys',
+		3: 'VotingToChangeMinThreshold',
+		4: 'VotingToChangeProxy',
+		5: 'BallotsStorage'
+	}
 	@observable ballotType;
 	@observable endTime;
 

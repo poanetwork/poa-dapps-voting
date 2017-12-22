@@ -30,11 +30,11 @@ export class BallotProxyMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "contractType", "ballotProxy")}
                 options={[
                   { value: '', label: '' },
-                  { value: '1', label: 'KeysManager' },
-                  { value: '2', label: 'VotingToChangeKeys' },
-                  { value: '3', label: 'VotingToChangeMinThreshold' },
-                  { value: '4', label: 'VotingToChangeProxy' },
-                  { value: '5', label: 'BallotsStorage' },
+                  { value: '1', label: ballotStore.ProxyBallotType[1] },
+                  { value: '2', label: ballotStore.ProxyBallotType[2] },
+                  { value: '3', label: ballotStore.ProxyBallotType[3] },
+                  { value: '4', label: ballotStore.ProxyBallotType[4] },
+                  { value: '5', label: ballotStore.ProxyBallotType[5] },
                 ]}
               >
               </Select>
