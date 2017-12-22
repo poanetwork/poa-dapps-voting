@@ -11,7 +11,7 @@ export default class VotingToChangeProxy {
     }
   }
 
-  createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender}){
+  createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, sender) {
     return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType).send({from: sender})
   }
 

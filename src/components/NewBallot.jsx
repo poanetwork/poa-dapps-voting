@@ -7,10 +7,6 @@ import { KeysTypes } from './KeysTypes';
 import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
-import { browserHistory } from 'react-router';
-
-console.log("browserHistory:")
-console.log(browserHistory)
 
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
@@ -105,12 +101,13 @@ export class NewBallot extends React.Component {
       ballotStore.ballotKeys.affectedKey, 
       ballotStore.ballotKeys.keyType, 
       ballotStore.ballotKeys.miningKey,
-      ballotStore.ballotType
+      ballotStore.ballotType,
+      contractsStore.votingKey
     ];
     console.log(inputToMethod)
-    let method = contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.createVotingForKeys(
+    let method = contractsStore.votingToChangeKeys.createVotingForKeys(
       ...inputToMethod
-    ).send({from: contractsStore.votingKey});
+    );
     return method;
   }
 
@@ -120,11 +117,12 @@ export class NewBallot extends React.Component {
       curDateInSeconds,
       ballotStore.endTimeUnix,
       ballotStore.ballotMinThreshold.proposedValue, 
+      contractsStore.votingKey
     ];
     console.log(inputToMethod)
-    let method = contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(
+    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(
       ...inputToMethod
-    ).send({from: contractsStore.votingKey});
+    );
     return method;
   }
 
@@ -135,12 +133,11 @@ export class NewBallot extends React.Component {
       ballotStore.endTimeUnix,
       ballotStore.ballotProxy.proposedAddress, 
       ballotStore.ballotProxy.contractType,
+      contractsStore.votingKey
     ];
-    console.log(inputToMethod)
-    console.log(contractsStore.votingToChangeProxy)
-    let method = contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(
+    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(
       ...inputToMethod
-    ).send({from: contractsStore.votingKey})
+    );
     return method;
   }
 

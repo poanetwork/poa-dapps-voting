@@ -8,6 +8,7 @@ import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 import commonStore from './stores/CommonStore';
 import validatorStore from './stores/ValidatorStore';
 import ballotStore from './stores/BallotStore';
+import ballotsStore from './stores/BallotsStore';
 import contractsStore from './stores/ContractsStore';
 import swal from 'sweetalert2';
 import getWeb3 from './getWeb3';
@@ -16,7 +17,7 @@ import createBrowserHistory from 'history/createBrowserHistory'
 
 const browserHistory = createBrowserHistory();
 const routingStore = new RouterStore();
-const stores = { commonStore, contractsStore, ballotStore, validatorStore, routing: routingStore };
+const stores = { commonStore, contractsStore, ballotStore, ballotsStore, validatorStore, routing: routingStore };
 const history = syncHistoryWithStore(browserHistory, routingStore);
 
 function generateElement(msg){
@@ -38,6 +39,8 @@ class AppMainRouter extends Component {
       contractsStore.setVotingToChangeMinThreshold(web3Config);
       contractsStore.setVotingToChangeProxy(web3Config);
       contractsStore.setVotingKey(web3Config);
+      contractsStore.getAllKeysBallots();
+      contractsStore.getAllProxyBallots();
       await contractsStore.setMiningKey(web3Config);
       console.log("votingKey", contractsStore.votingKey)
       console.log("miningKey", contractsStore.miningKey)
