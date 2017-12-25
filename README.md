@@ -28,7 +28,7 @@ Click **NEW BALLOT** button from any page to create a new ballot.
 
 
 ## Configuration file
-It is configured with [Oracles network contract](https://github.com/oraclesorg/oracles-contract)
+It is configured with [POA Network contract](https://github.com/poanetwork/poa-network-consensus-contracts)
 
 Path: `./src/contracts/addresses.js`
 

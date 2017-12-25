@@ -14,7 +14,7 @@ if (window.web3) {
 } else {
   swal(
     'Please use a web3 browser',
-    "You aren't connected to POA Network. Please, switch on Oracles plugin and refresh the page. Check Oracles network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.",
+    "You aren't connected to POA Network. Please, switch on Oracles plugin and refresh the page. Check Oracles network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.",
     'error'
   );
 }

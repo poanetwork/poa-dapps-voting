@@ -1,6 +1,6 @@
 let errorMsgNoMetamaskAccount = `You haven't chosen any account in MetaMask.
 Please, choose your initial key in MetaMask and reload the page.
-Check POA Network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.`;
+Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
 
 let getWeb3 = () => {
   return new Promise(function (resolve, reject) {
@@ -30,7 +30,7 @@ let getWeb3 = () => {
               netIdName = 'ERROR'
               errorMsg = `You aren't connected to POA Network. 
                   Please, switch on POA plugin and refresh the page. 
-                  Check POA Network <a href='https://github.com/oraclesorg/oracles-wiki' target='blank'>wiki</a> for more info.`
+                  Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`
               console.log('This is an unknown network.', netId)
           }
           var defaultAccount = web3.eth.defaultAccount || null;
