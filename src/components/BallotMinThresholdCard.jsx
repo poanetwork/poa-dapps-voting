@@ -42,7 +42,6 @@ export class BallotMinThresholdCard extends React.Component {
     const now = moment();
     const finish = moment.utc(this.endTime, 'DD/MM/YYYY h:mm:ss A');
     let ms = finish.diff(now);
-    console.log("ms:", ms)
     if (ms <= 0)
       return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
     
@@ -68,7 +67,7 @@ export class BallotMinThresholdCard extends React.Component {
   @action("Get creator")
   getCreator = async (_id) => {
     const { contractsStore } = this.props;
-    let votingState = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.votingState(_id).call()
+    let votingState = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.votingState(_id).call()
     this.getValidatorFullname(votingState.creator);
   }
 
@@ -85,23 +84,35 @@ export class BallotMinThresholdCard extends React.Component {
   @action("Get total voters")
   getTotalVoters = async (_id) => {
     const { contractsStore } = this.props;
-    this.totalVoters = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getTotalVoters(_id).call();
+    this.totalVoters = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getTotalVoters(_id).call();
     console.log(this.totalVoters);
   }
 
   @action("Get progress")
   getProgress = async (_id) => {
     const { contractsStore } = this.props;
-    this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call();
+    this.progress = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getProgress(_id).call();
   }
 
   @action("Get isFinalized")
   getIsFinalized = async(_id) => {
     const { contractsStore } = this.props;
-    this.isFinalized = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
+    this.isFinalized = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getIsFinalized(_id).call();
   }
 
-  vote = async (e, _id, _type) => {
+  isValidaVote = async () => {
+    const { contractsStore } = this.props;
+    let isValidVote = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.isValidVote(this.props.id, contractsStore.votingKey).call();
+    return isValidVote;
+  }
+
+  isActive = async () => {
+    const { contractsStore } = this.props;
+    let isActive = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.isActive(this.props.id).call();
+    return isActive;
+  }
+
+  vote = async (e, _type) => {
     const { commonStore, contractsStore } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
@@ -109,7 +120,13 @@ export class BallotMinThresholdCard extends React.Component {
       return;
     }
     commonStore.showLoading();
-    contractsStore.votingToChangeKeys.vote(this.props.id, _type, contractsStore.votingKey)
+    let isValidVote = await this.isValidaVote();
+    if (!isValidVote) {
+      commonStore.hideLoading();
+      swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
+      return;
+    }
+    contractsStore.votingToChangeMinThreshold.vote(this.props.id, _type, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
@@ -122,15 +139,25 @@ export class BallotMinThresholdCard extends React.Component {
     });
   }
 
-  finalize = async (e, _id) => {
+  finalize = async (e) => {
     const { commonStore, contractsStore } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
       return;
     }
+    if (this.isFinalized) {
+      swal("Warning!", constants.ALREADY_FINALIZED_MSG, "warning");
+      return;
+    }
     commonStore.showLoading();
-    contractsStore.votingToChangeKeys.finalize(this.props.id, contractsStore.votingKey)
+    let isActive = await this.isActive();
+    if (isActive) {
+      commonStore.hideLoading();
+      swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
+      return;
+    }
+    contractsStore.votingToChangeMinThreshold.finalize(this.props.id, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
@@ -212,7 +239,7 @@ export class BallotMinThresholdCard extends React.Component {
                 <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesAgainstPercents}%`}}></div>
               </div>
             </div>
-            <button type="button" onClick={(e) => this.vote(e, this.props.id, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
+            <button type="button" onClick={(e) => this.vote(e, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
           </div>
         </div>
         <div className="info">
@@ -220,7 +247,7 @@ export class BallotMinThresholdCard extends React.Component {
         </div>
         <hr />
         <div className="ballots-footer">
-          <button type="button" onClick={(e) => this.finalize(e, this.props.id)} className="ballots-footer-finalize">Finalize ballot</button>
+          <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
         </div>
       </div>

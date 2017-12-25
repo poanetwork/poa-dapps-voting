@@ -101,7 +101,6 @@ export class BallotKeysCard extends React.Component {
     const now = moment();
     const finish = moment.utc(this.endTime, 'DD/MM/YYYY h:mm:ss A');
     let ms = finish.diff(now);
-    console.log("ms:", ms)
     if (ms <= 0)
       return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
     
@@ -179,7 +178,19 @@ export class BallotKeysCard extends React.Component {
     this.isFinalized = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
   }
 
-  vote = async (e, _id, _type) => {
+  isValidaVote = async () => {
+    const { contractsStore } = this.props;
+    let isValidVote = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.isValidVote(this.props.id, contractsStore.votingKey).call();
+    return isValidVote;
+  }
+
+  isActive = async () => {
+    const { contractsStore } = this.props;
+    let isActive = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.isActive(this.props.id).call();
+    return isActive;
+  }
+
+  vote = async (e, _type) => {
     const { commonStore, contractsStore } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
@@ -187,6 +198,12 @@ export class BallotKeysCard extends React.Component {
       return;
     }
     commonStore.showLoading();
+    let isValidVote = await this.isValidaVote();
+    if (!isValidVote) {
+      commonStore.hideLoading();
+      swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
+      return;
+    }
     contractsStore.votingToChangeKeys.vote(this.props.id, _type, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
@@ -200,14 +217,24 @@ export class BallotKeysCard extends React.Component {
     });
   }
 
-  finalize = async (e, _id) => {
+  finalize = async (e) => {
     const { commonStore, contractsStore } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
       return;
     }
+    if (this.isFinalized) {
+      swal("Warning!", constants.ALREADY_FINALIZED_MSG, "warning");
+      return;
+    }
     commonStore.showLoading();
+    let isActive = await this.isActive();
+    if (isActive) {
+      commonStore.hideLoading();
+      swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
+      return;
+    }
     contractsStore.votingToChangeKeys.finalize(this.props.id, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
@@ -310,7 +337,7 @@ export class BallotKeysCard extends React.Component {
                 <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesAgainstPercents}%`}}></div>
               </div>
             </div>
-            <button type="button" onClick={(e) => this.vote(e, this.props.id, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
+            <button type="button" onClick={(e) => this.vote(e, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
           </div>
         </div>
         <div className="info">
@@ -318,7 +345,7 @@ export class BallotKeysCard extends React.Component {
         </div>
         <hr />
         <div className="ballots-footer">
-          <button type="button" onClick={(e) => this.finalize(e, this.props.id)} className="ballots-footer-finalize">Finalize ballot</button>
+          <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
         </div>
       </div>
