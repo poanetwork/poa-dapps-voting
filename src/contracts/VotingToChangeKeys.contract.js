@@ -19,7 +19,7 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.vote(id, choice).send({from: sender})
   }
 
-  finalize({id, sender}) {
-    return this.votingToChangeKeysInstance.methods.finalize(id, id).send({from: sender})
+  finalize(id, sender) {
+    return this.votingToChangeKeysInstance.methods.finalize(id).send({from: sender})
   }
 }

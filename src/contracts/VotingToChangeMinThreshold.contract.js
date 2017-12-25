@@ -19,7 +19,7 @@ export default class VotingToChangeMinThreshold {
     return this.votingToChangeMinThresholdInstance.methods.vote(id, choice).send({from: sender})
   }
 
-  finalize({id, sender}) {
-    return this.votingToChangeMinThresholdInstance.methods.finalize(id, id).send({from: sender})
+  finalize(id, sender) {
+    return this.votingToChangeMinThresholdInstance.methods.finalize(id).send({from: sender})
   }
 }

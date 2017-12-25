@@ -3,6 +3,7 @@ import moment from 'moment';
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
+import { constants } from "../constants";
 import swal from 'sweetalert2';
 
 @inject("commonStore", "contractsStore", "routing")
@@ -25,7 +26,7 @@ export class BallotMinThresholdCard extends React.Component {
     const { contractsStore } = this.props;
     let startTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call()
     console.log(startTime)
-    this.startTime = moment.utc(startTime*1000).format('DD/MM/YYYY h:mm A');
+    this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm A');
   }
 
   @action("Get end time of min threshold ballot")
@@ -33,13 +34,13 @@ export class BallotMinThresholdCard extends React.Component {
     const { contractsStore } = this.props;
     let endTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call()
     console.log(endTime)
-    this.endTime = moment.utc(endTime*1000).format('DD/MM/YYYY h:mm A');
+    this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm A');
   }
 
   @action("Calculate time to finish")
   calcTimeToFinish = (_id) => {
     const now = moment();
-    const finish = moment.utc(this.endTime*1000);
+    const finish = moment.utc(this.endTime * 1000);
     const totalHours = moment.duration(finish.diff(now)).hours();
     const totalMinutes = moment.duration(finish.diff(now)).minutes();
     const minutes = totalMinutes - totalHours * 60;
@@ -87,15 +88,39 @@ export class BallotMinThresholdCard extends React.Component {
     this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call
   }
 
-  @action("Vote")
   vote = async (e, _id, _type) => {
     const { commonStore, contractsStore } = this.props;
-    commonStore.showLoading();
     const { push } = this.props.routing;
+    if (!contractsStore.isValidVotingKey) {
+      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+      return;
+    }
+    commonStore.showLoading();
     contractsStore.votingToChangeKeys.vote(this.props.id, _type, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
-      swal("Congratulations!", "You successfully voted", "success").then((result) => {
+      swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
+        push(`${commonStore.rootPath}`);
+      });
+    })
+    .on("error", (e) => {
+      commonStore.hideLoading();
+      swal("Error!", e.message, "error");
+    });
+  }
+
+  finalize = async (e, _id) => {
+    const { commonStore, contractsStore } = this.props;
+    const { push } = this.props.routing;
+    if (!contractsStore.isValidVotingKey) {
+      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+      return;
+    }
+    commonStore.showLoading();
+    contractsStore.votingToChangeKeys.finalize(this.props.id, contractsStore.votingKey)
+    .on("receipt", () => {
+      commonStore.hideLoading();
+      swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
         push(`${commonStore.rootPath}`);
       });
     })
@@ -181,7 +206,7 @@ export class BallotMinThresholdCard extends React.Component {
         </div>
         <hr />
         <div className="ballots-footer">
-          <a href="#" className="ballots-footer-finalize">Finalize ballot</a>
+          <button type="button" onClick={(e) => this.finalize(e, this.props.id)} className="ballots-footer-finalize">Finalize ballot</button>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
         </div>
       </div>
