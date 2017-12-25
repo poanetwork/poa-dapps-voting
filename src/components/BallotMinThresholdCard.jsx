@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
+import { toAscii } from "../helpers"
 
 @inject("contractsStore")
 @observer
@@ -10,6 +11,7 @@ export class BallotMinThresholdCard extends React.Component {
   @observable endTime;
   @observable timeToFinish;
   @observable proposedValue;
+  @observable creator;
 
   @action("Get start time of min threshold ballot")
   getStartTime = async (_id) => {
@@ -48,11 +50,33 @@ export class BallotMinThresholdCard extends React.Component {
     this.proposedValue = proposedValue;
   }
 
+  @action("Get creator")
+  getCreator = async (_id) => {
+    const { contractsStore } = this.props;
+    let votingState = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.votingState(_id).call()
+    console.log("votingState:", votingState);
+    this.getValidatorFullname(votingState.creator);
+  }
+
+  @action("Get validator full name")
+  getValidatorFullname = async (_miningKey) => {
+    const { contractsStore } = this.props;
+    let validator = await contractsStore.validatorMetadata.metadataInstance.methods.validators(_miningKey).call();
+    console.log(validator)
+    console.log(validator.firstName)
+    console.log(validator.firstName.length)
+    let firstName = toAscii(validator.firstName);
+    let lastName = toAscii(validator.lastName);
+    let fullName = `${firstName} ${lastName}`
+    this.creator = fullName ? fullName : _miningKey;
+  }
+
   constructor(props) {
     super(props);
     this.getStartTime(this.props.id);
     this.getEndTime(this.props.id);
     this.getProposedValue(this.props.id);
+    this.getCreator(this.props.id);
     this.calcTimeToFinish(this.props.id);
   }
 
@@ -65,7 +89,7 @@ export class BallotMinThresholdCard extends React.Component {
               <p className="ballots-about-i--title">Name</p>
             </div>
             <div className="ballots-about-td">
-              <p className="ballots-i--name">Suleyman Duyar</p>
+              <p className="ballots-i--name">{this.creator}</p>
               <p className="ballots-i--created">{this.startTime}</p>
             </div>
           </div>

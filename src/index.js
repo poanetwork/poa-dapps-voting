@@ -38,6 +38,7 @@ class AppMainRouter extends Component {
       contractsStore.setVotingToChangeKeys(web3Config);
       contractsStore.setVotingToChangeMinThreshold(web3Config);
       contractsStore.setVotingToChangeProxy(web3Config);
+      contractsStore.setValidatorMetadata(web3Config);
       contractsStore.setVotingKey(web3Config);
       contractsStore.getAllKeysBallots();
       contractsStore.getAllProxyBallots();

@@ -4,6 +4,7 @@ import React from 'react';
 import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
 import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
+import ValidatorMetadata from '../contracts/ValidatorMetadata.contract'
 import ballotStore from './BallotStore'
 import ballotsStore from './BallotsStore'
 import getWeb3 from '../getWeb3';
@@ -19,6 +20,7 @@ class ContractsStore {
 	@observable votingToChangeKeys;
 	@observable votingToChangeMinThreshold;
 	@observable votingToChangeProxy;
+	@observable validatorMetadata;
 	@observable votingKey;
 	@observable miningKey;
 	@observable web3Instance;
@@ -63,6 +65,13 @@ class ContractsStore {
 	@action("Set VotingToChangeProxy contract")
 	setVotingToChangeProxy = (web3Config) => {
 		this.votingToChangeProxy = new VotingToChangeProxy({
+        	web3: web3Config.web3Instance
+      	});
+	}
+
+	@action("Set ValidatorMetadata contract")
+	setValidatorMetadata = (web3Config) => {
+		this.validatorMetadata = new ValidatorMetadata({
         	web3: web3Config.web3Instance
       	});
 	}
