@@ -155,7 +155,7 @@ export class BallotProxyCard extends React.Component {
           </div>
         </div>
         <div className="info">
-          Minimum 3 from {contractsStore.validatorsLength} validators is required to pass the proposal
+          Minimum {contractsStore.proxyBallotThreshold} from {contractsStore.validatorsLength} validators is required to pass the proposal
         </div>
         <hr />
         <div className="ballots-footer">

@@ -2,6 +2,7 @@ import { observable, computed, action } from 'mobx';
 import React from 'react';
 
 import PoaConsensus from '../contracts/PoaConsensus.contract'
+import BallotsStorage from '../contracts/BallotsStorage.contract'
 import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
 import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
@@ -19,6 +20,7 @@ class ContractsStore {
 	@observable activeKeysBallotsIDs;
 
 	@observable poaConsensus;
+	@observable ballotsStorage;
 	@observable votingToChangeKeys;
 	@observable votingToChangeMinThreshold;
 	@observable votingToChangeProxy;
@@ -27,11 +29,11 @@ class ContractsStore {
 	@observable miningKey;
 	@observable web3Instance;
 	@observable validatorsLength;
+	@observable keysBallotThreshold;
+	@observable minThresholdBallotThreshold;
+	@observable proxyBallotThreshold;
 
 	constructor() {
-		this.votingToChangeKeys = null;
-		this.votingToChangeMinThreshold = null;
-		this.votingToChangeProxy = null;
 		this.votingKey = null;
 		this.miningKey = null;
 		this.activeKeysBallotsIDs = [];
@@ -46,6 +48,21 @@ class ContractsStore {
 		return false
 	}
 
+	@action("get keys ballot threshold")
+	getKeysBallotThreshold = async () => {
+		this.keysBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call();
+	}
+
+	@action("Get min threshold ballot threshold")
+	getMinThresholdBallotThreshold() {
+		this.minThresholdBallotThreshold = this.keysBallotThreshold;
+	}
+
+	@action("get proxy ballot threshold")
+	getProxyBallotThreshold = async () => {
+		this.proxyBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getProxyThreshold().call();
+	}
+
 	@action("Set web3Instance")
 	setWeb3Instance = (web3Config) => {
 		this.web3Instance = web3Config.web3Instance;
@@ -56,6 +73,13 @@ class ContractsStore {
 		this.poaConsensus = new PoaConsensus({
         	web3: web3Config.web3Instance
       	});
+	}
+
+	@action("Set Ballots Storage contract")
+	setBallotsStorage = (web3Config) => {
+		this.ballotsStorage = new BallotsStorage({
+			web3: web3Config.web3Instance
+		});
 	}
 
 	@action("Set VotingToChangeKeys contract")
