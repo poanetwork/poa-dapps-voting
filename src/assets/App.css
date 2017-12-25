@@ -12,7 +12,7 @@
 
 .new-form, .settings, .ballots-i {
   transition: 0.3s box-shadow;
-  margin-bottom: 30px;
+  margin-bottom: 80px;
   border-radius: 8px;
   box-shadow: 0 10px 10px 0 rgba(50, 108, 181, 0.08);
   padding: 30px;
