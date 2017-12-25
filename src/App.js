@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { Header, Ballots, NewBallot, Settings, Footer } from './components';
 import './assets/App.css';
-import DevTools from 'mobx-react-devtools'
+//import DevTools from 'mobx-react-devtools'
 import Loading from './Loading';
 import { inject, observer } from 'mobx-react';
 
@@ -66,7 +66,7 @@ class App extends Component {
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
         {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         <Footer />
-        <DevTools />
+        {/*<DevTools />*/}
       </div>
     );
   }

@@ -25,6 +25,7 @@ export class BallotKeysCard extends React.Component {
   @observable votesForPercents;
   @observable votesAgainstPercents;
   @observable isFinalized;
+  @observable isFiltered;
 
   @computed get getVotesFor() {
     this.votesForNumber = (this.totalVoters + this.progress) / 2
@@ -259,14 +260,15 @@ export class BallotKeysCard extends React.Component {
     this.getIsFinalized(this.props.id);
   }
 
-  isFiltered = () => {
+  checkFilter = () => {
     let { commonStore } = this.props;
-    return commonStore.filtered && this.isFinalized;
+    let filtered = commonStore.filtered && this.isFinalized;
+    return filtered;
   }
 
   render () {
-    let { contractsStore } = this.props;
-    let ballotClass = this.isFiltered() ? "ballots-i display-none" : "ballots-i";
+    let { commonStore, contractsStore } = this.props;
+    let ballotClass = this.checkFilter() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>
         <div className="ballots-about">
