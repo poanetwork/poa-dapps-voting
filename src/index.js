@@ -38,7 +38,7 @@ class AppMainRouter extends Component {
       await contractsStore.setPoaConsensus(web3Config);
       contractsStore.setBallotsStorage(web3Config);
       contractsStore.getValidatorsLength();
-      contractsStore.getKeysBallotThreshold();
+      await contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();
       contractsStore.getProxyBallotThreshold();
       contractsStore.setVotingToChangeKeys(web3Config);

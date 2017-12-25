@@ -11,15 +11,15 @@ export default class VotingToChangeKeys {
     }
   }
 
-  createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender){
+  createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender) {
     return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType).send({from: sender})
   }
 
-  vote({id, choice, sender}){
+  vote(id, choice, sender) {
     return this.votingToChangeKeysInstance.methods.vote(id, choice).send({from: sender})
   }
 
-  finalize({id, sender}){
+  finalize({id, sender}) {
     return this.votingToChangeKeysInstance.methods.finalize(id, id).send({from: sender})
   }
 }

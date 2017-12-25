@@ -11,15 +11,15 @@ export default class VotingToChangeMinThreshold {
     }
   }
 
-  createBallotToChangeThreshold(startTime, endTime, proposedValue, sender){
+  createBallotToChangeThreshold(startTime, endTime, proposedValue, sender) {
     return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue).send({from: sender})
   }
 
-  vote({id, choice, sender}){
+  vote(id, choice, sender) {
     return this.votingToChangeMinThresholdInstance.methods.vote(id, choice).send({from: sender})
   }
 
-  finalize({id, sender}){
+  finalize({id, sender}) {
     return this.votingToChangeMinThresholdInstance.methods.finalize(id, id).send({from: sender})
   }
 }

@@ -15,11 +15,11 @@ export default class VotingToChangeProxy {
     return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType).send({from: sender})
   }
 
-  vote({id, choice, sender}){
+  vote(id, choice, sender) {
     return this.votingToChangeProxyInstance.methods.vote(id, choice).send({from: sender})
   }
 
-  finalize({id, sender}){
+  finalize({id, sender}) {
     return this.votingToChangeProxyInstance.methods.finalize(id, id).send({from: sender})
   }
 }

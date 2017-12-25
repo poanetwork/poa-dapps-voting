@@ -2,9 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
-import { toAscii } from "../helpers"
+import { toAscii } from "../helpers";
+import swal from 'sweetalert2';
 
-@inject("contractsStore", "ballotStore")
+@inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotProxyCard extends React.Component {
   @observable startTime;
@@ -95,6 +96,24 @@ export class BallotProxyCard extends React.Component {
     this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call
   }
 
+  @action("Vote")
+  vote = async (e, _id, _type) => {
+    const { commonStore, contractsStore } = this.props;
+    commonStore.showLoading();
+    const { push } = this.props.routing;
+    contractsStore.votingToChangeKeys.vote(this.props.id, _type, contractsStore.votingKey)
+    .on("receipt", () => {
+      commonStore.hideLoading();
+      swal("Congratulations!", "You successfully voted", "success").then((result) => {
+        push(`${commonStore.rootPath}`);
+      });
+    })
+    .on("error", (e) => {
+      commonStore.hideLoading();
+      swal("Error!", e.message, "error");
+    });
+  }
+
   constructor(props) {
     super(props);
     this.votesForNumber = 0;
@@ -151,7 +170,7 @@ export class BallotProxyCard extends React.Component {
         </div>
         <div className="ballots-i-scale">
           <div className="ballots-i-scale-column">
-            <a href="#" className="ballots-i--vote ballots-i--vote_yes">Vote</a>
+            <button type="button" onClick={(e) => this.vote(e, this.props.id, 1)} className="ballots-i--vote ballots-i--vote_yes">Vote</button>
             <div className="vote-scale--container">
               <p className="vote-scale--value">Yes</p>
               <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
@@ -170,7 +189,7 @@ export class BallotProxyCard extends React.Component {
                 <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesAgainstPercents}%`}}></div>
               </div>
             </div>
-            <a href="#" className="ballots-i--vote ballots-i--vote_no">Vote</a>
+            <button type="button" onClick={(e) => this.vote(e, this.props.id, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
           </div>
         </div>
         <div className="info">

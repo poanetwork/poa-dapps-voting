@@ -182,19 +182,23 @@ export class NewBallot extends React.Component {
   }
 
   render() {
-    const { ballotStore } = this.props;
+    const { contractsStore, ballotStore } = this.props;
     let validator = ballotStore.isNewValidatorPersonalData ? <Validator />: "";
     let keysTypes = ballotStore.isBallotForKey ? <KeysTypes />: "";
     let metadata
+    let minThreshold
     switch (ballotStore.ballotType) {
       case ballotStore.BallotType.keys: 
         metadata = <BallotKeysMetadata />;
+        minThreshold = contractsStore.keysBallotThreshold;
         break;
       case ballotStore.BallotType.minThreshold: 
         metadata = <BallotMinThresholdMetadata />;
+        minThreshold = contractsStore.minThresholdBallotThreshold;
         break;
       case ballotStore.BallotType.proxy: 
         metadata = <BallotProxyMetadata />;
+        minThreshold = contractsStore.proxyBallotThreshold;
         break;
     }
     return (
@@ -251,7 +255,7 @@ export class NewBallot extends React.Component {
           {metadata}
           <div className="new-form-footer">
             <div className="info">
-              Minimum 3 from 12 validators  required to pass the proposal
+              Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal
             </div>
             <button type="button" className="add-ballot" onClick={e => this.onClick(e)}>Add ballot</button>
           </div>
