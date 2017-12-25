@@ -133,36 +133,30 @@ class ContractsStore {
 	@action("Get all keys ballots")
 	getAllKeysBallots = async () => {
 		let allKeysBallots = await this.votingToChangeKeys.votingToChangeKeysInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-    	console.log("allKeysBallots:", allKeysBallots)
     	let allKeysBallotsIDs = allKeysBallots.map((event) => event.returnValues.id)
-    	console.log("allKeysBallotsIDs:", allKeysBallotsIDs)
-	    this.activeKeysBallotsIDs = allKeysBallotsIDs;
+    	this.activeKeysBallotsIDs = allKeysBallotsIDs;
 	    for (let i = 0; i < allKeysBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotKeysCard id={this.activeKeysBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotKeysCard id={this.activeKeysBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
 	    }
 	}
 
 	@action("Get all min threshold ballots")
 	getAllMinThresholdBallots = async () => {
 		let allMinThresholdBallots = await this.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-    	console.log("allMinThresholdBallots:", allMinThresholdBallots)
     	let allMinThresholdBallotsIDs = allMinThresholdBallots.map((event) => event.returnValues.id)
-    	console.log("allMinThresholdBallotsIDs:", allMinThresholdBallotsIDs)
-	    this.activeMinThresholdBallotsIDs = allMinThresholdBallotsIDs;
+    	this.activeMinThresholdBallotsIDs = allMinThresholdBallotsIDs;
 	    for (let i = 0; i < allMinThresholdBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotMinThresholdCard id={this.activeMinThresholdBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotMinThresholdCard id={this.activeMinThresholdBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
 	    }
 	}
 
 	@action("Get all proxy ballots")
 	getAllProxyBallots = async () => {
 		let allProxyBallots = await this.votingToChangeProxy.votingToChangeProxyInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-    	console.log("allProxyBallots:", allProxyBallots)
     	let allProxyBallotsIDs = allProxyBallots.map((event) => event.returnValues.id)
-    	console.log("allProxyBallotsIDs:", allProxyBallotsIDs)
-	    this.activeProxyBallotsIDs = allProxyBallotsIDs;
+    	this.activeProxyBallotsIDs = allProxyBallotsIDs;
 	    for (let i = 0; i < allProxyBallotsIDs.length; i++) {
-	    	ballotsStore.ballotCards.push(<BallotProxyCard id={this.activeProxyBallotsIDs[i]} type={ballotStore.BallotType.keys}/>);
+	    	ballotsStore.ballotCards.push(<BallotProxyCard id={this.activeProxyBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
 	    }
 	}
 }

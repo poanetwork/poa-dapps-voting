@@ -26,7 +26,6 @@ export class BallotProxyCard extends React.Component {
   getStartTime = async (_id) => {
     const { contractsStore } = this.props;
     let startTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getStartTime(_id).call()
-    console.log(startTime)
     this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -34,7 +33,6 @@ export class BallotProxyCard extends React.Component {
   getEndTime = async (_id) => {
     const { contractsStore } = this.props;
     let endTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getEndTime(_id).call()
-    console.log(endTime)
     this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -61,7 +59,6 @@ export class BallotProxyCard extends React.Component {
   getProposedAddress = async (_id) => {
     const { contractsStore } = this.props;
     let proposedAddress = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getProposedValue(_id).call()
-    console.log(proposedAddress)
     this.proposedAddress = proposedAddress;
   }
 
@@ -69,7 +66,6 @@ export class BallotProxyCard extends React.Component {
   getContractType = async (_id) => {
     const { contractsStore } = this.props;
     let contractType = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getContractType(_id).call()
-    console.log(contractType)
     this.contractType = contractType;
   }
 
@@ -94,7 +90,6 @@ export class BallotProxyCard extends React.Component {
   getTotalVoters = async (_id) => {
     const { contractsStore } = this.props;
     this.totalVoters = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getTotalVoters(_id).call();
-    console.log(this.totalVoters);
   }
 
   @action("Get progress")

@@ -84,7 +84,6 @@ export class BallotKeysCard extends React.Component {
   getStartTime = async (_id) => {
     const { contractsStore } = this.props;
     let startTime = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getStartTime(_id).call()
-    console.log(startTime)
     this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -92,7 +91,6 @@ export class BallotKeysCard extends React.Component {
   getEndTime = async (_id) => {
     const { contractsStore } = this.props;
     let endTime = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getEndTime(_id).call()
-    console.log(endTime)
     this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -119,7 +117,6 @@ export class BallotKeysCard extends React.Component {
   getBallotType = async (_id) => {
     const { contractsStore } = this.props;
     let ballotType = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getBallotType(_id).call()
-    console.log(ballotType)
     this.ballotType = ballotType;
     this.getBallotTypeDisplayName(ballotType);
   }
@@ -128,7 +125,6 @@ export class BallotKeysCard extends React.Component {
   getAffectedKeyType = async (_id) => {
     const { contractsStore } = this.props;
     let affectedKeyType = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getAffectedKeyType(_id).call()
-    console.log(affectedKeyType)
     this.affectedKeyType = affectedKeyType;
     this.getAffectedKeyTypeDisplayName(affectedKeyType);
   }
@@ -138,7 +134,6 @@ export class BallotKeysCard extends React.Component {
   getAffectedKey = async (_id) => {
     const { contractsStore } = this.props;
     let affectedKey = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getAffectedKey(_id).call()
-    console.log(affectedKey)
     this.affectedKey = affectedKey;
   }
 
@@ -163,7 +158,6 @@ export class BallotKeysCard extends React.Component {
   getTotalVoters = async (_id) => {
     const { contractsStore } = this.props;
     this.totalVoters = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getTotalVoters(_id).call();
-    console.log(this.totalVoters);
   }
 
   @action("Get progress")
@@ -265,10 +259,14 @@ export class BallotKeysCard extends React.Component {
     this.getIsFinalized(this.props.id);
   }
 
+  isFiltered = () => {
+    let { commonStore } = this.props;
+    return commonStore.filtered && this.isFinalized;
+  }
+
   render () {
-    let { commonStore, contractsStore } = this.props;
-    let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
-    console.log(this.isFinalized)
+    let { contractsStore } = this.props;
+    let ballotClass = this.isFiltered() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>
         <div className="ballots-about">

@@ -164,6 +164,8 @@ export class NewBallot extends React.Component {
         case ballotStore.BallotType.proxy: 
           methodToCreateBallot = this.createBallotForProxy;
           break;
+        default:
+          break;
       }
       const curDate = new Date();
       let curDateInSeconds = moment(curDate).add(5, 'minute').unix();
@@ -199,6 +201,8 @@ export class NewBallot extends React.Component {
       case ballotStore.BallotType.proxy: 
         metadata = <BallotProxyMetadata />;
         minThreshold = contractsStore.proxyBallotThreshold;
+        break;
+      default:
         break;
     }
     return (

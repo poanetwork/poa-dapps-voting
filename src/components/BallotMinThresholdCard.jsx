@@ -25,7 +25,6 @@ export class BallotMinThresholdCard extends React.Component {
   getStartTime = async (_id) => {
     const { contractsStore } = this.props;
     let startTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call()
-    console.log(startTime)
     this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -33,7 +32,6 @@ export class BallotMinThresholdCard extends React.Component {
   getEndTime = async (_id) => {
     const { contractsStore } = this.props;
     let endTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call()
-    console.log(endTime)
     this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -60,7 +58,6 @@ export class BallotMinThresholdCard extends React.Component {
   getProposedValue = async (_id) => {
     const { contractsStore } = this.props;
     let proposedValue = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call()
-    console.log(proposedValue)
     this.proposedValue = proposedValue;
   }
 
@@ -85,7 +82,6 @@ export class BallotMinThresholdCard extends React.Component {
   getTotalVoters = async (_id) => {
     const { contractsStore } = this.props;
     this.totalVoters = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getTotalVoters(_id).call();
-    console.log(this.totalVoters);
   }
 
   @action("Get progress")

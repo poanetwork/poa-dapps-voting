@@ -34,11 +34,20 @@ class App extends Component {
     commonStore.setSearchTerm(e.target.value.toLowerCase());
   }
 
+  shouldShowNavPan = () => {
+    const { commonStore } = this.props;
+    const currentPath = this.props.location.pathname;
+    let showNavPan = 
+    currentPath == `${commonStore.rootPath}` 
+    || currentPath == `${commonStore.rootPath}/`
+    || currentPath == `${commonStore.rootPath}/active`;
+    return showNavPan;
+  }
+
   render() {
     const { commonStore } = this.props;
     const loading = commonStore.loading ? <Loading /> : ''
-    const currentPath = this.props.location.pathname;
-    const nav = (currentPath == `${commonStore.rootPath}` || currentPath == `${commonStore.rootPath}/active`) ? <div className="search">
+    const nav = this.shouldShowNavPan() ? <div className="search">
       <div className="container flex-container">
         <div className="nav">
         <NavLink className="nav-i" exact activeClassName="nav-i_active" to={`${commonStore.rootPath}/`}>All</NavLink>
