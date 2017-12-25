@@ -1,5 +1,5 @@
 {
-  "name": "voting",
+  "name": "poa-dapps-voting",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://poanetwork.github.io/poa-dapps-voting",
@@ -30,6 +30,7 @@
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
+    "gh-pages": "^1.1.0",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "mobx": "^3.4.1",

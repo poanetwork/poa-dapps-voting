@@ -7,11 +7,11 @@ import "babel-polyfill";
 export class Ballots extends React.Component {
   render () {
     const { commonStore, ballotsStore } = this.props;
-    if (ballotsStore.ballotCards.length > 0) {
+    /*if (ballotsStore.ballotCards.length > 0) {
       commonStore.hideLoading();
     } else {
       commonStore.showLoading();
-    }
+    }*/
     return (
       <section className="container ballots">
         <h1 className="title">Ballots</h1>

@@ -9,6 +9,7 @@ import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
 import ValidatorMetadata from '../contracts/ValidatorMetadata.contract'
 import ballotStore from './BallotStore'
 import ballotsStore from './BallotsStore'
+import commonStore from './CommonStore'
 import getWeb3 from '../getWeb3';
 import { BallotKeysCard } from "../components/BallotKeysCard";
 import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
@@ -127,6 +128,7 @@ class ContractsStore {
 		}
 		catch(e) {
 			console.log(e)
+			this.miningKey = "0x0000000000000000000000000000000000000000";
 		}
 	}
 
@@ -138,6 +140,10 @@ class ContractsStore {
 	    for (let i = 0; i < allKeysBallotsIDs.length; i++) {
 	    	ballotsStore.ballotCards.push(<BallotKeysCard id={this.activeKeysBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
 	    }
+
+	    if (allKeysBallotsIDs.length == 0) {
+	    	commonStore.hideLoading();
+	    }
 	}
 
 	@action("Get all min threshold ballots")
@@ -148,6 +154,10 @@ class ContractsStore {
 	    for (let i = 0; i < allMinThresholdBallotsIDs.length; i++) {
 	    	ballotsStore.ballotCards.push(<BallotMinThresholdCard id={this.activeMinThresholdBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
 	    }
+
+	    if (allMinThresholdBallotsIDs.length == 0) {
+	    	commonStore.hideLoading();
+	    }
 	}
 
 	@action("Get all proxy ballots")
@@ -157,6 +167,10 @@ class ContractsStore {
     	this.activeProxyBallotsIDs = allProxyBallotsIDs;
 	    for (let i = 0; i < allProxyBallotsIDs.length; i++) {
 	    	ballotsStore.ballotCards.push(<BallotProxyCard id={this.activeProxyBallotsIDs[i]} type={ballotStore.BallotType.keys} key={ballotsStore.ballotCards.length}/>);
+	    }
+
+	    if (allProxyBallotsIDs.length == 0) {
+	    	commonStore.hideLoading();
 	    }
 	}
 }

@@ -32,6 +32,7 @@ class AppMainRouter extends Component {
 
   constructor(props) {
     super(props);
+    commonStore.showLoading();
 
     getWeb3().then(async (web3Config) => {
       contractsStore.setWeb3Instance(web3Config);
@@ -47,11 +48,13 @@ class AppMainRouter extends Component {
       contractsStore.setValidatorMetadata(web3Config);
       contractsStore.setVotingKey(web3Config);
       contractsStore.getAllKeysBallots();
+      contractsStore.getAllMinThresholdBallots();
       contractsStore.getAllProxyBallots();
       await contractsStore.setMiningKey(web3Config);
       console.log("votingKey", contractsStore.votingKey)
       console.log("miningKey", contractsStore.miningKey)
     }).catch((error) => {
+      commonStore.hideLoading();
       console.error(error.message);
       swal({
         icon: 'error',
