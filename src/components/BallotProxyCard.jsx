@@ -22,25 +22,12 @@ export class BallotProxyCard extends React.Component {
   @observable votesForPercents;
   @observable votesAgainstPercents;
 
-  @action("Calculate time to finish")
-  calcTimeToFinish = (_id) => {
-    const now = moment();
-    const finish = moment.utc(this.endTime*1000);
-    const totalHours = moment.duration(finish.diff(now)).hours();
-    const totalMinutes = moment.duration(finish.diff(now)).minutes();
-    const minutes = totalMinutes - totalHours * 60;
-    if (finish > now)
-      this.timeToFinish = moment(totalHours, "h").format("HH") + ":" + moment(minutes, "m").format("mm");
-    else
-      this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm");
-  }
-
   @action("Get start time of proxy ballot")
   getStartTime = async (_id) => {
     const { contractsStore } = this.props;
     let startTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getStartTime(_id).call()
     console.log(startTime)
-    this.startTime = moment.utc(startTime*1000).format('DD/MM/YYYY h:mm A');
+    this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
   @action("Get end time of proxy ballot")
@@ -48,7 +35,27 @@ export class BallotProxyCard extends React.Component {
     const { contractsStore } = this.props;
     let endTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getEndTime(_id).call()
     console.log(endTime)
-    this.endTime = moment.utc(endTime*1000).format('DD/MM/YYYY h:mm A');
+    this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
+  }
+
+  @action("Calculate time to finish")
+  calcTimeToFinish = () => {
+    const now = moment();
+    const finish = moment.utc(this.endTime, 'DD/MM/YYYY h:mm:ss A');
+    let ms = finish.diff(now);
+    console.log("ms:", ms)
+    if (ms <= 0)
+      return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
+    
+    let dur = moment.duration(ms);
+    this.timeToFinish = Math.floor(dur.asHours()) + moment.utc(ms).format(":mm:ss");
+  }
+
+  @action("Get times")
+  getTimes = async (_id) => {
+    await this.getStartTime(_id);
+    await this.getEndTime(_id);
+    this.calcTimeToFinish();
   }
 
   @action("Get proposed address of proxy ballot")
@@ -87,14 +94,20 @@ export class BallotProxyCard extends React.Component {
   @action("Get total voters")
   getTotalVoters = async (_id) => {
     const { contractsStore } = this.props;
-    this.totalVoters = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getTotalVoters(_id).call
+    this.totalVoters = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getTotalVoters(_id).call();
     console.log(this.totalVoters);
   }
 
   @action("Get progress")
   getProgress = async (_id) => {
     const { contractsStore } = this.props;
-    this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call
+    this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call();
+  }
+
+  @action("Get isFinalized")
+  getIsFinalized = async (_id) => {
+    const { contractsStore } = this.props;
+    this.isFinalized = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
   }
 
   vote = async (e, _id, _type) => {
@@ -145,16 +158,19 @@ export class BallotProxyCard extends React.Component {
     this.votesAgainstNumber = 0;
     this.votesForPercents = 0;
     this.votesAgainstPercents = 0;
-    this.getStartTime(this.props.id);
-    this.getEndTime(this.props.id);
+    this.getTimes(this.props.id);
     this.getProposedAddress(this.props.id);
     this.getContractType(this.props.id);
     this.getCreator(this.props.id);
-    this.calcTimeToFinish(this.props.id);
+    this.getTotalVoters(this.props.id);
+    this.getProgress(this.props.id);
+    this.getIsFinalized(this.props.id);
   }
 
   render () {
-    const { contractsStore, ballotStore } = this.props;
+    const { commonStore, contractsStore, ballotStore } = this.props;
+    let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
+    let additionalProps = this.isFinalized ? { disabled: true } : {};
     return (
       <div className="ballots-i">
         <div className="ballots-about">

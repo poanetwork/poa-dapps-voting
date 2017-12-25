@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import { Header, Ballots, NewBallot, Settings, Footer } from './components';
 import './assets/App.css';
 import DevTools from 'mobx-react-devtools'
@@ -10,6 +10,14 @@ import { inject, observer } from 'mobx-react';
 @observer
 class App extends Component {
   onBallotsRender = () => {
+    const { commonStore } = this.props;
+    commonStore.filtered = false;
+    return <Ballots/>;
+  }
+
+  onActiveBallotsRender = () => {
+    const { commonStore } = this.props;
+    commonStore.filtered = true;
     return <Ballots/>;
   }
 
@@ -28,7 +36,17 @@ class App extends Component {
       <div>
         {loading}
         <Header />
+        <div className="search">
+          <div className="container flex-container">
+            <div className="nav">
+            <NavLink className="nav-i" exact activeClassName="nav-i_active" to={`${commonStore.rootPath}/`}>All</NavLink>
+            <NavLink className="nav-i" activeClassName="nav-i_active" to={`${commonStore.rootPath}/active`}>Active</NavLink>
+            </div>
+            <input type="search" className="search-input" onChange={this.onSearch}/>
+          </div>
+        </div>
         <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
+        <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender}/>
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
         {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         <Footer />

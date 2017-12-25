@@ -1,14 +1,14 @@
 .header {
-  margin-bottom: $desktop-indent;
+  margin-bottom: 0px;
   padding: 22px 0;
   background-color: #6d2eae;
 
   @media screen and (max-width: $tablet-width) {
-    margin-bottom: $tablet-indent;
+    margin-bottom: 0px;
   }
 
   @media screen and (max-width: $mobile-width) {
-    margin-bottom: $mobile-indent;
+    margin-bottom: 0px;
   }
 
   .container {

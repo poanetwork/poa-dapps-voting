@@ -3,9 +3,11 @@ import { observable, computed, action } from 'mobx';
 class CommonStore {
 	@observable loading;
 	@observable rootPath;
+	@observable filtered;
 
 	constructor() {
 		this.loading = false;
+		this.filtered = false;
 		this.rootPath = '/poa-dapps-voting'
 	}
 
