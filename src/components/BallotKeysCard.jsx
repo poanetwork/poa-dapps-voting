@@ -144,6 +144,7 @@ export class BallotKeysCard extends React.Component {
   }
 
   render () {
+    let { contractsStore } = this.props;
     return (
       <div className="ballots-i">
         <div className="ballots-about">
@@ -215,7 +216,7 @@ export class BallotKeysCard extends React.Component {
           </div>
         </div>
         <div className="info">
-          Minimum 3 from 12 validators  required to pass the proposal
+          Minimum 3 from {contractsStore.validatorsLength} validators is required to pass the proposal
         </div>
         <hr />
         <div className="ballots-footer">
