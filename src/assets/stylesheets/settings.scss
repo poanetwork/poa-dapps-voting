@@ -1,0 +1,12 @@
+.settings {
+  @extend %white-block;
+  max-width: 600px;
+  margin: 0 auto;
+
+  &-title {
+    margin-bottom: 20px;
+    color: #38454f;
+    text-align: center;
+    font-size: 24px;
+  }
+}

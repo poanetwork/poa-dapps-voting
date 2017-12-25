@@ -1,4 +1,4 @@
-# Oracles network Governance Dapp
+# POA Network Governance Dapp
 
 ## Supported browsers
 
@@ -6,61 +6,46 @@
 
 ## MetaMask plugin setup
 
-* Connect to Oracles network in MetaMask plugin (See [Connect to Oracles network via MetaMask](https://github.com/oraclesorg/oracles-wiki/blob/master/MetaMask-connect.md#connect-to-oracles-network-via-metamask))
+* Connect to POA Network in MetaMask plugin (See [Connect to Oracles network via MetaMask](https://github.com/poanetwork/wiki/blob/master/MetaMask-connect.md#connect-to-poa-network-via-metamask))
 
-* Import your voting key to MetaMask Plugin (See [Governance section from wiki](https://github.com/oraclesorg/oracles-wiki/blob/master/governance.md)).
+* Import your voting key to MetaMask Plugin (See [Governance section from wiki](https://github.com/poanetwork/wiki/blob/master/governance.md)).
 
 ## Governance Dapp lifecycle
 
-Check [Governance Dapp section from wiki](https://github.com/oraclesorg/oracles-wiki/blob/master/governance.md)
+Check [Governance Dapp section from wiki](https://github.com/poanetwork/wiki/blob/master/governance.md)
 
 ## Ballots page
-You'll see the page with the list of all ballots. Here you can switch to see only your **UNANSWERED** or **EXPIRED** ballots. 
+You'll see the page with the list of all ballots. Here you can switch to see **ACTIVE** ballots. 
 **Search** by ballots' data is available too.
-
-Single ballot page is opened by clicking **VOTE NOW** button.
 
 ![](./docs/ballots.png)
 
-## Single ballot page
-Here you can vote for or against notary. If total number of votes > 3, notary will be added or deleted from the network depending on votes majority after voting will be finished.
-
-![](./docs/ballot.png)
 
 ## New ballot page
 Click **NEW BALLOT** button from any page to create a new ballot. 
 
-![](./docs/new_ballot_1.png)
+![](./docs/new_ballot.png)
 
-![](./docs/new_ballot_2.png)
-
-## Settings page
-You can return to this page from any page by clicking **Settings** button. You can choose your voting key here.
-
-![](./docs/settings.png)
 
 ## Configuration file
 It is configured with [Oracles network contract](https://github.com/oraclesorg/oracles-contract)
 
-Path: `./assets/javascripts/config.json`
+Path: `./src/contracts/addresses.js`
 
 ```
-{
-  "environment": "live",
-  "Ethereum": {
-    "live": {
-      "contractAddress": "Oracles_contract_address"
-    }
-  }
+module.exports = {
+  KEYS_MANAGER_ADDRESS: '0xfc90125492e58dbfe80c0bfb6a2a759c4f703ca8',
+    VOTING_TO_CHANGE_KEYS_ADDRESS: '0x49df4ec19243263e5db22da5865b4f482b8323a0',
+    VOTING_TO_CHANGE_MIN_THRESHOLD: '0x8829ebe113535826e8af17ed51f83755f675789a',
+    VOTING_TO_CHANGE_PROXY: '0x6b728399b41a38d4109f7af2213d4cc31ca87812',
+    METADATA_ADDRESS: '0xcBB2912666c7e8023B7ec78B6842702eB26336aC',
+    POA_ADDRESS: '0x8bf38d4764929064f2d4d3a56520a76ab3df415b',
+    BALLOTS_STORAGE_ADDRESS: '0x0d7590c7aedf1e7e85fc9a1ee88f6f17d3ba762f'
 }
 ```
 
 ## Building from source
 
-1) `npm install`
+1) `npm i`
 
-2) `npm run sass`
-
-3) `npm run coffee`
-
-4) `npm start`
+2) `npm start`
