@@ -12,6 +12,12 @@ export class BallotMinThresholdCard extends React.Component {
   @observable timeToFinish;
   @observable proposedValue;
   @observable creator;
+  @observable progress;
+  @observable totalVoters;
+  @observable votesForNumber;
+  @observable votesAgainstNumber;
+  @observable votesForPercents;
+  @observable votesAgainstPercents;
 
   @action("Get start time of min threshold ballot")
   getStartTime = async (_id) => {
@@ -54,7 +60,6 @@ export class BallotMinThresholdCard extends React.Component {
   getCreator = async (_id) => {
     const { contractsStore } = this.props;
     let votingState = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.votingState(_id).call()
-    console.log("votingState:", votingState);
     this.getValidatorFullname(votingState.creator);
   }
 
@@ -62,21 +67,37 @@ export class BallotMinThresholdCard extends React.Component {
   getValidatorFullname = async (_miningKey) => {
     const { contractsStore } = this.props;
     let validator = await contractsStore.validatorMetadata.metadataInstance.methods.validators(_miningKey).call();
-    console.log(validator)
-    console.log(validator.firstName)
-    console.log(validator.firstName.length)
     let firstName = toAscii(validator.firstName);
     let lastName = toAscii(validator.lastName);
     let fullName = `${firstName} ${lastName}`
     this.creator = fullName ? fullName : _miningKey;
   }
 
+  @action("Get total voters")
+  getTotalVoters = async (_id) => {
+    const { contractsStore } = this.props;
+    this.totalVoters = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getTotalVoters(_id).call
+    console.log(this.totalVoters);
+  }
+
+  @action("Get progress")
+  getProgress = async (_id) => {
+    const { contractsStore } = this.props;
+    this.progress = await contractsStore.votingToChangeKeys.votingToChangeKeysInstance.methods.getProgress(_id).call
+  }
+
   constructor(props) {
     super(props);
+    this.votesForNumber = 0;
+    this.votesAgainstNumber = 0;
+    this.votesForPercents = 0;
+    this.votesAgainstPercents = 0;
     this.getStartTime(this.props.id);
     this.getEndTime(this.props.id);
     this.getProposedValue(this.props.id);
     this.getCreator(this.props.id);
+    this.getTotalVoters(this.props.id);
+    this.getProgress(this.props.id);
     this.calcTimeToFinish(this.props.id);
   }
 
@@ -117,20 +138,20 @@ export class BallotMinThresholdCard extends React.Component {
             <a href="#" className="ballots-i--vote ballots-i--vote_yes">Vote</a>
             <div className="vote-scale--container">
               <p className="vote-scale--value">Yes</p>
-              <p className="vote-scale--votes">Votes: 40</p>
-              <p className="vote-scale--percentage">40%</p>
+              <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
+              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
               <div className="vote-scale">
-                <div className="vote-scale--fill vote-scale--fill_yes" style={{width: '50%'}}></div>
+                <div className="vote-scale--fill vote-scale--fill_yes" style={{width: `${this.votesForPercents}%`}}></div>
               </div>
             </div>
           </div>
           <div className="ballots-i-scale-column">
             <div className="vote-scale--container">
               <p className="vote-scale--value">No</p>
-              <p className="vote-scale--votes">Votes: 10</p>
-              <p className="vote-scale--percentage">20%</p>
+              <p className="vote-scale--votes">Votes: {this.votesAgainstNumber}</p>
+              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
               <div className="vote-scale">
-                <div className="vote-scale--fill vote-scale--fill_no" style={{width: '30%'}}></div>
+                <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesAgainstPercents}%`}}></div>
               </div>
             </div>
             <a href="#" className="ballots-i--vote ballots-i--vote_no">Vote</a>
