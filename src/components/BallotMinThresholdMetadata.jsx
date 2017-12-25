@@ -11,7 +11,7 @@ export class BallotMinThresholdMetadata extends React.Component {
         <div className="hidden">
           <div className="left">
             <div className="form-el">
-              <label for="key">Proposed Value</label>
+              <label htmlFor="key">Proposed Value</label>
               <input type="number" id="key" 
                 value={ballotStore.ballotMinThreshold.proposedValue} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue", "ballotMinThreshold")} 
@@ -23,7 +23,7 @@ export class BallotMinThresholdMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="key">Ballot End</label>
+              <label htmlFor="key">Ballot End</label>
               <input type="date" id="key" 
                 value={ballotStore.endTime} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 

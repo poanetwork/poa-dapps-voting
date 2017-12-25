@@ -15,7 +15,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isAddKeysBallotType} 
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.add)}
             />
-            <label for="add-key" className="radio radio_icon radio_add">Add key</label>
+            <label htmlFor="add-key" className="radio radio_icon radio_add">Add key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>
@@ -26,7 +26,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isRemoveKeysBallotType} 
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.remove)}
             />
-            <label for="remove-key" className="radio radio_icon radio_remove">Remove key</label>
+            <label htmlFor="remove-key" className="radio radio_icon radio_remove">Remove key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>
@@ -37,7 +37,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isSwapKeysBallotType} 
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.swap)}
             />
-            <label for="swap-key" className="radio radio_icon radio_swap">Swap key</label>
+            <label htmlFor="swap-key" className="radio radio_icon radio_swap">Swap key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>
@@ -50,7 +50,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isMiningKeyType} 
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.mining)}
             />
-            <label for="mining-key" className="radio">Mining Key</label>
+            <label htmlFor="mining-key" className="radio">Mining Key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>
@@ -61,7 +61,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isPayoutKeyType} 
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.payout)}
             />
-            <label for="payout-key" className="radio">Payout Key</label>
+            <label htmlFor="payout-key" className="radio">Payout Key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>
@@ -72,7 +72,7 @@ export class KeysTypes extends React.Component {
               checked={ballotStore.isVotingKeyType} 
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.voting)}
             />
-            <label for="voting-key" className="radio">Voting Key</label>
+            <label htmlFor="voting-key" className="radio">Voting Key</label>
             <p className="hint">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             </p>

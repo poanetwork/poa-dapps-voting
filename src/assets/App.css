@@ -162,6 +162,7 @@ hr {
       padding: 0 10px; } }
 
 .title {
+  margin-top: 30px;
   margin-bottom: 30px;
   color: #38454f;
   font-size: 30px;
@@ -456,7 +457,6 @@ button {
       margin-top: 20px; } }
 
 .search {
-  margin-bottom: 30px;
   border-bottom: 1px solid #eee;
   background-color: #fff;
   line-height: 80px;

@@ -12,7 +12,7 @@ export class Validator extends React.Component {
         <div className="hidden">
           <div className="left">
             <div className="form-el">
-              <label for="full-name">Full Name</label>
+              <label htmlFor="full-name">Full Name</label>
               <input type="text" id="full-name" 
                 value={validatorStore.fullName} 
                 onChange={e => validatorStore.changeValidatorMetadata(e, "fullName")}
@@ -24,7 +24,7 @@ export class Validator extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="address">Address</label>
+              <label htmlFor="address">Address</label>
               <input type="text" id="address" 
                 value={validatorStore.address} 
                 onChange={e => validatorStore.changeValidatorMetadata(e, "address")}
@@ -36,7 +36,7 @@ export class Validator extends React.Component {
           </div>
           <div className="left">
             <div className="form-el">
-              <label for="us-state">State</label>
+              <label htmlFor="us-state">State</label>
               <Select id="us-state"
                 value={validatorStore.state}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "state")}
@@ -102,7 +102,7 @@ export class Validator extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="zip-code">Zip Code</label>
+              <label htmlFor="zip-code">Zip Code</label>
               <input type="number" id="zip-code" 
                 value={validatorStore.zipCode} 
                 onChange={e => validatorStore.changeValidatorMetadata(e, "zipCode")}
@@ -114,7 +114,7 @@ export class Validator extends React.Component {
           </div>
           <div className="left">
             <div className="form-el">
-              <label for="license-id">License ID</label>
+              <label htmlFor="license-id">License ID</label>
               <input type="text" id="license-id" 
                 value={validatorStore.licenseID} 
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseID")}
@@ -126,7 +126,7 @@ export class Validator extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="license-expiration">License Expiration</label>
+              <label htmlFor="license-expiration">License Expiration</label>
               <input type="date" id="license-expiration" 
                 value={validatorStore.licenseExpiration} 
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseExpiration")}

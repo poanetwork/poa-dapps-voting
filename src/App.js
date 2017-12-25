@@ -29,22 +29,29 @@ class App extends Component {
     return <Settings/>;
   }
 
+  onSearch = (e) => {
+    const { commonStore } = this.props;
+    commonStore.setSearchTerm(e.target.value.toLowerCase());
+  }
+
   render() {
     const { commonStore } = this.props;
     const loading = commonStore.loading ? <Loading /> : ''
+    const currentPath = this.props.location.pathname;
+    const nav = (currentPath == `${commonStore.rootPath}` || currentPath == `${commonStore.rootPath}/active`) ? <div className="search">
+      <div className="container flex-container">
+        <div className="nav">
+        <NavLink className="nav-i" exact activeClassName="nav-i_active" to={`${commonStore.rootPath}/`}>All</NavLink>
+        <NavLink className="nav-i" activeClassName="nav-i_active" to={`${commonStore.rootPath}/active`}>Active</NavLink>
+        </div>
+        <input type="search" className="search-input" onChange={this.onSearch}/>
+      </div>
+    </div> : null;
     return (
       <div>
         {loading}
         <Header />
-        <div className="search">
-          <div className="container flex-container">
-            <div className="nav">
-            <NavLink className="nav-i" exact activeClassName="nav-i_active" to={`${commonStore.rootPath}/`}>All</NavLink>
-            <NavLink className="nav-i" activeClassName="nav-i_active" to={`${commonStore.rootPath}/active`}>Active</NavLink>
-            </div>
-            <input type="search" className="search-input" onChange={this.onSearch}/>
-          </div>
-        </div>
+        {nav}
         <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender}/>
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>

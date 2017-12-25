@@ -187,7 +187,6 @@ export class BallotMinThresholdCard extends React.Component {
   render () {
     let { commonStore, contractsStore } = this.props;
     let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
-    let additionalProps = this.isFinalized ? { disabled: true } : {};
     return (
       <div className={ballotClass}>
         <div className="ballots-about">

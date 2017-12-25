@@ -1,9 +1,10 @@
-import { observable, computed, action } from 'mobx';
+import { observable, action } from 'mobx';
 
 class CommonStore {
 	@observable loading;
 	@observable rootPath;
 	@observable filtered;
+	@observable searchTerm;
 
 	constructor() {
 		this.loading = false;
@@ -19,6 +20,11 @@ class CommonStore {
 	@action("hide loading")
 	hideLoading() {
 		this.loading = false;
+	}
+
+	@action("set search term")
+	setSearchTerm = (_val) => {
+		this.searchTerm = _val;
 	}
 }
 

@@ -11,7 +11,7 @@ export class BallotKeysMetadata extends React.Component {
         <div className="hidden">
           <div className="left">
             <div className="form-el">
-              <label for="key">Affected Key</label>
+              <label htmlFor="key">Affected Key</label>
               <input type="text" id="key" 
                 value={ballotStore.ballotKeys.affectedKey} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")} 
@@ -23,7 +23,7 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="key">Mining Key</label>
+              <label htmlFor="key">Mining Key</label>
               <input type="text" id="key" 
                 value={ballotStore.ballotKeys.miningKey} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "miningKey", "ballotKeys")} 
@@ -35,7 +35,7 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="left">
             <div className="form-el">
-              <label for="memo">Memo</label>
+              <label htmlFor="memo">Memo</label>
               <input type="text" id="memo" 
                 value={ballotStore.ballotKeys.memo} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "memo", "ballotKeys")} 
@@ -47,7 +47,7 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label for="key">Ballot End</label>
+              <label htmlFor="key">Ballot End</label>
               <input type="date" id="key" 
                 value={ballotStore.endTime} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 

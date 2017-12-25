@@ -45,7 +45,7 @@ export class BallotKeysCard extends React.Component {
   @action("Get ballotTypeDisplayName")
   getBallotTypeDisplayName(ballotType) {
     const { ballotStore } = this.props;
-    switch(parseInt(ballotType)) {
+    switch(parseInt(ballotType, 10)) {
       case ballotStore.KeysBallotType.add: 
         this.ballotTypeDisplayName = "add";
         break;
@@ -64,7 +64,7 @@ export class BallotKeysCard extends React.Component {
   @action("Get affectedKeyTypeDisplayName")
   getAffectedKeyTypeDisplayName(affectedKeyType) {
     const { ballotStore } = this.props;
-    switch(parseInt(affectedKeyType)) {
+    switch(parseInt(affectedKeyType, 10)) {
       case ballotStore.KeyType.mining: 
         this.affectedKeyTypeDisplayName = "mining";
         break;
@@ -269,7 +269,6 @@ export class BallotKeysCard extends React.Component {
     let { commonStore, contractsStore } = this.props;
     let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
     console.log(this.isFinalized)
-    let additionalProps = this.isFinalized ? { disabled: true } : {};
     return (
       <div className={ballotClass}>
         <div className="ballots-about">

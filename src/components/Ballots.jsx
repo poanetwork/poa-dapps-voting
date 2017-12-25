@@ -5,10 +5,6 @@ import "babel-polyfill";
 @inject("commonStore", "contractsStore", "ballotStore", "ballotsStore")
 @observer
 export class Ballots extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render () {
     const { commonStore, ballotsStore } = this.props;
     if (ballotsStore.ballotCards.length > 0) {

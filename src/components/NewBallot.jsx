@@ -143,7 +143,7 @@ export class NewBallot extends React.Component {
 
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore } = this.props;
-    const { location, push, goBack } = this.props.routing;
+    const { push } = this.props.routing;
     commonStore.showLoading();
     const isValidVotingKey = contractsStore.isValidVotingKey;
     if (!isValidVotingKey) {
@@ -213,7 +213,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForKey} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
                 />
-                <label for="ballot-for-validators" className="radio">Ballot for validators</label>
+                <label htmlFor="ballot-for-validators" className="radio">Ballot for validators</label>
                 <p className="hint">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                   eiusmod tempor incididunt ut labore
@@ -227,7 +227,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForMinThreshold} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
                 />
-                <label for="ballot-for-consensus" className="radio">Ballot for consensus</label>
+                <label htmlFor="ballot-for-consensus" className="radio">Ballot for consensus</label>
                 <p className="hint">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                   eiusmod tempor incididunt ut labore
@@ -241,7 +241,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForProxy} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
                 />
-                <label for="ballot-for-proxy" className="radio">Ballot for proxy</label>
+                <label htmlFor="ballot-for-proxy" className="radio">Ballot for proxy</label>
                 <p className="hint">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                   eiusmod tempor incididunt ut labore

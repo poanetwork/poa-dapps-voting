@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { observable, action, computed } from "mobx";
+import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
@@ -198,7 +198,7 @@ export class BallotProxyCard extends React.Component {
     const { commonStore, contractsStore, ballotStore } = this.props;
     let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
     return (
-      <div className="ballots-i">
+      <div className={ballotClass}>
         <div className="ballots-about">
           <div className="ballots-about-i ballots-about-i_name">
             <div className="ballots-about-td">
