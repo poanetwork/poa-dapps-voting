@@ -264,15 +264,25 @@ export class BallotKeysCard extends React.Component {
     this.getIsFinalized();
   }
 
-  checkFilter = () => {
+  hideCard = () => {
     let { commonStore } = this.props;
-    let filtered = commonStore.filtered && this.isFinalized;
-    return filtered;
+    let hideCard = commonStore.isActiveFilter && this.isFinalized;
+    if (commonStore.searchTerm) {
+      if (commonStore.searchTerm.length == 0) return hideCard;
+      if (String(this.affectedKey).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+      if (String(this.affectedKeyTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+      if (String(this.ballotTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+      if (String(this.creator).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+    } else {
+      return hideCard;
+    }
+    
+    return true;
   }
 
   render () {
     let { contractsStore } = this.props;
-    let ballotClass = this.checkFilter() ? "ballots-i display-none" : "ballots-i";
+    let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>
         <div className="ballots-about">
