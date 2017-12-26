@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
@@ -17,22 +17,44 @@ export class BallotProxyCard extends React.Component {
   @observable creator;
   @observable progress;
   @observable totalVoters;
-  @observable votesForNumber;
-  @observable votesAgainstNumber;
-  @observable votesForPercents;
-  @observable votesAgainstPercents;
+
+  @computed get votesForNumber() {
+    let votes = (this.totalVoters + this.progress) / 2;
+    return votes;
+  }
+
+  @computed get votesForPercents() {
+    if (this.totalVoters <= 0)
+      return 0;
+
+    let votesPercents = Math.round(this.votesForNumber / this.totalVoters * 100);
+    return votesPercents;
+  }
+
+  @computed get votesAgainstNumber() {
+    let votes = (this.totalVoters - this.progress) / 2;
+    return votes;
+  }
+
+  @computed get votesAgainstPercents() {
+    if (this.totalVoters <= 0)
+      return 0;
+
+    let votesPercents = Math.round(this.votesAgainstNumber / this.totalVoters * 100);
+    return votesPercents;
+  }
 
   @action("Get start time of proxy ballot")
-  getStartTime = async (_id) => {
-    const { contractsStore } = this.props;
-    let startTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getStartTime(_id).call()
+  getStartTime = async () => {
+    const { contractsStore, id } = this.props;
+    let startTime = await contractsStore.votingToChangeProxy.getStartTime(id);
     this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
   @action("Get end time of proxy ballot")
-  getEndTime = async (_id) => {
-    const { contractsStore } = this.props;
-    let endTime = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getEndTime(_id).call()
+  getEndTime = async () => {
+    const { contractsStore, id } = this.props;
+    let endTime = await contractsStore.votingToChangeProxy.getEndTime(id);
     this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -49,37 +71,37 @@ export class BallotProxyCard extends React.Component {
   }
 
   @action("Get times")
-  getTimes = async (_id) => {
-    await this.getStartTime(_id);
-    await this.getEndTime(_id);
+  getTimes = async () => {
+    await this.getStartTime();
+    await this.getEndTime();
     this.calcTimeToFinish();
   }
 
   @action("Get proposed address of proxy ballot")
-  getProposedAddress = async (_id) => {
-    const { contractsStore } = this.props;
-    let proposedAddress = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getProposedValue(_id).call()
+  getProposedAddress = async () => {
+    const { contractsStore, id } = this.props;
+    let proposedAddress = await contractsStore.votingToChangeProxy.getProposedValue(id);
     this.proposedAddress = proposedAddress;
   }
 
   @action("Get contract type of proxy ballot")
-  getContractType = async (_id) => {
-    const { contractsStore } = this.props;
-    let contractType = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getContractType(_id).call()
+  getContractType = async () => {
+    const { contractsStore, id } = this.props;
+    let contractType = await contractsStore.votingToChangeProxy.getContractType(id);
     this.contractType = contractType;
   }
 
   @action("Get creator")
-  getCreator = async (_id) => {
-    const { contractsStore } = this.props;
-    let votingState = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.votingState(_id).call()
+  getCreator = async () => {
+    const { contractsStore, id } = this.props;
+    let votingState = await contractsStore.votingToChangeProxy.votingState(id);
     this.getValidatorFullname(votingState.creator);
   }
 
   @action("Get validator full name")
   getValidatorFullname = async (_miningKey) => {
     const { contractsStore } = this.props;
-    let validator = await contractsStore.validatorMetadata.metadataInstance.methods.validators(_miningKey).call();
+    let validator = await contractsStore.validatorMetadata.validators(_miningKey);
     let firstName = toAscii(validator.firstName);
     let lastName = toAscii(validator.lastName);
     let fullName = `${firstName} ${lastName}`
@@ -87,37 +109,39 @@ export class BallotProxyCard extends React.Component {
   }
 
   @action("Get total voters")
-  getTotalVoters = async (_id) => {
-    const { contractsStore } = this.props;
-    this.totalVoters = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getTotalVoters(_id).call();
+  getTotalVoters = async () => {
+    const { contractsStore, id } = this.props;
+    let totalVoters = await contractsStore.votingToChangeProxy.getTotalVoters(id);
+    this.totalVoters = Number(totalVoters);
   }
 
   @action("Get progress")
-  getProgress = async (_id) => {
-    const { contractsStore } = this.props;
-    this.progress = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getProgress(_id).call();
+  getProgress = async () => {
+    const { contractsStore, id } = this.props;
+    let progress = await contractsStore.votingToChangeProxy.getProgress(id);
+    this.progress = Number(progress);
   }
 
   @action("Get isFinalized")
-  getIsFinalized = async (_id) => {
-    const { contractsStore } = this.props;
-    this.isFinalized = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.getIsFinalized(_id).call();
+  getIsFinalized = async () => {
+    const { contractsStore, id } = this.props;
+    this.isFinalized = await contractsStore.votingToChangeProxy.getIsFinalized(id);
   }
 
   isValidaVote = async () => {
-    const { contractsStore } = this.props;
-    let isValidVote = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.isValidVote(this.props.id, contractsStore.votingKey).call();
+    const { contractsStore, id } = this.props;
+    let isValidVote = await contractsStore.votingToChangeProxy.isValidVote(id, contractsStore.votingKey);
     return isValidVote;
   }
 
   isActive = async () => {
-    const { contractsStore } = this.props;
-    let isActive = await contractsStore.votingToChangeProxy.votingToChangeProxyInstance.methods.isActive(this.props.id).call();
+    const { contractsStore, id } = this.props;
+    let isActive = await contractsStore.votingToChangeProxy.isActive(id);
     return isActive;
   }
 
   vote = async (e, _type) => {
-    const { commonStore, contractsStore } = this.props;
+    const { commonStore, contractsStore, id } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
@@ -130,7 +154,7 @@ export class BallotProxyCard extends React.Component {
       swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
       return;
     }
-    contractsStore.votingToChangeProxy.vote(this.props.id, _type, contractsStore.votingKey)
+    contractsStore.votingToChangeProxy.vote(id, _type, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
@@ -144,7 +168,7 @@ export class BallotProxyCard extends React.Component {
   }
 
   finalize = async (e) => {
-    const { commonStore, contractsStore } = this.props;
+    const { commonStore, contractsStore, id } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
@@ -161,7 +185,7 @@ export class BallotProxyCard extends React.Component {
       swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
       return;
     }
-    contractsStore.votingToChangeProxy.finalize(this.props.id, contractsStore.votingKey)
+    contractsStore.votingToChangeProxy.finalize(id, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
@@ -176,17 +200,13 @@ export class BallotProxyCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.votesForNumber = 0;
-    this.votesAgainstNumber = 0;
-    this.votesForPercents = 0;
-    this.votesAgainstPercents = 0;
-    this.getTimes(this.props.id);
-    this.getProposedAddress(this.props.id);
-    this.getContractType(this.props.id);
-    this.getCreator(this.props.id);
-    this.getTotalVoters(this.props.id);
-    this.getProgress(this.props.id);
-    this.getIsFinalized(this.props.id);
+    this.getTimes();
+    this.getProposedAddress();
+    this.getContractType();
+    this.getCreator();
+    this.getTotalVoters();
+    this.getProgress();
+    this.getIsFinalized();
   }
 
   render () {
