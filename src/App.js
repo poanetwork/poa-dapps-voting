@@ -11,13 +11,13 @@ import { inject, observer } from 'mobx-react';
 class App extends Component {
   onBallotsRender = () => {
     const { commonStore } = this.props;
-    commonStore.filtered = false;
+    commonStore.isActiveFilter = false;
     return <Ballots/>;
   }
 
   onActiveBallotsRender = () => {
     const { commonStore } = this.props;
-    commonStore.filtered = true;
+    commonStore.isActiveFilter = true;
     return <Ballots/>;
   }
 

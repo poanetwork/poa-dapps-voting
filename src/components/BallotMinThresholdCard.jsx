@@ -200,9 +200,23 @@ export class BallotMinThresholdCard extends React.Component {
     this.getIsFinalized(this.props.id);
   }
 
+  hideCard = () => {
+    let { commonStore } = this.props;
+    let hideCard = commonStore.isActiveFilter && this.isFinalized;
+    if (commonStore.searchTerm) {
+      if (commonStore.searchTerm.length == 0) return hideCard;
+      if (String(this.proposedValue).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+      if (String(this.creator).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
+    } else {
+      return hideCard;
+    }
+    
+    return true;
+  }
+
   render () {
     let { commonStore, contractsStore } = this.props;
-    let ballotClass = (commonStore.filtered && this.isFinalized) ? "ballots-i display-none" : "ballots-i";
+    let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>
         <div className="ballots-about">
