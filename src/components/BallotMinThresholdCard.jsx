@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
@@ -16,22 +16,44 @@ export class BallotMinThresholdCard extends React.Component {
   @observable creator;
   @observable progress;
   @observable totalVoters;
-  @observable votesForNumber;
-  @observable votesAgainstNumber;
-  @observable votesForPercents;
-  @observable votesAgainstPercents;
+
+  @computed get votesForNumber() {
+    let votes = (this.totalVoters + this.progress) / 2;
+    return votes;
+  }
+
+  @computed get votesForPercents() {
+    if (this.totalVoters <= 0)
+      return 0;
+
+    let votesPercents = Math.round(this.votesForNumber / this.totalVoters * 100);
+    return votesPercents;
+  }
+
+  @computed get votesAgainstNumber() {
+    let votes = (this.totalVoters - this.progress) / 2;
+    return votes;
+  }
+
+  @computed get votesAgainstPercents() {
+    if (this.totalVoters <= 0)
+      return 0;
+
+    let votesPercents = Math.round(this.votesAgainstNumber / this.totalVoters * 100);
+    return votesPercents;
+  }
 
   @action("Get start time of min threshold ballot")
-  getStartTime = async (_id) => {
-    const { contractsStore } = this.props;
-    let startTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call()
+  getStartTime = async () => {
+    const { contractsStore, id } = this.props;
+    let startTime = await contractsStore.votingToChangeMinThreshold.getStartTime(id);
     this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
   @action("Get end time of min threshold ballot")
-  getEndTime = async (_id) => {
-    const { contractsStore } = this.props;
-    let endTime = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call()
+  getEndTime = async () => {
+    const { contractsStore, id } = this.props;
+    let endTime = await contractsStore.votingToChangeMinThreshold.getEndTime(id);
     this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
   }
 
@@ -48,30 +70,30 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   @action("Get times")
-  getTimes = async (_id) => {
-    await this.getStartTime(_id);
-    await this.getEndTime(_id);
+  getTimes = async () => {
+    await this.getStartTime();
+    await this.getEndTime();
     this.calcTimeToFinish();
   }
 
   @action("Get proposed value of min threshold ballot")
-  getProposedValue = async (_id) => {
-    const { contractsStore } = this.props;
-    let proposedValue = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call()
+  getProposedValue = async () => {
+    const { contractsStore, id } = this.props;
+    let proposedValue = await contractsStore.votingToChangeMinThreshold.getProposedValue(id);
     this.proposedValue = proposedValue;
   }
 
   @action("Get creator")
-  getCreator = async (_id) => {
-    const { contractsStore } = this.props;
-    let votingState = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.votingState(_id).call()
+  getCreator = async () => {
+    const { contractsStore, id } = this.props;
+    let votingState = await contractsStore.votingToChangeMinThreshold.votingState(id);
     this.getValidatorFullname(votingState.creator);
   }
 
   @action("Get validator full name")
   getValidatorFullname = async (_miningKey) => {
     const { contractsStore } = this.props;
-    let validator = await contractsStore.validatorMetadata.metadataInstance.methods.validators(_miningKey).call();
+    let validator = await contractsStore.validatorMetadata.validators(_miningKey);
     let firstName = toAscii(validator.firstName);
     let lastName = toAscii(validator.lastName);
     let fullName = `${firstName} ${lastName}`
@@ -79,37 +101,39 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   @action("Get total voters")
-  getTotalVoters = async (_id) => {
-    const { contractsStore } = this.props;
-    this.totalVoters = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getTotalVoters(_id).call();
+  getTotalVoters = async () => {
+    const { contractsStore, id } = this.props;
+    let totalVoters = await contractsStore.votingToChangeMinThreshold.getTotalVoters(id);
+    this.totalVoters = Number(totalVoters);
   }
 
   @action("Get progress")
-  getProgress = async (_id) => {
-    const { contractsStore } = this.props;
-    this.progress = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getProgress(_id).call();
+  getProgress = async () => {
+    const { contractsStore, id } = this.props;
+    let progress = await contractsStore.votingToChangeMinThreshold.getProgress(id);
+    this.progress = Number(progress);
   }
 
   @action("Get isFinalized")
-  getIsFinalized = async(_id) => {
-    const { contractsStore } = this.props;
-    this.isFinalized = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.getIsFinalized(_id).call();
+  getIsFinalized = async() => {
+    const { contractsStore, id } = this.props;
+    this.isFinalized = await contractsStore.votingToChangeMinThreshold.getIsFinalized(id);
   }
 
   isValidaVote = async () => {
-    const { contractsStore } = this.props;
-    let isValidVote = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.isValidVote(this.props.id, contractsStore.votingKey).call();
+    const { contractsStore, id } = this.props;
+    let isValidVote = await contractsStore.votingToChangeMinThreshold.isValidVote(id, contractsStore.votingKey);
     return isValidVote;
   }
 
   isActive = async () => {
-    const { contractsStore } = this.props;
-    let isActive = await contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.methods.isActive(this.props.id).call();
+    const { contractsStore, id } = this.props;
+    let isActive = await contractsStore.votingToChangeMinThreshold.isActive(id);
     return isActive;
   }
 
   vote = async (e, _type) => {
-    const { commonStore, contractsStore } = this.props;
+    const { commonStore, contractsStore, id } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
@@ -122,7 +146,7 @@ export class BallotMinThresholdCard extends React.Component {
       swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
       return;
     }
-    contractsStore.votingToChangeMinThreshold.vote(this.props.id, _type, contractsStore.votingKey)
+    contractsStore.votingToChangeMinThreshold.vote(id, _type, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
@@ -136,7 +160,7 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   finalize = async (e) => {
-    const { commonStore, contractsStore } = this.props;
+    const { commonStore, contractsStore, id } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
       swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
@@ -153,7 +177,7 @@ export class BallotMinThresholdCard extends React.Component {
       swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
       return;
     }
-    contractsStore.votingToChangeMinThreshold.finalize(this.props.id, contractsStore.votingKey)
+    contractsStore.votingToChangeMinThreshold.finalize(id, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
@@ -168,10 +192,6 @@ export class BallotMinThresholdCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.votesForNumber = 0;
-    this.votesAgainstNumber = 0;
-    this.votesForPercents = 0;
-    this.votesAgainstPercents = 0;
     this.getTimes(this.props.id);
     this.getProposedValue(this.props.id);
     this.getCreator(this.props.id);

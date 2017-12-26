@@ -53,5 +53,9 @@ export default class Metadata {
   async getMinThreshold({miningKey}) {
     let validatorData = await this.metadataInstance.methods.validators(miningKey).call();
     return validatorData.minThreshold;
-  }  
+  }
+
+  validators(_miningKey) {
+    return this.metadataInstance.methods.validators(_miningKey).call();
+  }
 }
