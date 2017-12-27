@@ -33,18 +33,6 @@ export class BallotKeysMetadata extends React.Component {
               </p>
             </div>
           </div>
-          {/*<div className="left">
-            <div className="form-el">
-              <label htmlFor="memo">Memo</label>
-              <input type="text" id="memo" 
-                value={ballotStore.ballotKeys.memo} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "memo", "ballotKeys")} 
-              />
-              <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              </p>
-            </div>
-          </div>*/}
           <div className="left">
             <div className="form-el">
               <label htmlFor="key">Ballot End</label>
