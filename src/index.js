@@ -55,11 +55,11 @@ class AppMainRouter extends Component {
       console.log("miningKey", contractsStore.miningKey)
     }).catch((error) => {
       commonStore.hideLoading();
-      console.error(error.message);
       swal({
         icon: 'error',
         title: 'Error',
-        content: generateElement(error.message)
+        html: error.message,
+        type: 'error'
       });
     });
   }
