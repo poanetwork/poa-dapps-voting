@@ -16,6 +16,7 @@ Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wi
 constants.WRONG_NETWORK_MSG = `You aren't connected to POA Network. 
 Please, switch on POA plugin and refresh the page. 
 Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
+constants.CARD_FINALIZE_DESCRIPTION = "Finalization is available after ballot time is finished";
 module.exports = {
   constants
 }

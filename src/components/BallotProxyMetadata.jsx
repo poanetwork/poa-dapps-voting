@@ -18,7 +18,7 @@ export class BallotProxyMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "proposedAddress", "ballotProxy")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed address of a new proxy contract.
               </p>
             </div>
           </div>
@@ -39,7 +39,7 @@ export class BallotProxyMetadata extends React.Component {
               >
               </Select>
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Choose proxy contract type.
               </p>
             </div>
           </div>
@@ -51,7 +51,7 @@ export class BallotProxyMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Ballot's end time.
               </p>
             </div>
           </div>

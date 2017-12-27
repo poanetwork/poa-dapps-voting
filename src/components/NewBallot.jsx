@@ -220,8 +220,7 @@ export class NewBallot extends React.Component {
                 />
                 <label htmlFor="ballot-for-validators" className="radio">Ballot for validators</label>
                 <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                  eiusmod tempor incididunt ut labore
+                  Ballot to add, remove or swap any type of key for existing or new validators.
                 </p>
               </div>
             </div>
@@ -234,8 +233,7 @@ export class NewBallot extends React.Component {
                 />
                 <label htmlFor="ballot-for-consensus" className="radio">Ballot for consensus</label>
                 <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                  eiusmod tempor incididunt ut labore
+                  Ballot to change the minimum threshold for consensus to vote for keys.
                 </p>
               </div>
             </div>
@@ -248,8 +246,7 @@ export class NewBallot extends React.Component {
                 />
                 <label htmlFor="ballot-for-proxy" className="radio">Ballot for proxy</label>
                 <p className="hint">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                  eiusmod tempor incididunt ut labore
+                  Ballot to change one of the proxy contracts.
                 </p>
               </div>
             </div>
