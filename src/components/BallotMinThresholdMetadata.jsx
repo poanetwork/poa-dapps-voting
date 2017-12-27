@@ -17,7 +17,7 @@ export class BallotMinThresholdMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue", "ballotMinThreshold")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed value of the minimum threshold for keys ballot consensus.
               </p>
             </div>
           </div>
@@ -29,7 +29,7 @@ export class BallotMinThresholdMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Ballot's end time.
               </p>
             </div>
           </div>

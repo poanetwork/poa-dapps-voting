@@ -17,7 +17,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="add-key" className="radio radio_icon radio_add">Add key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Add new key.
             </p>
           </div>
           <div className="radio-container">
@@ -28,7 +28,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="remove-key" className="radio radio_icon radio_remove">Remove key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Remove existing key.
             </p>
           </div>
           <div className="radio-container">
@@ -39,7 +39,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="swap-key" className="radio radio_icon radio_swap">Swap key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Remove existing key and add new key.
             </p>
           </div>
         </div>
@@ -52,7 +52,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="mining-key" className="radio">Mining Key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Mining key type.
             </p>
           </div>
           <div className="radio-container">
@@ -63,7 +63,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="payout-key" className="radio">Payout Key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Payout key type.
             </p>
           </div>
           <div className="radio-container">
@@ -74,7 +74,7 @@ export class KeysTypes extends React.Component {
             />
             <label htmlFor="voting-key" className="radio">Voting Key</label>
             <p className="hint">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              Voting key type.
             </p>
           </div>
         </div>

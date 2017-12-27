@@ -39,7 +39,7 @@ class BallotStore {
 		this.ballotKeys = {
 			keyType: this.KeyType.mining,
 			keysBallotType: this.KeysBallotType.add,
-			memo: "",
+			//memo: "",
 			affectedKey: "",
 			miningKey: ""
 		};
