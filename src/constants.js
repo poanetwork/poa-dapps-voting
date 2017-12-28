@@ -10,6 +10,13 @@ constants.AFFECTED_KEY_IS_NOT_ADDRESS_MSG = `Ballot affectedKey isn't address`;
 constants.MINING_KEY_IS_NOT_ADDRESS_MSG = `Ballot miningKey isn't address`;
 constants.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG = `Ballot proposedAddress isn't address`;
 constants.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG = "Ballot end time should be greater than now";
+constants.NO_METAMASK_MSG = `You haven't chosen any account in MetaMask.
+Please, choose your voting key in MetaMask and reload the page.
+Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
+constants.WRONG_NETWORK_MSG = `You aren't connected to POA Network. 
+Please, switch on POA plugin and refresh the page. 
+Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
+constants.CARD_FINALIZE_DESCRIPTION = "Finalization is available after ballot time is finished";
 module.exports = {
   constants
 }

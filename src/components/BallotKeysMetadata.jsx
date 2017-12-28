@@ -17,7 +17,7 @@ export class BallotKeysMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Affected key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>
@@ -29,23 +29,11 @@ export class BallotKeysMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "miningKey", "ballotKeys")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Mining key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>
           <div className="left">
-            <div className="form-el">
-              <label htmlFor="memo">Memo</label>
-              <input type="text" id="memo" 
-                value={ballotStore.ballotKeys.memo} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "memo", "ballotKeys")} 
-              />
-              <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              </p>
-            </div>
-          </div>
-          <div className="right">
             <div className="form-el">
               <label htmlFor="key">Ballot End</label>
               <input type="date" id="key" 
@@ -53,7 +41,7 @@ export class BallotKeysMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Ballot's end time.
               </p>
             </div>
           </div>
