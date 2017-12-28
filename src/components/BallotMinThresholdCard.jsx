@@ -215,7 +215,7 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   render () {
-    let { commonStore, contractsStore } = this.props;
+    let { contractsStore } = this.props;
     let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>

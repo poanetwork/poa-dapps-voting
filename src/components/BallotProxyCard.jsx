@@ -225,7 +225,7 @@ export class BallotProxyCard extends React.Component {
   }
 
   render () {
-    const { commonStore, contractsStore, ballotStore } = this.props;
+    const { contractsStore, ballotStore } = this.props;
     let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
     return (
       <div className={ballotClass}>

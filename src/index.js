@@ -20,14 +20,6 @@ const routingStore = new RouterStore();
 const stores = { commonStore, contractsStore, ballotStore, ballotsStore, validatorStore, routing: routingStore };
 const history = syncHistoryWithStore(browserHistory, routingStore);
 
-function generateElement(msg){
-  let errorNode = document.createElement("div");
-  errorNode.innerHTML = `<div>
-    ${msg}
-  </div>`;
-  return errorNode;
-}
-
 class AppMainRouter extends Component {
 
   constructor(props) {
