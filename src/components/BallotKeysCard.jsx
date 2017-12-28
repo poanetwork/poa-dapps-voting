@@ -359,7 +359,7 @@ export class BallotKeysCard extends React.Component {
         <hr />
         <div className="ballots-footer">
           <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+          <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
         </div>
       </div>
     );

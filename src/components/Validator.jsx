@@ -18,7 +18,7 @@ export class Validator extends React.Component {
                 onChange={e => validatorStore.changeValidatorMetadata(e, "fullName")}
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed validator's full name. Example: Jefferson L. Flowers.
               </p>
             </div>
           </div>
@@ -30,7 +30,7 @@ export class Validator extends React.Component {
                 onChange={e => validatorStore.changeValidatorMetadata(e, "address")}
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed validator's registration address. Example: 110 Wall St., New York.
               </p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export class Validator extends React.Component {
               >
               </Select>
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed validator's US state. Example: New York.
               </p>
             </div>
           </div>
@@ -108,7 +108,7 @@ export class Validator extends React.Component {
                 onChange={e => validatorStore.changeValidatorMetadata(e, "zipCode")}
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed validator's postal code. Example: 10005.
               </p>
             </div>
           </div>
@@ -120,7 +120,7 @@ export class Validator extends React.Component {
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseID")}
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                Proposed validator's notary license ID. Example: 191947.
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export class Validator extends React.Component {
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseExpiration")}
               />
               <p className="hint">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                When proposed validator's notary license is expired. Example: 11/10/2021.
               </p>
             </div>
           </div>

@@ -1,6 +1,4 @@
-let errorMsgNoMetamaskAccount = `You haven't chosen any account in MetaMask.
-Please, choose your initial key in MetaMask and reload the page.
-Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
+import { constants } from "./constants";
 
 let getWeb3 = () => {
   return new Promise(function (resolve, reject) {
@@ -28,14 +26,12 @@ let getWeb3 = () => {
               break;
             default:
               netIdName = 'ERROR'
-              errorMsg = `You aren't connected to POA Network. 
-                  Please, switch on POA plugin and refresh the page. 
-                  Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`
+              errorMsg = constants.WRONG_NETWORK_MSG
               console.log('This is an unknown network.', netId)
           }
           var defaultAccount = web3.eth.defaultAccount || null;
           if(defaultAccount === null){
-            reject({message: errorMsgNoMetamaskAccount})
+            reject({message: constants.NO_METAMASK_MSG})
           }
           if(errorMsg !== null){
             reject({message: errorMsg})
@@ -53,7 +49,7 @@ let getWeb3 = () => {
         console.log('Injected web3 detected.');
 
       } else {
-        reject({message: errorMsgNoMetamaskAccount})
+        reject({message: constants.NO_METAMASK_MSG})
         console.error('Metamask not found'); 
       }
     })
