@@ -1,12 +1,61 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
 import Select from 'react-select';
+import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete';
 
 @inject("validatorStore")
 @observer
 export class Validator extends React.Component {
+  onSelectAutocomplete = async (data) => {
+    const { validatorStore } = this.props;
+    let place = await geocodeByAddress(data)
+    console.log(place);
+    let address_components = {
+      postal_code: "",
+      street_number: "",
+      route: "",
+      locality: "",
+      administrative_area_level_1: ""
+    };
+    for (let i = 0; i < place[0].address_components.length; i++) {
+      let address_component = place[0].address_components[i];
+      let addressType = address_component.types[0];
+      switch(addressType) {
+        case "postal_code":
+          address_components.postal_code = Number(address_component.short_name);
+          break;
+        case "street_number":
+          address_components.street_number = address_component.short_name;
+          break;
+        case "route":
+          address_components.route = address_component.short_name;
+          break;
+        case "locality":
+          address_components.locality = address_component.short_name;
+          break;
+        case "administrative_area_level_1":
+          address_components.administrative_area_level_1 = address_component.long_name;
+          break;
+      }
+      validatorStore.address = `${address_components.street_number} ${address_components.route} ${address_components.locality}`;
+      validatorStore.state = address_components.administrative_area_level_1;
+      validatorStore.zipCode = address_components.postal_code;
+    }
+  }
+
   render() {
     const { validatorStore } = this.props;
+    const inputProps = {
+      value: validatorStore.address,
+      onChange: (e) => validatorStore.changeValidatorMetadata(e, "address"),
+      id: 'address'
+    }
+    const AutocompleteItem = ({ formattedSuggestion }) => (
+      <div className="custom-container">
+        <strong>{ formattedSuggestion.mainText }</strong>{' '}
+        <small>{ formattedSuggestion.secondaryText }</small>
+      </div>
+    )
     return (
       <div>
         <div className="hidden">
@@ -25,9 +74,8 @@ export class Validator extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="address">Address</label>
-              <input type="text" id="address" 
-                value={validatorStore.address} 
-                onChange={e => validatorStore.changeValidatorMetadata(e, "address")}
+              <PlacesAutocomplete
+                onSelect={this.onSelectAutocomplete} inputProps={inputProps} autocompleteItem={AutocompleteItem}
               />
               <p className="hint">
                 Proposed validator's registration address. Example: 110 Wall St., New York.
@@ -91,7 +139,7 @@ export class Validator extends React.Component {
                   { value: "Washington", label:  "Washington" },
                   { value: "West Virginia", label:  "West Virginia" },
                   { value: "Wisconsin", label:  "Wisconsin" },
-                  { value: "Wyomi", label:  "Wyomi" }
+                  { value: "Wyoming", label:  "Wyoming" }
                 ]}
               >
               </Select>
