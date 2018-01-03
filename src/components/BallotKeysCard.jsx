@@ -6,6 +6,8 @@ import { toAscii } from "../helpers";
 import { constants } from "../constants";
 import swal from 'sweetalert2';
 
+const ACCEPT = 1;
+const REJECT = 2;
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotKeysCard extends React.Component {
@@ -193,7 +195,7 @@ export class BallotKeysCard extends React.Component {
     return isActive;
   }
 
-  vote = async (e, _type) => {
+  vote = async ({choice}) => {
     const { commonStore, contractsStore, id } = this.props;
     const { push } = this.props.routing;
     if (!contractsStore.isValidVotingKey) {
@@ -207,7 +209,7 @@ export class BallotKeysCard extends React.Component {
       swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
       return;
     }
-    contractsStore.votingToChangeKeys.vote(id, _type, contractsStore.votingKey)
+    contractsStore.votingToChangeKeys.vote(id, choice, contractsStore.votingKey)
     .on("receipt", () => {
       commonStore.hideLoading();
       swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
@@ -331,26 +333,26 @@ export class BallotKeysCard extends React.Component {
         </div>
         <div className="ballots-i-scale">
           <div className="ballots-i-scale-column">
-            <button type="button" onClick={(e) => this.vote(e, this.props.id, 1)} className="ballots-i--vote ballots-i--vote_yes">Vote</button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--value">Yes</p>
-              <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
-              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
-              <div className="vote-scale">
-                <div className="vote-scale--fill vote-scale--fill_yes" style={{width: `${this.votesForPercents}%`}}></div>
-              </div>
-            </div>
-          </div>
-          <div className="ballots-i-scale-column">
+            <button type="button" onClick={() => this.vote({choice: REJECT})} className="ballots-i--vote ballots-i--vote_no">No</button>
             <div className="vote-scale--container">
               <p className="vote-scale--value">No</p>
               <p className="vote-scale--votes">Votes: {this.votesAgainstNumber}</p>
               <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
               <div className="vote-scale">
-                <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesAgainstPercents}%`}}></div>
+                <div className="vote-scale--fill vote-scale--fill_yes" style={{width: `${this.votesAgainstPercents}%`}}></div>
               </div>
             </div>
-            <button type="button" onClick={(e) => this.vote(e, 2)} className="ballots-i--vote ballots-i--vote_no">Vote</button>
+          </div>
+          <div className="ballots-i-scale-column">
+            <div className="vote-scale--container">
+              <p className="vote-scale--value">Yes</p>
+              <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
+              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
+              <div className="vote-scale">
+                <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesForPercents}%`}}></div>
+              </div>
+            </div>
+            <button type="button" onClick={() => this.vote({choice: ACCEPT})} className="ballots-i--vote ballots-i--vote_yes">Yes</button>
           </div>
         </div>
         <div className="info">
