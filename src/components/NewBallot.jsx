@@ -19,7 +19,6 @@ export class NewBallot extends React.Component {
 
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
-    console.log(ballotStore.endTime)
     const isAfter = moment(ballotStore.endTime).isAfter(moment());
 
     if (ballotStore.isNewValidatorPersonalData) {
@@ -56,7 +55,6 @@ export class NewBallot extends React.Component {
       }
 
       let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey.value);
-      console.log(isMiningKeyAddress, 'pizda', ballotStore.ballotKeys.miningKey)
       if (!isMiningKeyAddress) {
         swal("Warning!", constants.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
