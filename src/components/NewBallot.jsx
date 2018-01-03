@@ -102,7 +102,7 @@ export class NewBallot extends React.Component {
       ballotStore.ballotKeys.affectedKey, 
       ballotStore.ballotKeys.keyType, 
       ballotStore.ballotKeys.miningKey,
-      ballotStore.ballotType,
+      ballotStore.ballotKeys.keysBallotType,
       contractsStore.votingKey
     ];
     console.log(inputToMethod)
