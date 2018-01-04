@@ -1,14 +1,13 @@
 import votingToChangeMinThresholdABI from './votingToChangeMinThreshold.abi.json'
 import Web3 from 'web3';
-import {VOTING_TO_CHANGE_MIN_THRESHOLD} from './addresses'
+import networkAddresses from './addresses';
 
-console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD)
 export default class VotingToChangeMinThreshold {
-  constructor(){
-    if(window.web3.currentProvider){
-      let web3_10 = new Web3(window.web3.currentProvider);
-      this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
-    }
+  constructor({web3, netId}){
+    const {VOTING_TO_CHANGE_MIN_THRESHOLD} = networkAddresses(netId);
+    let web3_10 = new Web3(web3.currentProvider);
+    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD)
+    this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
   }
 
   //setters

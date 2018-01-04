@@ -70,47 +70,54 @@ class ContractsStore {
 	@action("Set web3Instance")
 	setWeb3Instance = (web3Config) => {
 		this.web3Instance = web3Config.web3Instance;
+		this.netId = web3Config.netId;
 	}
 
 	@action("Set PoA Consensus contract")
 	setPoaConsensus = (web3Config) => {
 		this.poaConsensus = new PoaConsensus({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set Ballots Storage contract")
 	setBallotsStorage = (web3Config) => {
 		this.ballotsStorage = new BallotsStorage({
-			web3: web3Config.web3Instance
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
 		});
 	}
 
 	@action("Set VotingToChangeKeys contract")
 	setVotingToChangeKeys = (web3Config) => {
 		this.votingToChangeKeys = new VotingToChangeKeys({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeMinThreshold contract")
 	setVotingToChangeMinThreshold = (web3Config) => {
 		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeProxy contract")
 	setVotingToChangeProxy = (web3Config) => {
 		this.votingToChangeProxy = new VotingToChangeProxy({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set ValidatorMetadata contract")
 	setValidatorMetadata = (web3Config) => {
 		this.validatorMetadata = new ValidatorMetadata({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
@@ -178,10 +185,10 @@ class ContractsStore {
 	}
 	@action
 	async getValidatorActiveBallots() {
-		if(this.web3Instance){
-			await this.setVotingToChangeKeys({web3Instance: this.web3Instance})
-			await this.setVotingToChangeMinThreshold({web3Instance: this.web3Instance})
-			await this.setVotingToChangeProxy({web3Instance: this.web3Instance})
+		if(this.web3Instance && this.netId){
+			await this.setVotingToChangeKeys({web3Instance: this.web3Instance, netId: this.netId})
+			await this.setVotingToChangeMinThreshold({web3Instance: this.web3Instance, netId: this.netId})
+			await this.setVotingToChangeProxy({web3Instance: this.web3Instance, netId: this.netId})
 			this.validatorLimits.keys = await this.votingToChangeKeys.getBallotLimit(this.web3Instance.eth.defaultAccount);
 			this.validatorLimits.minThreshold = await this.votingToChangeMinThreshold.getBallotLimit(this.web3Instance.eth.defaultAccount);
 			this.validatorLimits.proxy = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount);
