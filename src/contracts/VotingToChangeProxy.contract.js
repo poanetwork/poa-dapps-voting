@@ -76,6 +76,6 @@ export default class VotingToChangeProxy {
 
   async getBallotLimit(_votingKey) {
     const currentLimit = await this.votingToChangeProxyInstance.methods.getBallotLimitPerValidator().call();
-    return currentLimit - await this.getValidatorActiveBallots(_votingKey)
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey);
   }
 }

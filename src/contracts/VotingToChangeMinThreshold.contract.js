@@ -72,6 +72,6 @@ export default class VotingToChangeMinThreshold {
 
   async getBallotLimit(_votingKey) {
     const currentLimit = await this.votingToChangeMinThresholdInstance.methods.getBallotLimitPerValidator().call();
-    return currentLimit - await this.getValidatorActiveBallots(_votingKey)
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey);
   }
 }

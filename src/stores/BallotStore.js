@@ -127,12 +127,12 @@ class BallotStore {
 			this[parent][field] = newVal;
 		else
 			this[field] = newVal;
-		console.log("ballot metadata", field, parent?this[parent][field]:this[field])
+		console.log("ballot metadata", field, parent?this[parent][field]:this[field]);
 	}
 	@action("change ballot metadata")
 	setMiningKey = (value) => {
 		this.ballotKeys.miningKey = value;
-		console.log("ballot mining key", toJS(value))
+		console.log("ballot mining key", toJS(value));
 	}
 }
 
