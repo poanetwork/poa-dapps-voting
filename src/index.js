@@ -28,10 +28,10 @@ class AppMainRouter extends Component {
 
     getWeb3().then(async (web3Config) => {
       contractsStore.setWeb3Instance(web3Config);
-      await contractsStore.setPoaConsensus(web3Config);
+      contractsStore.setPoaConsensus(web3Config);
       contractsStore.setBallotsStorage(web3Config);
       contractsStore.getValidatorsLength();
-      await contractsStore.getKeysBallotThreshold();
+      contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();
       contractsStore.getProxyBallotThreshold();
       contractsStore.setVotingToChangeKeys(web3Config);
@@ -43,6 +43,8 @@ class AppMainRouter extends Component {
       contractsStore.getAllMinThresholdBallots();
       contractsStore.getAllProxyBallots();
       await contractsStore.setMiningKey(web3Config);
+      contractsStore.getValidatorActiveBallots();
+      contractsStore.getAllValidatorMetadata()
       console.log("votingKey", contractsStore.votingKey)
       console.log("miningKey", contractsStore.miningKey)
     }).catch((error) => {

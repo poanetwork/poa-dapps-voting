@@ -53,7 +53,6 @@ export class NewBallot extends React.Component {
         commonStore.hideLoading();
         return false;
       }
-
       let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey);
 
       if (!isMiningKeyAddress) {
@@ -102,10 +101,9 @@ export class NewBallot extends React.Component {
       ballotStore.ballotKeys.affectedKey, 
       ballotStore.ballotKeys.keyType, 
       ballotStore.ballotKeys.miningKey,
-      ballotStore.ballotType,
+      ballotStore.ballotKeys.keysBallotType,
       contractsStore.votingKey
     ];
-    console.log(inputToMethod)
     let method = contractsStore.votingToChangeKeys.createVotingForKeys(
       ...inputToMethod
     );
@@ -120,7 +118,6 @@ export class NewBallot extends React.Component {
       ballotStore.ballotMinThreshold.proposedValue, 
       contractsStore.votingKey
     ];
-    console.log(inputToMethod)
     let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(
       ...inputToMethod
     );
@@ -189,7 +186,7 @@ export class NewBallot extends React.Component {
     let validator = ballotStore.isNewValidatorPersonalData ? <Validator />: "";
     let keysTypes = ballotStore.isBallotForKey ? <KeysTypes />: "";
     let metadata
-    let minThreshold
+    let minThreshold = 0;
     switch (ballotStore.ballotType) {
       case ballotStore.BallotType.keys: 
         metadata = <BallotKeysMetadata />;
@@ -218,7 +215,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForKey} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
                 />
-                <label htmlFor="ballot-for-validators" className="radio">Ballot for validators</label>
+                <label htmlFor="ballot-for-validators" className="radio">Validator Management Ballot</label>
                 <p className="hint">
                   Ballot to add, remove or swap any type of key for existing or new validators.
                 </p>
@@ -231,7 +228,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForMinThreshold} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
                 />
-                <label htmlFor="ballot-for-consensus" className="radio">Ballot for consensus</label>
+                <label htmlFor="ballot-for-consensus" className="radio">Consenus Threshold Ballot</label>
                 <p className="hint">
                   Ballot to change the minimum threshold for consensus to vote for keys.
                 </p>
@@ -244,7 +241,7 @@ export class NewBallot extends React.Component {
                   checked={ballotStore.isBallotForProxy} 
                   onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
                 />
-                <label htmlFor="ballot-for-proxy" className="radio">Ballot for proxy</label>
+                <label htmlFor="ballot-for-proxy" className="radio">Modify Proxy Contract Ballot</label>
                 <p className="hint">
                   Ballot to change one of the proxy contracts.
                 </p>
@@ -257,7 +254,10 @@ export class NewBallot extends React.Component {
           {metadata}
           <div className="new-form-footer">
             <div className="info">
-              Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal
+              Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal<br />
+              You can create {contractsStore.validatorLimits.keys} ballot for keys<br />
+              You can create {contractsStore.validatorLimits.minThreshold} ballot for consensus<br />
+              You can create {contractsStore.validatorLimits.proxy} ballot for proxy<br />
             </div>
             <button type="button" className="add-ballot" onClick={e => this.onClick(e)}>Add ballot</button>
           </div>

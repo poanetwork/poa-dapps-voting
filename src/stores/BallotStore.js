@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import moment from 'moment';
 
 class BallotStore {
@@ -25,6 +25,7 @@ class BallotStore {
 		5: 'BallotsStorage'
 	}
 	@observable ballotType;
+	@observable keysBallotType;
 	@observable endTime;
 
 	@observable ballotKeys;
@@ -33,12 +34,12 @@ class BallotStore {
 
 
 	constructor() {
-		this.ballotType = this.BallotType.keys;
+		this.ballotType = null;
 		this.endTime = "";
 
 		this.ballotKeys = {
-			keyType: this.KeyType.mining,
-			keysBallotType: this.KeysBallotType.add,
+			keyType: null,
+			keysBallotType: null,
 			//memo: "",
 			affectedKey: "",
 			miningKey: ""
@@ -127,6 +128,11 @@ class BallotStore {
 		else
 			this[field] = newVal;
 		console.log("ballot metadata", field, parent?this[parent][field]:this[field])
+	}
+	@action("change ballot metadata")
+	setMiningKey = (value) => {
+		this.ballotKeys.miningKey = value;
+		console.log("ballot mining key", toJS(value))
 	}
 }
 

@@ -64,4 +64,18 @@ export default class VotingToChangeProxy {
   getContractType(_id) {
     return this.votingToChangeProxyInstance.methods.getContractType(_id).call();
   }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeProxyInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeProxyInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeProxyInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey)
+  }
 }

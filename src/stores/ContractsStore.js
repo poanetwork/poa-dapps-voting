@@ -19,7 +19,7 @@ import "babel-polyfill";
 
 class ContractsStore {
 	@observable activeKeysBallotsIDs;
-
+	@observable validatorLimits;
 	@observable poaConsensus;
 	@observable ballotsStorage;
 	@observable votingToChangeKeys;
@@ -33,15 +33,18 @@ class ContractsStore {
 	@observable keysBallotThreshold;
 	@observable minThresholdBallotThreshold;
 	@observable proxyBallotThreshold;
+	@observable validatorLimits;
+	@observable validatorsMetadata;
 
 	constructor() {
 		this.votingKey = null;
 		this.miningKey = null;
 		this.activeKeysBallotsIDs = [];
-
+		this.validatorsMetadata = [];
+		this.validatorLimits = {keys: null, minThreshold: null, proxy: null};
 		getWeb3().then(async (web3Config) => {
-	      contractsStore.setWeb3Instance(web3Config);
-	    })
+			contractsStore.setWeb3Instance(web3Config);
+		})
 	}
 
 	@computed get isValidVotingKey() {
@@ -55,8 +58,8 @@ class ContractsStore {
 	}
 
 	@action("Get min threshold ballot threshold")
-	getMinThresholdBallotThreshold() {
-		this.minThresholdBallotThreshold = this.keysBallotThreshold;
+	async getMinThresholdBallotThreshold() {
+		this.minThresholdBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call();
 	}
 
 	@action("get proxy ballot threshold")
@@ -172,6 +175,25 @@ class ContractsStore {
 	    if (allProxyBallotsIDs.length == 0) {
 	    	commonStore.hideLoading();
 	    }
+	}
+	@action
+	async getValidatorActiveBallots() {
+		if(this.web3Instance){
+			await this.setVotingToChangeKeys({web3Instance: this.web3Instance})
+			await this.setVotingToChangeMinThreshold({web3Instance: this.web3Instance})
+			await this.setVotingToChangeProxy({web3Instance: this.web3Instance})
+			this.validatorLimits.keys = await this.votingToChangeKeys.getBallotLimit(this.web3Instance.eth.defaultAccount);
+			this.validatorLimits.minThreshold = await this.votingToChangeMinThreshold.getBallotLimit(this.web3Instance.eth.defaultAccount);
+			this.validatorLimits.proxy = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount);
+		}
+	}
+	@action
+	async getAllValidatorMetadata() {
+		const keys = await this.poaConsensus.getValidators();
+		keys.forEach(async (key) => {
+			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
+			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
+		})
 	}
 }
 

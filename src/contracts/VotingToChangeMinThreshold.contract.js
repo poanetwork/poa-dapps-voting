@@ -60,4 +60,18 @@ export default class VotingToChangeMinThreshold {
   getProposedValue(_id) {
     return this.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call();
   }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeMinThresholdInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeMinThresholdInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey)
+  }
 }

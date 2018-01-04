@@ -68,4 +68,18 @@ export default class VotingToChangeKeys {
   getAffectedKey(_id) {
     return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
   }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeKeysInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeKeysInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey)
+  }
 }
