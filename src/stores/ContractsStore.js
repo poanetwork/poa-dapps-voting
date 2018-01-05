@@ -19,7 +19,6 @@ import "babel-polyfill";
 
 class ContractsStore {
 	@observable activeKeysBallotsIDs;
-	@observable validatorLimits;
 	@observable poaConsensus;
 	@observable ballotsStorage;
 	@observable votingToChangeKeys;

@@ -38,9 +38,10 @@ class App extends Component {
     const { commonStore } = this.props;
     const currentPath = this.props.location.pathname;
     let showNavPan = 
-    currentPath == `${commonStore.rootPath}` 
-    || currentPath == `${commonStore.rootPath}/`
-    || currentPath == `${commonStore.rootPath}/active`;
+    currentPath === `${commonStore.rootPath}` 
+    || currentPath === "/"
+    || currentPath === `${commonStore.rootPath}/`
+    || currentPath === `${commonStore.rootPath}/active`;
     return showNavPan;
   }
 
@@ -61,6 +62,7 @@ class App extends Component {
         {loading}
         <Header />
         {nav}
+        <Route exact path={`/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender}/>
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>

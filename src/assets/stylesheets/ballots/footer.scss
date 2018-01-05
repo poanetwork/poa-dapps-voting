@@ -1,7 +1,12 @@
 .ballots-footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
+  &-left {
+    display: inline-flex;
+    align-items: center;
+  }
   @media screen and (max-width: $tablet-width) {
     padding-top: $tablet-indent;
   }

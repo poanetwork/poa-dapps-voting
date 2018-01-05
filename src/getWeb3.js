@@ -29,7 +29,7 @@ let getWeb3 = () => {
               errorMsg = constants.WRONG_NETWORK_MSG
               console.log('This is an unknown network.', netId)
           }
-          document.title = `${netIdName} - POA governance dApp`
+          document.title = `${netIdName} - POA Network Governance DApp`
           var defaultAccount = web3.eth.defaultAccount || null;
           if(defaultAccount === null){
             reject({message: constants.NO_METAMASK_MSG})

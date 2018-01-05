@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, autorun } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
@@ -265,6 +265,15 @@ export class BallotKeysCard extends React.Component {
     this.getProgress();
     this.getIsFinalized();
   }
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.calcTimeToFinish()
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.interval);
+  }
 
   hideCard = () => {
     let { commonStore } = this.props;
@@ -360,8 +369,11 @@ export class BallotKeysCard extends React.Component {
         </div>
         <hr />
         <div className="ballots-footer">
-          <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
-          <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
+          <div className="ballots-footer-left">
+            <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
+            <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
+          </div>
+          <div type="button" className="ballots-i--vote ballots-i--vote_no">Ballot ID: {this.props.id}</div>
         </div>
       </div>
     );
