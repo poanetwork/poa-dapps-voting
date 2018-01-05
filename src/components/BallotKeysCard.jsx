@@ -373,7 +373,7 @@ export class BallotKeysCard extends React.Component {
             <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
             <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
           </div>
-          <div type="button" className="ballots-i--vote ballots-i--vote_no">Ballot ID: {this.props.id}</div>
+          <div type="button" className="ballots-i--vote ballots-i--vote_no">Keys Ballot ID: {this.props.id}</div>
         </div>
       </div>
     );

@@ -47,6 +47,7 @@ class AppMainRouter extends Component {
       contractsStore.getAllValidatorMetadata();
       console.log("votingKey", contractsStore.votingKey);
       console.log("miningKey", contractsStore.miningKey);
+      commonStore.hideLoading();
     }).catch((error) => {
       commonStore.hideLoading();
       swal({
