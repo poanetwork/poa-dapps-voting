@@ -19,7 +19,6 @@ import "babel-polyfill";
 
 class ContractsStore {
 	@observable activeKeysBallotsIDs;
-
 	@observable poaConsensus;
 	@observable ballotsStorage;
 	@observable votingToChangeKeys;
@@ -33,15 +32,18 @@ class ContractsStore {
 	@observable keysBallotThreshold;
 	@observable minThresholdBallotThreshold;
 	@observable proxyBallotThreshold;
+	@observable validatorLimits;
+	@observable validatorsMetadata;
 
 	constructor() {
 		this.votingKey = null;
 		this.miningKey = null;
 		this.activeKeysBallotsIDs = [];
-
+		this.validatorsMetadata = [];
+		this.validatorLimits = {keys: null, minThreshold: null, proxy: null};
 		getWeb3().then(async (web3Config) => {
-	      contractsStore.setWeb3Instance(web3Config);
-	    })
+			contractsStore.setWeb3Instance(web3Config);
+		})
 	}
 
 	@computed get isValidVotingKey() {
@@ -55,8 +57,8 @@ class ContractsStore {
 	}
 
 	@action("Get min threshold ballot threshold")
-	getMinThresholdBallotThreshold() {
-		this.minThresholdBallotThreshold = this.keysBallotThreshold;
+	async getMinThresholdBallotThreshold() {
+		this.minThresholdBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call();
 	}
 
 	@action("get proxy ballot threshold")
@@ -67,47 +69,54 @@ class ContractsStore {
 	@action("Set web3Instance")
 	setWeb3Instance = (web3Config) => {
 		this.web3Instance = web3Config.web3Instance;
+		this.netId = web3Config.netId;
 	}
 
 	@action("Set PoA Consensus contract")
 	setPoaConsensus = (web3Config) => {
 		this.poaConsensus = new PoaConsensus({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set Ballots Storage contract")
 	setBallotsStorage = (web3Config) => {
 		this.ballotsStorage = new BallotsStorage({
-			web3: web3Config.web3Instance
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
 		});
 	}
 
 	@action("Set VotingToChangeKeys contract")
 	setVotingToChangeKeys = (web3Config) => {
 		this.votingToChangeKeys = new VotingToChangeKeys({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeMinThreshold contract")
 	setVotingToChangeMinThreshold = (web3Config) => {
 		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeProxy contract")
 	setVotingToChangeProxy = (web3Config) => {
 		this.votingToChangeProxy = new VotingToChangeProxy({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
 	@action("Set ValidatorMetadata contract")
 	setValidatorMetadata = (web3Config) => {
 		this.validatorMetadata = new ValidatorMetadata({
-        	web3: web3Config.web3Instance
+					web3: web3Config.web3Instance,
+					netId: web3Config.netId
       	});
 	}
 
@@ -172,6 +181,25 @@ class ContractsStore {
 	    if (allProxyBallotsIDs.length == 0) {
 	    	commonStore.hideLoading();
 	    }
+	}
+	@action
+	async getValidatorActiveBallots() {
+		if(this.web3Instance && this.netId){
+			await this.setVotingToChangeKeys({web3Instance: this.web3Instance, netId: this.netId})
+			await this.setVotingToChangeMinThreshold({web3Instance: this.web3Instance, netId: this.netId})
+			await this.setVotingToChangeProxy({web3Instance: this.web3Instance, netId: this.netId})
+			this.validatorLimits.keys = await this.votingToChangeKeys.getBallotLimit(this.web3Instance.eth.defaultAccount);
+			this.validatorLimits.minThreshold = await this.votingToChangeMinThreshold.getBallotLimit(this.web3Instance.eth.defaultAccount);
+			this.validatorLimits.proxy = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount);
+		}
+	}
+	@action
+	async getAllValidatorMetadata() {
+		const keys = await this.poaConsensus.getValidators();
+		keys.forEach(async (key) => {
+			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
+			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
+		})
 	}
 }
 

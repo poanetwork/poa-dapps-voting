@@ -1,14 +1,13 @@
 import votingToChangeMinThresholdABI from './votingToChangeMinThreshold.abi.json'
 import Web3 from 'web3';
-import {VOTING_TO_CHANGE_MIN_THRESHOLD} from './addresses'
+import networkAddresses from './addresses';
 
-console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD)
 export default class VotingToChangeMinThreshold {
-  constructor(){
-    if(window.web3.currentProvider){
-      let web3_10 = new Web3(window.web3.currentProvider);
-      this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
-    }
+  constructor({web3, netId}){
+    const {VOTING_TO_CHANGE_MIN_THRESHOLD} = networkAddresses(netId);
+    let web3_10 = new Web3(web3.currentProvider);
+    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD)
+    this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
   }
 
   //setters
@@ -59,5 +58,19 @@ export default class VotingToChangeMinThreshold {
 
   getProposedValue(_id) {
     return this.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call();
+  }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeMinThresholdInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeMinThresholdInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey);
   }
 }

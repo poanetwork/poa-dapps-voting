@@ -1,14 +1,13 @@
 import votingToChangeKeysABI from './votingToChangeKeys.abi.json'
 import Web3 from 'web3';
-import {VOTING_TO_CHANGE_KEYS_ADDRESS} from './addresses'
-
-console.log('VotingToChangeKeys ', VOTING_TO_CHANGE_KEYS_ADDRESS)
+import networkAddresses from './addresses';
+      
 export default class VotingToChangeKeys {
-  constructor(){
-    if(window.web3.currentProvider){
-      let web3_10 = new Web3(window.web3.currentProvider);
-      this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
-    }
+  constructor({web3, netId}){
+    const {VOTING_TO_CHANGE_KEYS_ADDRESS} = networkAddresses(netId);
+    console.log('VotingToChangeKeys ', VOTING_TO_CHANGE_KEYS_ADDRESS);
+    let web3_10 = new Web3(web3.currentProvider);
+    this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
   }
 
   //setters
@@ -67,5 +66,19 @@ export default class VotingToChangeKeys {
 
   getAffectedKey(_id) {
     return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
+  }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeKeysInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeKeysInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey);
   }
 }

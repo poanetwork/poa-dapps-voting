@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 import { inject, observer } from "mobx-react";
+import Select from "react-select";
+import "react-select/dist/react-select.css";
 
-@inject("ballotStore")
+@inject("ballotStore", "contractsStore")
 @observer
 export class BallotKeysMetadata extends React.Component {
   render() {
+    const options = this.props.contractsStore.validatorsMetadata.slice();
     const { ballotStore } = this.props;
     return (
       <div>
@@ -24,9 +27,12 @@ export class BallotKeysMetadata extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="key">Mining Key</label>
-              <input type="text" id="key" 
+              <Select.Creatable
+                name="form-field-name"
+                id="key"
                 value={ballotStore.ballotKeys.miningKey} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "miningKey", "ballotKeys")} 
+                onChange={ballotStore.setMiningKey} 
+                options={options}
               />
               <p className="hint">
                 Mining key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.

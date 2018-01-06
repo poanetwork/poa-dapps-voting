@@ -1,14 +1,13 @@
 import votingToChangeProxyABI from './votingToChangeProxy.abi.json'
 import Web3 from 'web3';
-import {VOTING_TO_CHANGE_PROXY} from './addresses'
+import networkAddresses from './addresses';
 
-console.log('VotingToChangeProxy ', VOTING_TO_CHANGE_PROXY)
 export default class VotingToChangeProxy {
-  constructor(){
-    if(window.web3.currentProvider){
-      let web3_10 = new Web3(window.web3.currentProvider);
-      this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY);
-    }
+  constructor({web3, netId}){
+    const {VOTING_TO_CHANGE_PROXY} = networkAddresses(netId);
+    console.log('VotingToChangeProxy ', VOTING_TO_CHANGE_PROXY)
+    let web3_10 = new Web3(web3.currentProvider);
+    this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY);
   }
 
   //setters
@@ -63,5 +62,19 @@ export default class VotingToChangeProxy {
 
   getContractType(_id) {
     return this.votingToChangeProxyInstance.methods.getContractType(_id).call();
+  }
+
+  getMiningByVotingKey(_votingKey) {
+    return this.votingToChangeProxyInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  async getValidatorActiveBallots(_votingKey) {
+    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    return await this.votingToChangeProxyInstance.methods.validatorActiveBallots(miningKey).call();
+  }
+
+  async getBallotLimit(_votingKey) {
+    const currentLimit = await this.votingToChangeProxyInstance.methods.getBallotLimitPerValidator().call();
+    return currentLimit - await this.getValidatorActiveBallots(_votingKey);
   }
 }
