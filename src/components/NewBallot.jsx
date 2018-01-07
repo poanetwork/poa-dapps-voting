@@ -53,8 +53,8 @@ export class NewBallot extends React.Component {
         commonStore.hideLoading();
         return false;
       }
-      let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey);
 
+      let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey.value);
       if (!isMiningKeyAddress) {
         swal("Warning!", constants.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
@@ -100,7 +100,7 @@ export class NewBallot extends React.Component {
       ballotStore.endTimeUnix,
       ballotStore.ballotKeys.affectedKey, 
       ballotStore.ballotKeys.keyType, 
-      ballotStore.ballotKeys.miningKey,
+      ballotStore.ballotKeys.miningKey.value,
       ballotStore.ballotKeys.keysBallotType,
       contractsStore.votingKey
     ];
