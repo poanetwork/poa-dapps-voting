@@ -5,78 +5,14 @@ import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
 import swal from 'sweetalert2';
+import { BallotCard } from './BallotCard';
 
 const ACCEPT = 1;
 const REJECT = 2;
 @inject("commonStore", "contractsStore", "routing")
 @observer
 export class BallotMinThresholdCard extends React.Component {
-  @observable startTime;
-  @observable endTime;
-  @observable timeToFinish;
   @observable proposedValue;
-  @observable creator;
-  @observable progress;
-  @observable totalVoters;
-
-  @computed get votesForNumber() {
-    let votes = (this.totalVoters + this.progress) / 2;
-    return votes;
-  }
-
-  @computed get votesForPercents() {
-    if (this.totalVoters <= 0)
-      return 0;
-
-    let votesPercents = Math.round(this.votesForNumber / this.totalVoters * 100);
-    return votesPercents;
-  }
-
-  @computed get votesAgainstNumber() {
-    let votes = (this.totalVoters - this.progress) / 2;
-    return votes;
-  }
-
-  @computed get votesAgainstPercents() {
-    if (this.totalVoters <= 0)
-      return 0;
-
-    let votesPercents = Math.round(this.votesAgainstNumber / this.totalVoters * 100);
-    return votesPercents;
-  }
-
-  @action("Get start time of min threshold ballot")
-  getStartTime = async () => {
-    const { contractsStore, id } = this.props;
-    let startTime = await contractsStore.votingToChangeMinThreshold.getStartTime(id);
-    this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
-  }
-
-  @action("Get end time of min threshold ballot")
-  getEndTime = async () => {
-    const { contractsStore, id } = this.props;
-    let endTime = await contractsStore.votingToChangeMinThreshold.getEndTime(id);
-    this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
-  }
-
-  @action("Calculate time to finish")
-  calcTimeToFinish = () => {
-    const now = moment();
-    const finish = moment.utc(this.endTime, 'DD/MM/YYYY h:mm:ss A');
-    let ms = finish.diff(now);
-    if (ms <= 0)
-      return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
-    
-    let dur = moment.duration(ms);
-    this.timeToFinish = Math.floor(dur.asHours()) + moment.utc(ms).format(":mm:ss");
-  }
-
-  @action("Get times")
-  getTimes = async () => {
-    await this.getStartTime();
-    await this.getEndTime();
-    this.calcTimeToFinish();
-  }
 
   @action("Get proposed value of min threshold ballot")
   getProposedValue = async () => {
@@ -85,121 +21,9 @@ export class BallotMinThresholdCard extends React.Component {
     this.proposedValue = proposedValue;
   }
 
-  @action("Get creator")
-  getCreator = async () => {
-    const { contractsStore, id } = this.props;
-    let votingState = await contractsStore.votingToChangeMinThreshold.votingState(id);
-    this.getValidatorFullname(votingState.creator);
-  }
-
-  @action("Get validator full name")
-  getValidatorFullname = async (_miningKey) => {
-    const { contractsStore } = this.props;
-    let validator = await contractsStore.validatorMetadata.validators(_miningKey);
-    let firstName = toAscii(validator.firstName);
-    let lastName = toAscii(validator.lastName);
-    let fullName = `${firstName} ${lastName}`
-    this.creator = fullName ? fullName : _miningKey;
-  }
-
-  @action("Get total voters")
-  getTotalVoters = async () => {
-    const { contractsStore, id } = this.props;
-    let totalVoters = await contractsStore.votingToChangeMinThreshold.getTotalVoters(id);
-    this.totalVoters = Number(totalVoters);
-  }
-
-  @action("Get progress")
-  getProgress = async () => {
-    const { contractsStore, id } = this.props;
-    let progress = await contractsStore.votingToChangeMinThreshold.getProgress(id);
-    this.progress = Number(progress);
-  }
-
-  @action("Get isFinalized")
-  getIsFinalized = async() => {
-    const { contractsStore, id } = this.props;
-    this.isFinalized = await contractsStore.votingToChangeMinThreshold.getIsFinalized(id);
-  }
-
-  isValidaVote = async () => {
-    const { contractsStore, id } = this.props;
-    let isValidVote = await contractsStore.votingToChangeMinThreshold.isValidVote(id, contractsStore.votingKey);
-    return isValidVote;
-  }
-
-  isActive = async () => {
-    const { contractsStore, id } = this.props;
-    let isActive = await contractsStore.votingToChangeMinThreshold.isActive(id);
-    return isActive;
-  }
-
-  vote = async ({choice}) => {
-    const { commonStore, contractsStore, id } = this.props;
-    const { push } = this.props.routing;
-    if (!contractsStore.isValidVotingKey) {
-      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
-      return;
-    }
-    commonStore.showLoading();
-    let isValidVote = await this.isValidaVote();
-    if (!isValidVote) {
-      commonStore.hideLoading();
-      swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
-      return;
-    }
-    contractsStore.votingToChangeMinThreshold.vote(id, choice, contractsStore.votingKey)
-    .on("receipt", () => {
-      commonStore.hideLoading();
-      swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
-        push(`${commonStore.rootPath}`);
-      });
-    })
-    .on("error", (e) => {
-      commonStore.hideLoading();
-      swal("Error!", e.message, "error");
-    });
-  }
-
-  finalize = async (e) => {
-    const { commonStore, contractsStore, id } = this.props;
-    const { push } = this.props.routing;
-    if (!contractsStore.isValidVotingKey) {
-      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
-      return;
-    }
-    if (this.isFinalized) {
-      swal("Warning!", constants.ALREADY_FINALIZED_MSG, "warning");
-      return;
-    }
-    commonStore.showLoading();
-    let isActive = await this.isActive();
-    if (isActive) {
-      commonStore.hideLoading();
-      swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
-      return;
-    }
-    contractsStore.votingToChangeMinThreshold.finalize(id, contractsStore.votingKey)
-    .on("receipt", () => {
-      commonStore.hideLoading();
-      swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
-        push(`${commonStore.rootPath}`);
-      });
-    })
-    .on("error", (e) => {
-      commonStore.hideLoading();
-      swal("Error!", e.message, "error");
-    });
-  }
-
   constructor(props) {
     super(props);
-    this.getTimes(this.props.id);
     this.getProposedValue(this.props.id);
-    this.getCreator(this.props.id);
-    this.getTotalVoters(this.props.id);
-    this.getProgress(this.props.id);
-    this.getIsFinalized(this.props.id);
   }
 
   hideCard = () => {
@@ -217,10 +41,20 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   render () {
-    let { contractsStore } = this.props;
+    let { contractsStore, id } = this.props;
     let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
     return (
-      <div className={ballotClass}>
+      <BallotCard votingType="votingToChangeMinThreshold" id={id}>
+        <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
+          <div className="ballots-about-td">
+            <p className="ballots-about-i--title">Proposed min threshold</p>
+          </div>
+          <div className="ballots-about-td">
+            <p>{this.proposedValue}</p>
+          </div>
+        </div>
+      </BallotCard>
+      /*<div className={ballotClass}>
         <div className="ballots-about">
           <div className="ballots-about-i ballots-about-i_name">
             <div className="ballots-about-td">
@@ -284,7 +118,7 @@ export class BallotMinThresholdCard extends React.Component {
           </div>
           <div type="button" className="ballots-i--vote ballots-i--vote_no">Consensus Ballot ID: {this.props.id}</div>
         </div>
-      </div>
+      </div>*/
     );
   }
 }
