@@ -34,6 +34,7 @@ class AppMainRouter extends Component {
       await contractsStore.setVotingToChangeMinThreshold(web3Config);
       await contractsStore.setVotingToChangeProxy(web3Config);
       await contractsStore.setValidatorMetadata(web3Config);
+      contractsStore.setWeb3Instance(web3Config);
       contractsStore.getValidatorsLength();
       contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();

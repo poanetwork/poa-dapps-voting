@@ -10,7 +10,6 @@ import ValidatorMetadata from '../contracts/ValidatorMetadata.contract'
 import ballotStore from './BallotStore'
 import ballotsStore from './BallotsStore'
 import commonStore from './CommonStore'
-import getWeb3 from '../getWeb3';
 import { BallotKeysCard } from "../components/BallotKeysCard";
 import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
 import { BallotProxyCard } from "../components/BallotProxyCard";
@@ -41,9 +40,6 @@ class ContractsStore {
 		this.activeKeysBallotsIDs = [];
 		this.validatorsMetadata = [];
 		this.validatorLimits = {keys: null, minThreshold: null, proxy: null};
-		getWeb3().then(async (web3Config) => {
-			contractsStore.setWeb3Instance(web3Config);
-		})
 	}
 
 	@computed get isValidVotingKey() {
