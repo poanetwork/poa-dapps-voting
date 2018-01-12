@@ -25,8 +25,9 @@ export class BallotCard extends React.Component {
     }
 
     @computed get votesForPercents() {
-        if (this.totalVoters <= 0)
+        if (this.totalVoters <= 0) {
             return 0;
+        }
 
         let votesPercents = Math.round(this.votesForNumber / this.totalVoters * 100);
         return votesPercents;
@@ -38,8 +39,9 @@ export class BallotCard extends React.Component {
     }
 
     @computed get votesAgainstPercents() {
-        if (this.totalVoters <= 0)
+        if (this.totalVoters <= 0) {
             return 0;
+        }
 
         let votesPercents = Math.round(this.votesAgainstNumber / this.totalVoters * 100);
         return votesPercents;
@@ -49,23 +51,24 @@ export class BallotCard extends React.Component {
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let startTime = await contractsStore[votingType].getStartTime(id);
-        this.startTime = moment.utc(startTime * 1000).format('DD/MM/YYYY h:mm:ss A');
+        this.startTime = moment.utc(startTime * 1000).format("DD/MM/YYYY h:mm:ss A");
     }
 
     @action("Get end time of keys ballot")
     getEndTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let endTime = await contractsStore[votingType].getEndTime(id);
-        this.endTime = moment.utc(endTime * 1000).format('DD/MM/YYYY h:mm:ss A');
+        this.endTime = moment.utc(endTime * 1000).format("DD/MM/YYYY h:mm:ss A");
     }
 
     @action("Calculate time to finish")
     calcTimeToFinish = () => {
         const now = moment();
-        const finish = moment.utc(this.endTime, 'DD/MM/YYYY h:mm:ss A');
+        const finish = moment.utc(this.endTime, "DD/MM/YYYY h:mm:ss A");
         let ms = finish.diff(now);
-        if (ms <= 0)
+        if (ms <= 0) {
             return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
+        }
 
         let dur = moment.duration(ms);
         this.timeToFinish = Math.floor(dur.asHours()) + moment.utc(ms).format(":mm:ss");
@@ -111,8 +114,7 @@ export class BallotCard extends React.Component {
         let validator = await contractsStore.validatorMetadata.validators(_miningKey);
         let firstName = toAscii(validator.firstName);
         let lastName = toAscii(validator.lastName);
-        let fullName = `${firstName} ${lastName}`
-        console.log("fullname:", validator)
+        let fullName = `${firstName} ${lastName}`;
         this.creator = fullName ? fullName : _miningKey;
     }
 
@@ -198,8 +200,8 @@ export class BallotCard extends React.Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
-            this.calcTimeToFinish()
-        }, 1000)
+            this.calcTimeToFinish();
+        }, 1000);
     }
 
     componentWillUnmount() {
@@ -216,7 +218,7 @@ export class BallotCard extends React.Component {
         let { commonStore } = this.props;
         if (commonStore.searchTerm) {
             if (commonStore.searchTerm.length > 0) {
-                const isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm)
+                const isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm);
                 return  isCreatorPattern;
             }
         }
@@ -226,19 +228,19 @@ export class BallotCard extends React.Component {
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
         let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
-        let threshold
+        let threshold;
         switch(votingType) {
           case "votingToChangeKeys":
-            threshold = contractsStore.keysBallotThreshold
+            threshold = contractsStore.keysBallotThreshold;
             break;
           case "votingToChangeMinThreshold":
-            threshold = contractsStore.minThresholdBallotThreshold
+            threshold = contractsStore.minThresholdBallotThreshold;
             break;
           case "votingToChangeProxy":
-            threshold = contractsStore.proxyBallotThreshold
+            threshold = contractsStore.proxyBallotThreshold;
             break;
           default:
-            threshold = contractsStore.keysBallotThreshold
+            threshold = contractsStore.keysBallotThreshold;
             break;
         }
         return (
