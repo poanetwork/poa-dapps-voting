@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, computed, autorun } from "mobx";
+import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import { BallotCard } from './BallotCard';
 
@@ -81,36 +81,21 @@ export class BallotKeysCard extends React.Component {
     this.getBallotType();
   }
 
-  componentDidMount() {
-    this.interval = setInterval(() => {
-      this.calcTimeToFinish()
-    }, 1000)
-  }
-
-  componentWillUnmount() {
-    window.clearInterval(this.interval);
-  }
-
-  hideCard = () => {
+  isSearchPattern = () => {
     let { commonStore } = this.props;
-    let hideCard = commonStore.isActiveFilter && this.isFinalized;
     if (commonStore.searchTerm) {
-      if (commonStore.searchTerm.length == 0) return hideCard;
-      if (String(this.affectedKey).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
-      if (String(this.affectedKeyTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
-      if (String(this.ballotTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
-    } else {
-      return hideCard;
+      const isAffectedKeyPattern = String(this.affectedKey).toLowerCase().includes(commonStore.searchTerm)
+      const isAffectedKeyTypeDisplayNamePattern = String(this.affectedKeyTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)
+      const isBallotTypeDisplayNamePattern = String(this.ballotTypeDisplayName).toLowerCase().includes(commonStore.searchTerm)
+      return  (isAffectedKeyPattern || isAffectedKeyTypeDisplayNamePattern || isBallotTypeDisplayNamePattern);
     }
-    
     return true;
   }
 
   render () {
-    let { contractsStore, id } = this.props;
-    let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
+    let { id } = this.props;
     return (
-      <BallotCard votingType="votingToChangeKeys" id={id}>
+      <BallotCard votingType="votingToChangeKeys" id={id} isSearchPattern={this.isSearchPattern()}>
         <div className="ballots-about-i ballots-about-i_action">
           <div className="ballots-about-td">
             <p className="ballots-about-i--title">Action</p>
