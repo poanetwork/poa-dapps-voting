@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
-import { BallotCard } from './BallotCard';
+import { BallotCard } from "./BallotCard";
 
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
@@ -32,8 +32,8 @@ export class BallotProxyCard extends React.Component {
   isSearchPattern = () => {
     let { commonStore } = this.props;
     if (commonStore.searchTerm) {
-      const isProposedAddressPattern = String(this.proposedAddress).toLowerCase().includes(commonStore.searchTerm)
-      const isContractTypePattern = String(this.contractType).toLowerCase().includes(commonStore.searchTerm)
+      const isProposedAddressPattern = String(this.proposedAddress).toLowerCase().includes(commonStore.searchTerm);
+      const isContractTypePattern = String(this.contractType).toLowerCase().includes(commonStore.searchTerm);
       return (isProposedAddressPattern || isContractTypePattern);
     }
     return true;
