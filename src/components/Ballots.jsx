@@ -6,8 +6,8 @@ import "babel-polyfill";
 @observer
 export class Ballots extends React.Component {
   componentWillMount () {
-  	const { commonStore } = this.props;
-  	commonStore.isActiveFilter = this.props.isActiveFilter;
+    const { commonStore } = this.props;
+    commonStore.isActiveFilter = this.props.isActiveFilter;
   }
 
   render () {
