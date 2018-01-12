@@ -50,14 +50,14 @@ export class BallotCard extends React.Component {
     @action("Get start time of keys ballot")
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let startTime = await contractsStore[votingType].getStartTime(id);
+        let startTime = await this.getContract(contractsStore, votingType).getStartTime(id);
         this.startTime = moment.utc(startTime * 1000).format("DD/MM/YYYY h:mm:ss A");
     }
 
     @action("Get end time of keys ballot")
     getEndTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let endTime = await contractsStore[votingType].getEndTime(id);
+        let endTime = await this.getContract(contractsStore, votingType).getEndTime(id);
         this.endTime = moment.utc(endTime * 1000).format("DD/MM/YYYY h:mm:ss A");
     }
 
@@ -84,28 +84,28 @@ export class BallotCard extends React.Component {
     @action("Get creator")
     getCreator = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let votingState = await contractsStore[votingType].votingState(id);
+        let votingState = await this.getContract(contractsStore, votingType).votingState(id);
         this.getValidatorFullname(votingState.creator);
     }
 
     @action("Get progress")
     getProgress = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let progress = await contractsStore[votingType].getProgress(id);
+        let progress = await this.getContract(contractsStore, votingType).getProgress(id);
         this.progress = Number(progress);
     }
 
     @action("Get total voters")
     getTotalVoters = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let totalVoters = await contractsStore[votingType].getTotalVoters(id);
+        let totalVoters = await this.getContract(contractsStore, votingType).getTotalVoters(id);
         this.totalVoters = Number(totalVoters);
     }
 
     @action("Get isFinalized")
     getIsFinalized = async() => {
         const { contractsStore, id, votingType } = this.props;
-        this.isFinalized = await contractsStore[votingType].getIsFinalized(id);
+        this.isFinalized = await this.getContract(contractsStore, votingType).getIsFinalized(id);
     }
 
     @action("Get validator full name")
@@ -120,13 +120,13 @@ export class BallotCard extends React.Component {
 
     isValidaVote = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isValidVote = await contractsStore[votingType].isValidVote(id, contractsStore.votingKey);
+        let isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey);
         return isValidVote;
     }
 
     isActive = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isActive = await contractsStore[votingType].isActive(id);
+        let isActive = await this.getContract(contractsStore, votingType).isActive(id);
         return isActive;
     }
 
@@ -144,7 +144,7 @@ export class BallotCard extends React.Component {
             swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
             return;
         }
-        contractsStore[votingType].vote(id, choice, contractsStore.votingKey)
+        this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
             swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
@@ -175,7 +175,7 @@ export class BallotCard extends React.Component {
             swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
             return;
         }
-        contractsStore[votingType].finalize(id, contractsStore.votingKey)
+        this.getContract(contractsStore, votingType).finalize(id, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
             swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
@@ -186,6 +186,23 @@ export class BallotCard extends React.Component {
             commonStore.hideLoading();
             swal("Error!", e.message, "error");
         });
+    }
+
+    getContract(contractsStore, votingType) {
+        switch(votingType) {
+            case "votingToChangeKeys":
+                return contractsStore.votingToChangeKeys;
+                break;
+            case "votingToChangeMinThreshold":
+                return contractsStore.votingToChangeMinThreshold;
+                break;
+            case "votingToChangeProxy":
+                return contractsStore.votingToChangeProxy;
+                break;
+            default:
+                return contractsStore.votingToChangeKeys;
+                break;
+        }
     }
 
     constructor(props) {
