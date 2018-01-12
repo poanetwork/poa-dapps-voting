@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { observable, action, computed, autorun } from "mobx";
+import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
@@ -18,7 +18,6 @@ export class BallotCard extends React.Component {
   	@observable progress;
   	@observable totalVoters;
   	@observable isFinalized;
-  	@observable isFiltered;
 
   	@computed get votesForNumber() {
   		let votes = (this.totalVoters + this.progress) / 2;
@@ -197,22 +196,36 @@ export class BallotCard extends React.Component {
   		this.getIsFinalized();
   	}
 
-  	hideCard = () => {
-  		let { commonStore } = this.props;
-  		let hideCard = commonStore.isActiveFilter && this.isFinalized;
-  		if (commonStore.searchTerm) {
-  			if (commonStore.searchTerm.length == 0) return hideCard;
-  			if (String(this.creator).toLowerCase().includes(commonStore.searchTerm)) return  (hideCard && false);
-  		} else {
-  			return hideCard;
-  		}
+  	componentDidMount() {
+  		this.interval = setInterval(() => {
+  			this.calcTimeToFinish()
+  		}, 1000)
+  	}
 
+  	componentWillUnmount() {
+  		window.clearInterval(this.interval);
+  	}
+
+  	showCard = () => {
+  		let { commonStore } = this.props;
+  		let show = commonStore.isActiveFilter ? !this.isFinalized : true;
+  		return show;
+  	}
+
+  	isCreatorPattern = () => {
+  		let { commonStore } = this.props;
+  		if (commonStore.searchTerm) {
+  			if (commonStore.searchTerm.length > 0) {
+  				const isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm)
+  				return  isCreatorPattern;
+  			}
+  		}
   		return true;
   	}
 
   	render () {
-    let { contractsStore, ballotStore, votingType, children } = this.props;
-    let ballotClass = this.hideCard() ? "ballots-i display-none" : "ballots-i";
+    let { contractsStore, votingType, children, isSearchPattern } = this.props;
+    let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
     let threshold
     switch(votingType) {
    	  case "votingToChangeKeys":
@@ -224,6 +237,9 @@ export class BallotCard extends React.Component {
       case "votingToChangeProxy":
         threshold = contractsStore.proxyBallotThreshold
         break;
+      default:
+      	threshold = contractsStore.keysBallotThreshold
+      	break;
     }
     return (
       <div className={ballotClass}>
