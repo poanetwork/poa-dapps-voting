@@ -192,16 +192,25 @@ export class BallotCard extends React.Component {
         switch(votingType) {
             case "votingToChangeKeys":
                 return contractsStore.votingToChangeKeys;
-                break;
             case "votingToChangeMinThreshold":
                 return contractsStore.votingToChangeMinThreshold;
-                break;
             case "votingToChangeProxy":
                 return contractsStore.votingToChangeProxy;
-                break;
             default:
                 return contractsStore.votingToChangeKeys;
-                break;
+        }
+    }
+
+    getThreshold(contractsStore, votingType) {
+        switch(votingType) {
+          case "votingToChangeKeys":
+            return contractsStore.keysBallotThreshold;
+          case "votingToChangeMinThreshold":
+            return contractsStore.minThresholdBallotThreshold;
+          case "votingToChangeProxy":
+            return contractsStore.proxyBallotThreshold;
+          default:
+            return contractsStore.keysBallotThreshold;
         }
     }
 
@@ -245,21 +254,7 @@ export class BallotCard extends React.Component {
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
         let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
-        let threshold;
-        switch(votingType) {
-          case "votingToChangeKeys":
-            threshold = contractsStore.keysBallotThreshold;
-            break;
-          case "votingToChangeMinThreshold":
-            threshold = contractsStore.minThresholdBallotThreshold;
-            break;
-          case "votingToChangeProxy":
-            threshold = contractsStore.proxyBallotThreshold;
-            break;
-          default:
-            threshold = contractsStore.keysBallotThreshold;
-            break;
-        }
+        const threshold = this.getThreshold(contractsStore, votingType);
         return (
           <div className={ballotClass}>
             <div className="ballots-about">
