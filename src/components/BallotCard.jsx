@@ -169,7 +169,7 @@ export class BallotCard extends React.Component {
     }
 
     finalize = async (e) => {
-        if (this.isFinalized) return;
+        if (this.isFinalized) { return };
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
