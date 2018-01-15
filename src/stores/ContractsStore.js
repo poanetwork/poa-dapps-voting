@@ -95,24 +95,24 @@ class ContractsStore {
 	@action("Set VotingToChangeMinThreshold contract")
 	setVotingToChangeMinThreshold = (web3Config) => {
 		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeProxy contract")
 	setVotingToChangeProxy = (web3Config) => {
 		this.votingToChangeProxy = new VotingToChangeProxy({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
 	@action("Set ValidatorMetadata contract")
 	setValidatorMetadata = (web3Config) => {
 		this.validatorMetadata = new ValidatorMetadata({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
@@ -178,6 +178,7 @@ class ContractsStore {
 	    	commonStore.hideLoading();
 	    }
 	}
+
 	@action
 	async getValidatorActiveBallots() {
 		if(this.web3Instance && this.netId){
@@ -189,6 +190,7 @@ class ContractsStore {
 			this.validatorLimits.proxy = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount);
 		}
 	}
+
 	@action
 	async getAllValidatorMetadata() {
 		const keys = await this.poaConsensus.getValidators();

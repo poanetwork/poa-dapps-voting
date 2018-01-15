@@ -1,5 +1,7 @@
 let messages = {};
-messages.INVALID_VOTING_KEY_MSG = "The key is not valid voting Key! Please make sure you have loaded correct voting key in metamask";
+messages.INVALID_VOTING_KEY_MSG = function(key) {
+	return `The key ${key} is not valid voting Key! Please make sure you have loaded correct voting key in metamask`;
+};
 messages.VOTED_SUCCESS_MSG = "You successfully voted";
 messages.BALLOT_CREATED_SUCCESS_MSG = "You successfully created a new ballot";
 messages.FINALIZED_SUCCESS_MSG = "You successfully finalized";

@@ -182,7 +182,7 @@ export class BallotCard extends React.Component {
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", messages.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTING_KEY_MSG(contractsStore.votingKey), "warning");
             return;
         }
         commonStore.showLoading();
@@ -214,7 +214,7 @@ export class BallotCard extends React.Component {
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", messages.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTING_KEY_MSG(contractsStore.votingKey), "warning");
             return;
         }
         if (this.isFinalized) {

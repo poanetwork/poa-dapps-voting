@@ -147,7 +147,7 @@ export class NewBallot extends React.Component {
     const isValidVotingKey = contractsStore.isValidVotingKey;
     if (!isValidVotingKey) {
       commonStore.hideLoading();
-      swal("Warning!", messages.INVALID_VOTING_KEY_MSG, "warning");
+      swal("Warning!", messages.INVALID_VOTING_KEY_MSG(contractsStore.votingKey), "warning");
       return;
     }
     const isFormValid = this.checkValidation();
