@@ -19,6 +19,16 @@ export class BallotCard extends React.Component {
     @observable totalVoters;
     @observable isFinalized;
 
+    @computed get finalizeButtonDisplayName() {
+        const displayName = this.isFinalized ? "Finalized" : "Finalize ballot";
+        return displayName;
+    }
+
+    @computed get finalizeButtonClass () {
+        const cls = this.isFinalized ? "ballots-footer-finalize ballots-footer-finalize-finalized" : "ballots-footer-finalize";
+        return cls;
+    }
+
     @computed get votesForNumber() {
         let votes = (this.totalVoters + this.progress) / 2;
         return votes;
@@ -158,6 +168,7 @@ export class BallotCard extends React.Component {
     }
 
     finalize = async (e) => {
+        if (this.isFinalized) return;
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
@@ -308,7 +319,7 @@ export class BallotCard extends React.Component {
             <hr />
             <div className="ballots-footer">
               <div className="ballots-footer-left">
-                <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
+                <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
                 <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
               </div>
               <div type="button" className="ballots-i--vote ballots-i--vote_no">Proxy Ballot ID: {this.props.id}</div>
