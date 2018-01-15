@@ -791,6 +791,10 @@ button {
     margin-right: 20px;
     background-color: rgba(8, 179, 242, 0.1);
     white-space: nowrap; }
+    .ballots-footer-finalize-finalized {
+      background-color: rgba(109, 46, 174, 0.1);
+      color: #6d2eae;
+      cursor: default; }
     @media screen and (max-width: 414px) {
       .ballots-footer-finalize {
         width: 100%;
