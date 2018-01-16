@@ -81,8 +81,7 @@ export default class VotingToChangeKeys {
       console.log(e)
       miningKey = "0x0000000000000000000000000000000000000000";
     }
-    if (miningKey != "0x")
-      return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
+    return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
   }
 
   async getBallotLimit(_votingKey) {

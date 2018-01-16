@@ -176,13 +176,13 @@ export class BallotCard extends React.Component {
 
     vote = async ({choice}) => {
         if (this.timeToStart.val > 0) {
-            swal("Warning!", messages.BALLOT_IS_NOT_ACTIVE_MSG(this.timeTo.displayValue), "warning");
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", messages.INVALID_VOTING_KEY_MSG(contractsStore.votingKey), "warning");
+            swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
             return;
         }
         commonStore.showLoading();
@@ -208,13 +208,13 @@ export class BallotCard extends React.Component {
     finalize = async (e) => {
         if (this.isFinalized) { return; }
         if (this.timeToStart.val > 0) {
-            swal("Warning!", messages.BALLOT_IS_NOT_ACTIVE_MSG(this.timeTo.displayValue), "warning");
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", messages.INVALID_VOTING_KEY_MSG(contractsStore.votingKey), "warning");
+            swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
             return;
         }
         if (this.isFinalized) {
