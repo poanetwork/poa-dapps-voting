@@ -8,6 +8,7 @@ import swal from "sweetalert2";
 
 const ACCEPT = 1;
 const REJECT = 2;
+const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotCard extends React.Component {
@@ -61,20 +62,20 @@ export class BallotCard extends React.Component {
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let startTime = await this.getContract(contractsStore, votingType).getStartTime(id);
-        this.startTime = moment.utc(startTime * 1000).format("DD/MM/YYYY h:mm:ss A");
+        this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
     }
 
     @action("Get end time of keys ballot")
     getEndTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let endTime = await this.getContract(contractsStore, votingType).getEndTime(id);
-        this.endTime = moment.utc(endTime * 1000).format("DD/MM/YYYY h:mm:ss A");
+        this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
     }
 
     @action("Calculate time to finish")
     calcTimeToFinish = () => {
         const now = moment();
-        const finish = moment.utc(this.endTime, "DD/MM/YYYY h:mm:ss A");
+        const finish = moment.utc(this.endTime, USDateTimeFormat);
         let ms = finish.diff(now);
         if (ms <= 0) {
             return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
