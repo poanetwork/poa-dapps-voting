@@ -74,7 +74,6 @@ export default class VotingToChangeProxy {
       miningKey = await this.getMiningByVotingKey(_votingKey);
     }
     catch(e) {
-      console.log(e);
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeProxyInstance.methods.validatorActiveBallots(miningKey).call();
