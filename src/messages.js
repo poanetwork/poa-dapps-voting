@@ -16,7 +16,7 @@ Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wi
 messages.WRONG_NETWORK_MSG = `You aren't connected to POA Network. 
 Please, switch on POA plugin and refresh the page. 
 Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
-messages.BALLOT_IS_NOT_ACTIVE_MSG = function(timeToStart) {
+messages.ballotIsNotActiveMsg = function(timeToStart) {
 	return `The ballot is not active yet. Time to start: ${timeToStart}`
 }
 module.exports = {

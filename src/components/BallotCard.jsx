@@ -176,7 +176,7 @@ export class BallotCard extends React.Component {
 
     vote = async ({choice}) => {
         if (this.timeToStart.val > 0) {
-            swal("Warning!", messages.BALLOT_IS_NOT_ACTIVE_MSG(this.timeTo.displayValue), "warning");
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
         const { commonStore, contractsStore, id, votingType } = this.props;
@@ -208,7 +208,7 @@ export class BallotCard extends React.Component {
     finalize = async (e) => {
         if (this.isFinalized) { return; }
         if (this.timeToStart.val > 0) {
-            swal("Warning!", messages.BALLOT_IS_NOT_ACTIVE_MSG(this.timeTo.displayValue), "warning");
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
         const { commonStore, contractsStore, id, votingType } = this.props;
