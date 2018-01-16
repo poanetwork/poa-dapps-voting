@@ -21,4 +21,4 @@ messages.ballotIsNotActiveMsg = function(timeToStart) {
 };
 module.exports = {
   messages
-}
+};
