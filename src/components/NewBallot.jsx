@@ -39,10 +39,14 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
-        if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
-          swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
-          commonStore.hideLoading();
-          return false;
+        if (ballotStore.ballotKeys[ballotKeysProp]) {
+          if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
+            swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
+            commonStore.hideLoading();
+            return false;
+          }
+        } else {
+          console.log(ballotKeysProp)
         }
       }
 
@@ -95,47 +99,41 @@ export class NewBallot extends React.Component {
 
   createBallotForKeys = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotKeys.affectedKey, 
-      ballotStore.ballotKeys.keyType, 
-      ballotStore.ballotKeys.miningKey.value,
-      ballotStore.ballotKeys.keysBallotType,
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeKeys.createVotingForKeys(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      affectedKey: ballotStore.ballotKeys.affectedKey, 
+      affectedKeyType: ballotStore.ballotKeys.keyType, 
+      miningKey: ballotStore.ballotKeys.miningKey.value,
+      ballotType: ballotStore.ballotKeys.keysBallotType,
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeKeys.createVotingForKeys(inputToMethod);
     return method;
   }
 
   createBallotForMinThreshold = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotMinThreshold.proposedValue, 
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      proposedValue: ballotStore.ballotMinThreshold.proposedValue, 
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(inputToMethod);
     return method;
   }
 
   createBallotForProxy = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotProxy.proposedAddress, 
-      ballotStore.ballotProxy.contractType,
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      proposedValue: ballotStore.ballotProxy.proposedAddress, 
+      contractType: ballotStore.ballotProxy.contractType,
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(inputToMethod);
     return method;
   }
 
@@ -151,6 +149,20 @@ export class NewBallot extends React.Component {
     }
     const isFormValid = this.checkValidation();
     if (isFormValid) {
+      if (ballotStore.ballotType == ballotStore.BallotType.keys) {
+        const inputToAreBallotParamsValid = {
+          affectedKey: ballotStore.ballotKeys.affectedKey, 
+          affectedKeyType: ballotStore.ballotKeys.keyType, 
+          miningKey: ballotStore.ballotKeys.miningKey.value,
+          ballotType: ballotStore.ballotKeys.keysBallotType
+        };
+        let areBallotParamsValid = await contractsStore.votingToChangeKeys.areBallotParamsValid(inputToAreBallotParamsValid);
+        if (!areBallotParamsValid) {
+          commonStore.hideLoading();
+          return swal("Warning!", "The ballot input params are invalid", "warning");
+        }
+      }
+
       let methodToCreateBallot;
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys: 

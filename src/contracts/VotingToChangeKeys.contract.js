@@ -11,7 +11,7 @@ export default class VotingToChangeKeys {
   }
 
   //setters
-  createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender) {
+  createVotingForKeys({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender}) {
     return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType).send({from: sender});
   }
 
@@ -24,6 +24,10 @@ export default class VotingToChangeKeys {
   }
 
   //getters
+  areBallotParamsValid({ballotType, affectedKey, affectedKeyType, miningKey}) {
+    return this.votingToChangeKeysInstance.methods.areBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey).call();
+  }
+
   getStartTime(_id) {
     return this.votingToChangeKeysInstance.methods.getStartTime(_id).call();
   }
