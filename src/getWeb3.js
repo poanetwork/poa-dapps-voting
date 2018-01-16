@@ -1,4 +1,4 @@
-import { constants } from "./constants";
+import { messages } from "./messages";
 
 let getWeb3 = () => {
   return new Promise(function (resolve, reject) {
@@ -26,13 +26,13 @@ let getWeb3 = () => {
               break;
             default:
               netIdName = 'ERROR'
-              errorMsg = constants.WRONG_NETWORK_MSG
+              errorMsg = messages.WRONG_NETWORK_MSG
               console.log('This is an unknown network.', netId)
           }
           document.title = `${netIdName} - POA Network Governance DApp`
           var defaultAccount = web3.eth.defaultAccount || null;
           if(defaultAccount === null){
-            reject({message: constants.NO_METAMASK_MSG})
+            reject({message: messages.NO_METAMASK_MSG})
           }
           if(errorMsg !== null){
             reject({message: errorMsg})
@@ -50,7 +50,7 @@ let getWeb3 = () => {
         console.log('Injected web3 detected.');
 
       } else {
-        reject({message: constants.NO_METAMASK_MSG})
+        reject({message: messages.NO_METAMASK_MSG})
         console.error('Metamask not found'); 
       }
     })

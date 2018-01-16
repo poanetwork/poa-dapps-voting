@@ -7,7 +7,7 @@ import { KeysTypes } from './KeysTypes';
 import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
-import { constants } from "../constants";
+import { messages } from "../messages";
 
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
@@ -32,7 +32,7 @@ export class NewBallot extends React.Component {
     }
 
     if (!isAfter) {
-      swal("Warning!", constants.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
+      swal("Warning!", messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
       commonStore.hideLoading();
       return false;
     }
@@ -49,14 +49,14 @@ export class NewBallot extends React.Component {
       let isAffectedKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.affectedKey);
 
       if (!isAffectedKeyAddress) {
-        swal("Warning!", constants.AFFECTED_KEY_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.AFFECTED_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
 
       let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey.value);
       if (!isMiningKeyAddress) {
-        swal("Warning!", constants.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
@@ -84,7 +84,7 @@ export class NewBallot extends React.Component {
       let isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress);
 
       if (!isAddress) {
-        swal("Warning!", constants.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
@@ -146,7 +146,7 @@ export class NewBallot extends React.Component {
     const isValidVotingKey = contractsStore.isValidVotingKey;
     if (!isValidVotingKey) {
       commonStore.hideLoading();
-      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+      swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
       return;
     }
     const isFormValid = this.checkValidation();
@@ -170,7 +170,7 @@ export class NewBallot extends React.Component {
       methodToCreateBallot(curDateInSeconds)
       .on("receipt", () => {
         commonStore.hideLoading();
-        swal("Congratulations!", constants.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
+        swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
           push(`${commonStore.rootPath}`);
         });
       })
