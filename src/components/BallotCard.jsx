@@ -4,20 +4,43 @@ import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
+import { messages } from "../messages";
 import swal from "sweetalert2";
 
 const ACCEPT = 1;
 const REJECT = 2;
+const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
+const zeroTimeTo = "00:00";
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotCard extends React.Component {
     @observable startTime;
     @observable endTime;
-    @observable timeToFinish;
+    @observable timeTo = {};
+    @observable timeToStart = {
+        val: 0,
+        displayValue: zeroTimeTo,
+        title: "To start"
+    };
+    @observable timeToFinish = {
+        val: 0,
+        displayValue: zeroTimeTo,
+        title: "To close"
+    };
     @observable creator;
     @observable progress;
     @observable totalVoters;
     @observable isFinalized;
+
+    @computed get finalizeButtonDisplayName() {
+        const displayName = this.isFinalized ? "Finalized" : "Finalize ballot";
+        return displayName;
+    }
+
+    @computed get finalizeButtonClass () {
+        const cls = this.isFinalized ? "ballots-footer-finalize ballots-footer-finalize-finalized" : "ballots-footer-finalize";
+        return cls;
+    }
 
     @computed get votesForNumber() {
         let votes = (this.totalVoters + this.progress) / 2;
@@ -51,34 +74,55 @@ export class BallotCard extends React.Component {
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let startTime = await this.getContract(contractsStore, votingType).getStartTime(id);
-        this.startTime = moment.utc(startTime * 1000).format("DD/MM/YYYY h:mm:ss A");
+        this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
     }
 
     @action("Get end time of keys ballot")
     getEndTime = async () => {
         const { contractsStore, id, votingType } = this.props;
         let endTime = await this.getContract(contractsStore, votingType).getEndTime(id);
-        this.endTime = moment.utc(endTime * 1000).format("DD/MM/YYYY h:mm:ss A");
+        this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
     }
 
-    @action("Calculate time to finish")
-    calcTimeToFinish = () => {
-        const now = moment();
-        const finish = moment.utc(this.endTime, "DD/MM/YYYY h:mm:ss A");
-        let ms = finish.diff(now);
-        if (ms <= 0) {
-            return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
+    @action("Calculate time to start/finish")
+    calcTimeTo = () => {
+        const _now = moment();
+        const start = moment.utc(this.startTime, USDateTimeFormat);
+        const finish = moment.utc(this.endTime, USDateTimeFormat);
+        let msStart = start.diff(_now);
+        let msFinish = finish.diff(_now);
+
+        if (msStart > 0) {
+            this.timeToStart.val = msStart;
+            this.timeToStart.displayValue = this.formatMs(msStart, ":mm:ss");
+            return this.timeTo = this.timeToStart;
         }
 
-        let dur = moment.duration(ms);
-        this.timeToFinish = Math.floor(dur.asHours()) + moment.utc(ms).format(":mm:ss");
+        if (msFinish > 0) {
+            this.timeToFinish.val = msFinish;
+            this.timeToFinish.displayValue = this.formatMs(msFinish, ":mm:ss");
+            return this.timeTo = this.timeToFinish;
+        }
+
+        this.timeToFinish.val = 0;
+        this.timeToFinish.displayValue = zeroTimeTo;
+        return this.timeTo = this.timeToFinish;
     }
+
+    formatMs (ms, format) {
+        let dur = moment.duration(ms);
+        let hours = Math.floor(dur.asHours());
+        hours = hours < 10 ? "0" + hours : hours;
+        let formattedMs = hours + moment.utc(ms).format(":mm:ss");
+        return formattedMs;
+    }
+    
 
     @action("Get times")
     getTimes = async () => {
         await this.getStartTime();
         await this.getEndTime();
-        this.calcTimeToFinish();
+        this.calcTimeTo();
     }
 
     @action("Get creator")
@@ -131,23 +175,27 @@ export class BallotCard extends React.Component {
     }
 
     vote = async ({choice}) => {
+        if (this.timeToStart.val > 0) {
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
+            return;
+        }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTING_KEY_MSG, "warning");
             return;
         }
         commonStore.showLoading();
         let isValidVote = await this.isValidaVote();
         if (!isValidVote) {
             commonStore.hideLoading();
-            swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
             return;
         }
         this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
-            swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
+            swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
                 push(`${commonStore.rootPath}`);
             });
         })
@@ -158,27 +206,32 @@ export class BallotCard extends React.Component {
     }
 
     finalize = async (e) => {
+        if (this.isFinalized) { return; }
+        if (this.timeToStart.val > 0) {
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
+            return;
+        }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTING_KEY_MSG, "warning");
             return;
         }
         if (this.isFinalized) {
-            swal("Warning!", constants.ALREADY_FINALIZED_MSG, "warning");
+            swal("Warning!", messages.ALREADY_FINALIZED_MSG, "warning");
             return;
         }
         commonStore.showLoading();
         let isActive = await this.isActive();
         if (isActive) {
             commonStore.hideLoading();
-            swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
+            swal("Warning!", messages.INVALID_FINALIZE_MSG, "warning");
             return;
         }
         this.getContract(contractsStore, votingType).finalize(id, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
-            swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
+            swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                 push(`${commonStore.rootPath}`);
             });
         })
@@ -226,7 +279,7 @@ export class BallotCard extends React.Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
-            this.calcTimeToFinish();
+            this.calcTimeTo();
         }, 1000);
     }
 
@@ -273,8 +326,8 @@ export class BallotCard extends React.Component {
                   <p className="ballots-about-i--title">Time</p>
                 </div>
                 <div className="ballots-about-td">
-                  <p className="ballots-i--time">{this.timeToFinish}</p>
-                  <p className="ballots-i--to-close">To close</p>
+                  <p className="ballots-i--time">{this.timeTo.displayValue}</p>
+                  <p className="ballots-i--to-close">{this.timeTo.title}</p>
                 </div>
               </div>
             </div>
@@ -308,7 +361,7 @@ export class BallotCard extends React.Component {
             <hr />
             <div className="ballots-footer">
               <div className="ballots-footer-left">
-                <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
+                <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
                 <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
               </div>
               <div type="button" className="ballots-i--vote ballots-i--vote_no">Proxy Ballot ID: {this.props.id}</div>
