@@ -70,7 +70,7 @@ export default class VotingToChangeMinThreshold {
       miningKey = await this.getMiningByVotingKey(_votingKey);
     }
     catch(e) {
-      console.log(e)
+      console.log(e);
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call();
