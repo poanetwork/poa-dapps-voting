@@ -8,7 +8,6 @@ import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
 import { messages } from "../messages";
-import { constants } from "../constants";
 
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer

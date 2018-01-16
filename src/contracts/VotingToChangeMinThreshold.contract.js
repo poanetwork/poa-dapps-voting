@@ -6,7 +6,7 @@ export default class VotingToChangeMinThreshold {
   constructor({web3, netId}){
     const {VOTING_TO_CHANGE_MIN_THRESHOLD} = networkAddresses(netId);
     let web3_10 = new Web3(web3.currentProvider);
-    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD)
+    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD);
     this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
   }
 
@@ -65,7 +65,14 @@ export default class VotingToChangeMinThreshold {
   }
 
   async getValidatorActiveBallots(_votingKey) {
-    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    let miningKey;
+    try {
+      miningKey = await this.getMiningByVotingKey(_votingKey);
+    }
+    catch(e) {
+      console.log(e)
+      miningKey = "0x0000000000000000000000000000000000000000";
+    }
     return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call();
   }
 

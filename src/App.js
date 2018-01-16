@@ -64,7 +64,6 @@ class App extends Component {
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
         {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         <Footer />
-        {/*<DevTools />*/}
       </div>
     );
   }

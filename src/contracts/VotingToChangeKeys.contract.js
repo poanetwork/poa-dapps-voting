@@ -73,8 +73,16 @@ export default class VotingToChangeKeys {
   }
 
   async getValidatorActiveBallots(_votingKey) {
-    const miningKey = await this.getMiningByVotingKey(_votingKey);
-    return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
+    let miningKey;
+    try {
+      miningKey = await this.getMiningByVotingKey(_votingKey);
+    }
+    catch(e) {
+      console.log(e)
+      miningKey = "0x0000000000000000000000000000000000000000";
+    }
+    if (miningKey != "0x")
+      return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();
   }
 
   async getBallotLimit(_votingKey) {
