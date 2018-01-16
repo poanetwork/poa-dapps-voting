@@ -39,14 +39,10 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
-        if (ballotStore.ballotKeys[ballotKeysProp]) {
-          if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
-            swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
-            commonStore.hideLoading();
-            return false;
-          }
-        } else {
-          console.log(ballotKeysProp)
+        if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
+          swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
         }
       }
 
@@ -149,7 +145,7 @@ export class NewBallot extends React.Component {
     }
     const isFormValid = this.checkValidation();
     if (isFormValid) {
-      if (ballotStore.ballotType == ballotStore.BallotType.keys) {
+      if (ballotStore.ballotType === ballotStore.BallotType.keys) {
         const inputToAreBallotParamsValid = {
           affectedKey: ballotStore.ballotKeys.affectedKey, 
           affectedKeyType: ballotStore.ballotKeys.keyType, 
