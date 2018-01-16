@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export const Footer = () => (
   <footer className="footer">
     <div className="container">
-      <p className="footer-rights">{moment().format("GGGG")} POA Network. All rights reserved.</p>
+      <p className="footer-rights">{moment().format("YYYY")} POA Network. All rights reserved.</p>
       <Link to="/poa-dapps-voting" className="footer-logo"></Link>
       <div className="socials">
         <a href="https://twitter.com/poanetwork" className="socials-i socials-i_twitter"></a>
