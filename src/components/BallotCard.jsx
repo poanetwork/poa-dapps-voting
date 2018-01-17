@@ -10,7 +10,9 @@ import swal from "sweetalert2";
 const ACCEPT = 1;
 const REJECT = 2;
 const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
+
 const zeroTimeTo = "00:00";
+
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotCard extends React.Component {
@@ -207,6 +209,7 @@ export class BallotCard extends React.Component {
 
     finalize = async (e) => {
         if (this.isFinalized) { return; }
+
         if (this.timeToStart.val > 0) {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
