@@ -9,12 +9,25 @@ import swal from "sweetalert2";
 const ACCEPT = 1;
 const REJECT = 2;
 const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
+
+const zeroTimeTo = "00:00";
+
 @inject("commonStore", "contractsStore", "ballotStore", "routing")
 @observer
 export class BallotCard extends React.Component {
     @observable startTime;
     @observable endTime;
-    @observable timeToFinish;
+    @observable timeTo = {};
+    @observable timeToStart = {
+        val: 0,
+        displayValue: zeroTimeTo,
+        title: "To start"
+    };
+    @observable timeToFinish = {
+        val: 0,
+        displayValue: zeroTimeTo,
+        title: "To close"
+    };
     @observable creator;
     @observable progress;
     @observable totalVoters;
@@ -72,24 +85,46 @@ export class BallotCard extends React.Component {
         this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
     }
 
-    @action("Calculate time to finish")
-    calcTimeToFinish = () => {
-        const now = moment();
+
+    @action("Calculate time to start/finish")
+    calcTimeTo = () => {
+        const _now = moment();
+        const start = moment.utc(this.startTime, USDateTimeFormat);
         const finish = moment.utc(this.endTime, USDateTimeFormat);
-        let ms = finish.diff(now);
-        if (ms <= 0) {
-            return this.timeToFinish = moment(0, "h").format("HH") + ":" + moment(0, "m").format("mm") + ":" + moment(0, "s").format("ss");
+        let msStart = start.diff(_now);
+        let msFinish = finish.diff(_now);
+
+        if (msStart > 0) {
+            this.timeToStart.val = msStart;
+            this.timeToStart.displayValue = this.formatMs(msStart, ":mm:ss");
+            return this.timeTo = this.timeToStart;
         }
 
-        let dur = moment.duration(ms);
-        this.timeToFinish = Math.floor(dur.asHours()) + moment.utc(ms).format(":mm:ss");
+        if (msFinish > 0) {
+            this.timeToFinish.val = msFinish;
+            this.timeToFinish.displayValue = this.formatMs(msFinish, ":mm:ss");
+            return this.timeTo = this.timeToFinish;
+        }
+
+        this.timeToFinish.val = 0;
+        this.timeToFinish.displayValue = zeroTimeTo;
+        return this.timeTo = this.timeToFinish;
     }
+
+    formatMs (ms, format) {
+        let dur = moment.duration(ms);
+        let hours = Math.floor(dur.asHours());
+        hours = hours < 10 ? "0" + hours : hours;
+        let formattedMs = hours + moment.utc(ms).format(":mm:ss");
+        return formattedMs;
+    }
+    
 
     @action("Get times")
     getTimes = async () => {
         await this.getStartTime();
         await this.getEndTime();
-        this.calcTimeToFinish();
+        this.calcTimeTo();
     }
 
     @action("Get creator")
@@ -238,7 +273,7 @@ export class BallotCard extends React.Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
-            this.calcTimeToFinish();
+            this.calcTimeTo();
         }, 1000);
     }
 
@@ -285,8 +320,8 @@ export class BallotCard extends React.Component {
                   <p className="ballots-about-i--title">Time</p>
                 </div>
                 <div className="ballots-about-td">
-                  <p className="ballots-i--time">{this.timeToFinish}</p>
-                  <p className="ballots-i--to-close">To close</p>
+                  <p className="ballots-i--time">{this.timeTo.displayValue}</p>
+                  <p className="ballots-i--to-close">{this.timeTo.title}</p>
                 </div>
               </div>
             </div>
