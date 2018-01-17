@@ -47,7 +47,7 @@ class ContractsStore {
 		return false
 	}
 
-	@action("get keys ballot threshold")
+	@action("Get keys ballot threshold")
 	getKeysBallotThreshold = async () => {
 		this.keysBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call();
 	}
@@ -57,7 +57,7 @@ class ContractsStore {
 		this.minThresholdBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call();
 	}
 
-	@action("get proxy ballot threshold")
+	@action("Get proxy ballot threshold")
 	getProxyBallotThreshold = async () => {
 		this.proxyBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getProxyThreshold().call();
 	}
@@ -71,8 +71,8 @@ class ContractsStore {
 	@action("Set PoA Consensus contract")
 	setPoaConsensus = (web3Config) => {
 		this.poaConsensus = new PoaConsensus({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
@@ -87,32 +87,32 @@ class ContractsStore {
 	@action("Set VotingToChangeKeys contract")
 	setVotingToChangeKeys = (web3Config) => {
 		this.votingToChangeKeys = new VotingToChangeKeys({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeMinThreshold contract")
 	setVotingToChangeMinThreshold = (web3Config) => {
 		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeProxy contract")
 	setVotingToChangeProxy = (web3Config) => {
 		this.votingToChangeProxy = new VotingToChangeProxy({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
 	@action("Set ValidatorMetadata contract")
 	setValidatorMetadata = (web3Config) => {
 		this.validatorMetadata = new ValidatorMetadata({
-					web3: web3Config.web3Instance,
-					netId: web3Config.netId
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
       	});
 	}
 
@@ -178,6 +178,7 @@ class ContractsStore {
 	    	commonStore.hideLoading();
 	    }
 	}
+
 	@action
 	async getValidatorActiveBallots() {
 		if(this.web3Instance && this.netId){
@@ -189,6 +190,7 @@ class ContractsStore {
 			this.validatorLimits.proxy = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount);
 		}
 	}
+
 	@action
 	async getAllValidatorMetadata() {
 		const keys = await this.poaConsensus.getValidators();

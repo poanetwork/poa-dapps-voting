@@ -4,6 +4,7 @@ import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
 import { constants } from "../constants";
+import { messages } from "../messages";
 import swal from "sweetalert2";
 
 const ACCEPT = 1;
@@ -84,7 +85,6 @@ export class BallotCard extends React.Component {
         let endTime = await this.getContract(contractsStore, votingType).getEndTime(id);
         this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
     }
-
 
     @action("Calculate time to start/finish")
     calcTimeTo = () => {
@@ -177,23 +177,27 @@ export class BallotCard extends React.Component {
     }
 
     vote = async ({choice}) => {
+        if (this.timeToStart.val > 0) {
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
+            return;
+        }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
             return;
         }
         commonStore.showLoading();
         let isValidVote = await this.isValidaVote();
         if (!isValidVote) {
             commonStore.hideLoading();
-            swal("Warning!", constants.INVALID_VOTE_MSG, "warning");
+            swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
             return;
         }
         this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
-            swal("Congratulations!", constants.VOTED_SUCCESS_MSG, "success").then((result) => {
+            swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
                 push(`${commonStore.rootPath}`);
             });
         })
@@ -205,27 +209,32 @@ export class BallotCard extends React.Component {
 
     finalize = async (e) => {
         if (this.isFinalized) { return; }
+
+        if (this.timeToStart.val > 0) {
+            swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
+            return;
+        }
         const { commonStore, contractsStore, id, votingType } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
-            swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+            swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
             return;
         }
         if (this.isFinalized) {
-            swal("Warning!", constants.ALREADY_FINALIZED_MSG, "warning");
+            swal("Warning!", messages.ALREADY_FINALIZED_MSG, "warning");
             return;
         }
         commonStore.showLoading();
         let isActive = await this.isActive();
         if (isActive) {
             commonStore.hideLoading();
-            swal("Warning!", constants.INVALID_FINALIZE_MSG, "warning");
+            swal("Warning!", messages.INVALID_FINALIZE_MSG, "warning");
             return;
         }
         this.getContract(contractsStore, votingType).finalize(id, contractsStore.votingKey)
         .on("receipt", () => {
             commonStore.hideLoading();
-            swal("Congratulations!", constants.FINALIZED_SUCCESS_MSG, "success").then((result) => {
+            swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                 push(`${commonStore.rootPath}`);
             });
         })

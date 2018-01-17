@@ -51,9 +51,8 @@ class AppMainRouter extends Component {
     }).catch((error) => {
       commonStore.hideLoading();
       swal({
-        icon: 'error',
         title: 'Error',
-        html: error.message,
+        text: error.message,
         type: 'error'
       });
     });
