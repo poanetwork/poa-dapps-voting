@@ -214,6 +214,19 @@ export class BallotCard extends React.Component {
         }
     }
 
+    getTypeDisplayName(votingType) {
+        switch(votingType) {
+          case "votingToChangeKeys":
+            return "Keys";
+          case "votingToChangeMinThreshold":
+            return "Min Threshold";
+          case "votingToChangeProxy":
+            return "Proxy";
+          default:
+            return "Keys";
+        }
+    }
+
     constructor(props) {
         super(props);
         this.isFinalized = false;
@@ -311,7 +324,7 @@ export class BallotCard extends React.Component {
                 <button type="button" onClick={(e) => this.finalize(e)} className="ballots-footer-finalize">Finalize ballot</button>
                 <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
               </div>
-              <div type="button" className="ballots-i--vote ballots-i--vote_no">Proxy Ballot ID: {this.props.id}</div>
+              <div type="button" className="ballots-i--vote ballots-i--vote_no">{this.getTypeDisplayName(votingType)} Ballot ID: {this.props.id}</div>
             </div>
           </div>
         );
