@@ -27,6 +27,12 @@
     background-color: fade-out(#08b3f2, 0.9);
     white-space: nowrap;
 
+    &-finalized {
+      background-color: fade-out(#6d2eae, 0.9);
+      color: #6d2eae;
+      cursor: default;
+    }
+
     @media screen and (max-width: $mobile-width) {
       width: 100%;
       margin-right: 0;

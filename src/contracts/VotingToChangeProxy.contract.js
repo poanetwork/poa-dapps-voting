@@ -11,7 +11,7 @@ export default class VotingToChangeProxy {
   }
 
   //setters
-  createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, sender) {
+  createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender}) {
     return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType).send({from: sender})
   }
 
@@ -69,7 +69,13 @@ export default class VotingToChangeProxy {
   }
 
   async getValidatorActiveBallots(_votingKey) {
-    const miningKey = await this.getMiningByVotingKey(_votingKey);
+    let miningKey;
+    try {
+      miningKey = await this.getMiningByVotingKey(_votingKey);
+    }
+    catch(e) {
+      miningKey = "0x0000000000000000000000000000000000000000";
+    }
     return await this.votingToChangeProxyInstance.methods.validatorActiveBallots(miningKey).call();
   }
 

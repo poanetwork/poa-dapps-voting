@@ -7,7 +7,7 @@ import { KeysTypes } from './KeysTypes';
 import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
-import { constants } from "../constants";
+import { messages } from "../messages";
 
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
@@ -32,7 +32,7 @@ export class NewBallot extends React.Component {
     }
 
     if (!isAfter) {
-      swal("Warning!", constants.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
+      swal("Warning!", messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
       commonStore.hideLoading();
       return false;
     }
@@ -49,14 +49,14 @@ export class NewBallot extends React.Component {
       let isAffectedKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.affectedKey);
 
       if (!isAffectedKeyAddress) {
-        swal("Warning!", constants.AFFECTED_KEY_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.AFFECTED_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
 
       let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey.value);
       if (!isMiningKeyAddress) {
-        swal("Warning!", constants.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.MINING_KEY_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
@@ -84,7 +84,7 @@ export class NewBallot extends React.Component {
       let isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress);
 
       if (!isAddress) {
-        swal("Warning!", constants.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, "warning");
+        swal("Warning!", messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, "warning");
         commonStore.hideLoading();
         return false;
       }
@@ -95,47 +95,41 @@ export class NewBallot extends React.Component {
 
   createBallotForKeys = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotKeys.affectedKey, 
-      ballotStore.ballotKeys.keyType, 
-      ballotStore.ballotKeys.miningKey.value,
-      ballotStore.ballotKeys.keysBallotType,
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeKeys.createVotingForKeys(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      affectedKey: ballotStore.ballotKeys.affectedKey, 
+      affectedKeyType: ballotStore.ballotKeys.keyType, 
+      miningKey: ballotStore.ballotKeys.miningKey.value,
+      ballotType: ballotStore.ballotKeys.keysBallotType,
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeKeys.createVotingForKeys(inputToMethod);
     return method;
   }
 
   createBallotForMinThreshold = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotMinThreshold.proposedValue, 
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      proposedValue: ballotStore.ballotMinThreshold.proposedValue, 
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(inputToMethod);
     return method;
   }
 
   createBallotForProxy = (curDateInSeconds) => {
     const { ballotStore, contractsStore } = this.props;
-    const inputToMethod = [
-      curDateInSeconds,
-      ballotStore.endTimeUnix,
-      ballotStore.ballotProxy.proposedAddress, 
-      ballotStore.ballotProxy.contractType,
-      contractsStore.votingKey
-    ];
-    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(
-      ...inputToMethod
-    );
+    const inputToMethod = {
+      startTime: curDateInSeconds,
+      endTime: ballotStore.endTimeUnix,
+      proposedValue: ballotStore.ballotProxy.proposedAddress, 
+      contractType: ballotStore.ballotProxy.contractType,
+      sender: contractsStore.votingKey
+    };
+    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(inputToMethod);
     return method;
   }
 
@@ -146,11 +140,25 @@ export class NewBallot extends React.Component {
     const isValidVotingKey = contractsStore.isValidVotingKey;
     if (!isValidVotingKey) {
       commonStore.hideLoading();
-      swal("Warning!", constants.INVALID_VOTING_KEY_MSG, "warning");
+      swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
       return;
     }
     const isFormValid = this.checkValidation();
     if (isFormValid) {
+      if (ballotStore.ballotType === ballotStore.BallotType.keys) {
+        const inputToAreBallotParamsValid = {
+          affectedKey: ballotStore.ballotKeys.affectedKey, 
+          affectedKeyType: ballotStore.ballotKeys.keyType, 
+          miningKey: ballotStore.ballotKeys.miningKey.value,
+          ballotType: ballotStore.ballotKeys.keysBallotType
+        };
+        let areBallotParamsValid = await contractsStore.votingToChangeKeys.areBallotParamsValid(inputToAreBallotParamsValid);
+        if (!areBallotParamsValid) {
+          commonStore.hideLoading();
+          return swal("Warning!", "The ballot input params are invalid", "warning");
+        }
+      }
+
       let methodToCreateBallot;
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys: 
@@ -170,7 +178,7 @@ export class NewBallot extends React.Component {
       methodToCreateBallot(curDateInSeconds)
       .on("receipt", () => {
         commonStore.hideLoading();
-        swal("Congratulations!", constants.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
+        swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
           push(`${commonStore.rootPath}`);
         });
       })
