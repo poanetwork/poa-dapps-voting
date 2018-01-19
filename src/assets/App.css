@@ -689,6 +689,18 @@ button {
       margin-left: 0;
       margin-right: 15px; } }
 
+textarea {
+  border: 1px solid #e5eef9;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  overflow: auto;
+  outline: none;
+  border-radius: 3px;
+  width: 100%; }
+  textarea:focus {
+    border-color: #08b3f2; }
+
 .ballots-about {
   font-size: 0; }
   @media screen and (max-width: 768px) {

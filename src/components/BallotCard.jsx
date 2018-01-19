@@ -33,6 +33,7 @@ export class BallotCard extends React.Component {
     @observable progress;
     @observable totalVoters;
     @observable isFinalized;
+    @observable memo;
 
     @computed get finalizeButtonDisplayName() {
         const displayName = this.isFinalized ? "Finalized" : "Finalize ballot";
@@ -176,6 +177,13 @@ export class BallotCard extends React.Component {
         return isActive;
     }
 
+    getMemo = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let memo = await this.getContract(contractsStore, votingType).getMemo(id);
+        this.memo = memo;
+        return memo;
+    }
+
     vote = async ({choice}) => {
         if (this.timeToStart.val > 0) {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
@@ -278,6 +286,7 @@ export class BallotCard extends React.Component {
         this.getTotalVoters();
         this.getProgress();
         this.getIsFinalized();
+        this.getMemo();
     }
 
     componentDidMount() {
@@ -360,6 +369,9 @@ export class BallotCard extends React.Component {
             </div>
             <div className="info">
               Minimum {threshold} from {contractsStore.validatorsLength} validators is required to pass the proposal
+            </div>
+            <div className="info">
+              {this.memo}
             </div>
             <hr />
             <div className="ballots-footer">

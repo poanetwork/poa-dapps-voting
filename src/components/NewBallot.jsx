@@ -102,7 +102,8 @@ export class NewBallot extends React.Component {
       affectedKeyType: ballotStore.ballotKeys.keyType, 
       miningKey: ballotStore.ballotKeys.miningKey.value,
       ballotType: ballotStore.ballotKeys.keysBallotType,
-      sender: contractsStore.votingKey
+      sender: contractsStore.votingKey,
+      memo: ballotStore.memo
     };
     let method = contractsStore.votingToChangeKeys.createVotingForKeys(inputToMethod);
     return method;
@@ -114,7 +115,8 @@ export class NewBallot extends React.Component {
       startTime: curDateInSeconds,
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotMinThreshold.proposedValue, 
-      sender: contractsStore.votingKey
+      sender: contractsStore.votingKey,
+      memo: ballotStore.memo
     };
     let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(inputToMethod);
     return method;
@@ -127,7 +129,8 @@ export class NewBallot extends React.Component {
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotProxy.proposedAddress, 
       contractType: ballotStore.ballotProxy.contractType,
-      sender: contractsStore.votingKey
+      sender: contractsStore.votingKey,
+      memo: ballotStore.memo
     };
     let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(inputToMethod);
     return method;
@@ -260,6 +263,15 @@ export class NewBallot extends React.Component {
           {validator}
           {keysTypes}
           {metadata}
+          <div className="form-el">
+            <label>Description of the ballot</label>
+            <div>
+              <textarea rows="4" 
+                value={ballotStore.memo}
+                onChange={e => ballotStore.setMemo(e)}
+                 ></textarea>
+            </div>
+          </div>
           <div className="new-form-footer">
             <div className="info">
               Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal<br />

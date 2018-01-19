@@ -20,6 +20,11 @@ const routingStore = new RouterStore();
 const stores = { commonStore, contractsStore, ballotStore, ballotsStore, validatorStore, routing: routingStore };
 const history = syncHistoryWithStore(browserHistory, routingStore);
 
+function generateElement(msg){
+  let errorNode = document.createElement("div");
+  errorNode.innerHTML = `${msg}`;
+  return errorNode;
+}
 class AppMainRouter extends Component {
 
   constructor(props) {
@@ -49,10 +54,12 @@ class AppMainRouter extends Component {
       console.log("miningKey", contractsStore.miningKey);
       commonStore.hideLoading();
     }).catch((error) => {
+      console.error(error.message)
       commonStore.hideLoading();
       swal({
         title: 'Error',
-        text: error.message,
+        html: generateElement(error.message),
+        icon: 'error',
         type: 'error'
       });
     });

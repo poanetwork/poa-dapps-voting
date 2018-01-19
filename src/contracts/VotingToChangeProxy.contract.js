@@ -11,8 +11,8 @@ export default class VotingToChangeProxy {
   }
 
   //setters
-  createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender}) {
-    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType).send({from: sender})
+  createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender, memo}) {
+    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender})
   }
 
   vote(_id, choice, sender) {
@@ -62,6 +62,10 @@ export default class VotingToChangeProxy {
 
   getContractType(_id) {
     return this.votingToChangeProxyInstance.methods.getContractType(_id).call();
+  }
+
+  getMemo(_id) {
+    return this.votingToChangeProxyInstance.methods.getMemo(_id).call();
   }
 
   getMiningByVotingKey(_votingKey) {
