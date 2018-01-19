@@ -268,7 +268,7 @@ export class NewBallot extends React.Component {
             <div>
               <textarea rows="4" 
                 value={ballotStore.memo}
-                onChange={e => ballotStore.setMemo(e)}
+                onChange={(e) => ballotStore.setMemo(e)}
                  ></textarea>
             </div>
           </div>
