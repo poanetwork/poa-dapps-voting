@@ -20,6 +20,7 @@ export class NewBallot extends React.Component {
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
     const isAfter = moment(ballotStore.endTime).isAfter(moment());
+    const isTwoDaysMinimum = moment(ballotStore.endTime).isAfter(moment().add(2, 'days'));
 
     if (ballotStore.isNewValidatorPersonalData) {
       for (let validatorProp in validatorStore) {
@@ -33,6 +34,18 @@ export class NewBallot extends React.Component {
 
     if (!isAfter) {
       swal("Warning!", messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    if(!ballotStore.memo){
+      swal("Warning!", messages.DESCRIPTION_IS_EMPTY, "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    if(!isTwoDaysMinimum) {
+      swal("Warning!", messages.SHOULD_BE_MORE_THAN_TWO_DAYS, "warning");
       commonStore.hideLoading();
       return false;
     }

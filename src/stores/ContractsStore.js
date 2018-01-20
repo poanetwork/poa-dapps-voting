@@ -193,11 +193,17 @@ class ContractsStore {
 
 	@action
 	async getAllValidatorMetadata() {
+		const newMiningKey = {
+			label: "New Mining Key",
+			value: "0x0000000000000000000000000000000000000000"
+		}
+		this.validatorsMetadata.push(newMiningKey);
 		const keys = await this.poaConsensus.getValidators();
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
 			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
 		})
+		
 	}
 }
 
