@@ -316,6 +316,19 @@ export class BallotCard extends React.Component {
         return true;
     }
 
+    typeName(type){
+        switch(type) {
+            case "votingToChangeMinThreshold":
+                return "Consensus";
+            case "votingToChangeKeys":
+                return "Keys";
+            case "votingToChangeProxy":
+                return "Proxy";
+            default:
+                return "";
+        }
+    }
+
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
         let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
@@ -379,7 +392,7 @@ export class BallotCard extends React.Component {
                 <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
                 <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
               </div>
-              <div type="button" className="ballots-i--vote ballots-i--vote_no">Proxy Ballot ID: {this.props.id}</div>
+              <div type="button" className="ballots-i--vote ballots-i--vote_no">{this.typeName(votingType)} Ballot ID: {this.props.id}</div>
             </div>
           </div>
         );
