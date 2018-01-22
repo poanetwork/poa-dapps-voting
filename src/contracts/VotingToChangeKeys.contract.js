@@ -72,6 +72,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
   }
 
+  getMiningKey(_id) {
+    return this.votingToChangeKeysInstance.methods.getMiningKey(_id).call();
+  }
+
   getMiningByVotingKey(_votingKey) {
     return this.votingToChangeKeysInstance.methods.getMiningByVotingKey(_votingKey).call();
   }

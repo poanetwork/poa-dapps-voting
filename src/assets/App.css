@@ -724,15 +724,15 @@ textarea {
         display: table-row;
         width: 100% !important; } }
     .ballots-about-i_name {
-      width: 25%; }
+      width: 20%; }
     .ballots-about-i_action {
-      width: 15%; }
+      width: 10%; }
     .ballots-about-i_type {
-      width: 15%; }
+      width: 10%; }
     .ballots-about-i_proposal {
       width: 30%; }
     .ballots-about-i_mining-key {
-      width: 30%;
+      width: 25%;
       word-break: break-all; }
     .ballots-about-i_proposed-min-threshold {
       width: 60%;
@@ -744,7 +744,7 @@ textarea {
       width: 30%;
       word-break: break-all; }
     .ballots-about-i_time {
-      width: 15%;
+      width: 10%;
       text-align: right; }
       @media screen and (max-width: 768px) {
         .ballots-about-i_time {

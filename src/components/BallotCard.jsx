@@ -338,7 +338,7 @@ export class BallotCard extends React.Component {
             <div className="ballots-about">
               <div className="ballots-about-i ballots-about-i_name">
                 <div className="ballots-about-td">
-                  <p className="ballots-about-i--title">Name</p>
+                  <p className="ballots-about-i--title">Proposer</p>
                 </div>
                 <div className="ballots-about-td">
                   <p className="ballots-i--name">{this.creator}</p>

@@ -11,6 +11,7 @@ export class BallotKeysCard extends React.Component {
   @observable affectedKeyTypeDisplayName;
   @observable ballotType;
   @observable ballotTypeDisplayName;
+  @observable miningKey;
 
   @action("Get ballotTypeDisplayName")
   getBallotTypeDisplayName(ballotType) {
@@ -73,12 +74,20 @@ export class BallotKeysCard extends React.Component {
     let affectedKey = await contractsStore.votingToChangeKeys.getAffectedKey(id);
     this.affectedKey = affectedKey;
   }
+  @action("Get mining key of keys ballot")
+  getMiningKey = async () => {
+    const { contractsStore, id } = this.props;
+    let miningKey = await contractsStore.votingToChangeKeys.getMiningKey(id);
+    const metadata = await contractsStore.getValidatorMetadata(miningKey)
+    this.miningKey = `${metadata.lastName} ${miningKey}`;
+  }
 
   constructor(props) {
     super(props);
     this.getAffectedKey();
     this.getAffectedKeyType();
     this.getBallotType();
+    this.getMiningKey();
   }
 
   isSearchPattern = () => {
@@ -118,6 +127,14 @@ export class BallotKeysCard extends React.Component {
           </div>
           <div className="ballots-about-td">
             <p>{this.affectedKey}</p>
+          </div>
+        </div>
+        <div className="ballots-about-i ballots-about-i_mining-key">
+          <div className="ballots-about-td">
+            <p className="ballots-about-i--title">Validator key</p>
+          </div>
+          <div className="ballots-about-td">
+            <p>{this.miningKey}</p>
           </div>
         </div>
       </BallotCard>
