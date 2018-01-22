@@ -119,3 +119,18 @@
     }
   }
 }
+
+textarea {
+  border: 1px solid #e5eef9;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  overflow: auto;
+  outline: none;
+  border-radius: 3px;
+  width: 100%;
+  &:focus {
+    border-color: #08b3f2;
+    
+  }
+}

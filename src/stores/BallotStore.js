@@ -31,6 +31,7 @@ class BallotStore {
 	@observable ballotKeys;
 	@observable ballotMinThreshold;
 	@observable ballotProxy;
+	@observable memo;
 
 
 	constructor() {
@@ -53,6 +54,7 @@ class BallotStore {
 			proposedAddress: "",
 			contractType: ""
 		};
+		this.memo = "";
 	}
 
 	@computed get endTimeUnix() {
@@ -133,6 +135,12 @@ class BallotStore {
 	setMiningKey = (value) => {
 		this.ballotKeys.miningKey = value;
 		console.log("ballot mining key", toJS(value));
+	}
+
+	@action("Set ballot memo")
+	setMemo(e) {
+		console.log("memo", this.memo);
+		this.memo = e.target.value;
 	}
 }
 

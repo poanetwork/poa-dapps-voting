@@ -21,6 +21,8 @@ Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wi
 messages.ballotIsNotActiveMsg = function(timeToStart) {
 	return `The ballot is not active yet. Time to start: ${timeToStart}`;
 };
+messages.SHOULD_BE_MORE_THAN_TWO_DAYS = "Ballot end time should be at least 48 hours from now";
+messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
 module.exports = {
   messages
 };

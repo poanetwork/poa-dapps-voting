@@ -11,8 +11,8 @@ export default class VotingToChangeMinThreshold {
   }
 
   //setters
-  createBallotToChangeThreshold({startTime, endTime, proposedValue, sender}) {
-    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue).send({from: sender})
+  createBallotToChangeThreshold({startTime, endTime, proposedValue, sender, memo}) {
+    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender})
   }
 
   vote(_id, choice, sender) {
@@ -62,6 +62,10 @@ export default class VotingToChangeMinThreshold {
 
   getMiningByVotingKey(_votingKey) {
     return this.votingToChangeMinThresholdInstance.methods.getMiningByVotingKey(_votingKey).call();
+  }
+
+  getMemo(_id) {
+    return this.votingToChangeMinThresholdInstance.methods.getMemo(_id).call();
   }
 
   async getValidatorActiveBallots(_votingKey) {

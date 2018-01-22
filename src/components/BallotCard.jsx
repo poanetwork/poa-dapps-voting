@@ -33,6 +33,7 @@ export class BallotCard extends React.Component {
     @observable progress;
     @observable totalVoters;
     @observable isFinalized;
+    @observable memo;
 
     @computed get finalizeButtonDisplayName() {
         const displayName = this.isFinalized ? "Finalized" : "Finalize ballot";
@@ -176,6 +177,13 @@ export class BallotCard extends React.Component {
         return isActive;
     }
 
+    getMemo = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let memo = await this.getContract(contractsStore, votingType).getMemo(id);
+        this.memo = memo;
+        return memo;
+    }
+
     vote = async ({choice}) => {
         if (this.timeToStart.val > 0) {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
@@ -278,6 +286,7 @@ export class BallotCard extends React.Component {
         this.getTotalVoters();
         this.getProgress();
         this.getIsFinalized();
+        this.getMemo();
     }
 
     componentDidMount() {
@@ -307,8 +316,22 @@ export class BallotCard extends React.Component {
         return true;
     }
 
+    typeName(type){
+        switch(type) {
+            case "votingToChangeMinThreshold":
+                return "Consensus";
+            case "votingToChangeKeys":
+                return "Keys";
+            case "votingToChangeProxy":
+                return "Proxy";
+            default:
+                return "";
+        }
+    }
+
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
+        console.log(votingType);
         let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
         const threshold = this.getThreshold(contractsStore, votingType);
         return (
@@ -361,13 +384,16 @@ export class BallotCard extends React.Component {
             <div className="info">
               Minimum {threshold} from {contractsStore.validatorsLength} validators is required to pass the proposal
             </div>
+            <div className="info">
+              {this.memo}
+            </div>
             <hr />
             <div className="ballots-footer">
               <div className="ballots-footer-left">
                 <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
                 <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
               </div>
-              <div type="button" className="ballots-i--vote ballots-i--vote_no">Proxy Ballot ID: {this.props.id}</div>
+              <div type="button" className="ballots-i--vote ballots-i--vote_no">{this.typeName(votingType)} Ballot ID: {this.props.id}</div>
             </div>
           </div>
         );
