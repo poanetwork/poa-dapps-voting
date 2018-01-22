@@ -26,6 +26,8 @@ messages.SHOULD_BE_MORE_THAN_TWO_DAYS = (duration, neededHours, neededMinutes) =
 		Please add ${neededHours} hours and ${neededMinutes} minutes in order to set correct end time
 	`;
 }
+messages.FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
+Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
 module.exports = {
   messages

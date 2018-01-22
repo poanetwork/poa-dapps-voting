@@ -188,11 +188,16 @@ export class NewBallot extends React.Component {
       }
       let curDateInSeconds = moment.utc().add(5, 'minute').unix();
       methodToCreateBallot(curDateInSeconds)
-      .on("receipt", () => {
+      .on("receipt", (tx) => {
         commonStore.hideLoading();
-        swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
-          push(`${commonStore.rootPath}`);
-        });
+        if(tx.status === '0x1'){
+          swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
+            push(`${commonStore.rootPath}`);
+          });
+        } else {
+          swal("Warning!", messages.FAILED_TX, "warning").then((result) => {
+          });
+        }
       })
       .on("error", (e) => {
         commonStore.hideLoading();
