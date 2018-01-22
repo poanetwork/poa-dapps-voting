@@ -43,7 +43,8 @@ export class BallotKeysMetadata extends React.Component {
             <div className="form-el">
               <label htmlFor="key">Ballot End</label>
               <input type="datetime-local" id="key" 
-                value={ballotStore.endTime} 
+                value={ballotStore.endTime}
+                min={ballotStore.endTime}
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
               />
               <p className="hint">
