@@ -32,15 +32,15 @@
     }
 
     &_name {
-      width: 25%;
+      width: 20%;
     }
 
     &_action {
-      width: 15%;
+      width: 10%;
     }
-
+// 25
     &_type {
-      width: 15%;
+      width: 10%;
     }
 
     &_proposal {
@@ -48,7 +48,7 @@
     }
 
     &_mining-key {
-      width: 30%;
+      width: 25%;
       word-break: break-all;
     }
 
@@ -68,7 +68,7 @@
     }
 
     &_time {
-      width: 15%;
+      width: 10%;
       text-align: right;
 
       @media screen and (max-width: $tablet-width) {
