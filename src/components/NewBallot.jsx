@@ -8,7 +8,6 @@ import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
 import { messages } from "../messages";
-
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
 export class NewBallot extends React.Component {
@@ -19,8 +18,10 @@ export class NewBallot extends React.Component {
 
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
-    const isAfter = moment(ballotStore.endTime).isAfter(moment());
-    const isTwoDaysMinimum = moment(ballotStore.endTime).isAfter(moment().add(2, 'days'));
+    const twoDays = moment.utc().add(2, 'days').format();
+    let neededMinutes = moment(twoDays).diff(moment(ballotStore.endTime), 'minutes');
+    let neededHours = Math.round(neededMinutes/60);
+    let duration = 48 - neededHours;
 
     if (ballotStore.isNewValidatorPersonalData) {
       for (let validatorProp in validatorStore) {
@@ -32,20 +33,15 @@ export class NewBallot extends React.Component {
       }
     }
 
-    if (!isAfter) {
-      swal("Warning!", messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG, "warning");
-      commonStore.hideLoading();
-      return false;
-    }
-
     if(!ballotStore.memo){
       swal("Warning!", messages.DESCRIPTION_IS_EMPTY, "warning");
       commonStore.hideLoading();
       return false;
     }
 
-    if(!isTwoDaysMinimum) {
-      swal("Warning!", messages.SHOULD_BE_MORE_THAN_TWO_DAYS, "warning");
+    if(neededMinutes > 0) {
+      neededMinutes = neededHours*60 - neededMinutes;
+      swal("Warning!", messages.SHOULD_BE_MORE_THAN_TWO_DAYS(duration, neededHours, neededMinutes), "warning");
       commonStore.hideLoading();
       return false;
     }
@@ -189,8 +185,7 @@ export class NewBallot extends React.Component {
         default:
           break;
       }
-      const curDate = new Date();
-      let curDateInSeconds = moment(curDate).add(5, 'minute').unix();
+      let curDateInSeconds = moment.utc().add(5, 'minute').unix();
       methodToCreateBallot(curDateInSeconds)
       .on("receipt", () => {
         commonStore.hideLoading();
