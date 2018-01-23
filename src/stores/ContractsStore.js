@@ -202,8 +202,11 @@ class ContractsStore {
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
 			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
-		})
-		
+		})	
+	}
+	@action
+	async getValidatorMetadata(miningKey) {
+		return await this.validatorMetadata.getValidatorData({miningKey})
 	}
 }
 
