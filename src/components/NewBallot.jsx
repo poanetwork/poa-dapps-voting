@@ -19,7 +19,6 @@ export class NewBallot extends React.Component {
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
     const twoDays = moment.utc().add(2, 'days').format();
-    const endTime = moment(ballotStore.endTime).format();
     let neededMinutes = moment(twoDays).diff(moment(ballotStore.endTime), 'minutes');
     let neededHours = Math.round(neededMinutes/60);
     let duration = 48 - neededHours;
