@@ -13,7 +13,10 @@ let SOKOL_ADDRESSES = {};
 let CORE_ADDRESSES = {};
 
 function addressesURL(network) {
-    return `https://raw.githubusercontent.com/vbaranov/poa-chain-spec/${network}/contracts.json`;
+    const organization = 'poanetwork';
+    const repoName = 'poa-chain-spec';
+    const sourceFile = 'contracts.json';
+    return `https://raw.githubusercontent.com/${organization}/${repoName}/${network}/${sourceFile}`;
 }
 
 function getContractsAddresses(network) {
