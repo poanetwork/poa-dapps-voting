@@ -4,10 +4,10 @@ import networkAddresses from './addresses';
 
 export default class VotingToChangeMinThreshold {
   constructor({web3, netId}){
-    const {VOTING_TO_CHANGE_MIN_THRESHOLD} = networkAddresses(netId);
+    const {VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS} = networkAddresses(netId);
     let web3_10 = new Web3(web3.currentProvider);
-    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD);
-    this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD);
+    console.log('VotingToChangeMinThreshold ', VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
+    this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
   }
 
   //setters

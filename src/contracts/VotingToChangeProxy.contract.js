@@ -4,10 +4,10 @@ import networkAddresses from './addresses';
 
 export default class VotingToChangeProxy {
   constructor({web3, netId}){
-    const {VOTING_TO_CHANGE_PROXY} = networkAddresses(netId);
-    console.log('VotingToChangeProxy ', VOTING_TO_CHANGE_PROXY)
+    const {VOTING_TO_CHANGE_PROXY_ADDRESS} = networkAddresses(netId);
+    console.log('VotingToChangeProxy ', VOTING_TO_CHANGE_PROXY_ADDRESS)
     let web3_10 = new Web3(web3.currentProvider);
-    this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY);
+    this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
   }
 
   //setters
