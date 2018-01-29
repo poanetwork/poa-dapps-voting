@@ -1,13 +1,20 @@
-import votingToChangeProxyABI from './votingToChangeProxy.abi.json'
 import Web3 from 'web3';
 import networkAddresses from './addresses';
+import helpers from "./helpers";
 
 export default class VotingToChangeProxy {
-  constructor({web3, netId}){
+  async init({web3, netId}) {
     const {VOTING_TO_CHANGE_PROXY_ADDRESS} = networkAddresses(netId);
-    console.log('VotingToChangeProxy ', VOTING_TO_CHANGE_PROXY_ADDRESS)
+    console.log('VotingToChangeProxy address', VOTING_TO_CHANGE_PROXY_ADDRESS)
     let web3_10 = new Web3(web3.currentProvider);
-    this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
+
+    const branch = helpers.getBranch(netId);
+
+    let that = this;
+
+    let votingToChangeProxyABI = await helpers.getABI(branch, 'VotingToChangeProxyAddress')
+
+    that.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
   }
 
   //setters

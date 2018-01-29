@@ -1,14 +1,23 @@
-import poaConsensusAbi from './poaConsensus.abi.json'
 import Web3 from 'web3';
 import networkAddresses from './addresses';
+import helpers from "./helpers";
 
 export default class POAConsensus {
-  constructor({web3, netId}){
-    const {POA_ADDRESS} = networkAddresses(netId);
-    console.log('POA Address ' , POA_ADDRESS)
+  async init({web3, netId}) {
+  	const {POA_ADDRESS} = networkAddresses(netId);
+    console.log('POA address', POA_ADDRESS)
     let web3_10 = new Web3(web3.currentProvider);
-    this.poaInstance = new web3_10.eth.Contract(poaConsensusAbi, POA_ADDRESS);
+
+    const branch = helpers.getBranch(netId);
+
+    let that = this;
+
+    let poaConsensusAbi = await helpers.getABI(branch, 'PoaNetworkConsensus')
+
+    that.poaInstance = new web3_10.eth.Contract(poaConsensusAbi, POA_ADDRESS);
   }
+
+
   async getValidators(){
     return await this.poaInstance.methods.getValidators().call();
   }

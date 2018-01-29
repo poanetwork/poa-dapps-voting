@@ -1,13 +1,20 @@
-import votingToChangeKeysABI from './votingToChangeKeys.abi.json'
 import Web3 from 'web3';
 import networkAddresses from './addresses';
+import helpers from "./helpers";
       
 export default class VotingToChangeKeys {
-  constructor({web3, netId}){
+  async init({web3, netId}) {
     const {VOTING_TO_CHANGE_KEYS_ADDRESS} = networkAddresses(netId);
-    console.log('VotingToChangeKeys ', VOTING_TO_CHANGE_KEYS_ADDRESS);
+    console.log('VotingToChangeKeys address', VOTING_TO_CHANGE_KEYS_ADDRESS);
     let web3_10 = new Web3(web3.currentProvider);
-    this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
+
+    const branch = helpers.getBranch(netId);
+
+    let that = this;
+
+    let votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
+
+    that.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
   }
 
   //setters

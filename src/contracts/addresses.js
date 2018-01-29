@@ -1,4 +1,5 @@
 import { messages } from "../messages";
+import { addressesURL, wrongRepoAlert } from "./helpers";
 import swal from 'sweetalert2';
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
@@ -12,18 +13,12 @@ import swal from 'sweetalert2';
 let SOKOL_ADDRESSES = {};
 let CORE_ADDRESSES = {};
 
-function addressesURL(network) {
-    const organization = 'poanetwork';
-    const repoName = 'poa-chain-spec';
-    const sourceFile = 'contracts.json';
-    return `https://raw.githubusercontent.com/${organization}/${repoName}/${network}/${sourceFile}`;
-}
-
-function getContractsAddresses(network) {
-    fetch(addressesURL(network)).then(function(response) { 
+function getContractsAddresses(branch) {
+    let addr = addressesURL(branch);
+    fetch(addr).then(function(response) { 
         return response.json();
     }).then(function(contracts) {
-        switch (network) {
+        switch (branch) {
             case 'core':
                 CORE_ADDRESSES = contracts;
                 break;
@@ -35,7 +30,7 @@ function getContractsAddresses(network) {
                 break;
         }
     }).catch(function(err) {
-        swal("Error!", messages.wrongRepo(addressesURL(network)), "error");
+        wrongRepoAlert(addr);
     });
 }
 
