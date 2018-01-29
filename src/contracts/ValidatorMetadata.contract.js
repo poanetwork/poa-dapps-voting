@@ -27,11 +27,9 @@ export default class ValidatorMetadata {
 
     const branch = helpers.getBranch(netId);
 
-    let that = this;
-
     let MetadataAbi = await helpers.getABI(branch, 'ValidatorMetadata')
 
-    that.metadataInstance = new web3_10.eth.Contract(MetadataAbi, METADATA_ADDRESS);
+    this.metadataInstance = new web3_10.eth.Contract(MetadataAbi, METADATA_ADDRESS);
   }
 
   async getValidatorData({votingKey, miningKey}){

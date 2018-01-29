@@ -9,10 +9,8 @@ export default class BallotsStorage {
       let web3_10 = new Web3(web3.currentProvider);
       const branch = helpers.getBranch(netId);
 
-	  let that = this;
-
 	  let ballotsStorageAbi = await helpers.getABI(branch, 'BallotStorage')
 
-	  that.ballotsStorageInstance = new web3_10.eth.Contract(ballotsStorageAbi, BALLOTS_STORAGE_ADDRESS);
+	  this.ballotsStorageInstance = new web3_10.eth.Contract(ballotsStorageAbi, BALLOTS_STORAGE_ADDRESS);
   }
 }

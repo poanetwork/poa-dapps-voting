@@ -10,11 +10,9 @@ export default class VotingToChangeProxy {
 
     const branch = helpers.getBranch(netId);
 
-    let that = this;
-
     let votingToChangeProxyABI = await helpers.getABI(branch, 'VotingToChangeProxyAddress')
 
-    that.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
+    this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
   }
 
   //setters

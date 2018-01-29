@@ -10,11 +10,9 @@ export default class VotingToChangeMinThreshold {
 
     const branch = helpers.getBranch(netId);
 
-    let that = this;
-
     let votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
 
-    that.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
+    this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
   }
 
   //setters

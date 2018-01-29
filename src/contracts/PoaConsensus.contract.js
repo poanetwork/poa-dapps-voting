@@ -10,11 +10,9 @@ export default class POAConsensus {
 
     const branch = helpers.getBranch(netId);
 
-    let that = this;
-
     let poaConsensusAbi = await helpers.getABI(branch, 'PoaNetworkConsensus')
 
-    that.poaInstance = new web3_10.eth.Contract(poaConsensusAbi, POA_ADDRESS);
+    this.poaInstance = new web3_10.eth.Contract(poaConsensusAbi, POA_ADDRESS);
   }
 
 

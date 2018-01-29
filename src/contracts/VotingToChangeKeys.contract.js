@@ -10,11 +10,9 @@ export default class VotingToChangeKeys {
 
     const branch = helpers.getBranch(netId);
 
-    let that = this;
-
     let votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
 
-    that.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
+    this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
   }
 
   //setters
