@@ -29,6 +29,9 @@ messages.SHOULD_BE_MORE_THAN_TWO_DAYS = (duration, neededHours, neededMinutes) =
 messages.FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
+messages.wrongRepo = function(repo) {
+	return `There is no contracts.json in configured repo ${repo}`;
+};
 module.exports = {
   messages
 };

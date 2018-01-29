@@ -1,7 +1,8 @@
-import MetadataAbi from './validatorMetadata.abi.json'
 import Web3 from 'web3';
 import moment from 'moment';
 import networkAddresses from './addresses';
+import helpers from "./helpers";
+
 var toAscii = function(hex) {
   var str = '',
       i = 0,
@@ -18,12 +19,17 @@ var toAscii = function(hex) {
 };
 
 
-export default class Metadata {
-  constructor({web3, netId}){
+export default class ValidatorMetadata {
+  async init({web3, netId}) {
     const {METADATA_ADDRESS} = networkAddresses(netId);
-    console.log('Metadata contract:', METADATA_ADDRESS)
-    this.web3_10 = new Web3(web3.currentProvider);
-    this.metadataInstance = new this.web3_10.eth.Contract(MetadataAbi, METADATA_ADDRESS);
+    console.log('Metadata address', METADATA_ADDRESS)
+    let web3_10 = new Web3(web3.currentProvider);
+
+    const branch = helpers.getBranch(netId);
+
+    let MetadataAbi = await helpers.getABI(branch, 'ValidatorMetadata')
+
+    this.metadataInstance = new web3_10.eth.Contract(MetadataAbi, METADATA_ADDRESS);
   }
 
   async getValidatorData({votingKey, miningKey}){

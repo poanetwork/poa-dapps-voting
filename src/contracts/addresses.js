@@ -1,30 +1,41 @@
+import { messages } from "../messages";
+import { addressesURL, wrongRepoAlert } from "./helpers";
+import swal from 'sweetalert2';
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
-//     VOTING_TO_CHANGE_MIN_THRESHOLD: '0x5ae30d4c8892292e0d8164f87a2e12dff9dc99e1',
-//     VOTING_TO_CHANGE_PROXY: '0x6c221df3695ac13a7f9366568ec069c353d273b8',
+//     VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS: '0x5ae30d4c8892292e0d8164f87a2e12dff9dc99e1',
+//     VOTING_TO_CHANGE_PROXY_ADDRESS: '0x6c221df3695ac13a7f9366568ec069c353d273b8',
 //     BALLOTS_STORAGE_ADDRESS: '0x5d6573e62e3688e40c1fc36e01b155fb0006f432',
 //     METADATA_ADDRESS: '0x93eba9d9de66133fcde35775e9da593edd59a4e3',
 //     POA_ADDRESS: '0xf472e0e43570b9afaab67089615080cf7c20018d',
 // }
 
+let SOKOL_ADDRESSES = {};
+let CORE_ADDRESSES = {};
 
-const CORE_ADDRESSES = {
-    VOTING_TO_CHANGE_KEYS_ADDRESS: "0x49df4ec19243263e5db22da5865b4f482b8323a0",
-    VOTING_TO_CHANGE_MIN_THRESHOLD: "0x8829ebe113535826e8af17ed51f83755f675789a",
-    VOTING_TO_CHANGE_PROXY: "0x6b728399b41a38d4109f7af2213d4cc31ca87812",
-    BALLOTS_STORAGE_ADDRESS: "0x0d7590c7aedf1e7e85fc9a1ee88f6f17d3ba762f",
-    METADATA_ADDRESS: "0xcBB2912666c7e8023B7ec78B6842702eB26336aC",
-    POA_ADDRESS: "0x8bf38d4764929064f2d4d3a56520a76ab3df415b",
+function getContractsAddresses(branch) {
+    let addr = addressesURL(branch);
+    fetch(addr).then(function(response) { 
+        return response.json();
+    }).then(function(contracts) {
+        switch (branch) {
+            case 'core':
+                CORE_ADDRESSES = contracts;
+                break;
+            case 'sokol':
+                SOKOL_ADDRESSES = contracts;
+                break;
+            default:
+                CORE_ADDRESSES = contracts;
+                break;
+        }
+    }).catch(function(err) {
+        wrongRepoAlert(addr);
+    });
 }
 
-const SOKOL_ADDRESSES = {
-    VOTING_TO_CHANGE_KEYS_ADDRESS: "0xc40cdf254a4a35498aa84f35e9842c110729a2a0",
-    VOTING_TO_CHANGE_MIN_THRESHOLD: "0x700db8ba3128087f3b23f60de4bc3179bafa467d",
-    VOTING_TO_CHANGE_PROXY: "0x0aa4a75549757a90f62f88b3b96b69bead2db0ff",
-    BALLOTS_STORAGE_ADDRESS: "0x27e7d2572aa37bec2ed30795f2fabccda4781f86",
-    METADATA_ADDRESS: "0x1ce9ad5614d3e00b88affdfa64e65e52f2e4e0f4",
-    POA_ADDRESS: "0x03048F666359CFD3C74a1A5b9a97848BF71d5038",
-}
+getContractsAddresses('core');
+getContractsAddresses('sokol');
 
 module.exports = (netId) => {
     switch (netId) {
@@ -36,4 +47,5 @@ module.exports = (netId) => {
             return CORE_ADDRESSES
     }
 }
+
 

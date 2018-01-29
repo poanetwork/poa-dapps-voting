@@ -69,48 +69,54 @@ class ContractsStore {
 	}
 
 	@action("Set PoA Consensus contract")
-	setPoaConsensus = (web3Config) => {
-		this.poaConsensus = new PoaConsensus({
+	setPoaConsensus = async (web3Config) => {
+		this.poaConsensus = new PoaConsensus();
+		await this.poaConsensus.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
       	});
 	}
 
 	@action("Set Ballots Storage contract")
-	setBallotsStorage = (web3Config) => {
-		this.ballotsStorage = new BallotsStorage({
+	setBallotsStorage = async (web3Config) => {
+		this.ballotsStorage = new BallotsStorage();
+		await this.ballotsStorage.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-		});
+      	});
 	}
 
 	@action("Set VotingToChangeKeys contract")
-	setVotingToChangeKeys = (web3Config) => {
-		this.votingToChangeKeys = new VotingToChangeKeys({
+	setVotingToChangeKeys = async (web3Config) => {
+		this.votingToChangeKeys = new VotingToChangeKeys();
+		await this.votingToChangeKeys.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeMinThreshold contract")
-	setVotingToChangeMinThreshold = (web3Config) => {
-		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold({
+	setVotingToChangeMinThreshold = async (web3Config) => {
+		this.votingToChangeMinThreshold = new VotingToChangeMinThreshold();
+		await this.votingToChangeMinThreshold.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
       	});
 	}
 
 	@action("Set VotingToChangeProxy contract")
-	setVotingToChangeProxy = (web3Config) => {
-		this.votingToChangeProxy = new VotingToChangeProxy({
+	setVotingToChangeProxy = async (web3Config) => {
+		this.votingToChangeProxy = new VotingToChangeProxy();
+		await this.votingToChangeProxy.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
       	});
 	}
 
 	@action("Set ValidatorMetadata contract")
-	setValidatorMetadata = (web3Config) => {
-		this.validatorMetadata = new ValidatorMetadata({
+	setValidatorMetadata = async (web3Config) => {
+		this.validatorMetadata = new ValidatorMetadata();
+		await this.validatorMetadata.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
       	});
