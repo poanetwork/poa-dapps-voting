@@ -4,13 +4,11 @@ import swal from 'sweetalert2';
 
 function addressesURL(branch) {
     const URL = `https://raw.githubusercontent.com/${constants.organization}/${constants.repoName}/${branch}/${constants.addressesSourceFile}`;
-    console.log(URL);
     return URL;
 }
 
 function ABIURL(branch, contract) {
     const URL = `https://raw.githubusercontent.com/${constants.organization}/${constants.repoName}/${branch}/abis/${constants.ABIsSources[contract]}`;
-    console.log(URL);
     return URL;
 }
 
