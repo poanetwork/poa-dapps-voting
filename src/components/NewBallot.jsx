@@ -18,11 +18,7 @@ export class NewBallot extends React.Component {
 
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
-    const twoDays = moment.utc().add(2, 'days').format();
-    let neededMinutes = moment(twoDays).diff(moment(ballotStore.endTime), 'minutes');
-    let neededHours = Math.round(neededMinutes/60);
-    let duration = 48 - neededHours;
-
+    
     if (ballotStore.isNewValidatorPersonalData) {
       for (let validatorProp in validatorStore) {
         if (validatorStore[validatorProp].length === 0) {
@@ -35,13 +31,6 @@ export class NewBallot extends React.Component {
 
     if(!ballotStore.memo){
       swal("Warning!", messages.DESCRIPTION_IS_EMPTY, "warning");
-      commonStore.hideLoading();
-      return false;
-    }
-
-    if(neededMinutes > 0) {
-      neededMinutes = neededHours*60 - neededMinutes;
-      swal("Warning!", messages.SHOULD_BE_MORE_THAN_TWO_DAYS(duration, neededHours, neededMinutes), "warning");
       commonStore.hideLoading();
       return false;
     }
