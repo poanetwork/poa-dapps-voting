@@ -35,7 +35,7 @@ class BallotStore {
 
 
 	constructor() {
-		const twoDays = moment().add(1, 'minutes').add(10, 'minutes').format("YYYY-MM-DDTHH:mm");
+		const twoDays = moment().add(1, 'minutes').add(1, 'minutes').format("YYYY-MM-DDTHH:mm");
 		this.ballotType = null;
 		this.endTime = twoDays;
 
