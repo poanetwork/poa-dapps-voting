@@ -29,7 +29,6 @@ async function getContractsAddresses(branch) {
             CORE_ADDRESSES = contracts;
             break;
         case 'sokol':
-            console.log("WTF")
             SOKOL_ADDRESSES = contracts;
             break;
         default:
