@@ -10,6 +10,7 @@ import validatorStore from './stores/ValidatorStore';
 import ballotStore from './stores/BallotStore';
 import ballotsStore from './stores/BallotsStore';
 import contractsStore from './stores/ContractsStore';
+import { getContractsAddresses } from './contracts/addresses';
 import swal from 'sweetalert2';
 import getWeb3 from './getWeb3';
 import "babel-polyfill";
@@ -32,6 +33,8 @@ class AppMainRouter extends Component {
     commonStore.showLoading();
 
     getWeb3().then(async (web3Config) => {
+      await getContractsAddresses('sokol');
+      await getContractsAddresses('core');
       await contractsStore.setWeb3Instance(web3Config);
       await contractsStore.setPoaConsensus(web3Config);
       await contractsStore.setBallotsStorage(web3Config);

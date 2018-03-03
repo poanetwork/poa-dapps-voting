@@ -34,10 +34,7 @@ function getContractsAddresses(branch) {
     });
 }
 
-getContractsAddresses('core');
-getContractsAddresses('sokol');
-
-module.exports = (netId) => {
+function getAddresses(netId) {
     switch (netId) {
         case '77':
             return SOKOL_ADDRESSES
@@ -46,6 +43,11 @@ module.exports = (netId) => {
         default:
             return CORE_ADDRESSES
     }
+}
+
+module.exports = {
+    getContractsAddresses: getContractsAddresses,
+    networkAddresses: getAddresses
 }
 
 

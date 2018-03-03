@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import moment from 'moment';
-import networkAddresses from './addresses';
+import { networkAddresses } from './addresses';
 import helpers from "./helpers";
 
 var toAscii = function(hex) {

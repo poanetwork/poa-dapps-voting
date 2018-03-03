@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import networkAddresses from './addresses';
+import { networkAddresses } from './addresses';
 import helpers from "./helpers";
 
 export default class POAConsensus {
@@ -14,7 +14,6 @@ export default class POAConsensus {
 
     this.poaInstance = new web3_10.eth.Contract(poaConsensusAbi, POA_ADDRESS);
   }
-
 
   async getValidators(){
     return await this.poaInstance.methods.getValidators().call();
