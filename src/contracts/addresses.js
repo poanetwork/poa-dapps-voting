@@ -13,25 +13,29 @@ import swal from 'sweetalert2';
 let SOKOL_ADDRESSES = {};
 let CORE_ADDRESSES = {};
 
-function getContractsAddresses(branch) {
+async function getContractsAddresses(branch) {
     let addr = addressesURL(branch);
-    fetch(addr).then(function(response) { 
-        return response.json();
-    }).then(function(contracts) {
-        switch (branch) {
-            case 'core':
-                CORE_ADDRESSES = contracts;
-                break;
-            case 'sokol':
-                SOKOL_ADDRESSES = contracts;
-                break;
-            default:
-                CORE_ADDRESSES = contracts;
-                break;
-        }
-    }).catch(function(err) {
-        wrongRepoAlert(addr);
-    });
+    let response;
+    try {
+        response = await fetch(addr);
+    } catch(e) {
+        return wrongRepoAlert(addr);
+    }
+
+    let contracts = response.json();
+
+    switch (branch) {
+        case 'core':
+            CORE_ADDRESSES = contracts;
+            break;
+        case 'sokol':
+            console.log("WTF")
+            SOKOL_ADDRESSES = contracts;
+            break;
+        default:
+            CORE_ADDRESSES = contracts;
+            break;
+    }
 }
 
 function getAddresses(netId) {
