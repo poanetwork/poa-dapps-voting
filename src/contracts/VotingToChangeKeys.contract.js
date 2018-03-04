@@ -3,10 +3,17 @@ import { networkAddresses } from './addresses';
 import helpers from "./helpers";
       
 export default class VotingToChangeKeys {
+  constructor() {
+    this.web3_10 = '';
+    this.gasPrice = '';
+  }
+
   async init({web3, netId}) {
     const {VOTING_TO_CHANGE_KEYS_ADDRESS} = networkAddresses(netId);
     console.log('VotingToChangeKeys address', VOTING_TO_CHANGE_KEYS_ADDRESS);
     let web3_10 = new Web3(web3.currentProvider);
+    this.web3_10 = web3_10;
+    this.gasPrice = this.web3_10.utils.toWei('2', 'gwei');
 
     const branch = helpers.getBranch(netId);
 
@@ -17,15 +24,15 @@ export default class VotingToChangeKeys {
 
   //setters
   createVotingForKeys({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
-    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: helpers.gasPrice});
+    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender, gasPrice: helpers.gasPrice});
+    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice});
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender, gasPrice: helpers.gasPrice});
+    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender, gasPrice: this.gasPrice});
   }
 
   //getters

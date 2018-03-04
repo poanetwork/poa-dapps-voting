@@ -3,10 +3,17 @@ import { networkAddresses } from './addresses';
 import helpers from "./helpers";
 
 export default class VotingToChangeMinThreshold {
+  constructor() {
+    this.web3_10 = '';
+    this.gasPrice = '';
+  }
+  
   async init({web3, netId}) {
     const {VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS} = networkAddresses(netId);
     console.log('VotingToChangeMinThreshold address', VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
     let web3_10 = new Web3(web3.currentProvider);
+    this.web3_10 = web3_10;
+    this.gasPrice = this.web3_10.utils.toWei('2', 'gwei');
 
     const branch = helpers.getBranch(netId);
 
@@ -17,15 +24,15 @@ export default class VotingToChangeMinThreshold {
 
   //setters
   createBallotToChangeThreshold({startTime, endTime, proposedValue, sender, memo}) {
-    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: helpers.gasPrice})
+    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).send({from: sender, gasPrice: helpers.gasPrice})
+    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice})
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).send({from: sender, gasPrice: helpers.gasPrice})
+    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).send({from: sender, gasPrice: this.gasPrice})
   }
 
   //getters
