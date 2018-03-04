@@ -17,15 +17,15 @@ export default class VotingToChangeKeys {
 
   //setters
   createVotingForKeys({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
-    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: helpers.gasPrice});
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender, gasPrice: helpers.gasPrice});
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender, gasPrice: helpers.gasPrice});
   }
 
   //getters

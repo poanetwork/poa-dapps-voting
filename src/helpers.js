@@ -13,6 +13,9 @@ var toAscii = function(hex) {
   return str;
 };
 
+const gasPrice = this.web3_10.utils.toWei('2', 'gwei')
+
 module.exports = {
-  toAscii: toAscii
+  toAscii: toAscii,
+  gasPrice: gasPrice
 }

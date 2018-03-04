@@ -17,15 +17,15 @@ export default class VotingToChangeProxy {
 
   //setters
   createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender, memo}) {
-    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: helpers.gasPrice})
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeProxyInstance.methods.vote(_id, choice).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.vote(_id, choice).send({from: sender, gasPrice: helpers.gasPrice})
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeProxyInstance.methods.finalize(_id).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.finalize(_id).send({from: sender, gasPrice: helpers.gasPrice})
   }
 
   //getters
