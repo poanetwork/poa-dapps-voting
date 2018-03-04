@@ -1,15 +1,6 @@
 import { messages } from "../messages";
 import { addressesURL, wrongRepoAlert } from "./helpers";
 import swal from 'sweetalert2';
-        const local = { 
-            "VOTING_TO_CHANGE_KEYS_ADDRESS": "0x5226f8863d1dfd4cf1b0c8809adddcbfb3f29c88",
-            "VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS": "0x41a29980232cee85889c0da454a2113c750b2e91",
-            "VOTING_TO_CHANGE_PROXY_ADDRESS": "0x275a09b284a740401c3082bc7a29b0b5c0214ae0",
-            "BALLOTS_STORAGE_ADDRESS": "0xf219940f88b4cfb3cfcf5aa96a41ee48ee232cee",
-            "METADATA_ADDRESS": "0xb8891bb04889a1b88ad06bd8ee594b80b424f46e",
-            "POA_ADDRESS": "0x8bf38d4764929064f2d4d3a56520a76ab3df415b",
-        };
-    
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
 //     VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS: '0x5ae30d4c8892292e0d8164f87a2e12dff9dc99e1',
@@ -38,7 +29,7 @@ async function getContractsAddresses(branch) {
             CORE_ADDRESSES = contracts;
             break;
         case 'sokol':
-            SOKOL_ADDRESSES = local;
+            SOKOL_ADDRESSES = contracts;
             break;
         default:
             CORE_ADDRESSES = contracts;
