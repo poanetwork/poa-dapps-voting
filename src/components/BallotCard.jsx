@@ -45,6 +45,11 @@ export class BallotCard extends React.Component {
         return cls;
     }
 
+    @computed get finalizeDescription () {
+        const _finalizeDescription = this.isFinalized ? '' : constants.CARD_FINALIZE_DESCRIPTION;
+        return _finalizeDescription;
+    }
+
     @computed get votesForNumber() {
         let votes = (this.totalVoters + this.progress) / 2;
         return votes;
@@ -349,7 +354,7 @@ export class BallotCard extends React.Component {
               {children}
               <div className="ballots-about-i ballots-about-i_time">
                 <div className="ballots-about-td">
-                  <p className="ballots-about-i--title">Time</p>
+                  <p className="ballots-about-i--title">Ballot Time</p>
                 </div>
                 <div className="ballots-about-td">
                   <p className="ballots-i--time">{this.timeTo.displayValue}</p>
@@ -391,7 +396,7 @@ export class BallotCard extends React.Component {
             <div className="ballots-footer">
               <div className="ballots-footer-left">
                 <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
-                <p>{constants.CARD_FINALIZE_DESCRIPTION}</p>
+                <p>{this.finalizeDescription}</p>
               </div>
               <div type="button" className="ballots-i--vote ballots-i--vote_no">{this.typeName(votingType)} Ballot ID: {this.props.id}</div>
             </div>
