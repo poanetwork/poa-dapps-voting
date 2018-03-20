@@ -96,12 +96,13 @@ export class BallotCard extends React.Component {
         let msFinish = finish.diff(_now);
 
         if (msStart > 0) {
-            this.timeToStart.val = msStart;
+            this.timeToStart.val = msStart + 5000;
             this.timeToStart.displayValue = this.formatMs(msStart, ":mm:ss");
             return this.timeTo = this.timeToStart;
         }
 
         if (msFinish > 0) {
+            this.timeToStart.val = 0;
             this.timeToFinish.val = msFinish;
             this.timeToFinish.displayValue = this.formatMs(msFinish, ":mm:ss");
             return this.timeTo = this.timeToFinish;
@@ -165,16 +166,16 @@ export class BallotCard extends React.Component {
         this.creator = fullName ? fullName : _miningKey;
     }
 
-    isValidaVote = async () => {
+    isValidVote = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey);
-        return isValidVote;
+        let _isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey);
+        return _isValidVote;
     }
 
     isActive = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isActive = await this.getContract(contractsStore, votingType).isActive(id);
-        return isActive;
+        let _isActive = await this.getContract(contractsStore, votingType).isActive(id);
+        return _isActive;
     }
 
     getMemo = async () => {
@@ -196,7 +197,7 @@ export class BallotCard extends React.Component {
             return;
         }
         commonStore.showLoading();
-        let isValidVote = await this.isValidaVote();
+        let isValidVote = await this.isValidVote();
         if (!isValidVote) {
             commonStore.hideLoading();
             swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
