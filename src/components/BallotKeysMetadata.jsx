@@ -26,10 +26,10 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label htmlFor="key">Mining Key</label>
+              <label htmlFor="mining-key">Mining Key</label>
               <Select.Creatable
                 name="form-field-name"
-                id="key"
+                id="mining-key"
                 value={ballotStore.ballotKeys.miningKey} 
                 onChange={ballotStore.setMiningKey} 
                 options={options}
