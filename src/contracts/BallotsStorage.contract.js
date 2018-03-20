@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import networkAddresses from './addresses';
+import { networkAddresses } from './addresses';
 import helpers from "./helpers";
 
 export default class BallotsStorage {

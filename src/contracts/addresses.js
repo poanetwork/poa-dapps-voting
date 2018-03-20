@@ -1,6 +1,4 @@
-import { messages } from "../messages";
 import { addressesURL, wrongRepoAlert } from "./helpers";
-import swal from 'sweetalert2';
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
 //     VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS: '0x5ae30d4c8892292e0d8164f87a2e12dff9dc99e1',
@@ -13,31 +11,31 @@ import swal from 'sweetalert2';
 let SOKOL_ADDRESSES = {};
 let CORE_ADDRESSES = {};
 
-function getContractsAddresses(branch) {
+async function getContractsAddresses(branch) {
     let addr = addressesURL(branch);
-    fetch(addr).then(function(response) { 
-        return response.json();
-    }).then(function(contracts) {
-        switch (branch) {
-            case 'core':
-                CORE_ADDRESSES = contracts;
-                break;
-            case 'sokol':
-                SOKOL_ADDRESSES = contracts;
-                break;
-            default:
-                CORE_ADDRESSES = contracts;
-                break;
-        }
-    }).catch(function(err) {
-        wrongRepoAlert(addr);
-    });
+    let response;
+    try {
+        response = await fetch(addr);
+    } catch(e) {
+        return wrongRepoAlert(addr);
+    }
+
+    let contracts = await response.json();
+
+    switch (branch) {
+        case 'core':
+            CORE_ADDRESSES = contracts;
+            break;
+        case 'sokol':
+            SOKOL_ADDRESSES = contracts;
+            break;
+        default:
+            CORE_ADDRESSES = contracts;
+            break;
+    }
 }
 
-getContractsAddresses('core');
-getContractsAddresses('sokol');
-
-module.exports = (netId) => {
+function getAddresses(netId) {
     switch (netId) {
         case '77':
             return SOKOL_ADDRESSES
@@ -48,4 +46,7 @@ module.exports = (netId) => {
     }
 }
 
-
+module.exports = {
+    getContractsAddresses: getContractsAddresses,
+    networkAddresses: getAddresses
+}
