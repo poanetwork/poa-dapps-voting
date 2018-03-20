@@ -48,6 +48,11 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
+        if (!ballotStore.ballotKeys[ballotKeysProp]) {
+          swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
         if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
           swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
           commonStore.hideLoading();
@@ -97,6 +102,12 @@ export class NewBallot extends React.Component {
         commonStore.hideLoading();
         return false;
       }
+    }
+
+    if (!ballotStore.isBallotForKey && !ballotStore.isBallotForMinThreshold && !ballotStore.isBallotForProxy) {
+      swal("Warning!", messages.BALLOT_TYPE_IS_EMPTY_MSG, "warning");
+      commonStore.hideLoading();
+      return false;
     }
 
     return true;
@@ -205,6 +216,15 @@ export class NewBallot extends React.Component {
     }
   }
 
+  menuItemActive = (ballotType) => {
+    const { ballotStore } = this.props;
+    if (ballotType == ballotStore.ballotType) {
+      return 'ballot-types-i ballot-types-i_active';
+    } else {
+      return 'ballot-types-i';
+    }
+  }
+
   render() {
     const { contractsStore, ballotStore } = this.props;
     let validator = ballotStore.isNewValidatorPersonalData ? <Validator />: "";
@@ -233,13 +253,22 @@ export class NewBallot extends React.Component {
         <form action="" className="new-form">
           <div className="new-form-side new-form-side_left">
             <div className="ballot-types">
-              <div className="ballot-types-i ballot-types-i_active">
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.keys)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
+              >
                 Validator Management Ballot
               </div>
-              <div className="ballot-types-i">
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
+              >
                 Consenus Thershold Ballot
               </div>
-              <div className="ballot-types-i">
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.proxy)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
+              >
                 Modify Proxy Contract Ballot
               </div>
             </div>
