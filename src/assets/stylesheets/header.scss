@@ -15,12 +15,27 @@
     overflow: hidden;
   }
 
+  &.sokol {
+    background-image: none;
+    background-color: #6ac9b9;
+  }
+
   &-logo {
     @extend %logos;
     float: left;
     width: 182px;
   	height: 35px;
     background-position: 0 -24px;
+  }
+
+  &-logo-sokol {
+    @include image-2x('./images/logo_sokol@2x.png', 146px, 35px);
+    display: inline-block;
+    width: 146px;
+    height: 35px;
+    background-image: url('./images/logo_sokol.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
   }
 
   &-settings,
