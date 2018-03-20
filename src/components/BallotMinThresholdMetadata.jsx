@@ -23,8 +23,8 @@ export class BallotMinThresholdMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label htmlFor="key">Ballot End</label>
-              <input type="datetime-local" id="key" 
+              <label htmlFor="datetime-local">Ballot End</label>
+              <input type="datetime-local" id="datetime-local" 
                 value={ballotStore.endTime} 
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
               />
