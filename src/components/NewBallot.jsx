@@ -48,6 +48,11 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
+        if (!ballotStore.ballotKeys[ballotKeysProp]) {
+          swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
+          commonStore.hideLoading();
+          return false;
+        }
         if (ballotStore.ballotKeys[ballotKeysProp].length === 0) {
           swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
           commonStore.hideLoading();
@@ -99,6 +104,12 @@ export class NewBallot extends React.Component {
       }
     }
 
+    if (!ballotStore.isBallotForKey && !ballotStore.isBallotForMinThreshold && !ballotStore.isBallotForProxy) {
+      swal("Warning!", messages.BALLOT_TYPE_IS_EMPTY_MSG, "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
     return true;
   }
 
@@ -107,8 +118,8 @@ export class NewBallot extends React.Component {
     const inputToMethod = {
       startTime: curDateInSeconds,
       endTime: ballotStore.endTimeUnix,
-      affectedKey: ballotStore.ballotKeys.affectedKey, 
-      affectedKeyType: ballotStore.ballotKeys.keyType, 
+      affectedKey: ballotStore.ballotKeys.affectedKey,
+      affectedKeyType: ballotStore.ballotKeys.keyType,
       miningKey: ballotStore.ballotKeys.miningKey.value,
       ballotType: ballotStore.ballotKeys.keysBallotType,
       sender: contractsStore.votingKey,
@@ -123,7 +134,7 @@ export class NewBallot extends React.Component {
     const inputToMethod = {
       startTime: curDateInSeconds,
       endTime: ballotStore.endTimeUnix,
-      proposedValue: ballotStore.ballotMinThreshold.proposedValue, 
+      proposedValue: ballotStore.ballotMinThreshold.proposedValue,
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
@@ -136,7 +147,7 @@ export class NewBallot extends React.Component {
     const inputToMethod = {
       startTime: curDateInSeconds,
       endTime: ballotStore.endTimeUnix,
-      proposedValue: ballotStore.ballotProxy.proposedAddress, 
+      proposedValue: ballotStore.ballotProxy.proposedAddress,
       contractType: ballotStore.ballotProxy.contractType,
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
@@ -159,8 +170,8 @@ export class NewBallot extends React.Component {
     if (isFormValid) {
       if (ballotStore.ballotType === ballotStore.BallotType.keys) {
         const inputToAreBallotParamsValid = {
-          affectedKey: ballotStore.ballotKeys.affectedKey, 
-          affectedKeyType: ballotStore.ballotKeys.keyType, 
+          affectedKey: ballotStore.ballotKeys.affectedKey,
+          affectedKeyType: ballotStore.ballotKeys.keyType,
           miningKey: ballotStore.ballotKeys.miningKey.value,
           ballotType: ballotStore.ballotKeys.keysBallotType
         };
@@ -173,13 +184,13 @@ export class NewBallot extends React.Component {
 
       let methodToCreateBallot;
       switch (ballotStore.ballotType) {
-        case ballotStore.BallotType.keys: 
+        case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys;
           break;
-        case ballotStore.BallotType.minThreshold: 
+        case ballotStore.BallotType.minThreshold:
           methodToCreateBallot = this.createBallotForMinThreshold;
           break;
-        case ballotStore.BallotType.proxy: 
+        case ballotStore.BallotType.proxy:
           methodToCreateBallot = this.createBallotForProxy;
           break;
         default:
@@ -205,6 +216,15 @@ export class NewBallot extends React.Component {
     }
   }
 
+  menuItemActive = (ballotType) => {
+    const { ballotStore } = this.props;
+    if (ballotType == ballotStore.ballotType) {
+      return 'ballot-types-i ballot-types-i_active';
+    } else {
+      return 'ballot-types-i';
+    }
+  }
+
   render() {
     const { contractsStore, ballotStore } = this.props;
     let validator = ballotStore.isNewValidatorPersonalData ? <Validator />: "";
@@ -212,15 +232,15 @@ export class NewBallot extends React.Component {
     let metadata
     let minThreshold = 0;
     switch (ballotStore.ballotType) {
-      case ballotStore.BallotType.keys: 
+      case ballotStore.BallotType.keys:
         metadata = <BallotKeysMetadata />;
         minThreshold = contractsStore.keysBallotThreshold;
         break;
-      case ballotStore.BallotType.minThreshold: 
+      case ballotStore.BallotType.minThreshold:
         metadata = <BallotMinThresholdMetadata />;
         minThreshold = contractsStore.minThresholdBallotThreshold;
         break;
-      case ballotStore.BallotType.proxy: 
+      case ballotStore.BallotType.proxy:
         metadata = <BallotProxyMetadata />;
         minThreshold = contractsStore.proxyBallotThreshold;
         break;
@@ -231,67 +251,99 @@ export class NewBallot extends React.Component {
       <section className="container new">
         <h1 className="title">New Ballot</h1>
         <form action="" className="new-form">
-          <div className="hidden">
-            <div className="left">
-              <div className="radio-container">
-                <input type="radio" name="ballot-type" id="ballot-for-validators" 
-                  value={ballotStore.BallotType.keys}
-                  checked={ballotStore.isBallotForKey} 
-                  onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
-                />
-                <label htmlFor="ballot-for-validators" className="radio">Validator Management Ballot</label>
-                <p className="hint">
-                  Ballot to add, remove or swap any type of key for existing or new validators.
-                </p>
+          <div className="new-form-side new-form-side_left">
+            <div className="ballot-types">
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.keys)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
+              >
+                Validator Management Ballot
+              </div>
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
+              >
+                Consenus Thershold Ballot
+              </div>
+              <div 
+                className={this.menuItemActive(ballotStore.BallotType.proxy)}
+                onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
+              >
+                Modify Proxy Contract Ballot
               </div>
             </div>
-            <div className="right">
-              <div className="radio-container">
-                <input type="radio" name="ballot-type" id="ballot-for-consensus" 
-                  value={ballotStore.BallotType.minThreshold}
-                  checked={ballotStore.isBallotForMinThreshold} 
-                  onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
-                />
-                <label htmlFor="ballot-for-consensus" className="radio">Consenus Threshold Ballot</label>
-                <p className="hint">
-                  Ballot to change the minimum threshold for consensus to vote for keys.
-                </p>
-              </div>
-            </div>
-            <div className="left">
-              <div className="radio-container">
-                <input type="radio" name="ballot-type" id="ballot-for-proxy" 
-                  value={ballotStore.BallotType.proxy}
-                  checked={ballotStore.isBallotForProxy} 
-                  onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
-                />
-                <label htmlFor="ballot-for-proxy" className="radio">Modify Proxy Contract Ballot</label>
-                <p className="hint">
-                  Ballot to change one of the proxy contracts.
-                </p>
-              </div>
-            </div>
-          </div>
-          <hr />
-          {validator}
-          {keysTypes}
-          {metadata}
-          <div className="form-el">
-            <label>Description of the ballot</label>
-            <div>
-              <textarea rows="4" 
-                value={ballotStore.memo}
-                onChange={(e) => ballotStore.setMemo(e)}
-                 ></textarea>
-            </div>
-          </div>
-          <div className="new-form-footer">
             <div className="info">
-              Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal<br />
-              You can create {contractsStore.validatorLimits.keys} ballot for keys<br />
-              You can create {contractsStore.validatorLimits.minThreshold} ballot for consensus<br />
-              You can create {contractsStore.validatorLimits.proxy} ballot for proxy<br />
+              <p className="info-title">Information of the ballot</p>
+              <div className="info-i">
+                Minimum {minThreshold} from {contractsStore.validatorsLength} validators  required to pass the proposal<br />
+              </div>
+              <div className="info-i">
+                You can create {contractsStore.validatorLimits.keys} ballot for keys<br />
+              </div>
+              <div className="info-i">
+                You can create {contractsStore.validatorLimits.minThreshold} ballot for consensus<br />
+              </div>
+              <div className="info-i">
+                You can create {contractsStore.validatorLimits.proxy} ballot for proxy<br />
+              </div>
             </div>
+          </div>
+          <div className="new-form-side new-form-side_right">
+            <div className="form-el">
+              <label>Description of the ballot</label>
+              <div>
+                <textarea rows="4"
+                  value={ballotStore.memo}
+                  onChange={(e) => ballotStore.setMemo(e)}
+                  ></textarea>
+              </div>
+            </div>
+            <hr />
+            <div className="hidden">
+              <div className="left">
+                <div className="radio-container">
+                  <input type="radio" name="ballot-type" id="ballot-for-validators"
+                    value={ballotStore.BallotType.keys}
+                    checked={ballotStore.isBallotForKey}
+                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
+                    />
+                  <label htmlFor="ballot-for-validators" className="radio">Validator Management Ballot</label>
+                  <p className="hint">
+                    Ballot to add, remove or swap any type of key for existing or new validators.
+                  </p>
+                </div>
+              </div>
+              <div className="right">
+                <div className="radio-container">
+                  <input type="radio" name="ballot-type" id="ballot-for-consensus"
+                    value={ballotStore.BallotType.minThreshold}
+                    checked={ballotStore.isBallotForMinThreshold}
+                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
+                    />
+                  <label htmlFor="ballot-for-consensus" className="radio">Consenus Threshold Ballot</label>
+                  <p className="hint">
+                    Ballot to change the minimum threshold for consensus to vote for keys.
+                  </p>
+                </div>
+              </div>
+              <div className="left">
+                <div className="radio-container">
+                  <input type="radio" name="ballot-type" id="ballot-for-proxy"
+                    value={ballotStore.BallotType.proxy}
+                    checked={ballotStore.isBallotForProxy}
+                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
+                    />
+                  <label htmlFor="ballot-for-proxy" className="radio">Modify Proxy Contract Ballot</label>
+                  <p className="hint">
+                    Ballot to change one of the proxy contracts.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <hr />
+            {validator}
+            {keysTypes}
+            {metadata}
             <button type="button" className="add-ballot" onClick={e => this.onClick(e)}>Add ballot</button>
           </div>
         </form>
