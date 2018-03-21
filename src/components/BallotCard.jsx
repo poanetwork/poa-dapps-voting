@@ -354,7 +354,8 @@ export class BallotCard extends React.Component {
 
     showCard = () => {
         let { commonStore } = this.props;
-        let show = commonStore.isActiveFilter ? !this.isFinalized : true;
+        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && this.timeToFinish.val == 0 : true;
+        let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter;
         return show;
     }
 
@@ -396,7 +397,8 @@ export class BallotCard extends React.Component {
 
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
-        let ballotClass = (this.showCard() && (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
+        let isFromSearch = (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern);
+        let ballotClass = (this.showCard() && isFromSearch) ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
         const threshold = this.getThreshold(contractsStore, votingType);
         return (
           <div className={ballotClass}>

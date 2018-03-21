@@ -27,6 +27,9 @@ messages.SHOULD_BE_MORE_THAN_TWO_DAYS = (duration, neededHours, neededMinutes) =
 		Please add ${neededHours} hours and ${neededMinutes} minutes in order to set correct end time
 	`;
 }
+messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS = (duration) => {
+	return `Ballot end time should not be more than 14 days from now in UTC time. Current duration is ${duration} hours.`;
+}
 messages.FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";

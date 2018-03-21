@@ -13,19 +13,20 @@ export default class VotingToChangeProxy {
     let votingToChangeProxyABI = await helpers.getABI(branch, 'VotingToChangeProxyAddress')
 
     this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
   createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender, memo}) {
-    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeProxyInstance.methods.vote(_id, choice).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice})
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeProxyInstance.methods.finalize(_id).send({from: sender})
+    return this.votingToChangeProxyInstance.methods.finalize(_id).send({from: sender, gasPrice: this.gasPrice})
   }
 
   //getters

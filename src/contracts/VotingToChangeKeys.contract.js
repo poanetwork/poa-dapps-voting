@@ -13,19 +13,20 @@ export default class VotingToChangeKeys {
     let votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
 
     this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
   createVotingForKeys({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
-    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice});
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender});
+    return this.votingToChangeKeysInstance.methods.finalize(_id).send({from: sender, gasPrice: this.gasPrice});
   }
 
   //getters
