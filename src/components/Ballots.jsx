@@ -13,10 +13,13 @@ export class Ballots extends React.Component {
 
   render () {
     const { ballotsStore } = this.props;
+    let filteredBallotCards = ballotsStore.ballotCards.toJS().sort((a, b) => {
+      return b.props.startTime - a.props.startTime;
+    })
     return (
       <section className="container ballots">
         <h1 className="title">Ballots</h1>
-        {ballotsStore.ballotCards.toJS()}
+        {filteredBallotCards}
       </section>
     );
   }

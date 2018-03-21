@@ -90,24 +90,14 @@ export class BallotCard extends React.Component {
     @action("Get start time of keys ballot")
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let startTime;
-        try { 
-            startTime = await this.getContract(contractsStore, votingType).getStartTime(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let startTime = startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
         this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
     }
 
     @action("Get end time of keys ballot")
     getEndTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let endTime;
-        try { 
-            endTime = await this.getContract(contractsStore, votingType).getEndTime(id); 
-        } catch(e) {
-            console.log(e.message);
-        }
+        let endTime = await this.repeatGetProperty(contractsStore, votingType, id, "getEndTime", 0);
         this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
     }
 
@@ -156,12 +146,7 @@ export class BallotCard extends React.Component {
     @action("Get creator")
     getCreator = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let votingState;
-        try { 
-            votingState = await this.getContract(contractsStore, votingType).votingState(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
         if (votingState) {
             this.getValidatorFullname(votingState.creator);
         }
@@ -170,12 +155,7 @@ export class BallotCard extends React.Component {
     @action("Get progress")
     getProgress = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let progress;
-        try { 
-            progress = await this.getContract(contractsStore, votingType).getProgress(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let progress = await this.repeatGetProperty(contractsStore, votingType, id, "getProgress", 0);
         if (progress) {
             this.progress = Number(progress);
         }
@@ -184,12 +164,7 @@ export class BallotCard extends React.Component {
     @action("Get total voters")
     getTotalVoters = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let totalVoters;
-        try { 
-            totalVoters = await this.getContract(contractsStore, votingType).getTotalVoters(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let totalVoters = await this.repeatGetProperty(contractsStore, votingType, id, "getTotalVoters", 0);
         if (totalVoters) {
             this.totalVoters = Number(totalVoters);
         }
@@ -198,24 +173,14 @@ export class BallotCard extends React.Component {
     @action("Get isFinalized")
     getIsFinalized = async() => {
         const { contractsStore, id, votingType } = this.props;
-        let isFinalized;
-        try { 
-            isFinalized = await this.getContract(contractsStore, votingType).getIsFinalized(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let isFinalized = await this.repeatGetProperty(contractsStore, votingType, id, "getIsFinalized", 0);
         this.isFinalized = isFinalized;
     }
 
     @action("Get validator full name")
     getValidatorFullname = async (_miningKey) => {
         const { contractsStore } = this.props;
-        let validator;
-        try {
-            validator = await contractsStore.validatorMetadata.validators(_miningKey);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let validator = await this.repeatGetProperty(contractsStore, "validatorMetadata", _miningKey, "validators", 0);
         let firstName, lastName, fullName
         if (validator) {
             firstName = toAscii(validator.firstName);
@@ -239,23 +204,13 @@ export class BallotCard extends React.Component {
 
     isActive = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let _isActive;
-        try {
-            _isActive = await this.getContract(contractsStore, votingType).isActive(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let _isActive = await this.repeatGetProperty(contractsStore, votingType, id, "isActive", 0);
         return _isActive;
     }
 
     getMemo = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let memo;
-        try {
-            memo = await this.getContract(contractsStore, votingType).getMemo(id);
-        } catch(e) {
-            console.log(e.message);
-        }
+        let memo = await this.repeatGetProperty(contractsStore, votingType, id, "getMemo", 0);
         this.memo = memo;
         return memo;
     }
@@ -328,14 +283,36 @@ export class BallotCard extends React.Component {
         });
     }
 
-    getContract(contractsStore, votingType) {
-        switch(votingType) {
+    repeatGetProperty = async (contractsStore, contractType, id, methodID, tryID) => {
+        try {
+            let val = await this.getContract(contractsStore, contractType)[methodID](id);
+            if (tryID > 0) {
+                console.log(`success from Try ${tryID + 1}`);
+            }
+            return val;
+        } catch(e) {
+            if (tryID < 10) {
+                console.log(`trying to repeat get value again... Try ${tryID + 1}`);
+                tryID++;
+                await setTimeout(async () => {
+                    this.repeatGetProperty(contractsStore, contractType, id, methodID, tryID);
+                }, 1000)
+            } else {
+                return null;
+            }
+        }
+    }
+
+    getContract(contractsStore, contractType) {
+        switch(contractType) {
             case "votingToChangeKeys":
                 return contractsStore.votingToChangeKeys;
             case "votingToChangeMinThreshold":
                 return contractsStore.votingToChangeMinThreshold;
             case "votingToChangeProxy":
                 return contractsStore.votingToChangeProxy;
+            case "validatorMetadata":
+                return contractsStore.validatorMetadata;
             default:
                 return contractsStore.votingToChangeKeys;
         }
@@ -420,7 +397,6 @@ export class BallotCard extends React.Component {
 
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
-        console.log(votingType);
         let isFromSearch = (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern);
         let ballotClass = (this.showCard() && isFromSearch) ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
         const threshold = this.getThreshold(contractsStore, votingType);
