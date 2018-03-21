@@ -1,15 +1,41 @@
 .new {
   &-form {
     @extend %white-block;
+    display: flex;
     overflow: hidden;
+    padding: 0;
 
-    &-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    @media screen and (max-width: $tablet-width) {
+      display: block;
+    }
 
-      @media screen and (max-width: $mobile-width) {
-        flex-direction: column;
+    &-side {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      box-sizing: border-box;
+
+      @media screen and (max-width: $tablet-width) {
+        width: 100% !important;
+      }
+
+      &_left {
+        width: 30%;
+
+        @media screen and (max-width: $tablet-width) {
+          padding-bottom: 0;
+        }
+      }
+
+      &_right {
+        width: 70%;
+        border-left: 1px solid #e5eef9;
+        padding-left: 30px;
+        padding-right: 30px;
+
+        @media screen and (max-width: $tablet-width) {
+          border: 0;
+          padding-top: 0;
+        }
       }
     }
   }

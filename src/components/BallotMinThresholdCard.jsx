@@ -11,7 +11,12 @@ export class BallotMinThresholdCard extends React.Component {
   @action("Get proposed value of min threshold ballot")
   getProposedValue = async () => {
     const { contractsStore, id } = this.props;
-    let proposedValue = await contractsStore.votingToChangeMinThreshold.getProposedValue(id);
+    let proposedValue;
+    try {
+      proposedValue = await contractsStore.votingToChangeMinThreshold.getProposedValue(id);
+    } catch(e) {
+      console.log(e.message);
+    }
     this.proposedValue = proposedValue;
   }
 

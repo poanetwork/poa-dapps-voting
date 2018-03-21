@@ -6,7 +6,8 @@ label {
   font-family: 'Open Sans', sans-serif;
 }
 
-input {
+input,
+textarea {
   @extend %form-el;
 
   &:focus {
@@ -16,6 +17,14 @@ input {
   &[type='radio'] {
     display: none;
   }
+}
+
+textarea {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 70px;
+  resize: none;
 }
 
 select {
