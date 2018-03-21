@@ -13,19 +13,20 @@ export default class VotingToChangeMinThreshold {
     let votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
 
     this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
   createBallotToChangeThreshold({startTime, endTime, proposedValue, sender, memo}) {
-    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender})
+    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
-    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).send({from: sender})
+    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice})
   }
 
   finalize(_id, sender) {
-    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).send({from: sender})
+    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).send({from: sender, gasPrice: this.gasPrice})
   }
 
   //getters
