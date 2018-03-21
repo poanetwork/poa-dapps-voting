@@ -54,7 +54,12 @@ export class BallotKeysCard extends React.Component {
   @action("Get ballot type of keys ballot")
   getBallotType = async () => {
     const { contractsStore, id } = this.props;
-    let ballotType = await contractsStore.votingToChangeKeys.getBallotType(id);
+    let ballotType;
+    try {
+      ballotType = await contractsStore.votingToChangeKeys.getBallotType(id);
+    } catch(e) {
+      console.log(e.message);
+    }
     this.ballotType = ballotType;
     this.getBallotTypeDisplayName(ballotType);
   }
@@ -62,7 +67,12 @@ export class BallotKeysCard extends React.Component {
   @action("Get affected key type of keys ballot")
   getAffectedKeyType = async () => {
     const { contractsStore, id } = this.props;
-    let affectedKeyType = await contractsStore.votingToChangeKeys.getAffectedKeyType(id);
+    let affectedKeyType;
+    try {
+      affectedKeyType = await contractsStore.votingToChangeKeys.getAffectedKeyType(id);
+    } catch(e) {
+      console.log(e.message);
+    }
     this.affectedKeyType = affectedKeyType;
     this.getAffectedKeyTypeDisplayName(affectedKeyType);
   }
@@ -71,15 +81,33 @@ export class BallotKeysCard extends React.Component {
   @action("Get affected key of keys ballot")
   getAffectedKey = async () => {
     const { contractsStore, id } = this.props;
-    let affectedKey = await contractsStore.votingToChangeKeys.getAffectedKey(id);
+    let affectedKey;
+    try {
+      affectedKey = await contractsStore.votingToChangeKeys.getAffectedKey(id);
+    } catch (e) {
+      console.log(e.message);
+    }
     this.affectedKey = affectedKey;
   }
   @action("Get mining key of keys ballot")
   getMiningKey = async () => {
     const { contractsStore, id } = this.props;
-    let miningKey = await contractsStore.votingToChangeKeys.getMiningKey(id);
-    const metadata = await contractsStore.getValidatorMetadata(miningKey)
-    this.miningKey = `${metadata.lastName} ${miningKey}`;
+    let miningKey, metadata;
+    try {
+      miningKey = await contractsStore.votingToChangeKeys.getMiningKey(id);
+    } catch(e) {
+      console.log(e.message);
+    }
+    try {
+      metadata = await contractsStore.getValidatorMetadata(miningKey);
+    } catch(e) {
+      console.log(e.message);
+    }
+    if (metadata) {
+      this.miningKey = `${metadata.lastName} ${miningKey}`;
+    } else {
+      this.miningKey = `${miningKey}`;
+    }
   }
 
   constructor(props) {
@@ -93,10 +121,11 @@ export class BallotKeysCard extends React.Component {
   isSearchPattern = () => {
     let { commonStore } = this.props;
     if (commonStore.searchTerm) {
+      const isMiningKeyPattern = String(this.miningKey).toLowerCase().includes(commonStore.searchTerm);
       const isAffectedKeyPattern = String(this.affectedKey).toLowerCase().includes(commonStore.searchTerm);
       const isAffectedKeyTypeDisplayNamePattern = String(this.affectedKeyTypeDisplayName).toLowerCase().includes(commonStore.searchTerm);
       const isBallotTypeDisplayNamePattern = String(this.ballotTypeDisplayName).toLowerCase().includes(commonStore.searchTerm);
-      return  (isAffectedKeyPattern || isAffectedKeyTypeDisplayNamePattern || isBallotTypeDisplayNamePattern);
+      return  (isMiningKeyPattern || isAffectedKeyPattern || isAffectedKeyTypeDisplayNamePattern || isBallotTypeDisplayNamePattern);
     }
     return true;
   }

@@ -26,10 +26,10 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label htmlFor="key">Mining Key</label>
+              <label htmlFor="mining-key">Mining Key</label>
               <Select.Creatable
                 name="form-field-name"
-                id="key"
+                id="mining-key"
                 value={ballotStore.ballotKeys.miningKey} 
                 onChange={ballotStore.setMiningKey} 
                 options={options}
@@ -41,8 +41,8 @@ export class BallotKeysMetadata extends React.Component {
           </div>
           <div className="left">
             <div className="form-el">
-              <label htmlFor="key">Ballot End</label>
-              <input type="datetime-local" id="key" 
+              <label htmlFor="datetime-local">Ballot End</label>
+              <input type="datetime-local" id="datetime-local"
                 value={ballotStore.endTime}
                 min={ballotStore.endTime}
                 onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
