@@ -29,6 +29,7 @@ export class BallotCard extends React.Component {
         displayValue: zeroTimeTo,
         title: "To close"
     };
+    @observable creatorMiningKey;
     @observable creator;
     @observable progress;
     @observable totalVoters;
@@ -220,6 +221,7 @@ export class BallotCard extends React.Component {
             lastName = toAscii(validator.lastName);
             fullName = `${firstName} ${lastName}`;
         }
+        this.creatorMiningKey = _miningKey;
         this.creator = fullName ? fullName : _miningKey;
     }
 
@@ -382,8 +384,20 @@ export class BallotCard extends React.Component {
         let { commonStore } = this.props;
         if (commonStore.searchTerm) {
             if (commonStore.searchTerm.length > 0) {
-                const isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm);
-                return  isCreatorPattern;
+                const _isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm);
+                const _isCreatorMiningKeyPattern = String(this.creatorMiningKey).toLowerCase().includes(commonStore.searchTerm);
+                return  _isCreatorPattern || _isCreatorMiningKeyPattern;
+            }
+        }
+        return true;
+    }
+
+    isMemoPattern = () => {
+        let { commonStore } = this.props;
+        if (commonStore.searchTerm) {
+            if (commonStore.searchTerm.length > 0) {
+                const _isMemoPattern = String(this.memo).toLowerCase().includes(commonStore.searchTerm);
+                return  _isMemoPattern;
             }
         }
         return true;
@@ -405,7 +419,7 @@ export class BallotCard extends React.Component {
     render () {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
         console.log(votingType);
-        let ballotClass = (this.showCard() && (this.isCreatorPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
+        let ballotClass = (this.showCard() && (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern)) ? "ballots-i" : "ballots-i display-none";
         const threshold = this.getThreshold(contractsStore, votingType);
         return (
           <div className={ballotClass}>

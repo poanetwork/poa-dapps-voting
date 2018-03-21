@@ -117,10 +117,11 @@ export class BallotKeysCard extends React.Component {
   isSearchPattern = () => {
     let { commonStore } = this.props;
     if (commonStore.searchTerm) {
+      const isMiningKeyPattern = String(this.miningKey).toLowerCase().includes(commonStore.searchTerm);
       const isAffectedKeyPattern = String(this.affectedKey).toLowerCase().includes(commonStore.searchTerm);
       const isAffectedKeyTypeDisplayNamePattern = String(this.affectedKeyTypeDisplayName).toLowerCase().includes(commonStore.searchTerm);
       const isBallotTypeDisplayNamePattern = String(this.ballotTypeDisplayName).toLowerCase().includes(commonStore.searchTerm);
-      return  (isAffectedKeyPattern || isAffectedKeyTypeDisplayNamePattern || isBallotTypeDisplayNamePattern);
+      return  (isMiningKeyPattern || isAffectedKeyPattern || isAffectedKeyTypeDisplayNamePattern || isBallotTypeDisplayNamePattern);
     }
     return true;
   }
