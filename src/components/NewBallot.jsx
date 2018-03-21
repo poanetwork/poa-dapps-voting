@@ -20,7 +20,7 @@ export class NewBallot extends React.Component {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
     const twoDays = moment.utc().add(2, 'days').format();
     let neededMinutes = moment(twoDays).diff(moment(ballotStore.endTime), 'minutes');
-    let neededHours = Math.round(neededMinutes/60);
+    let neededHours = Math.round(neededMinutes / 60);
     let duration = 48 - neededHours;
 
     if (ballotStore.isNewValidatorPersonalData) {
@@ -33,15 +33,23 @@ export class NewBallot extends React.Component {
       }
     }
 
-    if(!ballotStore.memo){
+    if(!ballotStore.memo) {
       swal("Warning!", messages.DESCRIPTION_IS_EMPTY, "warning");
       commonStore.hideLoading();
       return false;
     }
 
     if(neededMinutes > 0) {
-      neededMinutes = neededHours*60 - neededMinutes;
+      neededMinutes = neededHours * 60 - neededMinutes;
       swal("Warning!", messages.SHOULD_BE_MORE_THAN_TWO_DAYS(duration, neededHours, neededMinutes), "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    const twoWeeks = moment.utc().add(14, 'days').format();
+    let exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes');
+    if (exceededMinutes > 0) {
+      swal("Warning!", messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS(duration), "warning");
       commonStore.hideLoading();
       return false;
     }
