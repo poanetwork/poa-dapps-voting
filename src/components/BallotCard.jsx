@@ -377,7 +377,8 @@ export class BallotCard extends React.Component {
 
     showCard = () => {
         let { commonStore } = this.props;
-        let show = commonStore.isActiveFilter ? !this.isFinalized : true;
+        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && this.timeToFinish.val == 0 : true;
+        let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter;
         return show;
     }
 
