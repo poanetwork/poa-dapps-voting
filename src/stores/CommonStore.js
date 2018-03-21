@@ -4,11 +4,13 @@ class CommonStore {
 	@observable loading;
 	@observable rootPath;
 	@observable isActiveFilter;
+	@observable isToFinalizeFilter;
 	@observable searchTerm;
 
 	constructor() {
 		this.loading = false;
 		this.isActiveFilter = false;
+		this.isToFinalizeFilter = false;
 		this.rootPath = '/poa-dapps-voting'
 	}
 

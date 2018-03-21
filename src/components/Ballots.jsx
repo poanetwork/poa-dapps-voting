@@ -8,6 +8,7 @@ export class Ballots extends React.Component {
   componentWillMount () {
     const { commonStore } = this.props;
     commonStore.isActiveFilter = this.props.isActiveFilter;
+    commonStore.isToFinalizeFilter = this.props.isToFinalizeFilter;
   }
 
   render () {

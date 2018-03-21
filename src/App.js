@@ -17,6 +17,10 @@ class App extends Component {
     return <Ballots isActiveFilter={true}/>;
   }
 
+  onToFinalizeBallotsRender = () => {
+    return <Ballots isToFinalizeFilter={true}/>;
+  }
+
   onNewBallotRender = () => {
     return <NewBallot/>;
   }
@@ -37,7 +41,8 @@ class App extends Component {
     currentPath === `${commonStore.rootPath}` 
     || currentPath === "/"
     || currentPath === `${commonStore.rootPath}/`
-    || currentPath === `${commonStore.rootPath}/active`;
+    || currentPath === `${commonStore.rootPath}/active`
+    || currentPath === `${commonStore.rootPath}/tofinalize`;
     return showNavPan;
   }
 
@@ -49,6 +54,7 @@ class App extends Component {
         <div className="nav">
         <NavLink className="nav-i" exact activeClassName="nav-i_active" to={`${commonStore.rootPath}/`}>All</NavLink>
         <NavLink className="nav-i" activeClassName="nav-i_active" to={`${commonStore.rootPath}/active`}>Active</NavLink>
+        <NavLink className="nav-i" activeClassName="nav-i_active" to={`${commonStore.rootPath}/tofinalize`}>To finalize</NavLink>
         </div>
         <input type="search" className="search-input" onChange={this.onSearch}/>
       </div>
@@ -61,6 +67,7 @@ class App extends Component {
         <Route exact path={`/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender}/>
+        <Route exact path={`${commonStore.rootPath}/tofinalize`} render={this.onToFinalizeBallotsRender}/>
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
         {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         <Footer netId={contractsStore.netId} />
