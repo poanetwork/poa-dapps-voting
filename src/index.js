@@ -33,27 +33,29 @@ class AppMainRouter extends Component {
     commonStore.showLoading();
 
     getWeb3().then(async (web3Config) => {
-      await getContractsAddresses('sokol');
-      await getContractsAddresses('core');
+      let getSokolContractsAddresses = getContractsAddresses('sokol');
+      let getCoreContractsAddresses = getContractsAddresses('core');
+      await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses]);
       
-      await contractsStore.setWeb3Instance(web3Config);
-      await contractsStore.setPoaConsensus(web3Config);
-      await contractsStore.setBallotsStorage(web3Config);
-      await contractsStore.setVotingToChangeKeys(web3Config);
-      await contractsStore.setVotingToChangeMinThreshold(web3Config);
-      await contractsStore.setVotingToChangeProxy(web3Config);
-      await contractsStore.setValidatorMetadata(web3Config);
+      contractsStore.setWeb3Instance(web3Config);
+      
+      let setPoaConsensus = contractsStore.setPoaConsensus(web3Config);
+      let setBallotsStorage = contractsStore.setBallotsStorage(web3Config);
+      let setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config);
+      let setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config);
+      let setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config);
+      let setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config);
 
-      await contractsStore.getAllKeysBallots();
-      await contractsStore.getAllMinThresholdBallots();
-      await contractsStore.getAllProxyBallots();
+      await Promise.all([setPoaConsensus, setBallotsStorage, setVotingToChangeKeys, setVotingToChangeMinThreshold, setVotingToChangeProxy, setValidatorMetadata])
+
+      await contractsStore.getAllBallots();
+      await contractsStore.setMiningKey(web3Config);
 
       contractsStore.getValidatorsLength();
       contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();
       contractsStore.getProxyBallotThreshold();
       contractsStore.setVotingKey(web3Config);
-      await contractsStore.setMiningKey(web3Config);
       contractsStore.getValidatorActiveBallots();
       contractsStore.getAllValidatorMetadata();
       console.log("votingKey", contractsStore.votingKey);
