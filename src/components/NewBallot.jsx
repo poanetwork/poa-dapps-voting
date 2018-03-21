@@ -196,7 +196,7 @@ export class NewBallot extends React.Component {
         default:
           break;
       }
-      let curDateInSeconds = moment.utc().add(5, 'minute').unix();
+      let curDateInSeconds = moment.utc().add(5, 'minutes').unix();
       methodToCreateBallot(curDateInSeconds)
       .on("receipt", (tx) => {
         commonStore.hideLoading();

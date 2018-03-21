@@ -120,12 +120,13 @@ export class BallotCard extends React.Component {
         let msFinish = finish.diff(_now);
 
         if (msStart > 0) {
-            this.timeToStart.val = msStart;
+            this.timeToStart.val = msStart + 5000;
             this.timeToStart.displayValue = this.formatMs(msStart, ":mm:ss");
             return this.timeTo = this.timeToStart;
         }
 
         if (msFinish > 0) {
+            this.timeToStart.val = 0;
             this.timeToFinish.val = msFinish;
             this.timeToFinish.displayValue = this.formatMs(msFinish, ":mm:ss");
             return this.timeTo = this.timeToFinish;
@@ -225,26 +226,26 @@ export class BallotCard extends React.Component {
         this.creator = fullName ? fullName : _miningKey;
     }
 
-    isValidaVote = async () => {
+    isValidVote = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isValidVote;
+        let _isValidVote;
         try {
-            isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey);
+            _isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey);
         } catch(e) {
             console.log(e.message);
         }
-        return isValidVote;
+        return _isValidVote;
     }
 
     isActive = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let isActive;
+        let _isActive;
         try {
-            isActive = await this.getContract(contractsStore, votingType).isActive(id);
+            _isActive = await this.getContract(contractsStore, votingType).isActive(id);
         } catch(e) {
             console.log(e.message);
         }
-        return isActive;
+        return _isActive;
     }
 
     getMemo = async () => {
@@ -271,7 +272,7 @@ export class BallotCard extends React.Component {
             return;
         }
         commonStore.showLoading();
-        let isValidVote = await this.isValidaVote();
+        let isValidVote = await this.isValidVote();
         if (!isValidVote) {
             commonStore.hideLoading();
             swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
