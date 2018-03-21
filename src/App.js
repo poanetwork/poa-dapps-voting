@@ -6,7 +6,7 @@ import './assets/App.css';
 import Loading from './Loading';
 import { inject, observer } from 'mobx-react';
 
-@inject("commonStore")
+@inject("commonStore","contractsStore")
 @observer
 class App extends Component {
   onBallotsRender = () => {
@@ -42,8 +42,8 @@ class App extends Component {
   }
 
   render() {
-    const { commonStore } = this.props;
-    const loading = commonStore.loading ? <Loading /> : ''
+    const { commonStore, contractsStore } = this.props;
+    const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
     const nav = this.shouldShowNavPan() ? <div className="search">
       <div className="container flex-container">
         <div className="nav">
@@ -56,14 +56,14 @@ class App extends Component {
     return (
       <div>
         {loading}
-        <Header />
+        <Header netId={contractsStore.netId} />
         {nav}
         <Route exact path={`/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender}/>
         <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender}/>
         <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender}/>
         {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
-        <Footer />
+        <Footer netId={contractsStore.netId} />
       </div>
     );
   }

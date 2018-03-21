@@ -103,7 +103,11 @@ export class BallotKeysCard extends React.Component {
     } catch(e) {
       console.log(e.message);
     }
-    this.miningKey = `${metadata.lastName} ${miningKey}`;
+    if (metadata) {
+      this.miningKey = `${metadata.lastName} ${miningKey}`;
+    } else {
+      this.miningKey = `${miningKey}`;
+    }
   }
 
   constructor(props) {
