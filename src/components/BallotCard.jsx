@@ -91,7 +91,7 @@ export class BallotCard extends React.Component {
     @action("Get start time of keys ballot")
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let startTime = startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
+        let startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
         this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
     }
 
@@ -195,7 +195,7 @@ export class BallotCard extends React.Component {
     @action("validator has already voted")
     getHasAlreadyVoted = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let _hasAlreadyVoted;
+        let _hasAlreadyVoted = false;
         try {
             _hasAlreadyVoted = await this.getContract(contractsStore, votingType).hasAlreadyVoted(id, contractsStore.votingKey);
         } catch(e) {
@@ -415,7 +415,7 @@ export class BallotCard extends React.Component {
         let isFromSearch = (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern);
         let ballotClass = (this.showCard() && isFromSearch) ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
         let voteScaleClass = this.isFinalized ? "vote-scale" : "vote-scale vote-scale-not-finalized";
-        let hasAlreadyVotedLabel = <div type="button" className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">You already voted</div>;
+        let hasAlreadyVotedLabel = <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">You already voted</div>;
         let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : "";
         const threshold = this.getThreshold(contractsStore, votingType);
         return (
