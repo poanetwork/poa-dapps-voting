@@ -48,14 +48,14 @@ class AppMainRouter extends Component {
 
       await Promise.all([setPoaConsensus, setBallotsStorage, setVotingToChangeKeys, setVotingToChangeMinThreshold, setVotingToChangeProxy, setValidatorMetadata])
 
-      await contractsStore.getAllBallots();
       await contractsStore.setMiningKey(web3Config);
+      await contractsStore.setVotingKey(web3Config);
+      await contractsStore.getAllBallots();
 
       contractsStore.getValidatorsLength();
       contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();
       contractsStore.getProxyBallotThreshold();
-      contractsStore.setVotingKey(web3Config);
       contractsStore.getValidatorActiveBallots();
       contractsStore.getAllValidatorMetadata();
       console.log("votingKey", contractsStore.votingKey);

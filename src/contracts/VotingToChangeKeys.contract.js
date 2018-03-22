@@ -58,6 +58,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
   }
 
+  hasAlreadyVoted(_id, votingKey) {
+    return this.votingToChangeKeysInstance.methods.hasAlreadyVoted(_id, votingKey).call();
+  }
+
   isValidVote(_id, votingKey) {
     return this.votingToChangeKeysInstance.methods.isValidVote(_id, votingKey).call();
   }
