@@ -1,4 +1,4 @@
-var toAscii = function(hex) {
+var toAscii = (hex) => {
   var str = '',
       i = 0,
       l = hex.length;

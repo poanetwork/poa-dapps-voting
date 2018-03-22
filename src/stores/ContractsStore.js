@@ -13,11 +13,8 @@ import commonStore from './CommonStore'
 import { BallotKeysCard } from "../components/BallotKeysCard";
 import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
 import { BallotProxyCard } from "../components/BallotProxyCard";
-import moment from "moment";
 
 import "babel-polyfill";
-
-const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
 
 class ContractsStore {
 	@observable poaConsensus;
@@ -75,7 +72,7 @@ class ContractsStore {
 		await this.poaConsensus.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Set Ballots Storage contract")
@@ -84,7 +81,7 @@ class ContractsStore {
 		await this.ballotsStorage.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Set VotingToChangeKeys contract")
@@ -93,7 +90,7 @@ class ContractsStore {
 		await this.votingToChangeKeys.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Set VotingToChangeMinThreshold contract")
@@ -102,7 +99,7 @@ class ContractsStore {
 		await this.votingToChangeMinThreshold.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Set VotingToChangeProxy contract")
@@ -111,7 +108,7 @@ class ContractsStore {
 		await this.votingToChangeProxy.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Set ValidatorMetadata contract")
@@ -120,7 +117,7 @@ class ContractsStore {
 		await this.validatorMetadata.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
-      	});
+		});
 	}
 
 	@action("Get validators length")
@@ -137,8 +134,7 @@ class ContractsStore {
 	setMiningKey = async (web3Config) => {
 		try {
 			this.miningKey = await this.votingToChangeKeys.votingToChangeKeysInstance.methods.getMiningByVotingKey(web3Config.defaultAccount).call();
-		}
-		catch(e) {
+		} catch(e) {
 			console.log(e)
 			this.miningKey = "0x0000000000000000000000000000000000000000";
 		}
@@ -159,64 +155,64 @@ class ContractsStore {
 
 		await Promise.all([allKeysBallotsIDs, allMinThresholdBallotsIDs, allProxyBallotsIDs]);
 
-	    let allBallotsIDsLength = allKeysBallotsIDs.length + allMinThresholdBallotsIDs.length + allProxyBallotsIDs.length;
+		let allBallotsIDsLength = allKeysBallotsIDs.length + allMinThresholdBallotsIDs.length + allProxyBallotsIDs.length;
 
-	    if (allBallotsIDsLength == 0) {
-	    	commonStore.hideLoading();
-	    }
+		if (allBallotsIDsLength == 0) {
+			commonStore.hideLoading();
+		}
 	}
 
 	getCards = async (allBallots, contractType) => {
 		let allBallotsIDs = [];
 		if (allBallots) {
 			allBallotsIDs = allBallots.map((event) => event.returnValues.id)
-		    for (let i = allBallotsIDs.length - 1; i >= 0; i--) {
+			for (let i = allBallotsIDs.length - 1; i >= 0; i--) {
 
-		    	let startTime = 0;
-		        try { 
-		            startTime = await this[contractType].getStartTime(allBallotsIDs[i]);
-		        } catch(e) {
-		            console.log(e.message);
-		        }
+				let startTime = 0;
+				try {
+					startTime = await this[contractType].getStartTime(allBallotsIDs[i]);
+				} catch(e) {
+					console.log(e.message);
+				}
 
-		        let card;
-		        switch(contractType) {
-		        	case "votingToChangeKeys":
-			        	card = <BallotKeysCard 
-				        	id={allBallotsIDs[i]} 
-			    			type={ballotStore.BallotType.keys} 
-			    			key={ballotsStore.ballotCards.length} 
-			    			startTime={startTime}/>
-			        	break;
-			        case "votingToChangeMinThreshold":
-			        	card = <BallotMinThresholdCard
-			        		id={allBallotsIDs[i]} 
-			    			type={ballotStore.BallotType.minThreshold} 
-			    			key={ballotsStore.ballotCards.length} 
-			    			startTime={startTime}/>
-			        	break;
-			        case "votingToChangeProxy":
-			        	card = <BallotProxyCard
-			        		id={allBallotsIDs[i]} 
-			    			type={ballotStore.BallotType.proxy} 
-			    			key={ballotsStore.ballotCards.length} 
-			    			startTime={startTime}/>
-			        	break;
-		        }
+				let card;
+				switch(contractType) {
+					case "votingToChangeKeys":
+					card = <BallotKeysCard
+					id={allBallotsIDs[i]}
+					type={ballotStore.BallotType.keys}
+					key={ballotsStore.ballotCards.length}
+					startTime={startTime}/>
+					break;
+					case "votingToChangeMinThreshold":
+					card = <BallotMinThresholdCard
+					id={allBallotsIDs[i]}
+					type={ballotStore.BallotType.minThreshold}
+					key={ballotsStore.ballotCards.length}
+					startTime={startTime}/>
+					break;
+					case "votingToChangeProxy":
+					card = <BallotProxyCard
+					id={allBallotsIDs[i]}
+					type={ballotStore.BallotType.proxy}
+					key={ballotsStore.ballotCards.length}
+					startTime={startTime}/>
+					break;
+				}
 
-		        ballotsStore.ballotCards.push(card);
-		    }
+				ballotsStore.ballotCards.push(card);
+			}
 
-		    return allBallotsIDs;
+			return allBallotsIDs;
 		}
 	}
 
 	@action("Get all keys ballots internal")
 	getAllBallotsIDsInternal = async () => {
 		let getAllKeysBallotsIDs = this.votingToChangeKeys.votingToChangeKeysInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-    	let getAllMinThresholdBallotsIDs = this.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-    	let getAllProxyBallotsIDs = this.votingToChangeProxy.votingToChangeProxyInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-	
+		let getAllMinThresholdBallotsIDs = this.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.getPastEvents('BallotCreated', {fromBlock: 0});
+		let getAllProxyBallotsIDs = this.votingToChangeProxy.votingToChangeProxyInstance.getPastEvents('BallotCreated', {fromBlock: 0});
+
 		return Promise.all([getAllKeysBallotsIDs, getAllMinThresholdBallotsIDs, getAllProxyBallotsIDs]);
 	}
 
@@ -253,7 +249,7 @@ class ContractsStore {
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
 			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
-		})	
+		})
 	}
 	@action
 	async getValidatorMetadata(miningKey) {

@@ -90,7 +90,7 @@ export class BallotCard extends React.Component {
     @action("Get start time of keys ballot")
     getStartTime = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let startTime = startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
+        let startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
         this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
     }
 
@@ -134,7 +134,7 @@ export class BallotCard extends React.Component {
         let formattedMs = hours + moment.utc(ms).format(":mm:ss");
         return formattedMs;
     }
-    
+
 
     @action("Get times")
     getTimes = async () => {
@@ -247,7 +247,9 @@ export class BallotCard extends React.Component {
     }
 
     finalize = async (e) => {
-        if (this.isFinalized) { return; }
+        if (this.isFinalized) {
+            return;
+        }
 
         if (this.timeToStart.val > 0) {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");

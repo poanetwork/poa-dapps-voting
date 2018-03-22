@@ -6,7 +6,7 @@ import './assets/App.css';
 import Loading from './Loading';
 import { inject, observer } from 'mobx-react';
 
-@inject("commonStore","contractsStore")
+@inject("commonStore", "contractsStore")
 @observer
 class App extends Component {
   onBallotsRender = () => {
@@ -37,8 +37,8 @@ class App extends Component {
   shouldShowNavPan = () => {
     const { commonStore } = this.props;
     const currentPath = this.props.location.pathname;
-    let showNavPan = 
-    currentPath === `${commonStore.rootPath}` 
+    let showNavPan =
+    currentPath === `${commonStore.rootPath}`
     || currentPath === "/"
     || currentPath === `${commonStore.rootPath}/`
     || currentPath === `${commonStore.rootPath}/active`

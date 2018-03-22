@@ -1,5 +1,5 @@
 let messages = {};
-messages.invalidVotingKeyMsg = function(key) {
+messages.invalidVotingKeyMsg = (key) => {
 	return `The key ${key} is not valid voting Key! Please make sure you have loaded correct voting key in metamask`;
 };
 messages.VOTED_SUCCESS_MSG = "You successfully voted";
@@ -19,7 +19,7 @@ Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wi
 messages.WRONG_NETWORK_MSG = `You aren't connected to POA Network. 
 Please, switch on POA plugin and refresh the page. 
 Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`;
-messages.ballotIsNotActiveMsg = function(timeToStart) {
+messages.ballotIsNotActiveMsg = (timeToStart) => {
 	return `The ballot is not active yet. Time to start: ${timeToStart}`;
 };
 messages.SHOULD_BE_MORE_THAN_TWO_DAYS = (duration, neededHours, neededMinutes) => {
@@ -33,7 +33,7 @@ messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS = (duration) => {
 messages.FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
-messages.wrongRepo = function(repo) {
+messages.wrongRepo = (repo) => {
 	return `There is no contracts.json in configured repo ${repo}`;
 };
 module.exports = {
