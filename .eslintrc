@@ -1,7 +1,7 @@
 {
 	"extends": "react-app",
 	"rules": {
-		"no-unused-vars": "off",
+		"no-unused-vars": "error",
 		"no-trailing-spaces": "error",
 		"no-mixed-spaces-and-tabs": "error",
 		"no-whitespace-before-property": "error",

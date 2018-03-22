@@ -13,11 +13,8 @@ import commonStore from './CommonStore'
 import { BallotKeysCard } from "../components/BallotKeysCard";
 import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
 import { BallotProxyCard } from "../components/BallotProxyCard";
-import moment from "moment";
 
 import "babel-polyfill";
-
-const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
 
 class ContractsStore {
 	@observable poaConsensus;
