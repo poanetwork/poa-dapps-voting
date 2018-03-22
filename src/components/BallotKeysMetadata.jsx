@@ -15,9 +15,9 @@ export class BallotKeysMetadata extends React.Component {
           <div className="left">
             <div className="form-el">
               <label htmlFor="key">Affected Key</label>
-              <input type="text" id="key" 
-                value={ballotStore.ballotKeys.affectedKey} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")} 
+              <input type="text" id="key"
+                value={ballotStore.ballotKeys.affectedKey}
+                onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")}
               />
               <p className="hint">
                 Affected key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
@@ -30,8 +30,8 @@ export class BallotKeysMetadata extends React.Component {
               <Select.Creatable
                 name="form-field-name"
                 id="mining-key"
-                value={ballotStore.ballotKeys.miningKey} 
-                onChange={ballotStore.setMiningKey} 
+                value={ballotStore.ballotKeys.miningKey}
+                onChange={ballotStore.setMiningKey}
                 options={options}
               />
               <p className="hint">
@@ -45,7 +45,7 @@ export class BallotKeysMetadata extends React.Component {
               <input type="datetime-local" id="datetime-local"
                 value={ballotStore.endTime}
                 min={ballotStore.endTime}
-                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
+                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")}
               />
               <p className="hint">
                 Ballot's end time.

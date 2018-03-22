@@ -1,9 +1,9 @@
 import { messages } from "./messages";
 
 let getWeb3 = () => {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
-    window.addEventListener('load', function () {
+    window.addEventListener('load', () => {
       var results
       var web3 = window.web3
 
@@ -51,7 +51,7 @@ let getWeb3 = () => {
 
       } else {
         reject({message: messages.NO_METAMASK_MSG})
-        console.error('Metamask not found'); 
+        console.error('Metamask not found');
       }
     })
   })

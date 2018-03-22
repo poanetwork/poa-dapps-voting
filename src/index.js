@@ -36,9 +36,9 @@ class AppMainRouter extends Component {
       let getSokolContractsAddresses = getContractsAddresses('sokol');
       let getCoreContractsAddresses = getContractsAddresses('core');
       await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses]);
-      
+
       contractsStore.setWeb3Instance(web3Config);
-      
+
       let setPoaConsensus = contractsStore.setPoaConsensus(web3Config);
       let setBallotsStorage = contractsStore.setBallotsStorage(web3Config);
       let setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config);

@@ -261,19 +261,19 @@ export class NewBallot extends React.Component {
         <form action="" className="new-form">
           <div className="new-form-side new-form-side_left">
             <div className="ballot-types">
-              <div 
+              <div
                 className={this.menuItemActive(ballotStore.BallotType.keys)}
                 onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
               >
                 Validator Management Ballot
               </div>
-              <div 
+              <div
                 className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
                 onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
               >
                 Consenus Thershold Ballot
               </div>
-              <div 
+              <div
                 className={this.menuItemActive(ballotStore.BallotType.proxy)}
                 onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
               >

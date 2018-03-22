@@ -25,7 +25,7 @@ export class BallotProxyCard extends React.Component {
   getContractType = async () => {
     const { contractsStore, id } = this.props;
     let contractType;
-    try { 
+    try {
       contractType = await contractsStore.votingToChangeProxy.getContractType(id);
     } catch(e) {
       console.log(e.message);

@@ -135,7 +135,7 @@ export class BallotCard extends React.Component {
         let formattedMs = hours + moment.utc(ms).format(":mm:ss");
         return formattedMs;
     }
-    
+
 
     @action("Get times")
     getTimes = async () => {
@@ -260,7 +260,9 @@ export class BallotCard extends React.Component {
     }
 
     finalize = async (e) => {
-        if (this.isFinalized) { return; }
+        if (this.isFinalized) {
+            return;
+        }
 
         if (this.timeToStart.val > 0) {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");

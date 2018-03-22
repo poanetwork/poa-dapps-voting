@@ -10,9 +10,9 @@ export class KeysTypes extends React.Component {
       <div className="hidden">
         <div className="left">
           <div className="radio-container">
-            <input type="radio" name="key-control" id="add-key" 
+            <input type="radio" name="key-control" id="add-key"
               value={ballotStore.KeysBallotType.add}
-              checked={ballotStore.isAddKeysBallotType} 
+              checked={ballotStore.isAddKeysBallotType}
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.add)}
             />
             <label htmlFor="add-key" className="radio radio_icon radio_add">Add key</label>
@@ -21,9 +21,9 @@ export class KeysTypes extends React.Component {
             </p>
           </div>
           <div className="radio-container">
-            <input type="radio" name="key-control" id="remove-key" 
+            <input type="radio" name="key-control" id="remove-key"
               value={ballotStore.KeysBallotType.remove}
-              checked={ballotStore.isRemoveKeysBallotType} 
+              checked={ballotStore.isRemoveKeysBallotType}
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.remove)}
             />
             <label htmlFor="remove-key" className="radio radio_icon radio_remove">Remove key</label>
@@ -32,9 +32,9 @@ export class KeysTypes extends React.Component {
             </p>
           </div>
           <div className="radio-container">
-            <input type="radio" name="key-control" id="swap-key" 
+            <input type="radio" name="key-control" id="swap-key"
               value={ballotStore.KeysBallotType.swap}
-              checked={ballotStore.isSwapKeysBallotType} 
+              checked={ballotStore.isSwapKeysBallotType}
               onChange={e => ballotStore.changeKeysBallotType(e, ballotStore.KeysBallotType.swap)}
             />
             <label htmlFor="swap-key" className="radio radio_icon radio_swap">Swap key</label>
@@ -45,9 +45,9 @@ export class KeysTypes extends React.Component {
         </div>
         <div className="right">
           <div className="radio-container">
-            <input type="radio" name="keys" id="mining-key" 
+            <input type="radio" name="keys" id="mining-key"
               value={ballotStore.KeyType.mining}
-              checked={ballotStore.isMiningKeyType} 
+              checked={ballotStore.isMiningKeyType}
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.mining)}
             />
             <label htmlFor="mining-key" className="radio">Mining Key</label>
@@ -56,9 +56,9 @@ export class KeysTypes extends React.Component {
             </p>
           </div>
           <div className="radio-container">
-            <input type="radio" name="keys" id="payout-key" 
+            <input type="radio" name="keys" id="payout-key"
               value={ballotStore.KeyType.payout}
-              checked={ballotStore.isPayoutKeyType} 
+              checked={ballotStore.isPayoutKeyType}
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.payout)}
             />
             <label htmlFor="payout-key" className="radio">Payout Key</label>
@@ -67,9 +67,9 @@ export class KeysTypes extends React.Component {
             </p>
           </div>
           <div className="radio-container">
-            <input type="radio" name="keys" id="voting-key" 
+            <input type="radio" name="keys" id="voting-key"
               value={ballotStore.KeyType.voting}
-              checked={ballotStore.isVotingKeyType} 
+              checked={ballotStore.isVotingKeyType}
               onChange={e => ballotStore.changeKeyType(e, ballotStore.KeyType.voting)}
             />
             <label htmlFor="voting-key" className="radio">Voting Key</label>
