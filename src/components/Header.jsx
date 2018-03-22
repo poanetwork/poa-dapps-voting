@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const Header = ({netId}) => {
-	console.log("netId: ", netId)
 	let headerClassName = netId === '77' ? 'sokol' : '';
 	const logoClassName = netId === '77' ? 'header-logo-sokol' : 'header-logo';
 	return(

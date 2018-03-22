@@ -54,6 +54,10 @@ export default class VotingToChangeProxy {
     return this.votingToChangeProxyInstance.methods.getIsFinalized(_id).call();
   }
 
+  hasAlreadyVoted(_id, votingKey) {
+    return this.votingToChangeProxyInstance.methods.hasAlreadyVoted(_id, votingKey).call();
+  }
+
   isValidVote(_id, votingKey) {
     return this.votingToChangeProxyInstance.methods.isValidVote(_id, votingKey).call();
   }

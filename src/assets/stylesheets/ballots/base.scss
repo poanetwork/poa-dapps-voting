@@ -106,6 +106,14 @@
     &--vote {
       @extend %_button;
 
+      &-label {
+        cursor: default;
+      }
+
+      &-label-right {
+        margin-left: auto !important;
+      }
+
       &_yes {
         margin-right: 15px;
         background-color: fade-out(#08b3f2, 0.9);

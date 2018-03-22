@@ -34,6 +34,7 @@ export class BallotCard extends React.Component {
     @observable progress;
     @observable totalVoters;
     @observable isFinalized;
+    @observable hasAlreadyVoted;
     @observable memo;
 
     @computed get finalizeButtonDisplayName() {
@@ -191,6 +192,18 @@ export class BallotCard extends React.Component {
         this.creator = fullName ? fullName : _miningKey;
     }
 
+    @action("validator has already voted")
+    getHasAlreadyVoted = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let _hasAlreadyVoted;
+        try {
+            _hasAlreadyVoted = await this.getContract(contractsStore, votingType).hasAlreadyVoted(id, contractsStore.votingKey);
+        } catch(e) {
+            console.log(e.message);
+        }
+        this.hasAlreadyVoted = _hasAlreadyVoted;
+    }
+
     isValidVote = async () => {
         const { contractsStore, id, votingType } = this.props;
         let _isValidVote;
@@ -334,10 +347,12 @@ export class BallotCard extends React.Component {
     constructor(props) {
         super(props);
         this.isFinalized = false;
+        this.hasAlreadyVoted = false;
         this.getTimes();
         this.getCreator();
         this.getTotalVoters();
         this.getProgress();
+        this.getHasAlreadyVoted();
         this.getIsFinalized();
         this.getMemo();
     }
@@ -354,7 +369,7 @@ export class BallotCard extends React.Component {
 
     showCard = () => {
         let { commonStore } = this.props;
-        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && this.timeToFinish.val == 0 : true;
+        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && this.timeToFinish.val == 0 && this.timeToStart.val == 0 : true;
         let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter;
         return show;
     }
@@ -399,6 +414,9 @@ export class BallotCard extends React.Component {
         let { contractsStore, votingType, children, isSearchPattern } = this.props;
         let isFromSearch = (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern);
         let ballotClass = (this.showCard() && isFromSearch) ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
+        let voteScaleClass = this.isFinalized ? "vote-scale" : "vote-scale vote-scale-not-finalized";
+        let hasAlreadyVotedLabel = <div type="button" className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">You already voted</div>;
+        let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : "";
         const threshold = this.getThreshold(contractsStore, votingType);
         return (
           <div className={ballotClass}>
@@ -430,7 +448,7 @@ export class BallotCard extends React.Component {
                   <p className="vote-scale--value">No</p>
                   <p className="vote-scale--votes">Votes: {this.votesAgainstNumber}</p>
                   <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
-                  <div className="vote-scale">
+                  <div className={voteScaleClass}>
                     <div className="vote-scale--fill vote-scale--fill_yes" style={{width: `${this.votesAgainstPercents}%`}}></div>
                   </div>
                 </div>
@@ -440,7 +458,7 @@ export class BallotCard extends React.Component {
                   <p className="vote-scale--value">Yes</p>
                   <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
                   <p className="vote-scale--percentage">{this.votesForPercents}%</p>
-                  <div className="vote-scale">
+                  <div className={voteScaleClass}>
                     <div className="vote-scale--fill vote-scale--fill_no" style={{width: `${this.votesForPercents}%`}}></div>
                   </div>
                 </div>
@@ -459,7 +477,8 @@ export class BallotCard extends React.Component {
                 <button type="button" onClick={(e) => this.finalize(e)} className={this.finalizeButtonClass}>{this.finalizeButtonDisplayName}</button>
                 <p>{this.finalizeDescription}</p>
               </div>
-              <div type="button" className="ballots-i--vote ballots-i--vote_no">{this.typeName(votingType)} Ballot ID: {this.props.id}</div>
+              {showHasAlreadyVotedLabel}
+              <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote_no">{this.typeName(votingType)} Ballot ID: {this.props.id}</div>
             </div>
           </div>
         );
