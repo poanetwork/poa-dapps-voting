@@ -12,9 +12,9 @@ export class BallotMinThresholdMetadata extends React.Component {
           <div className="left">
             <div className="form-el">
               <label htmlFor="key">Proposed Value</label>
-              <input type="number" id="key" 
-                value={ballotStore.ballotMinThreshold.proposedValue} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue", "ballotMinThreshold")} 
+              <input type="number" id="key"
+                value={ballotStore.ballotMinThreshold.proposedValue}
+                onChange={e => ballotStore.changeBallotMetadata(e, "proposedValue", "ballotMinThreshold")}
               />
               <p className="hint">
                 Proposed value of the minimum threshold for keys ballot consensus.
@@ -24,9 +24,9 @@ export class BallotMinThresholdMetadata extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="datetime-local">Ballot End</label>
-              <input type="datetime-local" id="datetime-local" 
-                value={ballotStore.endTime} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
+              <input type="datetime-local" id="datetime-local"
+                value={ballotStore.endTime}
+                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")}
               />
               <p className="hint">
                 Ballot's end time.

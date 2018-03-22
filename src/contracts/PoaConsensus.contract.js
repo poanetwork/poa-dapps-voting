@@ -4,7 +4,7 @@ import helpers from "./helpers";
 
 export default class POAConsensus {
   async init({web3, netId}) {
-  	const {POA_ADDRESS} = networkAddresses(netId);
+    const {POA_ADDRESS} = networkAddresses(netId);
     console.log('POA address', POA_ADDRESS)
     let web3_10 = new Web3(web3.currentProvider);
 

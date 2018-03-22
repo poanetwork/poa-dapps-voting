@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { networkAddresses } from './addresses';
 import helpers from "./helpers";
-      
+
 export default class VotingToChangeKeys {
   async init({web3, netId}) {
     const {VOTING_TO_CHANGE_KEYS_ADDRESS} = networkAddresses(netId);
@@ -94,8 +94,7 @@ export default class VotingToChangeKeys {
     let miningKey;
     try {
       miningKey = await this.getMiningByVotingKey(_votingKey);
-    }
-    catch(e) {
+    } catch(e) {
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();

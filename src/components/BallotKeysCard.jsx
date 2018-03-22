@@ -17,13 +17,13 @@ export class BallotKeysCard extends React.Component {
   getBallotTypeDisplayName(ballotType) {
     const { ballotStore } = this.props;
     switch(parseInt(ballotType, 10)) {
-      case ballotStore.KeysBallotType.add: 
+      case ballotStore.KeysBallotType.add:
         this.ballotTypeDisplayName = "add";
         break;
-      case ballotStore.KeysBallotType.remove: 
+      case ballotStore.KeysBallotType.remove:
         this.ballotTypeDisplayName = "remove";
         break;
-      case ballotStore.KeysBallotType.swap: 
+      case ballotStore.KeysBallotType.swap:
         this.ballotTypeDisplayName = "swap";
         break;
       default:
@@ -36,13 +36,13 @@ export class BallotKeysCard extends React.Component {
   getAffectedKeyTypeDisplayName(affectedKeyType) {
     const { ballotStore } = this.props;
     switch(parseInt(affectedKeyType, 10)) {
-      case ballotStore.KeyType.mining: 
+      case ballotStore.KeyType.mining:
         this.affectedKeyTypeDisplayName = "mining";
         break;
-      case ballotStore.KeyType.voting: 
+      case ballotStore.KeyType.voting:
         this.affectedKeyTypeDisplayName = "voting";
         break;
-      case ballotStore.KeyType.payout: 
+      case ballotStore.KeyType.payout:
         this.affectedKeyTypeDisplayName = "payout";
         break;
       default:
