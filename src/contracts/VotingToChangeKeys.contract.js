@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { networkAddresses } from './addresses';
 import helpers from "./helpers";
-      
+
 export default class VotingToChangeKeys {
   constructor() {
     this.web3_10 = '';
@@ -20,6 +20,7 @@ export default class VotingToChangeKeys {
     let votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
 
     this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
@@ -64,6 +65,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
   }
 
+  hasAlreadyVoted(_id, votingKey) {
+    return this.votingToChangeKeysInstance.methods.hasAlreadyVoted(_id, votingKey).call();
+  }
+
   isValidVote(_id, votingKey) {
     return this.votingToChangeKeysInstance.methods.isValidVote(_id, votingKey).call();
   }
@@ -100,8 +105,7 @@ export default class VotingToChangeKeys {
     let miningKey;
     try {
       miningKey = await this.getMiningByVotingKey(_votingKey);
-    }
-    catch(e) {
+    } catch(e) {
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call();

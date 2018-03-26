@@ -100,8 +100,8 @@ class BallotStore {
 	}
 
 	@computed get isNewValidatorPersonalData() {
-		return ballotStore.isBallotForKey 
-			&& ballotStore.isAddKeysBallotType 
+		return ballotStore.isBallotForKey
+			&& ballotStore.isAddKeysBallotType
 			&& ballotStore.isMiningKeyType;
 	}
 

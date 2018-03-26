@@ -62,8 +62,8 @@ export class Validator extends React.Component {
           <div className="left">
             <div className="form-el">
               <label htmlFor="full-name">Full Name</label>
-              <input type="text" id="full-name" 
-                value={validatorStore.fullName} 
+              <input type="text" id="full-name"
+                value={validatorStore.fullName}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "fullName")}
               />
               <p className="hint">
@@ -151,8 +151,8 @@ export class Validator extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="zip-code">Zip Code</label>
-              <input type="number" id="zip-code" 
-                value={validatorStore.zipCode} 
+              <input type="number" id="zip-code"
+                value={validatorStore.zipCode}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "zipCode")}
               />
               <p className="hint">
@@ -163,8 +163,8 @@ export class Validator extends React.Component {
           <div className="left">
             <div className="form-el">
               <label htmlFor="license-id">License ID</label>
-              <input type="text" id="license-id" 
-                value={validatorStore.licenseID} 
+              <input type="text" id="license-id"
+                value={validatorStore.licenseID}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseID")}
               />
               <p className="hint">
@@ -175,8 +175,8 @@ export class Validator extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="license-expiration">License Expiration</label>
-              <input type="date" id="license-expiration" 
-                value={validatorStore.licenseExpiration} 
+              <input type="date" id="license-expiration"
+                value={validatorStore.licenseExpiration}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "licenseExpiration")}
               />
               <p className="hint">

@@ -13,9 +13,9 @@ export class BallotProxyMetadata extends React.Component {
           <div className="left">
             <div className="form-el">
               <label htmlFor="key">Proposed Address</label>
-              <input type="text" id="key" 
-                value={ballotStore.ballotProxy.proposedAddress} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "proposedAddress", "ballotProxy")} 
+              <input type="text" id="key"
+                value={ballotStore.ballotProxy.proposedAddress}
+                onChange={e => ballotStore.changeBallotMetadata(e, "proposedAddress", "ballotProxy")}
               />
               <p className="hint">
                 Proposed address of a new proxy contract.
@@ -45,10 +45,10 @@ export class BallotProxyMetadata extends React.Component {
           </div>
           <div className="left">
             <div className="form-el">
-              <label htmlFor="key">Ballot End</label>
-              <input type="datetime-local" id="key" 
-                value={ballotStore.endTime} 
-                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")} 
+              <label htmlFor="datetime-local">Ballot End</label>
+              <input type="datetime-local" id="datetime-local"
+                value={ballotStore.endTime}
+                onChange={e => ballotStore.changeBallotMetadata(e, "endTime")}
               />
               <p className="hint">
                 Ballot's end time.

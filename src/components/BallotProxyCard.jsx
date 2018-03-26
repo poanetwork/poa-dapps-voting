@@ -12,14 +12,24 @@ export class BallotProxyCard extends React.Component {
   @action("Get proposed address of proxy ballot")
   getProposedAddress = async () => {
     const { contractsStore, id } = this.props;
-    let proposedAddress = await contractsStore.votingToChangeProxy.getProposedValue(id);
+    let proposedAddress;
+    try {
+      proposedAddress = await contractsStore.votingToChangeProxy.getProposedValue(id);
+    } catch(e) {
+      console.log(e.message);
+    }
     this.proposedAddress = proposedAddress;
   }
 
   @action("Get contract type of proxy ballot")
   getContractType = async () => {
     const { contractsStore, id } = this.props;
-    let contractType = await contractsStore.votingToChangeProxy.getContractType(id);
+    let contractType;
+    try {
+      contractType = await contractsStore.votingToChangeProxy.getContractType(id);
+    } catch(e) {
+      console.log(e.message);
+    }
     this.contractType = contractType;
   }
 

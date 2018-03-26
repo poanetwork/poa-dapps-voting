@@ -7,7 +7,7 @@ export default class VotingToChangeMinThreshold {
     this.web3_10 = '';
     this.gasPrice = '';
   }
-  
+
   async init({web3, netId}) {
     const {VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS} = networkAddresses(netId);
     console.log('VotingToChangeMinThreshold address', VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
@@ -20,6 +20,7 @@ export default class VotingToChangeMinThreshold {
     let votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
 
     this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(votingToChangeMinThresholdABI, VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
@@ -60,6 +61,10 @@ export default class VotingToChangeMinThreshold {
     return this.votingToChangeMinThresholdInstance.methods.getIsFinalized(_id).call();
   }
 
+  hasAlreadyVoted(_id, votingKey) {
+    return this.votingToChangeMinThresholdInstance.methods.hasAlreadyVoted(_id, votingKey).call();
+  }
+
   isValidVote(_id, votingKey) {
     return this.votingToChangeMinThresholdInstance.methods.isValidVote(_id, votingKey).call();
   }
@@ -84,8 +89,7 @@ export default class VotingToChangeMinThreshold {
     let miningKey;
     try {
       miningKey = await this.getMiningByVotingKey(_votingKey);
-    }
-    catch(e) {
+    } catch(e) {
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call();

@@ -20,6 +20,7 @@ export default class VotingToChangeProxy {
     let votingToChangeProxyABI = await helpers.getABI(branch, 'VotingToChangeProxyAddress')
 
     this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS);
+    this.gasPrice = web3_10.utils.toWei('1', 'gwei');
   }
 
   //setters
@@ -60,6 +61,10 @@ export default class VotingToChangeProxy {
     return this.votingToChangeProxyInstance.methods.getIsFinalized(_id).call();
   }
 
+  hasAlreadyVoted(_id, votingKey) {
+    return this.votingToChangeProxyInstance.methods.hasAlreadyVoted(_id, votingKey).call();
+  }
+
   isValidVote(_id, votingKey) {
     return this.votingToChangeProxyInstance.methods.isValidVote(_id, votingKey).call();
   }
@@ -88,8 +93,7 @@ export default class VotingToChangeProxy {
     let miningKey;
     try {
       miningKey = await this.getMiningByVotingKey(_votingKey);
-    }
-    catch(e) {
+    } catch(e) {
       miningKey = "0x0000000000000000000000000000000000000000";
     }
     return await this.votingToChangeProxyInstance.methods.validatorActiveBallots(miningKey).call();
