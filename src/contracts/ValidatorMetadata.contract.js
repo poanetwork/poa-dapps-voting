@@ -23,7 +23,6 @@ export default class ValidatorMetadata {
     let createdDate = validatorData.createdDate > 0 ? moment.unix(validatorData.createdDate).format('YYYY-MM-DD') : ''
     let updatedDate = validatorData.updatedDate > 0 ? moment.unix(validatorData.updatedDate).format('YYYY-MM-DD') : ''
     let expirationDate = validatorData.expirationDate > 0 ? moment.unix(validatorData.expirationDate).format('YYYY-MM-DD') : ''
-    let postal_code = Number(validatorData.zipcode) || ''
     return {
       firstName: toAscii(validatorData.firstName),
       lastName: toAscii(validatorData.lastName),
@@ -33,7 +32,7 @@ export default class ValidatorMetadata {
       expirationDate,
       licenseId: toAscii(validatorData.licenseId),
       us_state: toAscii(validatorData.state),
-      postal_code,
+      postal_code: toAscii(validatorData.zipcode),
     }
   }
 
