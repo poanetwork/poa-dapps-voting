@@ -11,7 +11,7 @@ export class BallotKeysMetadata extends React.Component {
     const { ballotStore } = this.props;
     return (
       <div>
-        <div className="hidden">
+        <div>
           <div className="left">
             <div className="form-el">
               <label htmlFor="key">Affected Key</label>

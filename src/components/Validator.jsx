@@ -22,7 +22,7 @@ export class Validator extends React.Component {
       let addressType = address_component.types[0];
       switch(addressType) {
         case "postal_code":
-          address_components.postal_code = Number(address_component.short_name);
+          address_components.postal_code = address_component.short_name;
           break;
         case "street_number":
           address_components.street_number = address_component.short_name;
@@ -151,7 +151,7 @@ export class Validator extends React.Component {
           <div className="right">
             <div className="form-el">
               <label htmlFor="zip-code">Zip Code</label>
-              <input type="number" id="zip-code"
+              <input type="text" id="zip-code"
                 value={validatorStore.zipCode}
                 onChange={e => validatorStore.changeValidatorMetadata(e, "zipCode")}
               />
