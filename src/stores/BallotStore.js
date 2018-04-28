@@ -22,9 +22,7 @@ class BallotStore {
 		2: 'VotingToChangeKeys',
 		3: 'VotingToChangeMinThreshold',
 		4: 'VotingToChangeProxy',
-		5: 'BallotsStorage',
-		7: 'ValidatorMetadata',
-		8: 'ValidatorMetadataEternalStorage'
+		5: 'BallotsStorage'
 	}
 	@observable ballotType;
 	@observable keysBallotType;
