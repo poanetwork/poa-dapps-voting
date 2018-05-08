@@ -39,7 +39,17 @@ export default class VotingToChangeMinThreshold {
   }
 
   votingState(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
+    if (this.votingToChangeMinThresholdInstance.methods.votingState) {
+      return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
+    }
+    return null;
+  }
+
+  getCreator(_id) {
+    if (this.votingToChangeMinThresholdInstance.methods.getCreator) {
+      return this.votingToChangeMinThresholdInstance.methods.getCreator(_id).call();
+    }
+    return null;
   }
 
   getTotalVoters(_id) {
