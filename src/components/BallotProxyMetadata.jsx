@@ -35,6 +35,8 @@ export class BallotProxyMetadata extends React.Component {
                   { value: '3', label: ballotStore.ProxyBallotType[3] },
                   { value: '4', label: ballotStore.ProxyBallotType[4] },
                   { value: '5', label: ballotStore.ProxyBallotType[5] },
+                  { value: '7', label: ballotStore.ProxyBallotType[7] },
+                  { value: '8', label: ballotStore.ProxyBallotType[8] },
                 ]}
               >
               </Select>
