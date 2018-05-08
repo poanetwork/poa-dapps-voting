@@ -147,7 +147,7 @@ export class BallotCard extends React.Component {
     @action("Get creator")
     getCreator = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0); 
+        let creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
         if (creator) {
             this.getValidatorFullname(creator);
         } else {
