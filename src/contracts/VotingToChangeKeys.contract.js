@@ -50,7 +50,17 @@ export default class VotingToChangeKeys {
   }
 
   votingState(_id) {
-    return this.votingToChangeKeysInstance.methods.votingState(_id).call();
+    if (this.votingToChangeKeysInstance.methods.votingState) {
+      return this.votingToChangeKeysInstance.methods.votingState(_id).call();
+    }
+    return null;
+  }
+
+  getCreator(_id) {
+    if (this.votingToChangeKeysInstance.methods.getCreator) {
+      return this.votingToChangeKeysInstance.methods.getCreator(_id).call();
+    }
+    return null;
   }
 
   getTotalVoters(_id) {
