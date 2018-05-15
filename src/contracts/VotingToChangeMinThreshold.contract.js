@@ -24,8 +24,8 @@ export default class VotingToChangeMinThreshold {
   }
 
   //setters
-  createBallotToChangeThreshold({startTime, endTime, proposedValue, sender, memo}) {
-    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
+  createBallot({startTime, endTime, proposedValue, sender, memo}) {
+    return this.votingToChangeMinThresholdInstance.methods.createBallot(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
