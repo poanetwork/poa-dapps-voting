@@ -133,7 +133,7 @@ export class NewBallot extends React.Component {
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeKeys.createVotingForKeys(inputToMethod);
+    let method = contractsStore.votingToChangeKeys.createBallot(inputToMethod);
     return method;
   }
 
@@ -146,7 +146,7 @@ export class NewBallot extends React.Component {
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(inputToMethod);
+    let method = contractsStore.votingToChangeMinThreshold.createBallot(inputToMethod);
     return method;
   }
 
@@ -160,7 +160,7 @@ export class NewBallot extends React.Component {
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(inputToMethod);
+    let method = contractsStore.votingToChangeProxy.createBallot(inputToMethod);
     return method;
   }
 
