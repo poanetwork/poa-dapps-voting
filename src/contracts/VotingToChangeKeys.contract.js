@@ -87,6 +87,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.isActive(_id).call();
   }
 
+  canBeFinalizedNow(_id) {
+    return this.votingToChangeKeysInstance.methods.canBeFinalizedNow(_id).call();
+  }
+
   getBallotType(_id) {
     return this.votingToChangeKeysInstance.methods.getBallotType(_id).call();
   }

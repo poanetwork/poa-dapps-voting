@@ -83,6 +83,10 @@ export default class VotingToChangeMinThreshold {
     return this.votingToChangeMinThresholdInstance.methods.isActive(_id).call();
   }
 
+  canBeFinalizedNow(_id) {
+    return this.votingToChangeMinThresholdInstance.methods.canBeFinalizedNow(_id).call();
+  }
+
   getProposedValue(_id) {
     return this.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call();
   }
