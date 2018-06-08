@@ -226,6 +226,12 @@ export class BallotCard extends React.Component {
         return _isActive;
     }
 
+    canBeFinalizedNow = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let _canBeFinalizedNow = await this.repeatGetProperty(contractsStore, votingType, id, "canBeFinalizedNow", 0);
+        return _canBeFinalizedNow;
+    }
+
     getMemo = async () => {
         const { contractsStore, id, votingType } = this.props;
         let memo = await this.repeatGetProperty(contractsStore, votingType, id, "getMemo", 0);
@@ -284,8 +290,12 @@ export class BallotCard extends React.Component {
             return;
         }
         commonStore.showLoading();
-        let isActive = await this.isActive();
-        if (isActive) {
+        let canBeFinalized = await this.canBeFinalizedNow();
+        if (canBeFinalized === null) {
+            console.log('canBeFinalizedNow is not existed');
+            canBeFinalized = !(await this.isActive());
+        }
+        if (!canBeFinalized) {
             commonStore.hideLoading();
             swal("Warning!", messages.INVALID_FINALIZE_MSG, "warning");
             return;
@@ -305,7 +315,11 @@ export class BallotCard extends React.Component {
 
     repeatGetProperty = async (contractsStore, contractType, id, methodID, tryID) => {
         try {
-            let val = await this.getContract(contractsStore, contractType)[methodID](id);
+            let contract = this.getContract(contractsStore, contractType);
+            if (!contract[methodID]) {
+                return null;
+            }
+            let val = await contract[methodID](id);
             if (tryID > 0) {
                 console.log(`success from Try ${tryID + 1}`);
             }
