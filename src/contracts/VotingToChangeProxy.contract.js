@@ -76,6 +76,10 @@ export default class VotingToChangeProxy {
     return this.votingToChangeProxyInstance.methods.isActive(_id).call();
   }
 
+  canBeFinalizedNow(_id) {
+    return this.votingToChangeProxyInstance.methods.canBeFinalizedNow(_id).call();
+  }
+
   getProposedValue(_id) {
     return this.votingToChangeProxyInstance.methods.getProposedValue(_id).call();
   }
