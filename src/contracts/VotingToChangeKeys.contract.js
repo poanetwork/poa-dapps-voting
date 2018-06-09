@@ -28,6 +28,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.createBallot(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
   }
 
+  createBallotToAddNewValidator({startTime, endTime, affectedKey, newVotingKey, newPayoutKey, sender, memo}) {
+    return this.votingToChangeKeysInstance.methods.createBallotToAddNewValidator(startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo).send({from: sender, gasPrice: this.gasPrice});
+  }
+
   vote(_id, choice, sender) {
     return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({from: sender, gasPrice: this.gasPrice});
   }

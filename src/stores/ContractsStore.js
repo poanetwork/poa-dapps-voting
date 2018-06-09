@@ -13,6 +13,7 @@ import commonStore from './CommonStore'
 import { BallotKeysCard } from "../components/BallotKeysCard";
 import { BallotMinThresholdCard } from "../components/BallotMinThresholdCard";
 import { BallotProxyCard } from "../components/BallotProxyCard";
+import { constants } from "../constants";
 
 import "babel-polyfill";
 
@@ -240,11 +241,7 @@ class ContractsStore {
 
 	@action
 	async getAllValidatorMetadata() {
-		const newMiningKey = {
-			label: "New Mining Key",
-			value: "0x0000000000000000000000000000000000000000"
-		}
-		this.validatorsMetadata.push(newMiningKey);
+		this.validatorsMetadata.push(constants.NEW_MINING_KEY);
 		const keys = await this.poaConsensus.getValidators();
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
