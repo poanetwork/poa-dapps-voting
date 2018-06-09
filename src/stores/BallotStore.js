@@ -46,6 +46,8 @@ class BallotStore {
 			keysBallotType: null,
 			//memo: "",
 			affectedKey: "",
+			newVotingKey: "",
+			newPayoutKey: "",
 			miningKey: ""
 		};
 
