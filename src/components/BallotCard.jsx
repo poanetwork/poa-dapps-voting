@@ -487,7 +487,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <div className="info">
-              Minimum {threshold} from {contractsStore.validatorsLength} validators is required to pass the proposal
+              Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
             </div>
             <div className="info">
               {this.memo}
