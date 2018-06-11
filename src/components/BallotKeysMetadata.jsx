@@ -20,7 +20,7 @@ export class BallotKeysMetadata extends React.Component {
               onChange={e => ballotStore.changeBallotMetadata(e, "newVotingKey", "ballotKeys")}
             />
             <p className="hint">
-              Voting key address of new validator. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+              Voting key address of new validator.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@ export class BallotKeysMetadata extends React.Component {
               onChange={e => ballotStore.changeBallotMetadata(e, "newPayoutKey", "ballotKeys")}
             />
             <p className="hint">
-              Payout key address of new validator. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+              Payout key address of new validator.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@ export class BallotKeysMetadata extends React.Component {
                 onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")}
               />
               <p className="hint">
-                {ballotStore.isNewValidatorPersonalData ? 'Mining key address of new validator.' : 'Affected key address of validator to vote for.'} Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+                {ballotStore.isNewValidatorPersonalData ? 'Mining key address of new validator.' : 'Affected key address of validator to vote for.'}<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export class BallotKeysMetadata extends React.Component {
                 disabled={ballotStore.isNewValidatorPersonalData}
               />
               <p className="hint">
-                Mining key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+                Mining key address of validator to vote for.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>

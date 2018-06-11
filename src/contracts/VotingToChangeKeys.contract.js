@@ -107,6 +107,20 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
   }
 
+  getNewVotingKey(_id) {
+    if (!this.votingToChangeKeysInstance.methods.getNewVotingKey) {
+      return "";
+    }
+    return this.votingToChangeKeysInstance.methods.getNewVotingKey(_id).call();
+  }
+
+  getNewPayoutKey(_id) {
+    if (!this.votingToChangeKeysInstance.methods.getNewPayoutKey) {
+      return "";
+    }
+    return this.votingToChangeKeysInstance.methods.getNewPayoutKey(_id).call();
+  }
+
   getMiningKey(_id) {
     return this.votingToChangeKeysInstance.methods.getMiningKey(_id).call();
   }

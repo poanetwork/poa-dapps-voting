@@ -47,8 +47,13 @@
       width: 30%;
     }
 
-    &_mining-key {
+    &_key {
       width: 25%;
+      word-break: break-all;
+    }
+
+    &_key_wide {
+      width: 50%;
       word-break: break-all;
     }
 
