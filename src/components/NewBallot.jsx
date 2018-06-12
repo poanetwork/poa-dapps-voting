@@ -56,6 +56,9 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
+        if (ballotKeysProp === 'newVotingKey' || ballotKeysProp === 'newPayoutKey') {
+          continue;
+        }
         if (!ballotStore.ballotKeys[ballotKeysProp]) {
           swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
           commonStore.hideLoading();

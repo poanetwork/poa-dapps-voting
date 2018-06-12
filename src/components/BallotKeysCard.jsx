@@ -76,6 +76,9 @@ export class BallotKeysCard extends React.Component {
     let newVotingKey;
     try {
       newVotingKey = await contractsStore.votingToChangeKeys.getNewVotingKey(id);
+      if (newVotingKey === "0x0000000000000000000000000000000000000000") {
+        newVotingKey = "";
+      }
     } catch (e) {
       console.log(e.message);
     }
@@ -88,6 +91,9 @@ export class BallotKeysCard extends React.Component {
     let newPayoutKey;
     try {
       newPayoutKey = await contractsStore.votingToChangeKeys.getNewPayoutKey(id);
+      if (newPayoutKey === "0x0000000000000000000000000000000000000000") {
+        newPayoutKey = "";
+      }
     } catch (e) {
       console.log(e.message);
     }
