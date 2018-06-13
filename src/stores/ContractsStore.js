@@ -3,6 +3,7 @@ import React from 'react';
 
 import PoaConsensus from '../contracts/PoaConsensus.contract'
 import BallotsStorage from '../contracts/BallotsStorage.contract'
+import ProxyStorage from '../contracts/ProxyStorage.contract'
 import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
 import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
@@ -20,6 +21,7 @@ import "babel-polyfill";
 class ContractsStore {
 	@observable poaConsensus;
 	@observable ballotsStorage;
+	@observable proxyStorage;
 	@observable votingToChangeKeys;
 	@observable votingToChangeMinThreshold;
 	@observable votingToChangeProxy;
@@ -80,6 +82,15 @@ class ContractsStore {
 	setBallotsStorage = async (web3Config) => {
 		this.ballotsStorage = new BallotsStorage();
 		await this.ballotsStorage.init({
+			web3: web3Config.web3Instance,
+			netId: web3Config.netId
+		});
+	}
+
+	@action("Set ProxyStorage contract")
+	setProxyStorage = async (web3Config) => {
+		this.proxyStorage = new ProxyStorage();
+		await this.proxyStorage.init({
 			web3: web3Config.web3Instance,
 			netId: web3Config.netId
 		});
