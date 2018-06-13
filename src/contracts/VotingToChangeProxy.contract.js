@@ -37,6 +37,13 @@ export default class VotingToChangeProxy {
   }
 
   //getters
+  doesMethodExist(methodName) {
+    if (this.votingToChangeProxyInstance.methods[methodName]) {
+      return true;
+    }
+    return false;
+  }
+
   getStartTime(_id) {
     return this.votingToChangeProxyInstance.methods.getStartTime(_id).call();
   }
@@ -46,14 +53,14 @@ export default class VotingToChangeProxy {
   }
 
   votingState(_id) {
-    if (this.votingToChangeProxyInstance.methods.votingState) {
+    if (this.doesMethodExist('votingState')) {
       return this.votingToChangeProxyInstance.methods.votingState(_id).call();
     }
     return null;
   }
 
   getCreator(_id) {
-    if (this.votingToChangeProxyInstance.methods.getCreator) {
+    if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeProxyInstance.methods.getCreator(_id).call();
     }
     return null;
@@ -84,7 +91,10 @@ export default class VotingToChangeProxy {
   }
 
   canBeFinalizedNow(_id) {
-    return this.votingToChangeProxyInstance.methods.canBeFinalizedNow(_id).call();
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeProxyInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
   }
 
   getProposedValue(_id) {

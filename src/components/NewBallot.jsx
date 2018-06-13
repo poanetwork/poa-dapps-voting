@@ -120,8 +120,9 @@ export class NewBallot extends React.Component {
     };
     let method;
     if (
-      ballotStore.ballotKeys.keysBallotType === ballotStore.KeysBallotType.add &&
-      ballotStore.ballotKeys.keyType === ballotStore.KeyType.mining
+      inputToMethod.ballotType === ballotStore.KeysBallotType.add &&
+      inputToMethod.affectedKeyType === ballotStore.KeyType.mining &&
+      (inputToMethod.newVotingKey || inputToMethod.newPayoutKey)
     ) {
       method = contractsStore.votingToChangeKeys.createBallotToAddNewValidator(inputToMethod);
     } else {

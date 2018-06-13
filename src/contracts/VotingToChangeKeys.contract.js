@@ -45,6 +45,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.areBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey).call();
   }
 
+  doesMethodExist(methodName) {
+    return this.votingToChangeKeysInstance && this.votingToChangeKeysInstance.methods[methodName];
+  }
+
   getStartTime(_id) {
     return this.votingToChangeKeysInstance.methods.getStartTime(_id).call();
   }
@@ -54,14 +58,14 @@ export default class VotingToChangeKeys {
   }
 
   votingState(_id) {
-    if (this.votingToChangeKeysInstance.methods.votingState) {
+    if (this.doesMethodExist('votingState')) {
       return this.votingToChangeKeysInstance.methods.votingState(_id).call();
     }
     return null;
   }
 
   getCreator(_id) {
-    if (this.votingToChangeKeysInstance.methods.getCreator) {
+    if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeKeysInstance.methods.getCreator(_id).call();
     }
     return null;
@@ -92,7 +96,10 @@ export default class VotingToChangeKeys {
   }
 
   canBeFinalizedNow(_id) {
-    return this.votingToChangeKeysInstance.methods.canBeFinalizedNow(_id).call();
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeKeysInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
   }
 
   getBallotType(_id) {
@@ -108,17 +115,17 @@ export default class VotingToChangeKeys {
   }
 
   getNewVotingKey(_id) {
-    if (!this.votingToChangeKeysInstance.methods.getNewVotingKey) {
-      return "";
+    if (this.doesMethodExist('getNewVotingKey')) {
+      return this.votingToChangeKeysInstance.methods.getNewVotingKey(_id).call();
     }
-    return this.votingToChangeKeysInstance.methods.getNewVotingKey(_id).call();
+    return "";
   }
 
   getNewPayoutKey(_id) {
-    if (!this.votingToChangeKeysInstance.methods.getNewPayoutKey) {
-      return "";
+    if (this.doesMethodExist('getNewPayoutKey')) {
+      return this.votingToChangeKeysInstance.methods.getNewPayoutKey(_id).call();
     }
-    return this.votingToChangeKeysInstance.methods.getNewPayoutKey(_id).call();
+    return "";
   }
 
   getMiningKey(_id) {

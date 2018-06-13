@@ -37,6 +37,13 @@ export default class VotingToChangeMinThreshold {
   }
 
   //getters
+  doesMethodExist(methodName) {
+    if (this.votingToChangeMinThresholdInstance.methods[methodName]) {
+      return true;
+    }
+    return false;
+  }
+
   getStartTime(_id) {
     return this.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call();
   }
@@ -46,14 +53,14 @@ export default class VotingToChangeMinThreshold {
   }
 
   votingState(_id) {
-    if (this.votingToChangeMinThresholdInstance.methods.votingState) {
+    if (this.doesMethodExist('votingState')) {
       return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
     }
     return null;
   }
 
   getCreator(_id) {
-    if (this.votingToChangeMinThresholdInstance.methods.getCreator) {
+    if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeMinThresholdInstance.methods.getCreator(_id).call();
     }
     return null;
@@ -84,7 +91,10 @@ export default class VotingToChangeMinThreshold {
   }
 
   canBeFinalizedNow(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.canBeFinalizedNow(_id).call();
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeMinThresholdInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
   }
 
   getProposedValue(_id) {
