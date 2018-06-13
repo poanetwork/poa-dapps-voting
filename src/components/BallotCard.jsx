@@ -3,7 +3,6 @@ import moment from "moment";
 import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
-import { constants } from "../constants";
 import { messages } from "../messages";
 import swal from "sweetalert2";
 
@@ -48,8 +47,15 @@ export class BallotCard extends React.Component {
     }
 
     @computed get finalizeDescription () {
-        const _finalizeDescription = this.isFinalized ? '' : constants.CARD_FINALIZE_DESCRIPTION;
-        return _finalizeDescription;
+        if (this.isFinalized) {
+            return '';
+        }
+        const { contractsStore, votingType } = this.props;
+        let description = 'Finalization is available after ballot time is finished';
+        if (this.getContract(contractsStore, votingType).doesMethodExist('canBeFinalizedNow')) {
+            description += ' or all validators are voted';
+        }
+        return description;
     }
 
     @computed get votesForNumber() {
@@ -315,11 +321,7 @@ export class BallotCard extends React.Component {
 
     repeatGetProperty = async (contractsStore, contractType, id, methodID, tryID) => {
         try {
-            let contract = this.getContract(contractsStore, contractType);
-            if (!contract[methodID]) {
-                return null;
-            }
-            let val = await contract[methodID](id);
+            let val = await this.getContract(contractsStore, contractType)[methodID](id);
             if (tryID > 0) {
                 console.log(`success from Try ${tryID + 1}`);
             }

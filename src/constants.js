@@ -1,5 +1,4 @@
 let constants = {};
-constants.CARD_FINALIZE_DESCRIPTION = "Finalization is available after ballot time is finished or all validators are voted";
 constants.organization = 'poanetwork';
 constants.repoName = 'poa-chain-spec';
 constants.addressesSourceFile = 'contracts.json';
