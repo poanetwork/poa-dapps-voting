@@ -6,6 +6,7 @@ constants.ABIsSources = {
 	'KeysManager': 'KeysManager.abi.json',
 	'PoaNetworkConsensus': 'PoaNetworkConsensus.abi.json',
 	'BallotStorage': 'BallotsStorage.abi.json',
+	'ProxyStorage': 'ProxyStorage.abi.json',
 	'ValidatorMetadata': 'ValidatorMetadata.abi.json',
 	'VotingToChangeKeys': 'VotingToChangeKeys.abi.json',
 	'VotingToChangeMinThreshold': 'VotingToChangeMinThreshold.abi.json',

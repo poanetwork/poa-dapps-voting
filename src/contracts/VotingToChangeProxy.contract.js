@@ -18,7 +18,13 @@ export default class VotingToChangeProxy {
 
   //setters
   createBallot({startTime, endTime, proposedValue, contractType, sender, memo}) {
-    return this.votingToChangeProxyInstance.methods.createBallot(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: this.gasPrice})
+    let method;
+    if (this.votingToChangeProxyInstance.methods.createBallot) {
+      method = this.votingToChangeProxyInstance.methods.createBallot;
+    } else {
+      method = this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress;
+    }
+    return method(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
