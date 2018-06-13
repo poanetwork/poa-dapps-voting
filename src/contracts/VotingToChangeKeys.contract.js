@@ -25,7 +25,13 @@ export default class VotingToChangeKeys {
 
   //setters
   createBallot({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
-    return this.votingToChangeKeysInstance.methods.createBallot(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
+    let method;
+    if (this.votingToChangeKeysInstance.methods.createBallot) {
+      method = this.votingToChangeKeysInstance.methods.createBallot;
+    } else {
+      method = this.votingToChangeKeysInstance.methods.createVotingForKeys;
+    }
+    return method(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
   }
 
   createBallotToAddNewValidator({startTime, endTime, affectedKey, newVotingKey, newPayoutKey, sender, memo}) {

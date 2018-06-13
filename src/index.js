@@ -41,12 +41,21 @@ class AppMainRouter extends Component {
 
       let setPoaConsensus = contractsStore.setPoaConsensus(web3Config);
       let setBallotsStorage = contractsStore.setBallotsStorage(web3Config);
+      let setProxyStorage = contractsStore.setProxyStorage(web3Config);
       let setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config);
       let setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config);
       let setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config);
       let setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config);
 
-      await Promise.all([setPoaConsensus, setBallotsStorage, setVotingToChangeKeys, setVotingToChangeMinThreshold, setVotingToChangeProxy, setValidatorMetadata])
+      await Promise.all([
+        setPoaConsensus,
+        setBallotsStorage,
+        setProxyStorage,
+        setVotingToChangeKeys,
+        setVotingToChangeMinThreshold,
+        setVotingToChangeProxy,
+        setValidatorMetadata
+      ]);
 
       await contractsStore.setMiningKey(web3Config);
       await contractsStore.setVotingKey(web3Config);
