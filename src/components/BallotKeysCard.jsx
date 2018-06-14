@@ -33,6 +33,43 @@ export class BallotKeysCard extends React.Component {
     }
   }
 
+  @action("Get votingState of keys ballot")
+  getVotingState = async () => {
+    const { contractsStore, id } = this.props;
+    let votingState;
+    try {
+      votingState = await contractsStore.votingToChangeKeys.votingState(id);
+    } catch(e) {
+      console.log(e.message);
+    }
+    if (votingState) {
+      this.affectedKey = votingState.affectedKey;
+      this.affectedKeyType = votingState.affectedKeyType;
+      this.ballotType = votingState.ballotType;
+      this.getBallotTypeDisplayName(this.ballotType);
+      this.miningKey = votingState.miningKey;
+
+      if (this.miningKey && this.miningKey !== '0x0000000000000000000000000000000000000000') {
+        let metadata;
+        try {
+          metadata = await contractsStore.getValidatorMetadata(this.miningKey);
+        } catch(e) {
+          console.log(e.message);
+        }
+        if (metadata) {
+          this.miningKey = `${metadata.lastName} ${this.miningKey}`;
+        } else {
+          this.miningKey = `${this.miningKey}`;
+        }
+      }
+    } else {
+      this.getAffectedKey();
+      this.getAffectedKeyType();
+      this.getBallotType();
+      this.getMiningKey();
+    }
+  }
+
   @action("Get ballot type of keys ballot")
   getBallotType = async () => {
     const { contractsStore, id } = this.props;
@@ -109,26 +146,25 @@ export class BallotKeysCard extends React.Component {
     } catch(e) {
       console.log(e.message);
     }
-    try {
-      metadata = await contractsStore.getValidatorMetadata(miningKey);
-    } catch(e) {
-      console.log(e.message);
-    }
-    if (metadata) {
-      this.miningKey = `${metadata.lastName} ${miningKey}`;
-    } else {
-      this.miningKey = `${miningKey}`;
+    if (miningKey && miningKey !== '0x0000000000000000000000000000000000000000') {
+      try {
+        metadata = await contractsStore.getValidatorMetadata(miningKey);
+      } catch(e) {
+        console.log(e.message);
+      }
+      if (metadata) {
+        this.miningKey = `${metadata.lastName} ${miningKey}`;
+      } else {
+        this.miningKey = `${miningKey}`;
+      }
     }
   }
 
   constructor(props) {
     super(props);
-    this.getAffectedKey();
+    this.getVotingState();
     this.getNewVotingKey();
     this.getNewPayoutKey();
-    this.getAffectedKeyType();
-    this.getBallotType();
-    this.getMiningKey();
   }
 
   getAffectedKeyTypeDisplayName = () => {
