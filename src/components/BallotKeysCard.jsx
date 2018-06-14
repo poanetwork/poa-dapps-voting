@@ -50,16 +50,11 @@ export class BallotKeysCard extends React.Component {
       this.miningKey = votingState.miningKey;
 
       if (this.miningKey && this.miningKey !== '0x0000000000000000000000000000000000000000') {
-        let metadata;
-        try {
-          metadata = await contractsStore.getValidatorMetadata(this.miningKey);
-        } catch(e) {
-          console.log(e.message);
-        }
-        if (metadata) {
-          this.miningKey = `${metadata.lastName} ${this.miningKey}`;
-        } else {
-          this.miningKey = `${this.miningKey}`;
+        for (let i = 0; i < contractsStore.validatorsMetadata.length; i++) {
+          if (contractsStore.validatorsMetadata[i].value.toLowerCase() === this.miningKey.toLowerCase()) {
+            this.miningKey = contractsStore.validatorsMetadata[i].labelInvers;
+            break;
+          }
         }
       }
     } else {
@@ -140,22 +135,19 @@ export class BallotKeysCard extends React.Component {
   @action("Get mining key of keys ballot")
   getMiningKey = async () => {
     const { contractsStore, id } = this.props;
-    let miningKey, metadata;
+    let miningKey;
     try {
       miningKey = await contractsStore.votingToChangeKeys.getMiningKey(id);
     } catch(e) {
       console.log(e.message);
     }
     if (miningKey && miningKey !== '0x0000000000000000000000000000000000000000') {
-      try {
-        metadata = await contractsStore.getValidatorMetadata(miningKey);
-      } catch(e) {
-        console.log(e.message);
-      }
-      if (metadata) {
-        this.miningKey = `${metadata.lastName} ${miningKey}`;
-      } else {
-        this.miningKey = `${miningKey}`;
+      this.miningKey = miningKey;
+      for (let i = 0; i < contractsStore.validatorsMetadata.length; i++) {
+        if (contractsStore.validatorsMetadata[i].value.toLowerCase() === this.miningKey.toLowerCase()) {
+          this.miningKey = contractsStore.validatorsMetadata[i].labelInvers;
+          break;
+        }
       }
     }
   }
