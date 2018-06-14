@@ -36,11 +36,13 @@ export class BallotKeysCard extends React.Component {
   @action("Get votingState of keys ballot")
   getVotingState = async () => {
     const { contractsStore, id } = this.props;
-    let votingState;
-    try {
-      votingState = await contractsStore.votingToChangeKeys.votingState(id);
-    } catch(e) {
-      console.log(e.message);
+    let votingState = this.props.votingState;
+    if (!votingState) {
+      try {
+        votingState = await contractsStore.votingToChangeKeys.votingState(id);
+      } catch(e) {
+        console.log(e.message);
+      }
     }
     if (votingState) {
       this.affectedKey = votingState.affectedKey;
@@ -213,7 +215,7 @@ export class BallotKeysCard extends React.Component {
   }
 
   render () {
-    let { id } = this.props;
+    let { id, votingState } = this.props;
 
     let affectedKeyClassName;
     let affectedKey = <p>{this.affectedKey}</p>;
@@ -240,7 +242,7 @@ export class BallotKeysCard extends React.Component {
     }
 
     return (
-      <BallotCard votingType="votingToChangeKeys" id={id} isSearchPattern={this.isSearchPattern()}>
+      <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id} isSearchPattern={this.isSearchPattern()}>
         <div className="ballots-about-i ballots-about-i_action">
           <div className="ballots-about-td">
             <p className="ballots-about-i--title">Action</p>

@@ -22,7 +22,11 @@ export class BallotMinThresholdCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getProposedValue(this.props.id);
+    if (this.props.votingState) {
+      this.proposedValue = this.props.votingState.proposedValue;
+    } else {
+      this.getProposedValue(this.props.id);
+    }
   }
 
   isSearchPattern = () => {
@@ -35,9 +39,9 @@ export class BallotMinThresholdCard extends React.Component {
   }
 
   render () {
-    let { id } = this.props;
+    let { id, votingState } = this.props;
     return (
-      <BallotCard votingType="votingToChangeMinThreshold" id={id} isSearchPattern={this.isSearchPattern()}>
+      <BallotCard votingType="votingToChangeMinThreshold" votingState={votingState} id={id} isSearchPattern={this.isSearchPattern()}>
         <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
           <div className="ballots-about-td">
             <p className="ballots-about-i--title">Proposed min threshold</p>
