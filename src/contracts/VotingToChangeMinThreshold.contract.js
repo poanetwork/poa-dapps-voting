@@ -58,6 +58,10 @@ export default class VotingToChangeMinThreshold {
     return this.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call();
   }
 
+  nextBallotId() {
+    return this.votingToChangeMinThresholdInstance.methods.nextBallotId().call();
+  }
+
   votingState(_id) {
     if (this.doesMethodExist('votingState')) {
       return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();

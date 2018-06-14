@@ -58,6 +58,10 @@ export default class VotingToChangeProxy {
     return this.votingToChangeProxyInstance.methods.getEndTime(_id).call();
   }
 
+  nextBallotId() {
+    return this.votingToChangeProxyInstance.methods.nextBallotId().call();
+  }
+
   votingState(_id) {
     if (this.doesMethodExist('votingState')) {
       return this.votingToChangeProxyInstance.methods.votingState(_id).call();
