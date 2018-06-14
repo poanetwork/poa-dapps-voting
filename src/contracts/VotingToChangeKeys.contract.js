@@ -56,6 +56,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.getEndTime(_id).call();
   }
 
+  nextBallotId() {
+    return this.votingToChangeKeysInstance.methods.nextBallotId().call();
+  }
+
   votingState(_id) {
     if (this.doesMethodExist('votingState')) {
       return this.votingToChangeKeysInstance.methods.votingState(_id).call();
