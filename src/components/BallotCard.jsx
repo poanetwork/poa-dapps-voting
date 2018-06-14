@@ -3,7 +3,6 @@ import moment from "moment";
 import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import { toAscii } from "../helpers";
-import { constants } from "../constants";
 import { messages } from "../messages";
 import swal from "sweetalert2";
 
@@ -48,8 +47,15 @@ export class BallotCard extends React.Component {
     }
 
     @computed get finalizeDescription () {
-        const _finalizeDescription = this.isFinalized ? '' : constants.CARD_FINALIZE_DESCRIPTION;
-        return _finalizeDescription;
+        if (this.isFinalized) {
+            return '';
+        }
+        const { contractsStore, votingType } = this.props;
+        let description = 'Finalization is available after ballot time is finished';
+        if (this.getContract(contractsStore, votingType).doesMethodExist('canBeFinalizedNow')) {
+            description += ' or all validators are voted';
+        }
+        return description;
     }
 
     @computed get votesForNumber() {
@@ -147,9 +153,14 @@ export class BallotCard extends React.Component {
     @action("Get creator")
     getCreator = async () => {
         const { contractsStore, id, votingType } = this.props;
-        let votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
-        if (votingState) {
-            this.getValidatorFullname(votingState.creator);
+        let creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
+        if (creator) {
+            this.getValidatorFullname(creator);
+        } else {
+            let votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
+            if (votingState) {
+                this.getValidatorFullname(votingState.creator);
+            }
         }
     }
 
@@ -221,6 +232,12 @@ export class BallotCard extends React.Component {
         return _isActive;
     }
 
+    canBeFinalizedNow = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let _canBeFinalizedNow = await this.repeatGetProperty(contractsStore, votingType, id, "canBeFinalizedNow", 0);
+        return _canBeFinalizedNow;
+    }
+
     getMemo = async () => {
         const { contractsStore, id, votingType } = this.props;
         let memo = await this.repeatGetProperty(contractsStore, votingType, id, "getMemo", 0);
@@ -279,8 +296,12 @@ export class BallotCard extends React.Component {
             return;
         }
         commonStore.showLoading();
-        let isActive = await this.isActive();
-        if (isActive) {
+        let canBeFinalized = await this.canBeFinalizedNow();
+        if (canBeFinalized === null) {
+            console.log('canBeFinalizedNow is not existed');
+            canBeFinalized = !(await this.isActive());
+        }
+        if (!canBeFinalized) {
             commonStore.hideLoading();
             swal("Warning!", messages.INVALID_FINALIZE_MSG, "warning");
             return;
@@ -468,7 +489,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <div className="info">
-              Minimum {threshold} from {contractsStore.validatorsLength} validators is required to pass the proposal
+              Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
             </div>
             <div className="info">
               {this.memo}

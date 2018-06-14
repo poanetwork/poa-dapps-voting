@@ -24,8 +24,14 @@ export default class VotingToChangeProxy {
   }
 
   //setters
-  createBallotToChangeProxyAddress({startTime, endTime, proposedValue, contractType, sender, memo}) {
-    return this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: this.gasPrice})
+  createBallot({startTime, endTime, proposedValue, contractType, sender, memo}) {
+    let method;
+    if (this.votingToChangeProxyInstance.methods.createBallot) {
+      method = this.votingToChangeProxyInstance.methods.createBallot;
+    } else {
+      method = this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress;
+    }
+    return method(startTime, endTime, proposedValue, contractType, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
@@ -37,6 +43,13 @@ export default class VotingToChangeProxy {
   }
 
   //getters
+  doesMethodExist(methodName) {
+    if (this.votingToChangeProxyInstance.methods[methodName]) {
+      return true;
+    }
+    return false;
+  }
+
   getStartTime(_id) {
     return this.votingToChangeProxyInstance.methods.getStartTime(_id).call();
   }
@@ -46,7 +59,17 @@ export default class VotingToChangeProxy {
   }
 
   votingState(_id) {
-    return this.votingToChangeProxyInstance.methods.votingState(_id).call();
+    if (this.doesMethodExist('votingState')) {
+      return this.votingToChangeProxyInstance.methods.votingState(_id).call();
+    }
+    return null;
+  }
+
+  getCreator(_id) {
+    if (this.doesMethodExist('getCreator')) {
+      return this.votingToChangeProxyInstance.methods.getCreator(_id).call();
+    }
+    return null;
   }
 
   getTotalVoters(_id) {
@@ -71,6 +94,13 @@ export default class VotingToChangeProxy {
 
   isActive(_id) {
     return this.votingToChangeProxyInstance.methods.isActive(_id).call();
+  }
+
+  canBeFinalizedNow(_id) {
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeProxyInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
   }
 
   getProposedValue(_id) {

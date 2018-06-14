@@ -24,8 +24,18 @@ export default class VotingToChangeKeys {
   }
 
   //setters
-  createVotingForKeys({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
-    return this.votingToChangeKeysInstance.methods.createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
+  createBallot({startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo}) {
+    let method;
+    if (this.votingToChangeKeysInstance.methods.createBallot) {
+      method = this.votingToChangeKeysInstance.methods.createBallot;
+    } else {
+      method = this.votingToChangeKeysInstance.methods.createVotingForKeys;
+    }
+    return method(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({from: sender, gasPrice: this.gasPrice});
+  }
+
+  createBallotToAddNewValidator({startTime, endTime, affectedKey, newVotingKey, newPayoutKey, sender, memo}) {
+    return this.votingToChangeKeysInstance.methods.createBallotToAddNewValidator(startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo).send({from: sender, gasPrice: this.gasPrice});
   }
 
   vote(_id, choice, sender) {
@@ -41,6 +51,10 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.areBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey).call();
   }
 
+  doesMethodExist(methodName) {
+    return this.votingToChangeKeysInstance && this.votingToChangeKeysInstance.methods[methodName];
+  }
+
   getStartTime(_id) {
     return this.votingToChangeKeysInstance.methods.getStartTime(_id).call();
   }
@@ -50,7 +64,17 @@ export default class VotingToChangeKeys {
   }
 
   votingState(_id) {
-    return this.votingToChangeKeysInstance.methods.votingState(_id).call();
+    if (this.doesMethodExist('votingState')) {
+      return this.votingToChangeKeysInstance.methods.votingState(_id).call();
+    }
+    return null;
+  }
+
+  getCreator(_id) {
+    if (this.doesMethodExist('getCreator')) {
+      return this.votingToChangeKeysInstance.methods.getCreator(_id).call();
+    }
+    return null;
   }
 
   getTotalVoters(_id) {
@@ -77,6 +101,13 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.isActive(_id).call();
   }
 
+  canBeFinalizedNow(_id) {
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeKeysInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
+  }
+
   getBallotType(_id) {
     return this.votingToChangeKeysInstance.methods.getBallotType(_id).call();
   }
@@ -87,6 +118,20 @@ export default class VotingToChangeKeys {
 
   getAffectedKey(_id) {
     return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
+  }
+
+  getNewVotingKey(_id) {
+    if (this.doesMethodExist('getNewVotingKey')) {
+      return this.votingToChangeKeysInstance.methods.getNewVotingKey(_id).call();
+    }
+    return "";
+  }
+
+  getNewPayoutKey(_id) {
+    if (this.doesMethodExist('getNewPayoutKey')) {
+      return this.votingToChangeKeysInstance.methods.getNewPayoutKey(_id).call();
+    }
+    return "";
   }
 
   getMiningKey(_id) {
