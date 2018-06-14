@@ -167,7 +167,10 @@ export class BallotCard extends React.Component {
     @action("Get votingState")
     getVotingState = async () => {
         const { contractsStore, id, votingType } = this.props;
-        const votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
+        let votingState = this.props.votingState;
+        if (!votingState) {
+            votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
+        }
         if (votingState) {
             // getTimes
             this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat);

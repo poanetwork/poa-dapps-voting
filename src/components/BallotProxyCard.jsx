@@ -35,8 +35,13 @@ export class BallotProxyCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getProposedAddress();
-    this.getContractType();
+    if (this.props.votingState) {
+      this.proposedAddress = this.props.votingState.proposedValue;
+      this.contractType = this.props.votingState.contractType;
+    } else {
+      this.getProposedAddress();
+      this.getContractType();
+    }
   }
 
   isSearchPattern = () => {
@@ -50,9 +55,9 @@ export class BallotProxyCard extends React.Component {
   }
 
   render () {
-    const { ballotStore, id } = this.props;
+    const { ballotStore, id, votingState } = this.props;
     return (
-      <BallotCard votingType="votingToChangeProxy" id={id} isSearchPattern={this.isSearchPattern()}>
+      <BallotCard votingType="votingToChangeProxy" votingState={votingState} id={id} isSearchPattern={this.isSearchPattern()}>
         <div className="ballots-about-i ballots-about-i_contract-type">
             <div className="ballots-about-td">
               <p className="ballots-about-i--title">Contract type</p>

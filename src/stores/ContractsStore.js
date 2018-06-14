@@ -154,78 +154,90 @@ class ContractsStore {
 
 	@action("Get all keys ballots")
 	getAllBallots = async () => {
-		let allKeysBallots, allMinThresholdBallots, allProxyBallots;
+		let keysNextBallotId = 0, minThresholdNextBallotId = 0, proxyNextBallotId = 0;
 		try {
-			[allKeysBallots, allMinThresholdBallots, allProxyBallots] = await this.getAllBallotsIDsInternal();
+			[keysNextBallotId, minThresholdNextBallotId, proxyNextBallotId] = await this.getAllBallotsNextIDs();
+			keysNextBallotId = Number(keysNextBallotId);
+			minThresholdNextBallotId = Number(minThresholdNextBallotId);
+			proxyNextBallotId = Number(proxyNextBallotId);
 		} catch (e) {
 			console.log(e.message);
 		}
 
-		let allKeysBallotsIDs = this.getCards(allKeysBallots, "votingToChangeKeys");
-		let allMinThresholdBallotsIDs = this.getCards(allMinThresholdBallots, "votingToChangeMinThreshold");
-		let allProxyBallotsIDs = this.getCards(allProxyBallots, "votingToChangeProxy");
+		const allKeysPromise = this.getCards(keysNextBallotId, "votingToChangeKeys");
+		const allMinThresholdPromise = this.getCards(minThresholdNextBallotId, "votingToChangeMinThreshold");
+		const allProxyPromise = this.getCards(proxyNextBallotId, "votingToChangeProxy");
 
-		await Promise.all([allKeysBallotsIDs, allMinThresholdBallotsIDs, allProxyBallotsIDs]);
+		await Promise.all([allKeysPromise, allMinThresholdPromise, allProxyPromise]);
 
-		let allBallotsIDsLength = allKeysBallotsIDs.length + allMinThresholdBallotsIDs.length + allProxyBallotsIDs.length;
+		const allBallotsIDsLength = keysNextBallotId + minThresholdNextBallotId + proxyNextBallotId;
 
-		if (allBallotsIDsLength == 0) {
+		if (allBallotsIDsLength === 0) {
 			commonStore.hideLoading();
 		}
 	}
 
-	getCards = async (allBallots, contractType) => {
-		let allBallotsIDs = [];
-		if (allBallots) {
-			allBallotsIDs = allBallots.map((event) => event.returnValues.id)
-			for (let i = allBallotsIDs.length - 1; i >= 0; i--) {
-
+	getCards = async (nextBallotId, contractType) => {
+		if (nextBallotId) {
+			for (let id = nextBallotId - 1; id >= 0; id--) {
 				let startTime = 0;
+				let votingState;
+
 				try {
-					startTime = await this[contractType].getStartTime(allBallotsIDs[i]);
+					votingState = await this[contractType].votingState(id);
 				} catch(e) {
 					console.log(e.message);
 				}
 
+				if (votingState) {
+					startTime = votingState.startTime;
+				} else {
+					try {
+						startTime = await this[contractType].getStartTime(id);
+					} catch(e) {
+						console.log(e.message);
+					}
+				}
+
 				let card;
 				switch(contractType) {
-					case "votingToChangeKeys":
+				case "votingToChangeKeys":
 					card = <BallotKeysCard
-					id={allBallotsIDs[i]}
-					type={ballotStore.BallotType.keys}
-					key={ballotsStore.ballotCards.length}
-					startTime={startTime}/>
+						id={id}
+						type={ballotStore.BallotType.keys}
+						key={ballotsStore.ballotCards.length}
+						startTime={startTime}
+						votingState={votingState}/>
 					break;
-					case "votingToChangeMinThreshold":
+				case "votingToChangeMinThreshold":
 					card = <BallotMinThresholdCard
-					id={allBallotsIDs[i]}
-					type={ballotStore.BallotType.minThreshold}
-					key={ballotsStore.ballotCards.length}
-					startTime={startTime}/>
+						id={id}
+						type={ballotStore.BallotType.minThreshold}
+						key={ballotsStore.ballotCards.length}
+						startTime={startTime}
+						votingState={votingState}/>
 					break;
-					case "votingToChangeProxy":
+				case "votingToChangeProxy":
 					card = <BallotProxyCard
-					id={allBallotsIDs[i]}
-					type={ballotStore.BallotType.proxy}
-					key={ballotsStore.ballotCards.length}
-					startTime={startTime}/>
+						id={id}
+						type={ballotStore.BallotType.proxy}
+						key={ballotsStore.ballotCards.length}
+						startTime={startTime}
+						votingState={votingState}/>
 					break;
 				}
 
 				ballotsStore.ballotCards.push(card);
 			}
-
-			return allBallotsIDs;
 		}
 	}
 
-	@action("Get all keys ballots internal")
-	getAllBallotsIDsInternal = async () => {
-		let getAllKeysBallotsIDs = this.votingToChangeKeys.votingToChangeKeysInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-		let getAllMinThresholdBallotsIDs = this.votingToChangeMinThreshold.votingToChangeMinThresholdInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-		let getAllProxyBallotsIDs = this.votingToChangeProxy.votingToChangeProxyInstance.getPastEvents('BallotCreated', {fromBlock: 0});
-
-		return Promise.all([getAllKeysBallotsIDs, getAllMinThresholdBallotsIDs, getAllProxyBallotsIDs]);
+	@action("Get all keys next ballot ids")
+	getAllBallotsNextIDs = async () => {
+		const keysNextBallotId = this.votingToChangeKeys.nextBallotId();
+		const minThresholdNextBallotId = this.votingToChangeMinThreshold.nextBallotId();
+		const proxyNextBallotId = this.votingToChangeProxy.nextBallotId();
+		return Promise.all([keysNextBallotId, minThresholdNextBallotId, proxyNextBallotId]);
 	}
 
 	@action
