@@ -59,14 +59,14 @@ class AppMainRouter extends Component {
 
       await contractsStore.setMiningKey(web3Config);
       await contractsStore.setVotingKey(web3Config);
+
+      await contractsStore.getAllValidatorMetadata();
       await contractsStore.getAllBallots();
 
-      contractsStore.getValidatorsLength();
       contractsStore.getKeysBallotThreshold();
       contractsStore.getMinThresholdBallotThreshold();
       contractsStore.getProxyBallotThreshold();
-      contractsStore.getValidatorActiveBallots();
-      contractsStore.getAllValidatorMetadata();
+      contractsStore.getBallotsLimits();
       console.log("votingKey", contractsStore.votingKey);
       console.log("miningKey", contractsStore.miningKey);
       commonStore.hideLoading();

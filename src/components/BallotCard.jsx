@@ -164,6 +164,45 @@ export class BallotCard extends React.Component {
         }
     }
 
+    @action("Get votingState")
+    getVotingState = async () => {
+        const { contractsStore, id, votingType } = this.props;
+        let votingState = this.props.votingState;
+        if (!votingState) {
+            votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
+        }
+        if (votingState) {
+            // getTimes
+            this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat);
+            this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat);
+            this.calcTimeTo();
+            // getCreator
+            this.getValidatorFullname(votingState.creator);
+            // getTotalVoters
+            if (votingState.totalVoters) {
+                this.totalVoters = Number(votingState.totalVoters);
+            }
+            // getProgress
+            if (votingState.progress) {
+                this.progress = Number(votingState.progress);
+            }
+            // getIsFinalized
+            this.isFinalized = votingState.isFinalized;
+            // getMemo
+            this.memo = votingState.memo;
+        } else {
+            this.getTimes();
+            const creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
+            if (creator) {
+                this.getValidatorFullname(creator);
+            }
+            this.getTotalVoters();
+            this.getProgress();
+            this.getIsFinalized();
+            this.getMemo();
+        }
+    }
+
     @action("Get progress")
     getProgress = async () => {
         const { contractsStore, id, votingType } = this.props;
@@ -371,13 +410,8 @@ export class BallotCard extends React.Component {
         super(props);
         this.isFinalized = false;
         this.hasAlreadyVoted = false;
-        this.getTimes();
-        this.getCreator();
-        this.getTotalVoters();
-        this.getProgress();
+        this.getVotingState();
         this.getHasAlreadyVoted();
-        this.getIsFinalized();
-        this.getMemo();
     }
 
     componentDidMount() {
