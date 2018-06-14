@@ -2,8 +2,9 @@ import React from 'react';
 import { inject, observer } from "mobx-react";
 import Select from 'react-select';
 import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete';
+import { constants } from "../constants";
 
-@inject("validatorStore")
+@inject("validatorStore", "ballotStore")
 @observer
 export class Validator extends React.Component {
   onSelectAutocomplete = async (data) => {
@@ -40,6 +41,17 @@ export class Validator extends React.Component {
       validatorStore.address = `${address_components.street_number} ${address_components.route} ${address_components.locality}`;
       validatorStore.state = address_components.administrative_area_level_1;
       validatorStore.zipCode = address_components.postal_code;
+    }
+  }
+
+  componentDidMount() {
+    this.props.ballotStore.ballotKeys.miningKey = constants.NEW_MINING_KEY;
+  }
+
+  componentWillUnmount() {
+    const { ballotStore } = this.props;
+    if (JSON.stringify(ballotStore.ballotKeys.miningKey) === JSON.stringify(constants.NEW_MINING_KEY)) {
+      ballotStore.ballotKeys.miningKey = "";
     }
   }
 

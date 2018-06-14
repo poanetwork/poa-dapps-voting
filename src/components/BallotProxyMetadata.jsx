@@ -2,11 +2,26 @@ import React from 'react';
 import { inject, observer } from "mobx-react";
 import Select from 'react-select';
 
-@inject("ballotStore")
+@inject("ballotStore", "contractsStore")
 @observer
 export class BallotProxyMetadata extends React.Component {
   render() {
-    const { ballotStore } = this.props;
+    const { ballotStore, contractsStore } = this.props;
+    let options = [
+      /*0*/ { value: '', label: '' },
+      /*1*/ { value: '1', label: ballotStore.ProxyBallotType[1] }, // KeysManager
+      /*2*/ { value: '2', label: ballotStore.ProxyBallotType[2] }, // VotingToChangeKeys
+      /*3*/ { value: '3', label: ballotStore.ProxyBallotType[3] }, // VotingToChangeMinThreshold
+      /*4*/ { value: '4', label: ballotStore.ProxyBallotType[4] }, // VotingToChangeProxy
+      /*5*/ { value: '5', label: ballotStore.ProxyBallotType[5] }, // BallotsStorage
+      /*6*/ { value: '7', label: ballotStore.ProxyBallotType[7] }, // ValidatorMetadata
+      /*7*/ { value: '8', label: ballotStore.ProxyBallotType[8] }, // ProxyStorage
+    ];
+
+    if (!contractsStore.proxyStorage.doesMethodExist('getValidatorMetadata')) {
+      options.splice(6); // keep 0-5 and remove 6-... items if ProxyStorage is old
+    }
+
     return (
       <div>
         <div>
@@ -24,18 +39,11 @@ export class BallotProxyMetadata extends React.Component {
           </div>
           <div className="right">
             <div className="form-el">
-              <label htmlFor="us-state">Contract Type</label>
-              <Select id="us-state"
+              <label htmlFor="contract-type">Contract Type</label>
+              <Select id="contract-type"
                 value={ballotStore.ballotProxy.contractType}
                 onChange={e => ballotStore.changeBallotMetadata(e, "contractType", "ballotProxy")}
-                options={[
-                  { value: '', label: '' },
-                  { value: '1', label: ballotStore.ProxyBallotType[1] },
-                  { value: '2', label: ballotStore.ProxyBallotType[2] },
-                  { value: '3', label: ballotStore.ProxyBallotType[3] },
-                  { value: '4', label: ballotStore.ProxyBallotType[4] },
-                  { value: '5', label: ballotStore.ProxyBallotType[5] },
-                ]}
+                options={options}
               >
               </Select>
               <p className="hint">

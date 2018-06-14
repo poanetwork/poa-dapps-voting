@@ -17,8 +17,14 @@ export default class VotingToChangeMinThreshold {
   }
 
   //setters
-  createBallotToChangeThreshold({startTime, endTime, proposedValue, sender, memo}) {
-    return this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
+  createBallot({startTime, endTime, proposedValue, sender, memo}) {
+    let method;
+    if (this.votingToChangeMinThresholdInstance.methods.createBallot) {
+      method = this.votingToChangeMinThresholdInstance.methods.createBallot;
+    } else {
+      method = this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold;
+    }
+    return method(startTime, endTime, proposedValue, memo).send({from: sender, gasPrice: this.gasPrice})
   }
 
   vote(_id, choice, sender) {
@@ -30,6 +36,13 @@ export default class VotingToChangeMinThreshold {
   }
 
   //getters
+  doesMethodExist(methodName) {
+    if (this.votingToChangeMinThresholdInstance.methods[methodName]) {
+      return true;
+    }
+    return false;
+  }
+
   getStartTime(_id) {
     return this.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call();
   }
@@ -39,7 +52,17 @@ export default class VotingToChangeMinThreshold {
   }
 
   votingState(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
+    if (this.doesMethodExist('votingState')) {
+      return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
+    }
+    return null;
+  }
+
+  getCreator(_id) {
+    if (this.doesMethodExist('getCreator')) {
+      return this.votingToChangeMinThresholdInstance.methods.getCreator(_id).call();
+    }
+    return null;
   }
 
   getTotalVoters(_id) {
@@ -64,6 +87,13 @@ export default class VotingToChangeMinThreshold {
 
   isActive(_id) {
     return this.votingToChangeMinThresholdInstance.methods.isActive(_id).call();
+  }
+
+  canBeFinalizedNow(_id) {
+    if (this.doesMethodExist('canBeFinalizedNow')) {
+      return this.votingToChangeMinThresholdInstance.methods.canBeFinalizedNow(_id).call();
+    }
+    return null;
   }
 
   getProposedValue(_id) {

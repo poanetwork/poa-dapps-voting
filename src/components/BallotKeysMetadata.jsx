@@ -7,20 +7,49 @@ import "react-select/dist/react-select.css";
 @observer
 export class BallotKeysMetadata extends React.Component {
   render() {
-    const options = this.props.contractsStore.validatorsMetadata.slice();
-    const { ballotStore } = this.props;
+    const { ballotStore, contractsStore } = this.props;
+    const options = contractsStore.validatorsMetadata.slice();
+    let newVotingPayoutKeys = '';
+    if (ballotStore.isNewValidatorPersonalData && contractsStore.votingToChangeKeys.doesMethodExist('createBallotToAddNewValidator')) {
+      newVotingPayoutKeys = <div>
+        <div className="left">
+          <div className="form-el">
+            <label htmlFor="new-voting-key">New Voting Key</label>
+            <input type="text" id="new-voting-key"
+              value={ballotStore.ballotKeys.newVotingKey}
+              onChange={e => ballotStore.changeBallotMetadata(e, "newVotingKey", "ballotKeys")}
+            />
+            <p className="hint">
+              Voting key address of new validator.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+            </p>
+          </div>
+        </div>
+        <div className="right">
+          <div className="form-el">
+            <label htmlFor="new-payout-key">New Payout Key</label>
+            <input type="text" id="new-payout-key"
+              value={ballotStore.ballotKeys.newPayoutKey}
+              onChange={e => ballotStore.changeBallotMetadata(e, "newPayoutKey", "ballotKeys")}
+            />
+            <p className="hint">
+              Payout key address of new validator.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+            </p>
+          </div>
+        </div>
+      </div>;
+    }
     return (
       <div>
         <div>
           <div className="left">
             <div className="form-el">
-              <label htmlFor="key">Affected Key</label>
+              <label htmlFor="key">{ballotStore.isNewValidatorPersonalData ? 'New Mining Key' : 'Affected Key'}</label>
               <input type="text" id="key"
                 value={ballotStore.ballotKeys.affectedKey}
                 onChange={e => ballotStore.changeBallotMetadata(e, "affectedKey", "ballotKeys")}
               />
               <p className="hint">
-                Affected key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+                {ballotStore.isNewValidatorPersonalData ? 'Mining key address of new validator.' : 'Affected key address of validator to vote for.'}<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>
@@ -33,12 +62,14 @@ export class BallotKeysMetadata extends React.Component {
                 value={ballotStore.ballotKeys.miningKey}
                 onChange={ballotStore.setMiningKey}
                 options={options}
+                disabled={ballotStore.isNewValidatorPersonalData}
               />
               <p className="hint">
-                Mining key address of validator to vote for. Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
+                Mining key address of validator to vote for.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee.
               </p>
             </div>
           </div>
+          {newVotingPayoutKeys}
           <div className="left">
             <div className="form-el">
               <label htmlFor="datetime-local">Ballot End</label>

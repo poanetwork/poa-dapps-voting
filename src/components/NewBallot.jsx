@@ -56,6 +56,9 @@ export class NewBallot extends React.Component {
 
     if (ballotStore.isBallotForKey) {
       for (let ballotKeysProp in ballotStore.ballotKeys) {
+        if (ballotKeysProp === 'newVotingKey' || ballotKeysProp === 'newPayoutKey') {
+          continue;
+        }
         if (!ballotStore.ballotKeys[ballotKeysProp]) {
           swal("Warning!", `Ballot ${ballotKeysProp} is empty`, "warning");
           commonStore.hideLoading();
@@ -128,12 +131,23 @@ export class NewBallot extends React.Component {
       endTime: ballotStore.endTimeUnix,
       affectedKey: ballotStore.ballotKeys.affectedKey,
       affectedKeyType: ballotStore.ballotKeys.keyType,
+      newVotingKey: ballotStore.ballotKeys.newVotingKey,
+      newPayoutKey: ballotStore.ballotKeys.newPayoutKey,
       miningKey: ballotStore.ballotKeys.miningKey.value,
       ballotType: ballotStore.ballotKeys.keysBallotType,
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeKeys.createVotingForKeys(inputToMethod);
+    let method;
+    if (
+      inputToMethod.ballotType === ballotStore.KeysBallotType.add &&
+      inputToMethod.affectedKeyType === ballotStore.KeyType.mining &&
+      (inputToMethod.newVotingKey || inputToMethod.newPayoutKey)
+    ) {
+      method = contractsStore.votingToChangeKeys.createBallotToAddNewValidator(inputToMethod);
+    } else {
+      method = contractsStore.votingToChangeKeys.createBallot(inputToMethod);
+    }
     return method;
   }
 
@@ -146,7 +160,7 @@ export class NewBallot extends React.Component {
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeMinThreshold.createBallotToChangeThreshold(inputToMethod);
+    let method = contractsStore.votingToChangeMinThreshold.createBallot(inputToMethod);
     return method;
   }
 
@@ -160,7 +174,7 @@ export class NewBallot extends React.Component {
       sender: contractsStore.votingKey,
       memo: ballotStore.memo
     };
-    let method = contractsStore.votingToChangeProxy.createBallotToChangeProxyAddress(inputToMethod);
+    let method = contractsStore.votingToChangeProxy.createBallot(inputToMethod);
     return method;
   }
 
@@ -271,7 +285,7 @@ export class NewBallot extends React.Component {
                 className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
                 onClick={(e) => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
               >
-                Consenus Thershold Ballot
+                Consenus Threshold Ballot
               </div>
               <div
                 className={this.menuItemActive(ballotStore.BallotType.proxy)}
