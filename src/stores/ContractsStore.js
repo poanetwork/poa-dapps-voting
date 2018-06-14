@@ -229,7 +229,7 @@ class ContractsStore {
 	}
 
 	@action
-	async getValidatorActiveBallots() {
+	async getBallotsLimits() {
 		if(this.web3Instance && this.netId){
 			let setVotingToChangeKeys = this.setVotingToChangeKeys({web3Instance: this.web3Instance, netId: this.netId})
 			let setVotingToChangeMinThreshold = this.setVotingToChangeMinThreshold({web3Instance: this.web3Instance, netId: this.netId})
@@ -254,14 +254,15 @@ class ContractsStore {
 	async getAllValidatorMetadata() {
 		this.validatorsMetadata.push(constants.NEW_MINING_KEY);
 		const keys = await this.poaConsensus.getValidators();
+		this.validatorsLength = keys.length;
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
-			this.validatorsMetadata.push({label: `${key} ${metadata.lastName}`, value: key})
+			this.validatorsMetadata.push({
+				label: `${key} ${metadata.lastName}`,
+				labelInvers: `${metadata.lastName} ${key}`,
+				value: key
+			})
 		})
-	}
-	@action
-	async getValidatorMetadata(miningKey) {
-		return await this.validatorMetadata.getValidatorData({miningKey})
 	}
 }
 
