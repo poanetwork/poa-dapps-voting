@@ -6,12 +6,14 @@ class CommonStore {
 	@observable isActiveFilter;
 	@observable isToFinalizeFilter;
 	@observable searchTerm;
+	@observable loadMoreLimit;
 
 	constructor() {
 		this.loading = false;
 		this.isActiveFilter = false;
 		this.isToFinalizeFilter = false;
 		this.rootPath = '/poa-dapps-voting'
+		this.loadMoreLimit = 10;
 	}
 
 	@action("show loading")
