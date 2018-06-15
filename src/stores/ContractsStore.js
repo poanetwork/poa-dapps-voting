@@ -206,24 +206,24 @@ class ContractsStore {
 						id={id}
 						type={ballotStore.BallotType.keys}
 						key={ballotsStore.ballotCards.length}
-						startTime={startTime}
-						votingState={votingState}/>
+						votingState={votingState}
+						startTime={startTime}/>
 					break;
 				case "votingToChangeMinThreshold":
 					card = <BallotMinThresholdCard
 						id={id}
 						type={ballotStore.BallotType.minThreshold}
 						key={ballotsStore.ballotCards.length}
-						startTime={startTime}
-						votingState={votingState}/>
+						votingState={votingState}
+						startTime={startTime}/>
 					break;
 				case "votingToChangeProxy":
 					card = <BallotProxyCard
 						id={id}
 						type={ballotStore.BallotType.proxy}
 						key={ballotsStore.ballotCards.length}
-						startTime={startTime}
-						votingState={votingState}/>
+						votingState={votingState}
+						startTime={startTime}/>
 					break;
 				}
 
