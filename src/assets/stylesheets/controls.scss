@@ -41,6 +41,21 @@ button {
   @extend %button;
   background-color: fade-out(#08b3f2, 0.9);
   color: #08b3f2;
+
+  &.load-more {
+    background-color: rgba(109,46,174,0.1);
+    color: #6d2eae;
+    margin-top: 0;
+    margin-bottom: 50px;
+
+    @media screen and (max-width: $container-width) {
+      margin-bottom: 80px;
+    }
+
+    @media screen and (max-width: $tablet-width) {
+      margin-top: 80px;
+    }
+  }
 }
 
 .radio {
