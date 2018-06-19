@@ -265,19 +265,11 @@ class ContractsStore {
 
 	@action
 	async getAllValidatorMetadata() {
-		//this.validatorsMetadata.push(constants.NEW_MINING_KEY);
 		this.validatorsMetadata[constants.NEW_MINING_KEY.value] = constants.NEW_MINING_KEY;
-
 		const keys = await this.poaConsensus.getValidators();
 		this.validatorsLength = keys.length;
 		keys.forEach(async (key) => {
 			const metadata = await this.validatorMetadata.getValidatorFullName({miningKey: key})
-			//this.validatorsMetadata.push({
-			//	label: `${key} ${metadata.lastName}`,
-			//	lastNameAndKey: `${metadata.lastName} ${key}`,
-			//	fullName: `${metadata.firstName} ${metadata.lastName}`,
-			//	value: key
-			//})
 			this.validatorsMetadata[key.toLowerCase()] = {
 				label: `${key} ${metadata.lastName}`,
 				lastNameAndKey: `${metadata.lastName} ${key}`,
