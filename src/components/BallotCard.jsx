@@ -2,7 +2,6 @@ import React from "react";
 import moment from "moment";
 import { observable, action, computed } from "mobx";
 import { inject, observer } from "mobx-react";
-import { toAscii } from "../helpers";
 import { messages } from "../messages";
 import swal from "sweetalert2";
 
@@ -33,6 +32,7 @@ export class BallotCard extends React.Component {
     @observable progress;
     @observable totalVoters;
     @observable isFinalized;
+    @observable canBeFinalized;
     @observable hasAlreadyVoted;
     @observable memo;
 
@@ -188,8 +188,16 @@ export class BallotCard extends React.Component {
             }
             // getIsFinalized
             this.isFinalized = votingState.isFinalized;
+            // canBeFinalizedNow
+            this.canBeFinalized = votingState.hasOwnProperty('canBeFinalizedNow') ? votingState.canBeFinalizedNow : null;
             // getMemo
             this.memo = votingState.memo;
+            // hasAlreadyVoted
+            if (votingState.hasOwnProperty('hasAlreadyVoted')) {
+                this.hasAlreadyVoted = votingState.hasAlreadyVoted;
+            } else {
+                this.getHasAlreadyVoted();
+            }
         } else {
             this.getTimes();
             const creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
@@ -199,7 +207,9 @@ export class BallotCard extends React.Component {
             this.getTotalVoters();
             this.getProgress();
             this.getIsFinalized();
+            this.canBeFinalizedNow();
             this.getMemo();
+            this.getHasAlreadyVoted();
         }
     }
 
@@ -231,12 +241,10 @@ export class BallotCard extends React.Component {
     @action("Get validator full name")
     getValidatorFullname = async (_miningKey) => {
         const { contractsStore } = this.props;
-        let validator = await this.repeatGetProperty(contractsStore, "validatorMetadata", _miningKey, "validators", 0);
-        let firstName, lastName, fullName
-        if (validator) {
-            firstName = toAscii(validator.firstName);
-            lastName = toAscii(validator.lastName);
-            fullName = `${firstName} ${lastName}`;
+        const miningKeyLowerCase = _miningKey.toLowerCase();
+        let fullName;
+        if (contractsStore.validatorsMetadata.hasOwnProperty(miningKeyLowerCase)) {
+            fullName = contractsStore.validatorsMetadata[miningKeyLowerCase].fullName;
         }
         this.creatorMiningKey = _miningKey;
         this.creator = fullName ? fullName : _miningKey;
@@ -274,7 +282,7 @@ export class BallotCard extends React.Component {
     canBeFinalizedNow = async () => {
         const { contractsStore, id, votingType } = this.props;
         let _canBeFinalizedNow = await this.repeatGetProperty(contractsStore, votingType, id, "canBeFinalizedNow", 0);
-        return _canBeFinalizedNow;
+        this.canBeFinalized = _canBeFinalizedNow;
     }
 
     getMemo = async () => {
@@ -335,12 +343,13 @@ export class BallotCard extends React.Component {
             return;
         }
         commonStore.showLoading();
-        let canBeFinalized = await this.canBeFinalizedNow();
-        if (canBeFinalized === null) {
+        await this.canBeFinalizedNow();
+        let _canBeFinalized = this.canBeFinalized;
+        if (_canBeFinalized === null) {
             console.log('canBeFinalizedNow is not existed');
-            canBeFinalized = !(await this.isActive());
+            _canBeFinalized = !(await this.isActive());
         }
-        if (!canBeFinalized) {
+        if (!_canBeFinalized) {
             commonStore.hideLoading();
             swal("Warning!", messages.INVALID_FINALIZE_MSG, "warning");
             return;
@@ -411,7 +420,6 @@ export class BallotCard extends React.Component {
         this.isFinalized = false;
         this.hasAlreadyVoted = false;
         this.getVotingState();
-        this.getHasAlreadyVoted();
     }
 
     componentDidMount() {
@@ -426,7 +434,7 @@ export class BallotCard extends React.Component {
 
     showCard = () => {
         let { commonStore } = this.props;
-        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && this.timeToFinish.val == 0 && this.timeToStart.val == 0 : true;
+        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && (this.timeToFinish.val == 0 || this.canBeFinalized) && this.timeToStart.val == 0 : true;
         let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter;
         return show;
     }

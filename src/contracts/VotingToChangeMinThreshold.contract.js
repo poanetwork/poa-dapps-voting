@@ -62,6 +62,13 @@ export default class VotingToChangeMinThreshold {
     return null;
   }
 
+  getBallotInfo(_id, _votingKey) {
+    if (this.doesMethodExist('getBallotInfo')) {
+      return this.votingToChangeMinThresholdInstance.methods.getBallotInfo(_id, _votingKey).call();
+    }
+    return null;
+  }
+
   getCreator(_id) {
     if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeMinThresholdInstance.methods.getCreator(_id).call();
