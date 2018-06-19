@@ -39,7 +39,7 @@ class ContractsStore {
 	constructor() {
 		this.votingKey = null;
 		this.miningKey = null;
-		this.validatorsMetadata = [];
+		this.validatorsMetadata = {};
 		this.validatorLimits = {keys: null, minThreshold: null, proxy: null};
 	}
 
@@ -178,57 +178,58 @@ class ContractsStore {
 	}
 
 	getCards = async (nextBallotId, contractType) => {
-		if (nextBallotId) {
-			for (let id = nextBallotId - 1; id >= 0; id--) {
-				let startTime = 0;
-				let votingState;
+		for (let id = nextBallotId - 1; id >= 0; id--) {
+			let startTime = 0;
+			let votingState;
 
-				try {
+			try {
+				votingState = await this[contractType].getBallotInfo(id, this.votingKey);
+				if (!votingState) {
 					votingState = await this[contractType].votingState(id);
+				}
+			} catch(e) {
+				console.log(e.message);
+			}
+
+			if (votingState) {
+				startTime = votingState.startTime;
+			} else {
+				try {
+					startTime = await this[contractType].getStartTime(id);
 				} catch(e) {
 					console.log(e.message);
 				}
-
-				if (votingState) {
-					startTime = votingState.startTime;
-				} else {
-					try {
-						startTime = await this[contractType].getStartTime(id);
-					} catch(e) {
-						console.log(e.message);
-					}
-				}
-
-				let card;
-				switch(contractType) {
-				case "votingToChangeKeys":
-					card = <BallotKeysCard
-						id={id}
-						type={ballotStore.BallotType.keys}
-						key={ballotsStore.ballotCards.length}
-						votingState={votingState}
-						startTime={startTime}/>
-					break;
-				case "votingToChangeMinThreshold":
-					card = <BallotMinThresholdCard
-						id={id}
-						type={ballotStore.BallotType.minThreshold}
-						key={ballotsStore.ballotCards.length}
-						votingState={votingState}
-						startTime={startTime}/>
-					break;
-				case "votingToChangeProxy":
-					card = <BallotProxyCard
-						id={id}
-						type={ballotStore.BallotType.proxy}
-						key={ballotsStore.ballotCards.length}
-						votingState={votingState}
-						startTime={startTime}/>
-					break;
-				}
-
-				ballotsStore.ballotCards.push(card);
 			}
+
+			let card;
+			switch(contractType) {
+			case "votingToChangeKeys":
+				card = <BallotKeysCard
+					id={id}
+					type={ballotStore.BallotType.keys}
+					key={ballotsStore.ballotCards.length}
+					votingState={votingState}
+					startTime={startTime}/>
+				break;
+			case "votingToChangeMinThreshold":
+				card = <BallotMinThresholdCard
+					id={id}
+					type={ballotStore.BallotType.minThreshold}
+					key={ballotsStore.ballotCards.length}
+					votingState={votingState}
+					startTime={startTime}/>
+				break;
+			case "votingToChangeProxy":
+				card = <BallotProxyCard
+					id={id}
+					type={ballotStore.BallotType.proxy}
+					key={ballotsStore.ballotCards.length}
+					votingState={votingState}
+					startTime={startTime}/>
+				break;
+			}
+
+			ballotsStore.ballotCards.push(card);
 		}
 	}
 
@@ -264,16 +265,25 @@ class ContractsStore {
 
 	@action
 	async getAllValidatorMetadata() {
-		this.validatorsMetadata.push(constants.NEW_MINING_KEY);
+		//this.validatorsMetadata.push(constants.NEW_MINING_KEY);
+		this.validatorsMetadata[constants.NEW_MINING_KEY.value] = constants.NEW_MINING_KEY;
+
 		const keys = await this.poaConsensus.getValidators();
 		this.validatorsLength = keys.length;
 		keys.forEach(async (key) => {
-			const metadata = await this.validatorMetadata.getValidatorData({miningKey: key})
-			this.validatorsMetadata.push({
+			const metadata = await this.validatorMetadata.getValidatorFullName({miningKey: key})
+			//this.validatorsMetadata.push({
+			//	label: `${key} ${metadata.lastName}`,
+			//	lastNameAndKey: `${metadata.lastName} ${key}`,
+			//	fullName: `${metadata.firstName} ${metadata.lastName}`,
+			//	value: key
+			//})
+			this.validatorsMetadata[key.toLowerCase()] = {
 				label: `${key} ${metadata.lastName}`,
-				labelInvers: `${metadata.lastName} ${key}`,
+				lastNameAndKey: `${metadata.lastName} ${key}`,
+				fullName: `${metadata.firstName} ${metadata.lastName}`,
 				value: key
-			})
+			}
 		})
 	}
 }

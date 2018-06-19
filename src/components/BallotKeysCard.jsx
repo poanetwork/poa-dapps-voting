@@ -52,18 +52,30 @@ export class BallotKeysCard extends React.Component {
       this.miningKey = votingState.miningKey;
 
       if (this.miningKey && this.miningKey !== '0x0000000000000000000000000000000000000000') {
-        for (let i = 0; i < contractsStore.validatorsMetadata.length; i++) {
-          if (contractsStore.validatorsMetadata[i].value.toLowerCase() === this.miningKey.toLowerCase()) {
-            this.miningKey = contractsStore.validatorsMetadata[i].labelInvers;
-            break;
-          }
+        const miningKeyLowerCase = this.miningKey.toLowerCase();
+        if (contractsStore.validatorsMetadata.hasOwnProperty(miningKeyLowerCase)) {
+          this.miningKey = contractsStore.validatorsMetadata[miningKeyLowerCase].lastNameAndKey;
         }
+      }
+
+      if (votingState.hasOwnProperty('newVotingKey')) {
+        this.newVotingKey = votingState.newVotingKey;
+      } else {
+        this.getNewVotingKey();
+      }
+
+      if (votingState.hasOwnProperty('newPayoutKey')) {
+        this.newPayoutKey = votingState.newPayoutKey;
+      } else {
+        this.getNewPayoutKey();
       }
     } else {
       this.getAffectedKey();
       this.getAffectedKeyType();
       this.getBallotType();
       this.getMiningKey();
+      this.getNewVotingKey();
+      this.getNewPayoutKey();
     }
   }
 
@@ -144,12 +156,10 @@ export class BallotKeysCard extends React.Component {
       console.log(e.message);
     }
     if (miningKey && miningKey !== '0x0000000000000000000000000000000000000000') {
+      const miningKeyLowerCase = this.miningKey.toLowerCase();
       this.miningKey = miningKey;
-      for (let i = 0; i < contractsStore.validatorsMetadata.length; i++) {
-        if (contractsStore.validatorsMetadata[i].value.toLowerCase() === this.miningKey.toLowerCase()) {
-          this.miningKey = contractsStore.validatorsMetadata[i].labelInvers;
-          break;
-        }
+      if (contractsStore.validatorsMetadata.hasOwnProperty(miningKeyLowerCase)) {
+        this.miningKey = contractsStore.validatorsMetadata[miningKeyLowerCase].lastNameAndKey;
       }
     }
   }
@@ -157,8 +167,6 @@ export class BallotKeysCard extends React.Component {
   constructor(props) {
     super(props);
     this.getVotingState();
-    this.getNewVotingKey();
-    this.getNewPayoutKey();
   }
 
   getAffectedKeyTypeDisplayName = () => {
