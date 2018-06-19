@@ -60,12 +60,18 @@ export class BallotKeysCard extends React.Component {
 
       if (votingState.hasOwnProperty('newVotingKey')) {
         this.newVotingKey = votingState.newVotingKey;
+        if (this.newVotingKey === "0x0000000000000000000000000000000000000000") {
+          this.newVotingKey = "";
+        }
       } else {
         this.getNewVotingKey();
       }
 
       if (votingState.hasOwnProperty('newPayoutKey')) {
         this.newPayoutKey = votingState.newPayoutKey;
+        if (this.newPayoutKey === "0x0000000000000000000000000000000000000000") {
+          this.newPayoutKey = "";
+        }
       } else {
         this.getNewPayoutKey();
       }
