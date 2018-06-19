@@ -74,6 +74,13 @@ export default class VotingToChangeKeys {
     return null;
   }
 
+  getBallotInfo(_id, _votingKey) {
+    if (this.doesMethodExist('getBallotInfo')) {
+      return this.votingToChangeKeysInstance.methods.getBallotInfo(_id).call();
+    }
+    return null;
+  }
+
   getCreator(_id) {
     if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeKeysInstance.methods.getCreator(_id).call();

@@ -8,7 +8,12 @@ import "react-select/dist/react-select.css";
 export class BallotKeysMetadata extends React.Component {
   render() {
     const { ballotStore, contractsStore } = this.props;
-    const options = contractsStore.validatorsMetadata.slice();
+    let options = [];
+    for (var key in contractsStore.validatorsMetadata) {
+      if (contractsStore.validatorsMetadata.hasOwnProperty(key)) {
+        options.push(contractsStore.validatorsMetadata[key]);
+      }
+    }
     let newVotingPayoutKeys = '';
     if (ballotStore.isNewValidatorPersonalData && contractsStore.votingToChangeKeys.doesMethodExist('createBallotToAddNewValidator')) {
       newVotingPayoutKeys = <div>

@@ -69,6 +69,13 @@ export default class VotingToChangeProxy {
     return null;
   }
 
+  getBallotInfo(_id, _votingKey) {
+    if (this.doesMethodExist('getBallotInfo')) {
+      return this.votingToChangeProxyInstance.methods.getBallotInfo(_id, _votingKey).call();
+    }
+    return null;
+  }
+
   getCreator(_id) {
     if (this.doesMethodExist('getCreator')) {
       return this.votingToChangeProxyInstance.methods.getCreator(_id).call();
