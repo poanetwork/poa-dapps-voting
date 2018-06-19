@@ -50,9 +50,7 @@ export class BallotCard extends React.Component {
         if (this.isFinalized) {
             return '';
         }
-        const { contractsStore, votingType } = this.props;
         let description = 'Finalization is available after ballot time is finished';
-        //if (this.getContract(contractsStore, votingType).doesMethodExist('canBeFinalizedNow')) {
         if (this.canBeFinalized !== null) {
             description += ' or all validators are voted';
         }
