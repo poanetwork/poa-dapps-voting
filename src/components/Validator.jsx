@@ -37,6 +37,8 @@ export class Validator extends React.Component {
         case "administrative_area_level_1":
           address_components.administrative_area_level_1 = address_component.long_name;
           break;
+        default:
+          break;
       }
       validatorStore.address = `${address_components.street_number} ${address_components.route} ${address_components.locality}`;
       validatorStore.state = address_components.administrative_area_level_1;

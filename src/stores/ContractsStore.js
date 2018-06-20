@@ -44,7 +44,7 @@ class ContractsStore {
 	}
 
 	@computed get isValidVotingKey() {
-		if (this.miningKey != "0x0000000000000000000000000000000000000000") return true;
+		if (this.miningKey && this.miningKey !== "0x0000000000000000000000000000000000000000") return true;
 		return false
 	}
 
@@ -177,28 +177,94 @@ class ContractsStore {
 		}
 	}
 
+	fillCardVotingState = (votingState, contractType) => {
+		const creatorLowerCase = votingState.creator.toLowerCase();
+		votingState.creatorMiningKey = votingState.creator;
+		if (this.validatorsMetadata.hasOwnProperty(creatorLowerCase)) {
+			const creatorFullName = this.validatorsMetadata[creatorLowerCase].fullName;
+			if (creatorFullName) {
+				votingState.creator = creatorFullName;
+			}
+		}
+
+		if (contractType === "votingToChangeKeys") {
+			votingState.isAddMining = false;
+
+			switch (Number(votingState.ballotType)) {
+			case ballotStore.KeysBallotType.add:
+				votingState.ballotTypeDisplayName = "add";
+				if (Number(votingState.affectedKeyType) === ballotStore.KeyType.mining) {
+					votingState.isAddMining = true;
+				}
+				break;
+			case ballotStore.KeysBallotType.remove:
+				votingState.ballotTypeDisplayName = "remove";
+				break;
+			case ballotStore.KeysBallotType.swap:
+				votingState.ballotTypeDisplayName = "swap";
+				break;
+			default:
+				votingState.ballotTypeDisplayName =  "";
+				break;
+			}
+
+			if (!votingState.hasOwnProperty('newVotingKey')) {
+				votingState.newVotingKey = "";
+			}
+			if (votingState.newVotingKey === "0x0000000000000000000000000000000000000000") {
+				votingState.newVotingKey = "";
+			}
+
+			if (!votingState.hasOwnProperty('newPayoutKey')) {
+				votingState.newPayoutKey = "";
+			}
+			if (votingState.newPayoutKey === "0x0000000000000000000000000000000000000000") {
+				votingState.newPayoutKey = "";
+			}
+
+			switch(Number(votingState.affectedKeyType)) {
+			case ballotStore.KeyType.mining:
+				votingState.affectedKeyTypeDisplayName = "mining";
+				break;
+			case ballotStore.KeyType.voting:
+				votingState.affectedKeyTypeDisplayName = "voting";
+				break;
+			case ballotStore.KeyType.payout:
+				votingState.affectedKeyTypeDisplayName = "payout";
+				break;
+			default:
+				votingState.affectedKeyTypeDisplayName =  "";
+				break;
+			}
+			if (votingState.isAddMining) {
+				if (votingState.newVotingKey) votingState.affectedKeyTypeDisplayName += ', voting';
+				if (votingState.newPayoutKey) votingState.affectedKeyTypeDisplayName += ', payout';
+			}
+
+			if (votingState.miningKey && votingState.miningKey !== '0x0000000000000000000000000000000000000000') {
+				const miningKeyLowerCase = votingState.miningKey.toLowerCase();
+				if (this.validatorsMetadata.hasOwnProperty(miningKeyLowerCase)) {
+					votingState.miningKey = this.validatorsMetadata[miningKeyLowerCase].lastNameAndKey;
+				}
+			}
+		} else if (contractType === "votingToChangeProxy") {
+			votingState.contractTypeDisplayName = ballotStore.ProxyBallotType[votingState.contractType];
+		}
+
+		return votingState;
+	}
+
 	getCards = async (nextBallotId, contractType) => {
 		for (let id = nextBallotId - 1; id >= 0; id--) {
-			let startTime = 0;
 			let votingState;
-
 			try {
 				votingState = await this[contractType].getBallotInfo(id, this.votingKey);
 				if (!votingState) {
 					votingState = await this[contractType].votingState(id);
 				}
+				votingState = this.fillCardVotingState(votingState, contractType);
 			} catch(e) {
 				console.log(e.message);
-			}
-
-			if (votingState) {
-				startTime = votingState.startTime;
-			} else {
-				try {
-					startTime = await this[contractType].getStartTime(id);
-				} catch(e) {
-					console.log(e.message);
-				}
 			}
 
 			let card;
@@ -208,24 +274,23 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.keys}
 					key={ballotsStore.ballotCards.length}
-					votingState={votingState}
-					startTime={startTime}/>
+					votingState={votingState}/>
 				break;
 			case "votingToChangeMinThreshold":
 				card = <BallotMinThresholdCard
 					id={id}
 					type={ballotStore.BallotType.minThreshold}
 					key={ballotsStore.ballotCards.length}
-					votingState={votingState}
-					startTime={startTime}/>
+					votingState={votingState}/>
 				break;
 			case "votingToChangeProxy":
 				card = <BallotProxyCard
 					id={id}
 					type={ballotStore.BallotType.proxy}
 					key={ballotsStore.ballotCards.length}
-					votingState={votingState}
-					startTime={startTime}/>
+					votingState={votingState}/>
+				break;
+			default:
 				break;
 			}
 

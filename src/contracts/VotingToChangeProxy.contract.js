@@ -43,14 +43,6 @@ export default class VotingToChangeProxy {
     return false;
   }
 
-  getStartTime(_id) {
-    return this.votingToChangeProxyInstance.methods.getStartTime(_id).call();
-  }
-
-  getEndTime(_id) {
-    return this.votingToChangeProxyInstance.methods.getEndTime(_id).call();
-  }
-
   nextBallotId() {
     return this.votingToChangeProxyInstance.methods.nextBallotId().call();
   }
@@ -67,25 +59,6 @@ export default class VotingToChangeProxy {
       return this.votingToChangeProxyInstance.methods.getBallotInfo(_id, _votingKey).call();
     }
     return null;
-  }
-
-  getCreator(_id) {
-    if (this.doesMethodExist('getCreator')) {
-      return this.votingToChangeProxyInstance.methods.getCreator(_id).call();
-    }
-    return null;
-  }
-
-  getTotalVoters(_id) {
-    return this.votingToChangeProxyInstance.methods.getTotalVoters(_id).call();
-  }
-
-  getProgress(_id) {
-    return this.votingToChangeProxyInstance.methods.getProgress(_id).call();
-  }
-
-  getIsFinalized(_id) {
-    return this.votingToChangeProxyInstance.methods.getIsFinalized(_id).call();
   }
 
   hasAlreadyVoted(_id, votingKey) {
@@ -105,18 +78,6 @@ export default class VotingToChangeProxy {
       return this.votingToChangeProxyInstance.methods.canBeFinalizedNow(_id).call();
     }
     return null;
-  }
-
-  getProposedValue(_id) {
-    return this.votingToChangeProxyInstance.methods.getProposedValue(_id).call();
-  }
-
-  getContractType(_id) {
-    return this.votingToChangeProxyInstance.methods.getContractType(_id).call();
-  }
-
-  getMemo(_id) {
-    return this.votingToChangeProxyInstance.methods.getMemo(_id).call();
   }
 
   getMiningByVotingKey(_votingKey) {
