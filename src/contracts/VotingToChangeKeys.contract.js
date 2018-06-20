@@ -55,14 +55,6 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance && this.votingToChangeKeysInstance.methods[methodName];
   }
 
-  getStartTime(_id) {
-    return this.votingToChangeKeysInstance.methods.getStartTime(_id).call();
-  }
-
-  getEndTime(_id) {
-    return this.votingToChangeKeysInstance.methods.getEndTime(_id).call();
-  }
-
   nextBallotId() {
     return this.votingToChangeKeysInstance.methods.nextBallotId().call();
   }
@@ -79,25 +71,6 @@ export default class VotingToChangeKeys {
       return this.votingToChangeKeysInstance.methods.getBallotInfo(_id).call();
     }
     return null;
-  }
-
-  getCreator(_id) {
-    if (this.doesMethodExist('getCreator')) {
-      return this.votingToChangeKeysInstance.methods.getCreator(_id).call();
-    }
-    return null;
-  }
-
-  getTotalVoters(_id) {
-    return this.votingToChangeKeysInstance.methods.getTotalVoters(_id).call();
-  }
-
-  getProgress(_id) {
-    return this.votingToChangeKeysInstance.methods.getProgress(_id).call();
-  }
-
-  getIsFinalized(_id) {
-    return this.votingToChangeKeysInstance.methods.getIsFinalized(_id).call();
   }
 
   hasAlreadyVoted(_id, votingKey) {
@@ -119,42 +92,8 @@ export default class VotingToChangeKeys {
     return null;
   }
 
-  getBallotType(_id) {
-    return this.votingToChangeKeysInstance.methods.getBallotType(_id).call();
-  }
-
-  getAffectedKeyType(_id) {
-    return this.votingToChangeKeysInstance.methods.getAffectedKeyType(_id).call();
-  }
-
-  getAffectedKey(_id) {
-    return this.votingToChangeKeysInstance.methods.getAffectedKey(_id).call();
-  }
-
-  getNewVotingKey(_id) {
-    if (this.doesMethodExist('getNewVotingKey')) {
-      return this.votingToChangeKeysInstance.methods.getNewVotingKey(_id).call();
-    }
-    return "";
-  }
-
-  getNewPayoutKey(_id) {
-    if (this.doesMethodExist('getNewPayoutKey')) {
-      return this.votingToChangeKeysInstance.methods.getNewPayoutKey(_id).call();
-    }
-    return "";
-  }
-
-  getMiningKey(_id) {
-    return this.votingToChangeKeysInstance.methods.getMiningKey(_id).call();
-  }
-
   getMiningByVotingKey(_votingKey) {
     return this.votingToChangeKeysInstance.methods.getMiningByVotingKey(_votingKey).call();
-  }
-
-  getMemo(_id) {
-    return this.votingToChangeKeysInstance.methods.getMemo(_id).call();
   }
 
   async getValidatorActiveBallots(_votingKey) {

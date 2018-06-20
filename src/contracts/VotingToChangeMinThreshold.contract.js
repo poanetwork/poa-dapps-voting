@@ -50,14 +50,6 @@ export default class VotingToChangeMinThreshold {
     return false;
   }
 
-  getStartTime(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getStartTime(_id).call();
-  }
-
-  getEndTime(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getEndTime(_id).call();
-  }
-
   nextBallotId() {
     return this.votingToChangeMinThresholdInstance.methods.nextBallotId().call();
   }
@@ -74,25 +66,6 @@ export default class VotingToChangeMinThreshold {
       return this.votingToChangeMinThresholdInstance.methods.getBallotInfo(_id, _votingKey).call();
     }
     return null;
-  }
-
-  getCreator(_id) {
-    if (this.doesMethodExist('getCreator')) {
-      return this.votingToChangeMinThresholdInstance.methods.getCreator(_id).call();
-    }
-    return null;
-  }
-
-  getTotalVoters(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getTotalVoters(_id).call();
-  }
-
-  getProgress(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getProgress(_id).call();
-  }
-
-  getIsFinalized(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getIsFinalized(_id).call();
   }
 
   hasAlreadyVoted(_id, votingKey) {
@@ -114,16 +87,8 @@ export default class VotingToChangeMinThreshold {
     return null;
   }
 
-  getProposedValue(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getProposedValue(_id).call();
-  }
-
   getMiningByVotingKey(_votingKey) {
     return this.votingToChangeMinThresholdInstance.methods.getMiningByVotingKey(_votingKey).call();
-  }
-
-  getMemo(_id) {
-    return this.votingToChangeMinThresholdInstance.methods.getMemo(_id).call();
   }
 
   async getValidatorActiveBallots(_votingKey) {

@@ -11,7 +11,7 @@ const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
 
 const zeroTimeTo = "00:00";
 
-@inject("commonStore", "contractsStore", "ballotStore", "routing")
+@inject("commonStore", "contractsStore", "routing")
 @observer
 export class BallotCard extends React.Component {
     @observable startTime;
@@ -93,20 +93,6 @@ export class BallotCard extends React.Component {
         return votesPercents;
     }
 
-    @action("Get start time of keys ballot")
-    getStartTime = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let startTime = await this.repeatGetProperty(contractsStore, votingType, id, "getStartTime", 0);
-        this.startTime = moment.utc(startTime * 1000).format(USDateTimeFormat);
-    }
-
-    @action("Get end time of keys ballot")
-    getEndTime = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let endTime = await this.repeatGetProperty(contractsStore, votingType, id, "getEndTime", 0);
-        this.endTime = moment.utc(endTime * 1000).format(USDateTimeFormat);
-    }
-
     @action("Calculate time to start/finish")
     calcTimeTo = () => {
         const _now = moment();
@@ -139,114 +125,6 @@ export class BallotCard extends React.Component {
         hours = hours < 10 ? "0" + hours : hours;
         let formattedMs = hours + moment.utc(ms).format(":mm:ss");
         return formattedMs;
-    }
-
-
-    @action("Get times")
-    getTimes = async () => {
-        await this.getStartTime();
-        await this.getEndTime();
-        this.calcTimeTo();
-    }
-
-    @action("Get creator")
-    getCreator = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
-        if (creator) {
-            this.getValidatorFullname(creator);
-        } else {
-            let votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
-            if (votingState) {
-                this.getValidatorFullname(votingState.creator);
-            }
-        }
-    }
-
-    @action("Get votingState")
-    getVotingState = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let votingState = this.props.votingState;
-        if (!votingState) {
-            votingState = await this.repeatGetProperty(contractsStore, votingType, id, "votingState", 0);
-        }
-        if (votingState) {
-            // getTimes
-            this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat);
-            this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat);
-            this.calcTimeTo();
-            // getCreator
-            this.getValidatorFullname(votingState.creator);
-            // getTotalVoters
-            if (votingState.totalVoters) {
-                this.totalVoters = Number(votingState.totalVoters);
-            }
-            // getProgress
-            if (votingState.progress) {
-                this.progress = Number(votingState.progress);
-            }
-            // getIsFinalized
-            this.isFinalized = votingState.isFinalized;
-            // canBeFinalizedNow
-            this.canBeFinalized = votingState.hasOwnProperty('canBeFinalizedNow') ? votingState.canBeFinalizedNow : null;
-            // getMemo
-            this.memo = votingState.memo;
-            // hasAlreadyVoted
-            if (votingState.hasOwnProperty('hasAlreadyVoted')) {
-                this.hasAlreadyVoted = votingState.hasAlreadyVoted;
-            } else {
-                this.getHasAlreadyVoted();
-            }
-        } else {
-            this.getTimes();
-            const creator = await this.repeatGetProperty(contractsStore, votingType, id, "getCreator", 0);
-            if (creator) {
-                this.getValidatorFullname(creator);
-            }
-            this.getTotalVoters();
-            this.getProgress();
-            this.getIsFinalized();
-            this.canBeFinalizedNow();
-            this.getMemo();
-            this.getHasAlreadyVoted();
-        }
-    }
-
-    @action("Get progress")
-    getProgress = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let progress = await this.repeatGetProperty(contractsStore, votingType, id, "getProgress", 0);
-        if (progress) {
-            this.progress = Number(progress);
-        }
-    }
-
-    @action("Get total voters")
-    getTotalVoters = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let totalVoters = await this.repeatGetProperty(contractsStore, votingType, id, "getTotalVoters", 0);
-        if (totalVoters) {
-            this.totalVoters = Number(totalVoters);
-        }
-    }
-
-    @action("Get isFinalized")
-    getIsFinalized = async() => {
-        const { contractsStore, id, votingType } = this.props;
-        let isFinalized = await this.repeatGetProperty(contractsStore, votingType, id, "getIsFinalized", 0);
-        this.isFinalized = isFinalized;
-    }
-
-    @action("Get validator full name")
-    getValidatorFullname = async (_miningKey) => {
-        const { contractsStore } = this.props;
-        const miningKeyLowerCase = _miningKey.toLowerCase();
-        let fullName;
-        if (contractsStore.validatorsMetadata.hasOwnProperty(miningKeyLowerCase)) {
-            fullName = contractsStore.validatorsMetadata[miningKeyLowerCase].fullName;
-        }
-        this.creatorMiningKey = _miningKey;
-        this.creator = fullName ? fullName : _miningKey;
     }
 
     @action("validator has already voted")
@@ -282,13 +160,6 @@ export class BallotCard extends React.Component {
         const { contractsStore, id, votingType } = this.props;
         let _canBeFinalizedNow = await this.repeatGetProperty(contractsStore, votingType, id, "canBeFinalizedNow", 0);
         this.canBeFinalized = _canBeFinalizedNow;
-    }
-
-    getMemo = async () => {
-        const { contractsStore, id, votingType } = this.props;
-        let memo = await this.repeatGetProperty(contractsStore, votingType, id, "getMemo", 0);
-        this.memo = memo;
-        return memo;
     }
 
     vote = async ({choice}) => {
@@ -416,9 +287,30 @@ export class BallotCard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.isFinalized = false;
-        this.hasAlreadyVoted = false;
-        this.getVotingState();
+        const { votingState } = this.props;
+        // getTimes
+        this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat);
+        this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat);
+        this.calcTimeTo();
+        // getCreator
+        this.creator = votingState.creator;
+        this.creatorMiningKey = votingState.creatorMiningKey;
+        // getTotalVoters
+        this.totalVoters = Number(votingState.totalVoters);
+        // getProgress
+        this.progress = Number(votingState.progress);
+        // getIsFinalized
+        this.isFinalized = votingState.isFinalized;
+        // canBeFinalizedNow
+        this.canBeFinalized = votingState.hasOwnProperty('canBeFinalizedNow') ? votingState.canBeFinalizedNow : null;
+        // getMemo
+        this.memo = votingState.memo;
+        // hasAlreadyVoted
+        if (votingState.hasOwnProperty('hasAlreadyVoted')) {
+            this.hasAlreadyVoted = votingState.hasAlreadyVoted;
+        } else {
+            this.getHasAlreadyVoted();
+        }
     }
 
     componentDidMount() {
@@ -433,32 +325,9 @@ export class BallotCard extends React.Component {
 
     showCard = () => {
         let { commonStore } = this.props;
-        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && (this.timeToFinish.val == 0 || this.canBeFinalized) && this.timeToStart.val == 0 : true;
+        let checkToFinalizeFilter = commonStore.isToFinalizeFilter ? !this.isFinalized && (this.timeToFinish.val === 0 || this.canBeFinalized) && this.timeToStart.val === 0 : true;
         let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter;
         return show;
-    }
-
-    isCreatorPattern = () => {
-        let { commonStore } = this.props;
-        if (commonStore.searchTerm) {
-            if (commonStore.searchTerm.length > 0) {
-                const _isCreatorPattern = String(this.creator).toLowerCase().includes(commonStore.searchTerm);
-                const _isCreatorMiningKeyPattern = String(this.creatorMiningKey).toLowerCase().includes(commonStore.searchTerm);
-                return  _isCreatorPattern || _isCreatorMiningKeyPattern;
-            }
-        }
-        return true;
-    }
-
-    isMemoPattern = () => {
-        let { commonStore } = this.props;
-        if (commonStore.searchTerm) {
-            if (commonStore.searchTerm.length > 0) {
-                const _isMemoPattern = String(this.memo).toLowerCase().includes(commonStore.searchTerm);
-                return  _isMemoPattern;
-            }
-        }
-        return true;
     }
 
     typeName(type){
@@ -475,9 +344,8 @@ export class BallotCard extends React.Component {
     }
 
     render () {
-        let { contractsStore, votingType, children, isSearchPattern } = this.props;
-        let isFromSearch = (this.isCreatorPattern() || this.isMemoPattern() || isSearchPattern);
-        let ballotClass = (this.showCard() && isFromSearch) ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
+        let { contractsStore, votingType, children } = this.props;
+        let ballotClass = this.showCard() ? this.isFinalized ? "ballots-i" : "ballots-i ballots-i-not-finalized" : "ballots-i display-none";
         let voteScaleClass = this.isFinalized ? "vote-scale" : "vote-scale vote-scale-not-finalized";
         let hasAlreadyVotedLabel = <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">You already voted</div>;
         let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : "";
