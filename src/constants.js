@@ -18,6 +18,9 @@ constants.NEW_MINING_KEY = {
 	fullName: "",
 	value: "0x0000000000000000000000000000000000000000"
 };
+constants.minBallotDurationInDays = 2;
+constants.startTimeOffsetInMinutes = 5;
+constants.endTimeDefaultInMinutes = 2890;
 module.exports = {
 	constants
 }
