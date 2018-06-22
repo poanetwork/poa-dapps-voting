@@ -1,5 +1,6 @@
 import { observable, computed, action, toJS } from 'mobx';
 import moment from 'moment';
+import { constants } from "../constants";
 
 class BallotStore {
 	BallotType = {
@@ -37,14 +38,12 @@ class BallotStore {
 
 
 	constructor() {
-		const twoDays = moment().add(3, 'minutes').format("YYYY-MM-DDTHH:mm");
 		this.ballotType = null;
-		this.endTime = twoDays;
+		this.endTime = moment().add(constants.endTimeDefaultInMinutes, 'minutes').format("YYYY-MM-DDTHH:mm");
 
 		this.ballotKeys = {
 			keyType: null,
 			keysBallotType: null,
-			//memo: "",
 			affectedKey: "",
 			newVotingKey: "",
 			newPayoutKey: "",

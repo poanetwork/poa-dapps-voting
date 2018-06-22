@@ -8,6 +8,7 @@ import { BallotKeysMetadata } from './BallotKeysMetadata';
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
 import { messages } from "../messages";
+import { constants } from "../constants";
 @inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
 @observer
 export class NewBallot extends React.Component {
@@ -18,6 +19,7 @@ export class NewBallot extends React.Component {
 
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props;
+
     if (ballotStore.isNewValidatorPersonalData) {
       for (let validatorProp in validatorStore) {
         if (validatorStore[validatorProp].length === 0) {
@@ -30,6 +32,27 @@ export class NewBallot extends React.Component {
 
     if(!ballotStore.memo) {
       swal("Warning!", messages.DESCRIPTION_IS_EMPTY, "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    const minBallotDurationInHours = constants.minBallotDurationInDays * 24;
+    const minEndTime = moment.utc().add(minBallotDurationInHours, 'hours').format();
+    let neededMinutes = moment(minEndTime).diff(moment(ballotStore.endTime), 'minutes');
+    let neededHours = Math.round(neededMinutes / 60);
+    let duration = minBallotDurationInHours - neededHours;
+
+    if (neededMinutes > 0) {
+      neededMinutes = neededHours * 60 - neededMinutes;
+      swal("Warning!", messages.SHOULD_BE_MORE_THAN_MIN_DURATION(minBallotDurationInHours, duration, neededHours, neededMinutes), "warning");
+      commonStore.hideLoading();
+      return false;
+    }
+
+    const twoWeeks = moment.utc().add(14, 'days').format();
+    let exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes');
+    if (exceededMinutes > 0) {
+      swal("Warning!", messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS(duration), "warning");
       commonStore.hideLoading();
       return false;
     }
@@ -104,10 +127,10 @@ export class NewBallot extends React.Component {
     return true;
   }
 
-  createBallotForKeys = (curDateInSeconds) => {
+  createBallotForKeys = (startTime) => {
     const { ballotStore, contractsStore } = this.props;
     const inputToMethod = {
-      startTime: curDateInSeconds,
+      startTime: startTime,
       endTime: ballotStore.endTimeUnix,
       affectedKey: ballotStore.ballotKeys.affectedKey,
       affectedKeyType: ballotStore.ballotKeys.keyType,
@@ -131,10 +154,10 @@ export class NewBallot extends React.Component {
     return method;
   }
 
-  createBallotForMinThreshold = (curDateInSeconds) => {
+  createBallotForMinThreshold = (startTime) => {
     const { ballotStore, contractsStore } = this.props;
     const inputToMethod = {
-      startTime: curDateInSeconds,
+      startTime: startTime,
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotMinThreshold.proposedValue,
       sender: contractsStore.votingKey,
@@ -144,10 +167,10 @@ export class NewBallot extends React.Component {
     return method;
   }
 
-  createBallotForProxy = (curDateInSeconds) => {
+  createBallotForProxy = (startTime) => {
     const { ballotStore, contractsStore } = this.props;
     const inputToMethod = {
-      startTime: curDateInSeconds,
+      startTime: startTime,
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotProxy.proposedAddress,
       contractType: ballotStore.ballotProxy.contractType,
@@ -199,8 +222,8 @@ export class NewBallot extends React.Component {
           break;
       }
 
-      let curDateInSeconds = moment.utc().add(1, 'minute').unix();
-      methodToCreateBallot(curDateInSeconds)
+      const startTime = moment.utc().add(constants.startTimeOffsetInMinutes, 'minutes').unix();
+      methodToCreateBallot(startTime)
       .on("receipt", (tx) => {
         commonStore.hideLoading();
         if(tx.status === '0x1'){
