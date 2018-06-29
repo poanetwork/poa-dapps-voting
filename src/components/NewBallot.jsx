@@ -226,7 +226,7 @@ export class NewBallot extends React.Component {
       methodToCreateBallot(startTime)
       .on("receipt", (tx) => {
         commonStore.hideLoading();
-        if(tx.status === '0x1'){
+        if (tx.status === true || tx.status === '0x1') {
           swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
             push(`${commonStore.rootPath}`);
           });
