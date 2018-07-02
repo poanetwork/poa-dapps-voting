@@ -259,9 +259,6 @@ class ContractsStore {
 			let votingState;
 			try {
 				votingState = await this[contractType].getBallotInfo(id, this.votingKey);
-				if (!votingState) {
-					votingState = await this[contractType].votingState(id);
-				}
 				votingState = this.fillCardVotingState(votingState, contractType);
 			} catch(e) {
 				console.log(e.message);
