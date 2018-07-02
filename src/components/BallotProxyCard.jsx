@@ -6,9 +6,9 @@ import { BallotCard } from "./BallotCard";
 @observer
 export class BallotProxyCard extends React.Component {
   render () {
-    const { id, votingState } = this.props;
+    const { id, votingState, pos } = this.props;
     return (
-      <BallotCard votingType="votingToChangeProxy" votingState={votingState} id={id}>
+      <BallotCard votingType="votingToChangeProxy" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_contract-type">
             <div className="ballots-about-td">
               <p className="ballots-about-i--title">Contract type</p>

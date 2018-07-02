@@ -271,6 +271,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.keys}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			case "votingToChangeMinThreshold":
@@ -278,6 +279,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.minThreshold}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			case "votingToChangeProxy":
@@ -285,6 +287,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.proxy}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			default:

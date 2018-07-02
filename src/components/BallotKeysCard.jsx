@@ -6,7 +6,7 @@ import { BallotCard } from "./BallotCard";
 @observer
 export class BallotKeysCard extends React.Component {
   render () {
-    let { id, votingState } = this.props;
+    let { id, votingState, pos } = this.props;
 
     let affectedKeyClassName;
     let affectedKey = <p>{votingState.affectedKey}</p>;
@@ -33,7 +33,7 @@ export class BallotKeysCard extends React.Component {
     }
 
     return (
-      <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id}>
+      <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_action">
           <div className="ballots-about-td">
             <p className="ballots-about-i--title">Action</p>
