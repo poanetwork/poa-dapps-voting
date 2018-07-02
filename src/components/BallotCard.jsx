@@ -181,11 +181,16 @@ export class BallotCard extends React.Component {
             return;
         }
         this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
-        .on("receipt", () => {
+        .on("receipt", (tx) => {
             commonStore.hideLoading();
-            swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
-                push(`${commonStore.rootPath}`);
-            });
+            if (tx.status === true || tx.status === '0x1') {
+                swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
+                    push(`${commonStore.rootPath}`);
+                });
+            } else {
+                swal("Warning!", messages.VOTE_FAILED_TX, "warning").then((result) => {
+                });
+            }
         })
         .on("error", (e) => {
             commonStore.hideLoading();
@@ -225,11 +230,16 @@ export class BallotCard extends React.Component {
             return;
         }
         this.getContract(contractsStore, votingType).finalize(id, contractsStore.votingKey)
-        .on("receipt", () => {
+        .on("receipt", (tx) => {
             commonStore.hideLoading();
-            swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
-                push(`${commonStore.rootPath}`);
-            });
+            if (tx.status === true || tx.status === '0x1') {
+                swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
+                    push(`${commonStore.rootPath}`);
+                });
+            } else {
+                swal("Warning!", messages.FINALIZE_FAILED_TX, "warning").then((result) => {
+                });
+            }
         })
         .on("error", (e) => {
             commonStore.hideLoading();
