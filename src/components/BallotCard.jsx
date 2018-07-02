@@ -193,7 +193,7 @@ export class BallotCard extends React.Component {
                 if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
                     this.canBeFinalized = ballotInfo.canBeFinalizedNow;
                 } else {
-                    await canBeFinalizedNow();
+                    await this.canBeFinalizedNow();
                 }
                 this.hasAlreadyVoted = true;
 
@@ -247,7 +247,9 @@ export class BallotCard extends React.Component {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
                 this.isFinalized = true;
-                this.canBeFinalized = false;
+                if (this.canBeFinalized !== null) {
+                    this.canBeFinalized = false;
+                }
                 swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
                 });
