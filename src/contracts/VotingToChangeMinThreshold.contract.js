@@ -47,18 +47,11 @@ export default class VotingToChangeMinThreshold {
     return this.votingToChangeMinThresholdInstance.methods.nextBallotId().call();
   }
 
-  votingState(_id) {
-    if (this.doesMethodExist('votingState')) {
-      return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
-    }
-    return null;
-  }
-
   getBallotInfo(_id, _votingKey) {
     if (this.doesMethodExist('getBallotInfo')) {
       return this.votingToChangeMinThresholdInstance.methods.getBallotInfo(_id, _votingKey).call();
     }
-    return null;
+    return this.votingToChangeMinThresholdInstance.methods.votingState(_id).call();
   }
 
   hasAlreadyVoted(_id, votingKey) {

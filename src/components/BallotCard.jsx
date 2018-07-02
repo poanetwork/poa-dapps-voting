@@ -180,10 +180,23 @@ export class BallotCard extends React.Component {
             swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
             return;
         }
-        this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
-        .on("receipt", (tx) => {
+        const contract = this.getContract(contractsStore, votingType);
+        contract.vote(id, choice, contractsStore.votingKey)
+        .on("receipt", async (tx) => {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
+                const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey);
+
+                this.totalVoters = ballotInfo.totalVoters;
+                this.progress = ballotInfo.progress;
+                this.isFinalized = ballotInfo.isFinalized;
+                if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
+                    this.canBeFinalized = ballotInfo.canBeFinalizedNow;
+                } else {
+                    await canBeFinalizedNow();
+                }
+                this.hasAlreadyVoted = true;
+
                 swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
                 });
@@ -233,6 +246,8 @@ export class BallotCard extends React.Component {
         .on("receipt", (tx) => {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
+                this.isFinalized = true;
+                this.canBeFinalized = false;
                 swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
                 });
