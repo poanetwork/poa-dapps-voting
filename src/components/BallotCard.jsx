@@ -252,9 +252,11 @@ export class BallotCard extends React.Component {
         .on("receipt", (tx) => {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
-                ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = true;
+                this.isFinalized = true;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = this.isFinalized;
                 if (this.canBeFinalized !== null) {
-                    ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = false;
+                    this.canBeFinalized = false;
+                    ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = this.canBeFinalized;
                 }
                 swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
