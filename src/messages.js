@@ -1,6 +1,6 @@
 let messages = {};
 messages.invalidVotingKeyMsg = (key) => {
-	return `The key ${key} is not valid voting Key! Please make sure you have loaded correct voting key in metamask`;
+	return `The key ${key} is not valid voting Key! Please make sure you have loaded correct voting key in Metamask`;
 };
 messages.VOTED_SUCCESS_MSG = "You successfully voted";
 messages.BALLOT_CREATED_SUCCESS_MSG = "You successfully created a new ballot";
@@ -31,11 +31,11 @@ messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS = (duration) => {
 	return `Ballot end time should not be more than 14 days from now in UTC time. Current duration is ${duration} hours.`;
 }
 messages.BALLOT_CREATE_FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
-Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
+Make sure you don't have Transaction Error. Exception thrown in contract code message in Metamask before you sign it.`
 messages.VOTE_FAILED_TX = `Your transaction was failed. Please make sure you haven't already voted for this ballot.
-Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
+Make sure you don't have Transaction Error. Exception thrown in contract code message in Metamask before you sign it.`
 messages.FINALIZE_FAILED_TX = `Your transaction was failed. Make sure you don't have Transaction Error.
-Exception thrown in contract code message in metamask before you sign it.`
+Exception thrown in contract code message in Metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
 messages.wrongRepo = (repo) => {
 	return `There is no contracts.json in configured repo ${repo}`;

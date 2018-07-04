@@ -231,8 +231,7 @@ export class NewBallot extends React.Component {
             push(`${commonStore.rootPath}`);
           });
         } else {
-          swal("Warning!", messages.BALLOT_CREATE_FAILED_TX, "warning").then((result) => {
-          });
+          swal("Warning!", messages.BALLOT_CREATE_FAILED_TX, "warning");
         }
       })
       .on("error", (e) => {

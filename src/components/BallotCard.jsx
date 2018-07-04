@@ -207,8 +207,7 @@ export class BallotCard extends React.Component {
                     push(`${commonStore.rootPath}`);
                 });
             } else {
-                swal("Warning!", messages.VOTE_FAILED_TX, "warning").then((result) => {
-                });
+                swal("Warning!", messages.VOTE_FAILED_TX, "warning");
             }
         })
         .on("error", (e) => {
@@ -262,8 +261,7 @@ export class BallotCard extends React.Component {
                     push(`${commonStore.rootPath}`);
                 });
             } else {
-                swal("Warning!", messages.FINALIZE_FAILED_TX, "warning").then((result) => {
-                });
+                swal("Warning!", messages.FINALIZE_FAILED_TX, "warning");
             }
         })
         .on("error", (e) => {
