@@ -180,6 +180,7 @@ export class BallotCard extends React.Component {
             swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
             return;
         }
+
         const contract = this.getContract(contractsStore, votingType);
         contract.vote(id, choice, contractsStore.votingKey)
         .on("receipt", async (tx) => {
