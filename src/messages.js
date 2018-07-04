@@ -30,8 +30,12 @@ messages.SHOULD_BE_MORE_THAN_MIN_DURATION = (minDuration, duration, neededHours,
 messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS = (duration) => {
 	return `Ballot end time should not be more than 14 days from now in UTC time. Current duration is ${duration} hours.`;
 }
-messages.FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
+messages.BALLOT_CREATE_FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
+messages.VOTE_FAILED_TX = `Your transaction was failed. Please make sure you haven't already voted for this ballot.
+Make sure you don't have Transaction Error. Exception thrown in contract code message in metamask before you sign it.`
+messages.FINALIZE_FAILED_TX = `Your transaction was failed. Make sure you don't have Transaction Error.
+Exception thrown in contract code message in metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = "Description cannot be empty";
 messages.wrongRepo = (repo) => {
 	return `There is no contracts.json in configured repo ${repo}`;
