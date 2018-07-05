@@ -52,18 +52,11 @@ export default class VotingToChangeKeys {
     return this.votingToChangeKeysInstance.methods.nextBallotId().call();
   }
 
-  votingState(_id) {
-    if (this.doesMethodExist('votingState')) {
-      return this.votingToChangeKeysInstance.methods.votingState(_id).call();
-    }
-    return null;
-  }
-
   getBallotInfo(_id, _votingKey) {
     if (this.doesMethodExist('getBallotInfo')) {
       return this.votingToChangeKeysInstance.methods.getBallotInfo(_id).call();
     }
-    return null;
+    return this.votingToChangeKeysInstance.methods.votingState(_id).call();
   }
 
   hasAlreadyVoted(_id, votingKey) {

@@ -6,9 +6,9 @@ import { BallotCard } from "./BallotCard";
 @observer
 export class BallotMinThresholdCard extends React.Component {
   render () {
-    let { id, votingState } = this.props;
+    let { id, votingState, pos } = this.props;
     return (
-      <BallotCard votingType="votingToChangeMinThreshold" votingState={votingState} id={id}>
+      <BallotCard votingType="votingToChangeMinThreshold" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
           <div className="ballots-about-td">
             <p className="ballots-about-i--title">Proposed min threshold</p>

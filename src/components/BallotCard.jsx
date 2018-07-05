@@ -11,7 +11,7 @@ const USDateTimeFormat = "MM/DD/YYYY h:mm:ss A";
 
 const zeroTimeTo = "00:00";
 
-@inject("commonStore", "contractsStore", "routing")
+@inject("commonStore", "contractsStore", "routing", "ballotsStore")
 @observer
 export class BallotCard extends React.Component {
     @observable startTime;
@@ -167,7 +167,7 @@ export class BallotCard extends React.Component {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
-        const { commonStore, contractsStore, id, votingType } = this.props;
+        const { commonStore, contractsStore, id, votingType, ballotsStore } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
             swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
@@ -180,16 +180,35 @@ export class BallotCard extends React.Component {
             swal("Warning!", messages.INVALID_VOTE_MSG, "warning");
             return;
         }
-        this.getContract(contractsStore, votingType).vote(id, choice, contractsStore.votingKey)
-        .on("receipt", (tx) => {
+
+        const contract = this.getContract(contractsStore, votingType);
+        contract.vote(id, choice, contractsStore.votingKey)
+        .on("receipt", async (tx) => {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
+                const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey);
+
+                this.totalVoters = Number(ballotInfo.totalVoters);
+                this.progress = Number(ballotInfo.progress);
+                this.isFinalized = Boolean(ballotInfo.isFinalized);
+                if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
+                    this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow);
+                } else {
+                    await this.canBeFinalizedNow();
+                }
+                this.hasAlreadyVoted = true;
+
+                ballotsStore.ballotCards[this.props.pos].props.votingState.totalVoters = this.totalVoters;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.progress = this.progress;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = this.isFinalized;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = this.canBeFinalized;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted;
+
                 swal("Congratulations!", messages.VOTED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
                 });
             } else {
-                swal("Warning!", messages.VOTE_FAILED_TX, "warning").then((result) => {
-                });
+                swal("Warning!", messages.VOTE_FAILED_TX, "warning");
             }
         })
         .on("error", (e) => {
@@ -207,7 +226,7 @@ export class BallotCard extends React.Component {
             swal("Warning!", messages.ballotIsNotActiveMsg(this.timeTo.displayValue), "warning");
             return;
         }
-        const { commonStore, contractsStore, id, votingType } = this.props;
+        const { commonStore, contractsStore, id, votingType, ballotsStore } = this.props;
         const { push } = this.props.routing;
         if (!contractsStore.isValidVotingKey) {
             swal("Warning!", messages.invalidVotingKeyMsg(contractsStore.votingKey), "warning");
@@ -233,12 +252,17 @@ export class BallotCard extends React.Component {
         .on("receipt", (tx) => {
             commonStore.hideLoading();
             if (tx.status === true || tx.status === '0x1') {
+                this.isFinalized = true;
+                ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = this.isFinalized;
+                if (this.canBeFinalized !== null) {
+                    this.canBeFinalized = false;
+                    ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = this.canBeFinalized;
+                }
                 swal("Congratulations!", messages.FINALIZED_SUCCESS_MSG, "success").then((result) => {
                     push(`${commonStore.rootPath}`);
                 });
             } else {
-                swal("Warning!", messages.FINALIZE_FAILED_TX, "warning").then((result) => {
-                });
+                swal("Warning!", messages.FINALIZE_FAILED_TX, "warning");
             }
         })
         .on("error", (e) => {

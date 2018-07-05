@@ -259,9 +259,6 @@ class ContractsStore {
 			let votingState;
 			try {
 				votingState = await this[contractType].getBallotInfo(id, this.votingKey);
-				if (!votingState) {
-					votingState = await this[contractType].votingState(id);
-				}
 				votingState = this.fillCardVotingState(votingState, contractType);
 			} catch(e) {
 				console.log(e.message);
@@ -274,6 +271,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.keys}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			case "votingToChangeMinThreshold":
@@ -281,6 +279,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.minThreshold}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			case "votingToChangeProxy":
@@ -288,6 +287,7 @@ class ContractsStore {
 					id={id}
 					type={ballotStore.BallotType.proxy}
 					key={ballotsStore.ballotCards.length}
+					pos={ballotsStore.ballotCards.length}
 					votingState={votingState}/>
 				break;
 			default:
