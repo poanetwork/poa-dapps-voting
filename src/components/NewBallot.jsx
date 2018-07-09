@@ -9,7 +9,7 @@ import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata';
 import { BallotProxyMetadata } from './BallotProxyMetadata';
 import { messages } from "../messages";
 import { constants } from "../constants";
-@inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing")
+@inject("commonStore", "ballotStore", "validatorStore", "contractsStore", "routing", "ballotsStore")
 @observer
 export class NewBallot extends React.Component {
   constructor(props) {
@@ -182,7 +182,7 @@ export class NewBallot extends React.Component {
   }
 
   onClick = async () => {
-    const { commonStore, contractsStore, ballotStore } = this.props;
+    const { commonStore, contractsStore, ballotStore, ballotsStore } = this.props;
     const { push } = this.props.routing;
     commonStore.showLoading();
     const isValidVotingKey = contractsStore.isValidVotingKey;
@@ -208,15 +208,19 @@ export class NewBallot extends React.Component {
       }
 
       let methodToCreateBallot;
+      let contractType;
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys;
+          contractType = "votingToChangeKeys";
           break;
         case ballotStore.BallotType.minThreshold:
           methodToCreateBallot = this.createBallotForMinThreshold;
+          contractType = "votingToChangeMinThreshold";
           break;
         case ballotStore.BallotType.proxy:
           methodToCreateBallot = this.createBallotForProxy;
+          contractType = "votingToChangeProxy";
           break;
         default:
           break;
@@ -224,11 +228,16 @@ export class NewBallot extends React.Component {
 
       const startTime = moment.utc().add(constants.startTimeOffsetInMinutes, 'minutes').unix();
       methodToCreateBallot(startTime)
-      .on("receipt", (tx) => {
+      .on("receipt", async (tx) => {
         commonStore.hideLoading();
         if (tx.status === true || tx.status === '0x1') {
+          const newId = Number(tx.events.BallotCreated.returnValues.id);
+          const card = await contractsStore.getCard(newId, contractType);
+          ballotsStore.ballotCards.push(card);
+
           swal("Congratulations!", messages.BALLOT_CREATED_SUCCESS_MSG, "success").then((result) => {
             push(`${commonStore.rootPath}`);
+            window.scrollTo(0, 0);
           });
         } else {
           swal("Warning!", messages.BALLOT_CREATE_FAILED_TX, "warning");

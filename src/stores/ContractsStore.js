@@ -254,47 +254,51 @@ class ContractsStore {
 		return votingState;
 	}
 
+	getCard = async (id, contractType) => {
+		let votingState;
+		try {
+			votingState = await this[contractType].getBallotInfo(id, this.votingKey);
+			votingState = this.fillCardVotingState(votingState, contractType);
+		} catch(e) {
+			console.log(e.message);
+		}
+
+		let card;
+		switch(contractType) {
+		case "votingToChangeKeys":
+			card = <BallotKeysCard
+				id={id}
+				type={ballotStore.BallotType.keys}
+				key={ballotsStore.ballotCards.length}
+				pos={ballotsStore.ballotCards.length}
+				votingState={votingState}/>
+			break;
+		case "votingToChangeMinThreshold":
+			card = <BallotMinThresholdCard
+				id={id}
+				type={ballotStore.BallotType.minThreshold}
+				key={ballotsStore.ballotCards.length}
+				pos={ballotsStore.ballotCards.length}
+				votingState={votingState}/>
+			break;
+		case "votingToChangeProxy":
+			card = <BallotProxyCard
+				id={id}
+				type={ballotStore.BallotType.proxy}
+				key={ballotsStore.ballotCards.length}
+				pos={ballotsStore.ballotCards.length}
+				votingState={votingState}/>
+			break;
+		default:
+			break;
+		}
+
+		return card;
+	}
+
 	getCards = async (nextBallotId, contractType) => {
 		for (let id = nextBallotId - 1; id >= 0; id--) {
-			let votingState;
-			try {
-				votingState = await this[contractType].getBallotInfo(id, this.votingKey);
-				votingState = this.fillCardVotingState(votingState, contractType);
-			} catch(e) {
-				console.log(e.message);
-			}
-
-			let card;
-			switch(contractType) {
-			case "votingToChangeKeys":
-				card = <BallotKeysCard
-					id={id}
-					type={ballotStore.BallotType.keys}
-					key={ballotsStore.ballotCards.length}
-					pos={ballotsStore.ballotCards.length}
-					votingState={votingState}/>
-				break;
-			case "votingToChangeMinThreshold":
-				card = <BallotMinThresholdCard
-					id={id}
-					type={ballotStore.BallotType.minThreshold}
-					key={ballotsStore.ballotCards.length}
-					pos={ballotsStore.ballotCards.length}
-					votingState={votingState}/>
-				break;
-			case "votingToChangeProxy":
-				card = <BallotProxyCard
-					id={id}
-					type={ballotStore.BallotType.proxy}
-					key={ballotsStore.ballotCards.length}
-					pos={ballotsStore.ballotCards.length}
-					votingState={votingState}/>
-				break;
-			default:
-				break;
-			}
-
-			ballotsStore.ballotCards.push(card);
+			ballotsStore.ballotCards.push(await this.getCard(id, contractType));
 		}
 	}
 
