@@ -15,7 +15,7 @@ export class BallotKeysMetadata extends React.Component {
       }
     }
     let newVotingPayoutKeys = '';
-    if (ballotStore.isNewValidatorPersonalData && contractsStore.votingToChangeKeys.doesMethodExist('createBallotToAddNewValidator')) {
+    if (ballotStore.isNewValidatorPersonalData && contractsStore.votingToChangeKeys && contractsStore.votingToChangeKeys.doesMethodExist('createBallotToAddNewValidator')) {
       newVotingPayoutKeys = <div>
         <div className="left">
           <div className="form-el">
