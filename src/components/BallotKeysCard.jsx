@@ -1,35 +1,37 @@
-import React from "react";
-import { inject, observer } from "mobx-react";
-import { BallotCard } from "./BallotCard";
+import React from 'react'
+import { inject, observer } from 'mobx-react'
+import { BallotCard } from './BallotCard.jsx'
 
-@inject("commonStore", "routing")
+@inject('commonStore', 'routing')
 @observer
 export class BallotKeysCard extends React.Component {
-  render () {
-    let { id, votingState, pos } = this.props;
+  render() {
+    let { id, votingState, pos } = this.props
 
-    let affectedKeyClassName;
-    let affectedKey = <p>{votingState.affectedKey}</p>;
-    let newVotingKey;
-    let newPayoutKey;
-    let miningKeyDiv;
+    let affectedKeyClassName
+    let affectedKey = <p>{votingState.affectedKey}</p>
+    let newVotingKey
+    let newPayoutKey
+    let miningKeyDiv
     if (votingState.isAddMining) {
-      affectedKeyClassName = 'ballots-about-i_key_wide';
+      affectedKeyClassName = 'ballots-about-i_key_wide'
       if (votingState.newVotingKey || votingState.newPayoutKey) {
-        affectedKey = <p>Mining: {votingState.affectedKey}</p>;
-        if (votingState.newVotingKey) newVotingKey = <p>Voting: {votingState.newVotingKey}</p>;
-        if (votingState.newPayoutKey) newPayoutKey = <p>Payout: {votingState.newPayoutKey}</p>;
+        affectedKey = <p>Mining: {votingState.affectedKey}</p>
+        if (votingState.newVotingKey) newVotingKey = <p>Voting: {votingState.newVotingKey}</p>
+        if (votingState.newPayoutKey) newPayoutKey = <p>Payout: {votingState.newPayoutKey}</p>
       }
     } else {
-      affectedKeyClassName = 'ballots-about-i_key';
-      miningKeyDiv = <div className="ballots-about-i ballots-about-i_key">
-        <div className="ballots-about-td">
-          <p className="ballots-about-i--title">Validator key</p>
+      affectedKeyClassName = 'ballots-about-i_key'
+      miningKeyDiv = (
+        <div className="ballots-about-i ballots-about-i_key">
+          <div className="ballots-about-td">
+            <p className="ballots-about-i--title">Validator key</p>
+          </div>
+          <div className="ballots-about-td">
+            <p>{votingState.miningKey}</p>
+          </div>
         </div>
-        <div className="ballots-about-td">
-          <p>{votingState.miningKey}</p>
-        </div>
-      </div>;
+      )
     }
 
     return (
@@ -62,6 +64,6 @@ export class BallotKeysCard extends React.Component {
         </div>
         {miningKeyDiv}
       </BallotCard>
-    );
+    )
   }
 }

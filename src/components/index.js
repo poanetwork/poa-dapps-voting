@@ -1,5 +1,5 @@
-export { Ballots } from './Ballots';
-export { Header } from './Header';
-export { NewBallot } from './NewBallot';
-export { Settings } from './Settings';
-export { Footer } from './Footer';
+export { Ballots } from './Ballots.jsx'
+export { Header } from './Header.jsx'
+export { NewBallot } from './NewBallot.jsx'
+export { Settings } from './Settings.jsx'
+export { Footer } from './Footer.jsx'
