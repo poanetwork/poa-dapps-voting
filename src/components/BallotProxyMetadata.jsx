@@ -18,7 +18,7 @@ export class BallotProxyMetadata extends React.Component {
       /*7*/ { value: '8', label: ballotStore.ProxyBallotType[8] }, // ProxyStorage
     ];
 
-    if (!contractsStore.proxyStorage.doesMethodExist('getValidatorMetadata')) {
+    if (!contractsStore.proxyStorage || !contractsStore.proxyStorage.doesMethodExist('getValidatorMetadata')) {
       options.splice(6); // keep 0-5 and remove 6-... items if ProxyStorage is old
     }
 
