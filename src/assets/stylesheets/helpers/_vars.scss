@@ -1,0 +1,39 @@
+$base-images-path: '../assets/images';
+
+// colors
+$primary-color: #5c34a2;
+$primary-color-darker: #45277a;
+$secondary-color: #6ac9b9;
+$secondary-color-darker: darken(#6ac9b9, 10%);
+
+// borders
+$base-border-color: #b8c1cb;
+
+// widths
+$container-width: 960px;
+$container-responsive-width: 980px;
+$tablet-width: 768px;
+$mobile-width: 414px;
+$small-mobile-width: 360px;
+
+// header
+$header-links-container-height: 70px;
+$header-height_mobile: 70px;
+
+// mobile menu
+$header-mobile-menu-container-height: 172px;
+
+// footer
+$footer-height_desktop: 66px;
+$footer-height_mobile: 132px;
+
+// misc
+$desktop-indent: 30px;
+$tablet-indent: 20px;
+$mobile-indent: 15px;
+
+// forms
+$input-height: 40px;
+$input-color: #202d3c;
+
+$footer-height: 60px;

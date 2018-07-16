@@ -1,0 +1,58 @@
+.footer {
+  @extend %full-width;
+
+  background-color: $primary-color;
+  bottom: 0;
+  padding: 18px 0;
+  position: absolute;
+
+  &.sokol {
+    background-color: $secondary-color;
+  }
+
+  .container {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    @media screen and (max-width: $tablet-width) {
+      flex-direction: column;
+    }
+  }
+
+  .socials {
+    order: 2;
+
+    @media screen and (max-width: $tablet-width) {
+      margin-top: 15px;
+      order: 1;
+    }
+  }
+
+  &-logo {
+    @include image-2x('#{ $base-images-path}/logos/logo_validators_dapp_footer@2x.png');
+    background-image: url('#{ $base-images-path}/logos/logo_validators_dapp_footer.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    height: 20px;
+    left: 0;
+    order: 0;
+    width: 123px;
+  }
+
+  &-rights {
+    color: #fff;
+    font-size: 12px;
+    order: 1;
+    text-align: center;
+
+    @media screen and (max-width: $tablet-width) {
+      line-height: normal;
+      margin-top: 15px;
+      order: 2;
+      width: 100%;
+    }
+  }
+}
