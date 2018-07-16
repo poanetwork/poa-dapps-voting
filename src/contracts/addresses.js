@@ -1,4 +1,4 @@
-import { addressesURL, wrongRepoAlert } from "./helpers";
+import { addressesURL, wrongRepoAlert } from './helpers'
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
 //     VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS: '0x5ae30d4c8892292e0d8164f87a2e12dff9dc99e1',
@@ -8,45 +8,45 @@ import { addressesURL, wrongRepoAlert } from "./helpers";
 //     POA_ADDRESS: '0xf472e0e43570b9afaab67089615080cf7c20018d',
 // }
 
-let SOKOL_ADDRESSES = {};
-let CORE_ADDRESSES = {};
+let SOKOL_ADDRESSES = {}
+let CORE_ADDRESSES = {}
 
 async function getContractsAddresses(branch) {
-    let addr = addressesURL(branch);
-    let response;
-    try {
-        response = await fetch(addr);
-    } catch(e) {
-        return wrongRepoAlert(addr);
-    }
+  let addr = addressesURL(branch)
+  let response
+  try {
+    response = await fetch(addr)
+  } catch (e) {
+    return wrongRepoAlert(addr)
+  }
 
-    let contracts = await response.json();
+  let contracts = await response.json()
 
-    switch (branch) {
-        case 'core':
-            CORE_ADDRESSES = contracts;
-            break;
-        case 'sokol':
-            SOKOL_ADDRESSES = contracts;
-            break;
-        default:
-            CORE_ADDRESSES = contracts;
-            break;
-    }
+  switch (branch) {
+    case 'core':
+      CORE_ADDRESSES = contracts
+      break
+    case 'sokol':
+      SOKOL_ADDRESSES = contracts
+      break
+    default:
+      CORE_ADDRESSES = contracts
+      break
+  }
 }
 
 function getAddresses(netId) {
-    switch (netId) {
-        case '77':
-            return SOKOL_ADDRESSES
-        case '99':
-            return CORE_ADDRESSES
-        default:
-            return CORE_ADDRESSES
-    }
+  switch (netId) {
+    case '77':
+      return SOKOL_ADDRESSES
+    case '99':
+      return CORE_ADDRESSES
+    default:
+      return CORE_ADDRESSES
+  }
 }
 
 module.exports = {
-    getContractsAddresses: getContractsAddresses,
-    networkAddresses: getAddresses
+  getContractsAddresses: getContractsAddresses,
+  networkAddresses: getAddresses
 }

@@ -1,12 +1,12 @@
-import React from "react";
-import { inject, observer } from "mobx-react";
-import { BallotCard } from "./BallotCard";
+import React from 'react'
+import { inject, observer } from 'mobx-react'
+import { BallotCard } from './BallotCard.jsx'
 
-@inject("commonStore", "routing")
+@inject('commonStore', 'routing')
 @observer
 export class BallotMinThresholdCard extends React.Component {
-  render () {
-    let { id, votingState, pos } = this.props;
+  render() {
+    let { id, votingState, pos } = this.props
     return (
       <BallotCard votingType="votingToChangeMinThreshold" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
@@ -18,6 +18,6 @@ export class BallotMinThresholdCard extends React.Component {
           </div>
         </div>
       </BallotCard>
-    );
+    )
   }
 }
