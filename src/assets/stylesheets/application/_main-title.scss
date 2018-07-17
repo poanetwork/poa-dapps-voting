@@ -1,0 +1,21 @@
+.main-title-container {
+  -ms-flex-pack: justify;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 38px;
+
+  .main-title {
+    font-size: 24px;
+    color: #333;
+    line-height: 38px;
+  }
+
+  @media screen and (max-width: $mobile-width) {
+    -ms-flex-direction: column;
+    flex-direction: column;
+    .search-input {
+      width: 100%;
+    }
+  }
+}

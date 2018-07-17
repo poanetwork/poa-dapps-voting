@@ -8,3 +8,24 @@
     background-size: $width $height;
   }
 }
+
+@mixin default-text-input-styles() {
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid $base-border-color;
+  box-sizing: border-box;
+  color: #333;
+  font-size: 16px;
+  height: 38px;
+  outline: none;
+  padding: 0 15px;
+  transition: 0.15s border-color;
+  &:hover {
+    border-color: #8e959d;
+    color: $input-color;
+  }
+  &:focus {
+    border-color: $primary-color;
+    color: $input-color;
+  }
+}

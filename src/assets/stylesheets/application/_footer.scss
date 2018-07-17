@@ -31,8 +31,8 @@
   }
 
   &-logo {
-    @include image-2x('#{ $base-images-path}/logos/logo_validators_dapp_footer@2x.png');
-    background-image: url('#{ $base-images-path}/logos/logo_validators_dapp_footer.png');
+    @include image-2x('#{ $base-images-path}/logos/logo_voting_dapp_footer@2x.png');
+    background-image: url('#{ $base-images-path}/logos/logo_voting_dapp_footer.png');
     background-repeat: no-repeat;
     background-size: contain;
     display: block;

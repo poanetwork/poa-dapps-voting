@@ -100,7 +100,6 @@ export class Ballots extends React.Component {
     }
     return (
       <section className="container ballots">
-        <h1 className="title">Ballots</h1>
         {ballotCards}
         {loadMoreButton}
       </section>
