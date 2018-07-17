@@ -20,7 +20,10 @@
     "chalk": "2.4.1",
     "css-loader": "0.28.11",
     "dotenv": "4.0.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-loader": "1.9.0",
+    "eslint-plugin-dependencies": "^2.4.0",
+    "eslint-plugin-prettier": "^2.6.2",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
@@ -38,6 +41,7 @@
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
+    "prettier": "^1.13.7",
     "promise": "8.0.1",
     "raf": "3.4.0",
     "randomhex": "^0.1.5",
@@ -66,7 +70,8 @@
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "node scripts/build.js",
     "build": "npm-run-all build-css build-js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -108,7 +113,30 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "dependencies"
+    ],
+    "rules": {
+      "no-control-regex": 0,
+      "dependencies/no-cycles": "error",
+      "dependencies/no-unresolved": ["error", {
+        "ignore": ["web3"]
+      }]
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      }
+    }
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
