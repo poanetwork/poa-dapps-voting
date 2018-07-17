@@ -1,30 +1,30 @@
-import React from 'react';
-const styles = (netId) => {
+import React from 'react'
+const styles = netId => {
   const core = {
     backgroundColor: 'rgba(35, 29, 115, 0.8)'
-  };
+  }
   const sokol = {
     backgroundColor: 'rgba(47, 109, 99, 0.8)'
   }
-  switch(netId) {
+  switch (netId) {
     case '77':
-      return sokol;
+      return sokol
     case '99':
-      return core;
+      return core
     default:
-      return {};
+      return {}
   }
 }
-const Loading = ({netId}) => (
+const Loading = ({ netId }) => (
   <div className="loading-container" style={styles(netId)}>
     <div className="loading">
-      <div className="loading-i"></div>
-      <div className="loading-i"></div>
-      <div className="loading-i"></div>
-      <div className="loading-i"></div>
-      <div className="loading-i"></div>
-      <div className="loading-i"></div>
+      <div className="loading-i" />
+      <div className="loading-i" />
+      <div className="loading-i" />
+      <div className="loading-i" />
+      <div className="loading-i" />
+      <div className="loading-i" />
     </div>
   </div>
 )
-export default Loading;
+export default Loading

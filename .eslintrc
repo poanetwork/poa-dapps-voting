@@ -1,15 +1,26 @@
 {
-	"extends": "react-app",
-	"rules": {
-		"no-unused-vars": "error",
-		"no-trailing-spaces": "error",
-		"no-mixed-spaces-and-tabs": "error",
-		"no-whitespace-before-property": "error",
-		"comma-spacing": "error",
-		"brace-style": "error",
-		"func-names": "error",
-		"no-duplicate-imports": "error",
-		"no-dupe-class-members": "error",
-		"arrow-spacing": "error"
-	}
+  "extends": [
+    "react-app",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "dependencies"
+  ],
+  "rules": {
+    "no-control-regex": 0,
+    "dependencies/no-cycles": "error",
+    "dependencies/no-unresolved": ["error", {
+      "ignore": ["web3"]
+    }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  }
 }
