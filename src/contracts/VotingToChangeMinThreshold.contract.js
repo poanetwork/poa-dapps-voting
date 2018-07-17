@@ -32,9 +32,7 @@ export default class VotingToChangeMinThreshold {
   }
 
   vote(_id, choice) {
-    return this.votingToChangeMinThresholdInstance.methods
-      .vote(_id, choice)
-      .encodeABI()
+    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).encodeABI()
   }
 
   finalize(_id) {

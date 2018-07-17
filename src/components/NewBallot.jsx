@@ -245,43 +245,49 @@ export class NewBallot extends React.Component {
         .add(constants.startTimeOffsetInMinutes, 'minutes')
         .unix()
 
-      web3.eth.sendTransaction({
-        from: contractsStore.votingKey,
-        to: contractInstance.options.address,
-        gasPrice: web3.utils.toWei('1', 'gwei'),
-        data: methodToCreateBallot(startTime)
-      }, async (error, hash) => {
-        if (error) {
-          commonStore.hideLoading()
-          swal('Error!', error.message, 'error')
-        } else {
-          try {
-            let tx
-            do {
-              await sleep(constants.getTransactionReceiptInterval)
-              tx = await web3.eth.getTransactionReceipt(hash)
-            } while (tx === null)
-
+      web3.eth.sendTransaction(
+        {
+          from: contractsStore.votingKey,
+          to: contractInstance.options.address,
+          gasPrice: web3.utils.toWei('1', 'gwei'),
+          data: methodToCreateBallot(startTime)
+        },
+        async (error, hash) => {
+          if (error) {
             commonStore.hideLoading()
-            if (tx.status === true || tx.status === '0x1') {
-              const events = await contractInstance.getPastEvents('BallotCreated', {fromBlock: tx.blockNumber, toBlock: tx.blockNumber})
-              const newId = Number(events[0].returnValues.id)
-              const card = await contractsStore.getCard(newId, contractType)
-              ballotsStore.ballotCards.push(card)
+            swal('Error!', error.message, 'error')
+          } else {
+            try {
+              let tx
+              do {
+                await sleep(constants.getTransactionReceiptInterval)
+                tx = await web3.eth.getTransactionReceipt(hash)
+              } while (tx === null)
 
-              swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
-                push(`${commonStore.rootPath}`)
-                window.scrollTo(0, 0)
-              })
-            } else {
-              swal('Warning!', messages.BALLOT_CREATE_FAILED_TX, 'warning')
+              commonStore.hideLoading()
+              if (tx.status === true || tx.status === '0x1') {
+                const events = await contractInstance.getPastEvents('BallotCreated', {
+                  fromBlock: tx.blockNumber,
+                  toBlock: tx.blockNumber
+                })
+                const newId = Number(events[0].returnValues.id)
+                const card = await contractsStore.getCard(newId, contractType)
+                ballotsStore.ballotCards.push(card)
+
+                swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
+                  push(`${commonStore.rootPath}`)
+                  window.scrollTo(0, 0)
+                })
+              } else {
+                swal('Warning!', messages.BALLOT_CREATE_FAILED_TX, 'warning')
+              }
+            } catch (e) {
+              commonStore.hideLoading()
+              swal('Error!', e.message, 'error')
             }
-          } catch (e) {
-            commonStore.hideLoading()
-            swal('Error!', e.message, 'error')
           }
         }
-      })
+      )
     }
   }
 
