@@ -1,11 +1,8 @@
-//import Web3 from 'web3'
 import React from 'react'
 import moment from 'moment'
 import { observable, action, computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../messages'
-//import { constants } from '../constants'
-//import { sleep } from '../helpers'
 import { sendTransactionByVotingKey } from '../helpers'
 import swal from 'sweetalert2'
 
@@ -195,7 +192,6 @@ export class BallotCard extends React.Component {
       return
     }
 
-    //const web3 = new Web3(contractsStore.web3Instance.currentProvider)
     const contract = this.getContract(contractsStore, votingType)
 
     sendTransactionByVotingKey(
@@ -227,61 +223,6 @@ export class BallotCard extends React.Component {
       },
       messages.VOTE_FAILED_TX
     )
-
-    /*
-    web3.eth.sendTransaction(
-      {
-        from: contractsStore.votingKey,
-        to: contract.address,
-        gasPrice: web3.utils.toWei('1', 'gwei'),
-        data: contract.vote(id, choice)
-      },
-      async (error, hash) => {
-        if (error) {
-          commonStore.hideLoading()
-          swal('Error!', error.message, 'error')
-        } else {
-          try {
-            let tx
-            do {
-              await sleep(constants.getTransactionReceiptInterval)
-              tx = await web3.eth.getTransactionReceipt(hash)
-            } while (tx === null)
-
-            commonStore.hideLoading()
-            if (tx.status === true || tx.status === '0x1') {
-              const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey)
-
-              this.totalVoters = Number(ballotInfo.totalVoters)
-              this.progress = Number(ballotInfo.progress)
-              this.isFinalized = Boolean(ballotInfo.isFinalized)
-              if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
-                this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow)
-              } else {
-                await this.canBeFinalizedNow()
-              }
-              this.hasAlreadyVoted = true
-
-              ballotsStore.ballotCards[pos].props.votingState.totalVoters = this.totalVoters
-              ballotsStore.ballotCards[pos].props.votingState.progress = this.progress
-              ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
-              ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
-              ballotsStore.ballotCards[pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted
-
-              swal('Congratulations!', messages.VOTED_SUCCESS_MSG, 'success').then(result => {
-                push(`${commonStore.rootPath}`)
-              })
-            } else {
-              swal('Warning!', messages.VOTE_FAILED_TX, 'warning')
-            }
-          } catch (e) {
-            commonStore.hideLoading()
-            swal('Error!', e.message, 'error')
-          }
-        }
-      }
-    )
-    */
   }
 
   finalize = async e => {
@@ -316,7 +257,6 @@ export class BallotCard extends React.Component {
       return
     }
 
-    //const web3 = new Web3(contractsStore.web3Instance.currentProvider)
     const contract = this.getContract(contractsStore, votingType)
 
     sendTransactionByVotingKey(
@@ -336,49 +276,6 @@ export class BallotCard extends React.Component {
       },
       messages.FINALIZE_FAILED_TX
     )
-
-    /*
-    web3.eth.sendTransaction(
-      {
-        from: contractsStore.votingKey,
-        to: contract.address,
-        gasPrice: web3.utils.toWei('1', 'gwei'),
-        data: contract.finalize(id)
-      },
-      async (error, hash) => {
-        if (error) {
-          commonStore.hideLoading()
-          swal('Error!', error.message, 'error')
-        } else {
-          try {
-            let tx
-            do {
-              await sleep(constants.getTransactionReceiptInterval)
-              tx = await web3.eth.getTransactionReceipt(hash)
-            } while (tx === null)
-
-            commonStore.hideLoading()
-            if (tx.status === true || tx.status === '0x1') {
-              this.isFinalized = true
-              ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
-              if (this.canBeFinalized !== null) {
-                this.canBeFinalized = false
-                ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
-              }
-              swal('Congratulations!', messages.FINALIZED_SUCCESS_MSG, 'success').then(result => {
-                push(`${commonStore.rootPath}`)
-              })
-            } else {
-              swal('Warning!', messages.FINALIZE_FAILED_TX, 'warning')
-            }
-          } catch (e) {
-            commonStore.hideLoading()
-            swal('Error!', e.message, 'error')
-          }
-        }
-      }
-    )
-    */
   }
 
   repeatGetProperty = async (contractsStore, contractType, id, methodID, tryID) => {
