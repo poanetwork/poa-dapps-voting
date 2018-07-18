@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+//import Web3 from 'web3'
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
@@ -10,7 +10,8 @@ import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
 import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
 import { messages } from '../messages'
 import { constants } from '../constants'
-import { sleep } from '../helpers'
+//import { sleep } from '../helpers'
+import { sendTransactionByVotingKey } from '../helpers'
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
 export class NewBallot extends React.Component {
@@ -231,7 +232,7 @@ export class NewBallot extends React.Component {
       let methodToCreateBallot
       let contractType
       let contractInstance
-      let web3 = new Web3(contractsStore.web3Instance.currentProvider)
+      //let web3 = new Web3(contractsStore.web3Instance.currentProvider)
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys
@@ -254,6 +255,28 @@ export class NewBallot extends React.Component {
 
       const startTime = this.getStartTimeUnix()
 
+      sendTransactionByVotingKey(
+        this.props,
+        contractInstance.options.address,
+        methodToCreateBallot(startTime),
+        async tx => {
+          const events = await contractInstance.getPastEvents('BallotCreated', {
+            fromBlock: tx.blockNumber,
+            toBlock: tx.blockNumber
+          })
+          const newId = Number(events[0].returnValues.id)
+          const card = await contractsStore.getCard(newId, contractType)
+          ballotsStore.ballotCards.push(card)
+
+          swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
+            push(`${commonStore.rootPath}`)
+            window.scrollTo(0, 0)
+          })
+        },
+        messages.BALLOT_CREATE_FAILED_TX
+      )
+
+      /*
       web3.eth.sendTransaction(
         {
           from: contractsStore.votingKey,
@@ -297,6 +320,7 @@ export class NewBallot extends React.Component {
           }
         }
       )
+      */
     }
   }
 
