@@ -16,11 +16,11 @@
       height: 30px;
       width: 3px;
       transform: translateY(-50%);
-      background-color: #08b3f2;
+      background-color: $primary-color;
     }
 
     &_active {
-      color: #08b3f2;
+      color: $primary-color;
 
       &:before {
         opacity: 1;
