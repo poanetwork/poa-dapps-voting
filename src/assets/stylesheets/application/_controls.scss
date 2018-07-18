@@ -138,8 +138,9 @@ button {
 }
 
 .hint {
-  margin-top: 15px;
   color: $gray-text-color;
-  line-height: 18px;
   font-size: 12px;
+  line-height: 18px;
+  margin-top: 15px;
+  word-break: break-all;
 }

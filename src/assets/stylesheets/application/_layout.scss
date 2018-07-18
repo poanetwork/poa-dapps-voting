@@ -13,7 +13,6 @@
       right: 0;
       top: 0;
       z-index: 1234;
-
       @media screen and (max-width: $mobile-width) {
         display: block;
       }
@@ -25,6 +24,7 @@
     }
   }
 }
+
 @media screen and (max-width: $mobile-width) {
   #root,
   .app-container {
@@ -38,11 +38,15 @@
 
 .content {
   @media screen and (max-width: $mobile-width) {
-
     padding-top: $header-height_mobile;
-
   }
   &.content-menu-open {
     padding-top: $header-mobile-menu-container-height + $header-height_mobile;
   }
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }

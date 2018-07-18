@@ -1,7 +1,6 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
-import 'react-select/dist/react-select.css'
 
 @inject('ballotStore', 'contractsStore')
 @observer
@@ -89,6 +88,7 @@ export class BallotKeysMetadata extends React.Component {
               </p>
             </div>
           </div>
+          <div className="clearfix"> </div>
           {newVotingPayoutKeys}
           <div className="left">
             <div className="form-el">
