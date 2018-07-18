@@ -17,6 +17,13 @@ export class NewBallot extends React.Component {
     this.onClick = this.onClick.bind(this)
   }
 
+  getStartTimeUnix() {
+    return moment
+      .utc()
+      .add(constants.startTimeOffsetInMinutes, 'minutes')
+      .unix()
+  }
+
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props
 
@@ -37,16 +44,21 @@ export class NewBallot extends React.Component {
     }
 
     const minBallotDurationInHours = constants.minBallotDurationInDays * 24
+    const startTime = this.getStartTimeUnix()
     const minEndTime = moment
       .utc()
       .add(minBallotDurationInHours, 'hours')
       .format()
     let neededMinutes = moment(minEndTime).diff(moment(ballotStore.endTime), 'minutes')
-    let neededHours = Math.round(neededMinutes / 60)
-    let duration = minBallotDurationInHours - neededHours
+    let neededHours = Math.floor(neededMinutes / 60)
+    let duration = moment.unix(ballotStore.endTimeUnix).diff(moment.unix(startTime), 'hours')
+
+    if (duration < 0) {
+      duration = 0
+    }
 
     if (neededMinutes > 0) {
-      neededMinutes = neededHours * 60 - neededMinutes
+      neededMinutes = Math.abs(neededHours * 60 - neededMinutes)
       swal(
         'Warning!',
         messages.SHOULD_BE_MORE_THAN_MIN_DURATION(minBallotDurationInHours, duration, neededHours, neededMinutes),
@@ -312,7 +324,7 @@ export class NewBallot extends React.Component {
                 className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
                 onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
               >
-                Consenus Threshold Ballot
+                Consensus Threshold Ballot
               </div>
               <div
                 className={this.menuItemActive(ballotStore.BallotType.proxy)}
@@ -373,7 +385,7 @@ export class NewBallot extends React.Component {
                     onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
                   />
                   <label htmlFor="ballot-for-consensus" className="radio">
-                    Consenus Threshold Ballot
+                    Consensus Threshold Ballot
                   </label>
                   <p className="hint">Ballot to change the minimum threshold for consensus to vote for keys.</p>
                 </div>
