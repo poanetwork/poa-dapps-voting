@@ -10,12 +10,17 @@
 }
 
 %white-block {
-  transition: 0.3s box-shadow;
-  margin-bottom: 80px;
-  border-radius: 8px;
-  box-shadow: 0 10px 10px 0 fade-out(#326cb5, 0.92);
-  padding: $desktop-indent;
   background-color: #fff;
+  border: 1px solid $base-border-color;
+  border-radius: 6px;
+  margin-bottom: 80px;
+  padding: $desktop-indent;
+  transition: 0.15s box-shadow;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 0 55px rgba(0, 0, 0, 0.15);
+  }
 
   @media screen and (max-width: $tablet-width) {
     margin-bottom: $tablet-indent;
@@ -35,7 +40,6 @@
   padding: 0 10px;
   background-color: #fff;
   color: #444;
-  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
 }
 

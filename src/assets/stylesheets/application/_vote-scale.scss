@@ -15,11 +15,11 @@
     border-radius: 3px;
 
     &_yes {
-      background-color: #08b3f2;
+      background-color: $danger-color;;
     }
 
     &_no {
-      background-color: #6d2eae;
+      background-color: $success-color;
     }
   }
 
@@ -41,15 +41,16 @@
   &--votes,
   &--percentage {
     float: right;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   &--votes {
+    color: $gray-text-color;
     margin-left: 10px;
-    color: #8197a2;
   }
 
   &--percentage {
-    color: #08b3f2;
+    color: #000;
+    font-weight: 700;
   }
 }

@@ -1,7 +1,7 @@
 label {
   display: inline-block;
   margin-bottom: 15px;
-  color: #8197a2;
+  color: $gray-text-color;
   font-size: 14px;
   font-family: 'Open Sans', sans-serif;
 }
@@ -43,9 +43,6 @@ button {
   color: #08b3f2;
 
   &.load-more {
-    background-color: rgba(109,46,174,0.1);
-    color: #6d2eae;
-    margin-top: 0;
     margin-bottom: 50px;
 
     @media screen and (max-width: $container-width) {
@@ -144,7 +141,7 @@ button {
 
 .hint {
   margin-top: 15px;
-  color: #8197a2;
+  color: $gray-text-color;
   line-height: 18px;
   font-size: 12px;
 }

@@ -6,20 +6,31 @@
   &-left {
     display: inline-flex;
     align-items: center;
+
+    @media screen and (max-width: $mobile-width) {
+      display: block;
+      .btn {
+        display: block;
+        margin: 0 0 15px;
+        width: 100%;
+      }
+    }
   }
+
   @media screen and (max-width: $tablet-width) {
     padding-top: $tablet-indent;
   }
 
   @media screen and (max-width: $mobile-width) {
     flex-direction: column-reverse;
-    padding-top: $mobile-indent;
+    padding-top: 0;
   }
 
   p {
+    color: $gray-text-color;
     line-height: 18px;
-    color: #8197a2;
     max-width: 340px;
+    padding-left: 15px;
   }
 
   &-finalize {

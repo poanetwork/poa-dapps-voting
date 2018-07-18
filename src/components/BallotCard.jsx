@@ -46,9 +46,7 @@ export class BallotCard extends React.Component {
 
   @computed
   get finalizeButtonClass() {
-    const cls = this.isFinalized
-      ? 'ballots-footer-finalize ballots-footer-finalize-finalized'
-      : 'ballots-footer-finalize'
+    const cls = this.isFinalized ? 'btn btn-primary disabled' : 'btn btn-primary'
     return cls
   }
 
@@ -398,7 +396,7 @@ export class BallotCard extends React.Component {
         ? 'ballots-i'
         : 'ballots-i ballots-i-not-finalized'
       : 'ballots-i display-none'
-    let voteScaleClass = this.isFinalized ? 'vote-scale' : 'vote-scale vote-scale-not-finalized'
+    let voteScaleClass = 'vote-scale'
     let hasAlreadyVotedLabel = (
       <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">
         You already voted
@@ -434,12 +432,12 @@ export class BallotCard extends React.Component {
             <button
               type="button"
               onClick={e => this.vote({ choice: REJECT })}
-              className="ballots-i--vote ballots-i--vote_no"
+              className="btn btn-danger ballots-i--vote_no"
             >
               No
             </button>
             <div className="vote-scale--container">
-              <p className="vote-scale--value">No</p>
+              {/* <p className="vote-scale--value">No</p> */}
               <p className="vote-scale--votes">Votes: {this.votesAgainstNumber}</p>
               <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
               <div className={voteScaleClass}>
@@ -452,7 +450,7 @@ export class BallotCard extends React.Component {
           </div>
           <div className="ballots-i-scale-column">
             <div className="vote-scale--container">
-              <p className="vote-scale--value">Yes</p>
+              {/* <p className="vote-scale--value">Yes</p> */}
               <p className="vote-scale--votes">Votes: {this.votesForNumber}</p>
               <p className="vote-scale--percentage">{this.votesForPercents}%</p>
               <div className={voteScaleClass}>
@@ -460,9 +458,9 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <button
-              type="button"
+              className="btn btn-success ballots-i--vote_yes"
               onClick={e => this.vote({ choice: ACCEPT })}
-              className="ballots-i--vote ballots-i--vote_yes"
+              type="button"
             >
               Yes
             </button>
@@ -481,7 +479,7 @@ export class BallotCard extends React.Component {
             <p>{this.finalizeDescription}</p>
           </div>
           {showHasAlreadyVotedLabel}
-          <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote_no">
+          <div className="ballots-i--vote-label">
             {this.typeName(votingType)} Ballot ID: {this.props.id}
           </div>
         </div>

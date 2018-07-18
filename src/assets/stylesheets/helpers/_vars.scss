@@ -5,6 +5,13 @@ $primary-color: #5c34a2;
 $primary-color-darker: #45277a;
 $secondary-color: #6ac9b9;
 $secondary-color-darker: darken(#6ac9b9, 10%);
+$danger-color: #ff4949;
+$success-color: #13ce66;
+$gray-text-color: #778f9b;
+
+// buttons
+$btn-primary-bg: $primary-color;
+$btn-secondary-bg: #61db97;
 
 // borders
 $base-border-color: #b8c1cb;

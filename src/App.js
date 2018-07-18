@@ -20,27 +20,32 @@ class App extends Component {
         {
           icon: '',
           title: 'All',
-          url: commonStore.rootPath
+          url: commonStore.rootPath,
+          class: ''
         },
         {
           icon: '',
           title: 'Active',
-          url: `${commonStore.rootPath}/active`
+          url: `${commonStore.rootPath}/active`,
+          class: ''
         },
         {
           icon: '',
           title: 'To Finalize',
-          url: `${commonStore.rootPath}/tofinalize`
+          url: `${commonStore.rootPath}/tofinalize`,
+          class: ''
         },
         {
           icon: '',
           title: 'New Ballot',
-          url: `${commonStore.rootPath}/new`
+          url: `${commonStore.rootPath}/new`,
+          class: 'btn btn-new-ballot btn-success btn-new'
         }
         // {
         //   'icon': '',
         //   'title': 'Settings',
-        //   'url': `${ commonStore.rootPath }/settings`
+        //   'url': `${ commonStore.rootPath }/settings`,
+        //    class: ''
         // }
       ]
     }
@@ -106,6 +111,7 @@ class App extends Component {
   render() {
     const { commonStore, contractsStore } = this.props
     const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
+    console.log(contractsStore.netId)
 
     const search = this.shouldShowSearch() ? (
       <input type="search" className="search-input" onChange={this.onSearch} />
