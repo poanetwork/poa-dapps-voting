@@ -61,6 +61,5 @@ function sendTransactionByVotingKey(props, to, data, cb, warning) {
 
 module.exports = {
   toAscii: toAscii,
-  //sleep: sleep,
   sendTransactionByVotingKey: sendTransactionByVotingKey
 }

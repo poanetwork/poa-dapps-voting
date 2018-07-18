@@ -1,4 +1,3 @@
-//import Web3 from 'web3'
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
@@ -10,7 +9,6 @@ import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
 import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
 import { messages } from '../messages'
 import { constants } from '../constants'
-//import { sleep } from '../helpers'
 import { sendTransactionByVotingKey } from '../helpers'
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
@@ -275,52 +273,6 @@ export class NewBallot extends React.Component {
         },
         messages.BALLOT_CREATE_FAILED_TX
       )
-
-      /*
-      web3.eth.sendTransaction(
-        {
-          from: contractsStore.votingKey,
-          to: contractInstance.options.address,
-          gasPrice: web3.utils.toWei('1', 'gwei'),
-          data: methodToCreateBallot(startTime)
-        },
-        async (error, hash) => {
-          if (error) {
-            commonStore.hideLoading()
-            swal('Error!', error.message, 'error')
-          } else {
-            try {
-              let tx
-              do {
-                await sleep(constants.getTransactionReceiptInterval)
-                tx = await web3.eth.getTransactionReceipt(hash)
-              } while (tx === null)
-
-              commonStore.hideLoading()
-              if (tx.status === true || tx.status === '0x1') {
-                const events = await contractInstance.getPastEvents('BallotCreated', {
-                  fromBlock: tx.blockNumber,
-                  toBlock: tx.blockNumber
-                })
-                const newId = Number(events[0].returnValues.id)
-                const card = await contractsStore.getCard(newId, contractType)
-                ballotsStore.ballotCards.push(card)
-
-                swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
-                  push(`${commonStore.rootPath}`)
-                  window.scrollTo(0, 0)
-                })
-              } else {
-                swal('Warning!', messages.BALLOT_CREATE_FAILED_TX, 'warning')
-              }
-            } catch (e) {
-              commonStore.hideLoading()
-              swal('Error!', e.message, 'error')
-            }
-          }
-        }
-      )
-      */
     }
   }
 
