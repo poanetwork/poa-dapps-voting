@@ -17,27 +17,26 @@ export default class VotingToChangeMinThreshold {
       VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS
     )
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
+    this.address = VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS
   }
 
   //setters
-  createBallot({ startTime, endTime, proposedValue, sender, memo }) {
+  createBallot({ startTime, endTime, proposedValue, memo }) {
     let method
     if (this.votingToChangeMinThresholdInstance.methods.createBallot) {
       method = this.votingToChangeMinThresholdInstance.methods.createBallot
     } else {
       method = this.votingToChangeMinThresholdInstance.methods.createBallotToChangeThreshold
     }
-    return method(startTime, endTime, proposedValue, memo).send({ from: sender, gasPrice: this.gasPrice })
+    return method(startTime, endTime, proposedValue, memo).encodeABI()
   }
 
-  vote(_id, choice, sender) {
-    return this.votingToChangeMinThresholdInstance.methods
-      .vote(_id, choice)
-      .send({ from: sender, gasPrice: this.gasPrice })
+  vote(_id, choice) {
+    return this.votingToChangeMinThresholdInstance.methods.vote(_id, choice).encodeABI()
   }
 
-  finalize(_id, sender) {
-    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).send({ from: sender, gasPrice: this.gasPrice })
+  finalize(_id) {
+    return this.votingToChangeMinThresholdInstance.methods.finalize(_id).encodeABI()
   }
 
   //getters

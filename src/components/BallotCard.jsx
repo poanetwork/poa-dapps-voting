@@ -3,6 +3,7 @@ import moment from 'moment'
 import { observable, action, computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../messages'
+import { sendTransactionByVotingKey } from '../helpers'
 import swal from 'sweetalert2'
 
 const ACCEPT = 1
@@ -177,7 +178,7 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
     }
-    const { commonStore, contractsStore, id, votingType, ballotsStore } = this.props
+    const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
     if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
@@ -192,40 +193,36 @@ export class BallotCard extends React.Component {
     }
 
     const contract = this.getContract(contractsStore, votingType)
-    contract
-      .vote(id, choice, contractsStore.votingKey)
-      .on('receipt', async tx => {
-        commonStore.hideLoading()
-        if (tx.status === true || tx.status === '0x1') {
-          const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey)
 
-          this.totalVoters = Number(ballotInfo.totalVoters)
-          this.progress = Number(ballotInfo.progress)
-          this.isFinalized = Boolean(ballotInfo.isFinalized)
-          if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
-            this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow)
-          } else {
-            await this.canBeFinalizedNow()
-          }
-          this.hasAlreadyVoted = true
+    sendTransactionByVotingKey(
+      this.props,
+      contract.address,
+      contract.vote(id, choice),
+      async tx => {
+        const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey)
 
-          ballotsStore.ballotCards[this.props.pos].props.votingState.totalVoters = this.totalVoters
-          ballotsStore.ballotCards[this.props.pos].props.votingState.progress = this.progress
-          ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = this.isFinalized
-          ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = this.canBeFinalized
-          ballotsStore.ballotCards[this.props.pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted
-
-          swal('Congratulations!', messages.VOTED_SUCCESS_MSG, 'success').then(result => {
-            push(`${commonStore.rootPath}`)
-          })
+        this.totalVoters = Number(ballotInfo.totalVoters)
+        this.progress = Number(ballotInfo.progress)
+        this.isFinalized = Boolean(ballotInfo.isFinalized)
+        if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
+          this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow)
         } else {
-          swal('Warning!', messages.VOTE_FAILED_TX, 'warning')
+          await this.canBeFinalizedNow()
         }
-      })
-      .on('error', e => {
-        commonStore.hideLoading()
-        swal('Error!', e.message, 'error')
-      })
+        this.hasAlreadyVoted = true
+
+        ballotsStore.ballotCards[pos].props.votingState.totalVoters = this.totalVoters
+        ballotsStore.ballotCards[pos].props.votingState.progress = this.progress
+        ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+        ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
+        ballotsStore.ballotCards[pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted
+
+        swal('Congratulations!', messages.VOTED_SUCCESS_MSG, 'success').then(result => {
+          push(`${commonStore.rootPath}`)
+        })
+      },
+      messages.VOTE_FAILED_TX
+    )
   }
 
   finalize = async e => {
@@ -237,7 +234,7 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
     }
-    const { commonStore, contractsStore, id, votingType, ballotsStore } = this.props
+    const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
     if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
@@ -259,28 +256,26 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.INVALID_FINALIZE_MSG, 'warning')
       return
     }
-    this.getContract(contractsStore, votingType)
-      .finalize(id, contractsStore.votingKey)
-      .on('receipt', tx => {
-        commonStore.hideLoading()
-        if (tx.status === true || tx.status === '0x1') {
-          this.isFinalized = true
-          ballotsStore.ballotCards[this.props.pos].props.votingState.isFinalized = this.isFinalized
-          if (this.canBeFinalized !== null) {
-            this.canBeFinalized = false
-            ballotsStore.ballotCards[this.props.pos].props.votingState.canBeFinalized = this.canBeFinalized
-          }
-          swal('Congratulations!', messages.FINALIZED_SUCCESS_MSG, 'success').then(result => {
-            push(`${commonStore.rootPath}`)
-          })
-        } else {
-          swal('Warning!', messages.FINALIZE_FAILED_TX, 'warning')
+
+    const contract = this.getContract(contractsStore, votingType)
+
+    sendTransactionByVotingKey(
+      this.props,
+      contract.address,
+      contract.finalize(id),
+      async tx => {
+        this.isFinalized = true
+        ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+        if (this.canBeFinalized !== null) {
+          this.canBeFinalized = false
+          ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
         }
-      })
-      .on('error', e => {
-        commonStore.hideLoading()
-        swal('Error!', e.message, 'error')
-      })
+        swal('Congratulations!', messages.FINALIZED_SUCCESS_MSG, 'success').then(result => {
+          push(`${commonStore.rootPath}`)
+        })
+      },
+      messages.FINALIZE_FAILED_TX
+    )
   }
 
   repeatGetProperty = async (contractsStore, contractType, id, methodID, tryID) => {
