@@ -9,6 +9,7 @@ import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
 import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
 import { messages } from '../messages'
 import { constants } from '../constants'
+import { sendTransactionByVotingKey } from '../helpers'
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
 export class NewBallot extends React.Component {
@@ -160,20 +161,19 @@ export class NewBallot extends React.Component {
       newPayoutKey: ballotStore.ballotKeys.newPayoutKey,
       miningKey: ballotStore.ballotKeys.miningKey.value,
       ballotType: ballotStore.ballotKeys.keysBallotType,
-      sender: contractsStore.votingKey,
       memo: ballotStore.memo
     }
-    let method
+    let data
     if (
       inputToMethod.ballotType === ballotStore.KeysBallotType.add &&
       inputToMethod.affectedKeyType === ballotStore.KeyType.mining &&
       (inputToMethod.newVotingKey || inputToMethod.newPayoutKey)
     ) {
-      method = contractsStore.votingToChangeKeys.createBallotToAddNewValidator(inputToMethod)
+      data = contractsStore.votingToChangeKeys.createBallotToAddNewValidator(inputToMethod)
     } else {
-      method = contractsStore.votingToChangeKeys.createBallot(inputToMethod)
+      data = contractsStore.votingToChangeKeys.createBallot(inputToMethod)
     }
-    return method
+    return data
   }
 
   createBallotForMinThreshold = startTime => {
@@ -182,11 +182,9 @@ export class NewBallot extends React.Component {
       startTime: startTime,
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotMinThreshold.proposedValue,
-      sender: contractsStore.votingKey,
       memo: ballotStore.memo
     }
-    let method = contractsStore.votingToChangeMinThreshold.createBallot(inputToMethod)
-    return method
+    return contractsStore.votingToChangeMinThreshold.createBallot(inputToMethod)
   }
 
   createBallotForProxy = startTime => {
@@ -196,11 +194,9 @@ export class NewBallot extends React.Component {
       endTime: ballotStore.endTimeUnix,
       proposedValue: ballotStore.ballotProxy.proposedAddress,
       contractType: ballotStore.ballotProxy.contractType,
-      sender: contractsStore.votingKey,
       memo: ballotStore.memo
     }
-    let method = contractsStore.votingToChangeProxy.createBallot(inputToMethod)
-    return method
+    return contractsStore.votingToChangeProxy.createBallot(inputToMethod)
   }
 
   onClick = async () => {
@@ -233,47 +229,50 @@ export class NewBallot extends React.Component {
 
       let methodToCreateBallot
       let contractType
+      let contractInstance
+      //let web3 = new Web3(contractsStore.web3Instance.currentProvider)
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys
           contractType = 'votingToChangeKeys'
+          contractInstance = contractsStore.votingToChangeKeys.votingToChangeKeysInstance
           break
         case ballotStore.BallotType.minThreshold:
           methodToCreateBallot = this.createBallotForMinThreshold
           contractType = 'votingToChangeMinThreshold'
+          contractInstance = contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance
           break
         case ballotStore.BallotType.proxy:
           methodToCreateBallot = this.createBallotForProxy
           contractType = 'votingToChangeProxy'
+          contractInstance = contractsStore.votingToChangeProxy.votingToChangeProxyInstance
           break
         default:
           break
       }
 
-      const startTime = moment
-        .utc()
-        .add(constants.startTimeOffsetInMinutes, 'minutes')
-        .unix()
-      methodToCreateBallot(startTime)
-        .on('receipt', async tx => {
-          commonStore.hideLoading()
-          if (tx.status === true || tx.status === '0x1') {
-            const newId = Number(tx.events.BallotCreated.returnValues.id)
-            const card = await contractsStore.getCard(newId, contractType)
-            ballotsStore.ballotCards.push(card)
+      const startTime = this.getStartTimeUnix()
 
-            swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
-              push(`${commonStore.rootPath}`)
-              window.scrollTo(0, 0)
-            })
-          } else {
-            swal('Warning!', messages.BALLOT_CREATE_FAILED_TX, 'warning')
-          }
-        })
-        .on('error', e => {
-          commonStore.hideLoading()
-          swal('Error!', e.message, 'error')
-        })
+      sendTransactionByVotingKey(
+        this.props,
+        contractInstance.options.address,
+        methodToCreateBallot(startTime),
+        async tx => {
+          const events = await contractInstance.getPastEvents('BallotCreated', {
+            fromBlock: tx.blockNumber,
+            toBlock: tx.blockNumber
+          })
+          const newId = Number(events[0].returnValues.id)
+          const card = await contractsStore.getCard(newId, contractType)
+          ballotsStore.ballotCards.push(card)
+
+          swal('Congratulations!', messages.BALLOT_CREATED_SUCCESS_MSG, 'success').then(result => {
+            push(`${commonStore.rootPath}`)
+            window.scrollTo(0, 0)
+          })
+        },
+        messages.BALLOT_CREATE_FAILED_TX
+      )
     }
   }
 
