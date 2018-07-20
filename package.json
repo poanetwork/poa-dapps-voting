@@ -123,9 +123,14 @@
     "rules": {
       "no-control-regex": 0,
       "dependencies/no-cycles": "error",
-      "dependencies/no-unresolved": ["error", {
-        "ignore": ["web3"]
-      }]
+      "dependencies/no-unresolved": [
+        "error",
+        {
+          "ignore": [
+            "web3"
+          ]
+        }
+      ]
     },
     "settings": {
       "import/resolver": {

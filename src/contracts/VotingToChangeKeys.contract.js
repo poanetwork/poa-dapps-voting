@@ -14,34 +14,32 @@ export default class VotingToChangeKeys {
 
     this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS)
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
+    this.address = VOTING_TO_CHANGE_KEYS_ADDRESS
   }
 
   //setters
-  createBallot({ startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, sender, memo }) {
+  createBallot({ startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo }) {
     let method
     if (this.votingToChangeKeysInstance.methods.createBallot) {
       method = this.votingToChangeKeysInstance.methods.createBallot
     } else {
       method = this.votingToChangeKeysInstance.methods.createVotingForKeys
     }
-    return method(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).send({
-      from: sender,
-      gasPrice: this.gasPrice
-    })
+    return method(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).encodeABI()
   }
 
-  createBallotToAddNewValidator({ startTime, endTime, affectedKey, newVotingKey, newPayoutKey, sender, memo }) {
+  createBallotToAddNewValidator({ startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo }) {
     return this.votingToChangeKeysInstance.methods
       .createBallotToAddNewValidator(startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo)
-      .send({ from: sender, gasPrice: this.gasPrice })
+      .encodeABI()
   }
 
-  vote(_id, choice, sender) {
-    return this.votingToChangeKeysInstance.methods.vote(_id, choice).send({ from: sender, gasPrice: this.gasPrice })
+  vote(_id, choice) {
+    return this.votingToChangeKeysInstance.methods.vote(_id, choice).encodeABI()
   }
 
-  finalize(_id, sender) {
-    return this.votingToChangeKeysInstance.methods.finalize(_id).send({ from: sender, gasPrice: this.gasPrice })
+  finalize(_id) {
+    return this.votingToChangeKeysInstance.methods.finalize(_id).encodeABI()
   }
 
   //getters

@@ -21,6 +21,7 @@ constants.NEW_MINING_KEY = {
 constants.minBallotDurationInDays = 2
 constants.startTimeOffsetInMinutes = 5
 constants.endTimeDefaultInMinutes = 2890
+constants.getTransactionReceiptInterval = 5000
 module.exports = {
   constants
 }
