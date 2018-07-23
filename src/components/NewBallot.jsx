@@ -221,6 +221,15 @@ export class NewBallot extends React.Component {
         let areBallotParamsValid = await contractsStore.votingToChangeKeys.areBallotParamsValid(
           inputToAreBallotParamsValid
         )
+        if (ballotStore.ballotKeys.keysBallotType === ballotStore.KeysBallotType.add) {
+          if (ballotStore.ballotKeys.keyType !== ballotStore.KeyType.mining) {
+            if (!ballotStore.ballotKeys.miningKey.value) {
+              areBallotParamsValid = false
+            } else if (ballotStore.ballotKeys.miningKey.value === '0x0000000000000000000000000000000000000000') {
+              areBallotParamsValid = false
+            }
+          }
+        }
         if (!areBallotParamsValid) {
           commonStore.hideLoading()
           return swal('Warning!', 'The ballot input params are invalid', 'warning')
