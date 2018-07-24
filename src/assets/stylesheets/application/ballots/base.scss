@@ -16,19 +16,20 @@
       border-color: rgba($primary-color, 0.3);
     }
     &-scale {
+      border-top: 1px solid #e5eef9;
       display: flex;
       justify-content: space-between;
+      margin-bottom: 30px;
       margin-top: $desktop-indent;
-      border-top: 1px solid #e5eef9;
-      padding: $desktop-indent 0;
+      padding: $desktop-indent 0 0 0;
       @media screen and (max-width: $tablet-width) {
         display: block;
         margin-top: $tablet-indent;
-        padding: $tablet-indent 0;
+        padding: $tablet-indent 0 0 0;
       }
       @media screen and (max-width: $mobile-width) {
         margin-top: $mobile-indent;
-        padding: $mobile-indent 0;
+        padding: $mobile-indent 0 0 0;
       }
       &-column {
         display: flex;

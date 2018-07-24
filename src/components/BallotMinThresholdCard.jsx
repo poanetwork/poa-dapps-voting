@@ -10,10 +10,10 @@ export class BallotMinThresholdCard extends React.Component {
     return (
       <BallotCard votingType="votingToChangeMinThreshold" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_proposed-min-threshold">
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Proposed min threshold</p>
           </div>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.proposedValue}</p>
           </div>
         </div>

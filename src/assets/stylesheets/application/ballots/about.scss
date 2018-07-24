@@ -1,5 +1,4 @@
 .ballots-about {
-  font-size: 0;
   @media screen and (max-width: $tablet-width) {
     display: table;
     width: 100%;
@@ -13,12 +12,6 @@
     display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
-    &:not(&_time) {
-      padding-right: 10px;
-      @media screen and (max-width: $tablet-width) {
-        padding-right: 0;
-      }
-    }
     @media screen and (max-width: $tablet-width) {
       display: table-row;
       width: 100% !important;
@@ -37,7 +30,7 @@
       width: 30%;
     }
     &_key {
-      width: 25%;
+      width: 26%;
       word-break: break-all;
     }
     &_key_wide {
@@ -57,7 +50,7 @@
       word-break: break-all;
     }
     &_time {
-      width: 10%;
+      width: 8%;
       text-align: right;
       @media screen and (max-width: $tablet-width) {
         text-align: left;
@@ -71,13 +64,13 @@
     }
     &--title {
       color: #333;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       left: 0;
       position: absolute;
       right: 0;
       text-align: left;
-      top: -#{$desktop-indent * 2};
+      top: -#{ $desktop-indent * 2 + 10 };
       z-index: 1;
       @media screen and (max-width: $tablet-width) {
         position: relative;
@@ -87,15 +80,36 @@
         white-space: nowrap;
       }
     }
+    &:first-child .ballots-about-td-value {
+      border-left: none;
+      padding-left: 0;
+    }
+    &:last-child .ballots-about-td-value {
+      border-right: none;
+      padding-right: 0;
+    }
   }
   &-td {
+    &.ballots-about-td-value {
+      border-right: 1px solid $base-border-color;
+      font-size: 13px;
+      min-height: 56px;
+      padding-left: 5px;
+      padding-right: 5px;
+      @media screen and (max-width: $tablet-width) {
+        border: none;
+        min-height: 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
     @media screen and (max-width: $tablet-width) {
       display: table-cell;
       vertical-align: top;
     }
     &:first-child {
       @media screen and (max-width: $tablet-width) {
-        padding-right: 20px;
+        padding-right: 10px;
       }
     }
     #{$this}-i:not(:last-child) & {
