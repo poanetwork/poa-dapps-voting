@@ -318,7 +318,6 @@ export class NewBallot extends React.Component {
     }
     return (
       <section className="container new">
-        <h1 className="title">New Ballot</h1>
         <form action="" className="new-form">
           <div className="new-form-side new-form-side_left">
             <div className="ballot-types">
@@ -419,7 +418,7 @@ export class NewBallot extends React.Component {
             {validator}
             {keysTypes}
             {metadata}
-            <button type="button" className="add-ballot" onClick={e => this.onClick(e)}>
+            <button type="button" className="btn btn-primary add-ballot" onClick={e => this.onClick(e)}>
               Add ballot
             </button>
           </div>

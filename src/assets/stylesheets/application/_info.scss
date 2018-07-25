@@ -1,0 +1,57 @@
+.info {
+  color: #000;
+
+  .ballots & {
+    @include image-2x('./images/info@2x.png', 32px, 32px);
+    align-items: center;
+    background-image: url(./images/info.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    display: flex;
+    margin-bottom: 20px;
+    max-width: 100%;
+    min-height: 32px;
+    padding-left: 44px;
+    word-break: break-all;
+  }
+
+  .new-form & {
+    padding: 30px;
+  }
+
+  &-title {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 44px;
+
+    &:before {
+      @include image-2x('./images/info@2x.png', 32px, 32px);
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &-i {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 12px;
+    line-height: 18px;
+    font-size: 12px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: $primary-color;
+    }
+  }
+}

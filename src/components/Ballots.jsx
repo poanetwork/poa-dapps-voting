@@ -143,7 +143,7 @@ export class Ballots extends React.Component {
     if (ballotCards.length > this.limit && !commonStore.isActiveFilter && !commonStore.isToFinalizeFilter) {
       loadMoreButton = (
         <div className="center">
-          <button type="button" className="load-more" onClick={e => this.onClick(e)}>
+          <button type="button" className="btn btn-primary load-more" onClick={e => this.onClick(e)}>
             &darr; LOAD MORE BALLOTS &darr;
           </button>
         </div>
@@ -152,7 +152,6 @@ export class Ballots extends React.Component {
     }
     return (
       <section className="container ballots">
-        <h1 className="title">Ballots</h1>
         {ballotCards}
         {loadMoreButton}
       </section>

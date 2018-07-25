@@ -1,0 +1,121 @@
+.ballots-about {
+  @media screen and (max-width: $tablet-width) {
+    display: table;
+    width: 100%;
+  }
+  $this: &;
+  p {
+    line-height: 28px;
+  }
+  &-i {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+    @media screen and (max-width: $tablet-width) {
+      display: table-row;
+      width: 100% !important;
+    }
+    &_name {
+      width: 20%;
+    }
+    &_action {
+      width: 10%;
+    }
+    // 25
+    &_type {
+      width: 10%;
+    }
+    &_proposal {
+      width: 30%;
+    }
+    &_key {
+      width: 26%;
+      word-break: break-all;
+    }
+    &_key_wide {
+      width: 50%;
+      word-break: break-all;
+    }
+    &_proposed-min-threshold {
+      width: 70%;
+      word-break: break-all;
+    }
+    &_contract-type {
+      width: 40%;
+      word-break: break-all;
+    }
+    &_proposed-address {
+      width: 30%;
+      word-break: break-all;
+    }
+    &_time {
+      width: 8%;
+      text-align: right;
+      @media screen and (max-width: $tablet-width) {
+        text-align: left;
+      }
+      #{$this}-i--title {
+        text-align: right;
+        @media screen and (max-width: $tablet-width) {
+          text-align: left;
+        }
+      }
+    }
+    &--title {
+      color: #333;
+      font-size: 13px;
+      font-weight: 700;
+      left: 0;
+      position: absolute;
+      right: 0;
+      text-align: left;
+      top: -#{ $desktop-indent * 2 + 10 };
+      z-index: 1;
+      @media screen and (max-width: $tablet-width) {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        white-space: nowrap;
+      }
+    }
+    &:first-child .ballots-about-td-value {
+      border-left: none;
+      padding-left: 0;
+    }
+    &:last-child .ballots-about-td-value {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+  &-td {
+    &.ballots-about-td-value {
+      border-right: 1px solid $base-border-color;
+      font-size: 13px;
+      min-height: 56px;
+      padding-left: 5px;
+      padding-right: 5px;
+      @media screen and (max-width: $tablet-width) {
+        border: none;
+        min-height: 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    @media screen and (max-width: $tablet-width) {
+      display: table-cell;
+      vertical-align: top;
+    }
+    &:first-child {
+      @media screen and (max-width: $tablet-width) {
+        padding-right: 10px;
+      }
+    }
+    #{$this}-i:not(:last-child) & {
+      @media screen and (max-width: $tablet-width) {
+        padding-bottom: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+.vote-scale {
+  clear: left;
+  overflow: hidden;
+  height: 6px;
+  margin-top: 30px;
+  border-radius: 3px;
+  background-color: fade-out(#e5eef9, 0.5);
+
+  &-not-finalized {
+    background-color: #ffffff;
+  }
+
+  &--fill {
+    height: 100%;
+    border-radius: 3px;
+
+    &_yes {
+      background-color: $danger-color;;
+    }
+
+    &_no {
+      background-color: $success-color;
+    }
+  }
+
+  &--container {
+    width: 100%;
+    max-width: 343px;
+
+    @media screen and (max-width: $tablet-width) {
+      float: right;
+      max-width: 100%;
+    }
+  }
+
+  &--value {
+    float: left;
+    font-size: 12px;
+  }
+
+  &--votes,
+  &--percentage {
+    float: right;
+    font-size: 13px;
+  }
+
+  &--votes {
+    color: $gray-text-color;
+    margin-left: 10px;
+  }
+
+  &--percentage {
+    color: #000;
+    font-weight: 700;
+  }
+}
