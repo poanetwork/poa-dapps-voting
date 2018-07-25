@@ -24,10 +24,10 @@ export class BallotKeysCard extends React.Component {
       affectedKeyClassName = 'ballots-about-i_key'
       miningKeyDiv = (
         <div className="ballots-about-i ballots-about-i_key">
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Validator key</p>
           </div>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.miningKey}</p>
           </div>
         </div>
@@ -37,26 +37,26 @@ export class BallotKeysCard extends React.Component {
     return (
       <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id} pos={pos}>
         <div className="ballots-about-i ballots-about-i_action">
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Action</p>
           </div>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.ballotTypeDisplayName}</p>
           </div>
         </div>
         <div className="ballots-about-i ballots-about-i_type">
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Key type</p>
           </div>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.affectedKeyTypeDisplayName}</p>
           </div>
         </div>
         <div className={`ballots-about-i ${affectedKeyClassName}`}>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Affected key</p>
           </div>
-          <div className="ballots-about-td">
+          <div className="ballots-about-td ballots-about-td-value">
             {affectedKey}
             {newVotingKey}
             {newPayoutKey}
