@@ -47,7 +47,7 @@ export class BallotCard extends React.Component {
 
   @computed
   get finalizeButtonClass() {
-    const cls = this.isFinalized ? 'btn btn-primary disabled' : 'btn btn-primary'
+    const cls = this.isFinalized ? 'btn btn-primary btn-finalize disabled' : 'btn btn-primary btn-finalize'
     return cls
   }
 

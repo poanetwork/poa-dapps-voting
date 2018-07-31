@@ -98,11 +98,7 @@
       &-label-right {
         margin-left: auto !important;
       }
-      &_yes {
-        margin-right: 15px;
-      }
       &_no {
-        margin-left: 15px;
         @media screen and (max-width: $tablet-width) {
           float: left;
           margin-left: 0;

@@ -39,7 +39,7 @@ class App extends Component {
           icon: 'link-icon-add',
           title: 'New Ballot',
           url: `${commonStore.rootPath}/new`,
-          class: 'btn btn-new-ballot btn-success btn-new'
+          class: 'btn btn-new-ballot btn-success btn-new no-shadow'
         }
         // {
         //   'icon': '',

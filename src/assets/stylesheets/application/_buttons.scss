@@ -1,3 +1,8 @@
+@mixin btn-background-properties() {
+  background-size: 14px 14px;
+  padding-right: 45px;
+}
+
 button,
 input,
 textarea {
@@ -21,40 +26,74 @@ textarea {
   transition: 0.15s background-color;
   &.btn-primary {
     background-color: $primary-color;
+    box-shadow: 0px 5px 10px 0 rgba(92, 52, 162, 0.3);
     &:hover {
-      background-color: lighten($primary-color, 10%);
+      background-color: darken($primary-color, 10%);
     }
   }
   &.btn-secondary {
     background-color: $secondary-color;
     &:hover {
-      background-color: lighten($secondary-color, 10%);
+      background-color: darken($secondary-color, 10%);
     }
   }
   &.btn-success {
     background-color: $success-color;
+    box-shadow: 0px 5px 10px 0 rgba(96, 219, 151, 0.3);
     &:hover {
-      background-color: lighten($success-color, 10%);
+      background-color: darken($success-color, 10%);
     }
   }
   &.btn-danger {
     background-color: $danger-color;
+    box-shadow: 0px 5px 10px 0 rgba(242, 27, 87, 0.3);
     &:hover {
-      background-color: lighten($danger-color, 10%);
+      background-color: darken($danger-color, 10%);
     }
   }
   &.btn-new {
     background-image: url('#{ $base-images-path }/icons/icon-add.svg');
-    background-size: 14px 14px;
-    padding-right: 45px;
+    @include btn-background-properties();
+  }
+  &.btn-transparent {
+    color: $primary-color;
+    background-color: transparent;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  &.btn-load-more {
+    background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
+    @include btn-background-properties();
+  }
+  &.no-shadow {
+    box-shadow: none;
   }
   &[disabled],
   &.disabled {
-    color: #788f9a;
+    color: #333333;
     cursor: default;
-    background-color: #dde2e8;
+    background-color: #f0f0f0;;
+    box-shadow: none;
     &:hover {
-      background-color: #dde2e8;
+      background-color: #f0f0f0;;
     }
+  }
+  &.btn-finalize {
+    background-image: url('#{ $base-images-path }/icons/icon-finalize-white.svg');
+    @include btn-background-properties();
+    &[disabled],
+    &.disabled {
+      background-image: url('#{ $base-images-path }/icons/icon-finalize-black.svg');
+    }
+  }
+  &.text-lowercase {
+    text-transform: lowercase;
+  }
+  &.text-uppercase {
+    text-transform: uppercase;
+  }
+  &.text-capitalize {
+    text-transform: capitalize;
   }
 }

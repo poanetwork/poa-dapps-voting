@@ -418,7 +418,7 @@ export class NewBallot extends React.Component {
             {validator}
             {keysTypes}
             {metadata}
-            <button type="button" className="btn btn-primary add-ballot" onClick={e => this.onClick(e)}>
+            <button type="button" className="btn btn-primary btn-new text-capitalize" onClick={e => this.onClick(e)}>
               Add ballot
             </button>
           </div>
