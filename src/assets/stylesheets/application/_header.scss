@@ -70,9 +70,10 @@
 
   .link {
     color: #fff;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 16px;
-    margin-left: 30px;
+    line-height: 18px;
+    margin-left: 34px;
     opacity: 0.8;
     text-decoration: none;
     transition: opacity linear 0.1s;
@@ -97,27 +98,13 @@
     background-repeat: no-repeat;
 
     &-all {
-      background-image: url('#{ $base-images-path }/icons/icon-events.svg');
+      background-image: url('#{ $base-images-path }/icons/icon-all.svg');
     }
-    &-set-metadata {
-      background-image: url('#{ $base-images-path }/icons/icon-status.svg');
+    &-active {
+      background-image: url('#{ $base-images-path }/icons/icon-active.svg');
     }
-    &-pending-changes {
-      background-image: url('#{ $base-images-path }/icons/icon-statistics.svg');
-    }
-  }
-
-  &.sokol {
-    .link-icon {
-      &-all {
-        background-image: url('#{ $base-images-path }/icons/icon-events-sokol.svg');
-      }
-      &-set-metadata {
-        background-image: url('#{ $base-images-path }/icons/icon-status-sokol.svg');
-      }
-      &-pending-changes {
-        background-image: url('#{ $base-images-path }/icons/icon-statistics-sokol.svg');
-      }
+    &-to-finalize {
+      background-image: url('#{ $base-images-path }/icons/icon-to-finalize.svg');
     }
   }
 
@@ -169,9 +156,8 @@
   }
 
   .btn.btn-new-ballot {
-    background-image: url('#{ $base-images-path }/btn-new-success.png');
-    height: 40px;
-    line-height: 40px;
+    height: 36px;
+    line-height: 36px;
     opacity: 1;
     .link-icon {
       display: none;

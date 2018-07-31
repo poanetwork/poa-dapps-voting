@@ -18,25 +18,25 @@ class App extends Component {
       showMobileMenu: false,
       navigationData: [
         {
-          icon: '',
+          icon: 'link-icon-all',
           title: 'All',
           url: commonStore.rootPath,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-active',
           title: 'Active',
           url: `${commonStore.rootPath}/active`,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-to-finalize',
           title: 'To Finalize',
           url: `${commonStore.rootPath}/tofinalize`,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-add',
           title: 'New Ballot',
           url: `${commonStore.rootPath}/new`,
           class: 'btn btn-new-ballot btn-success btn-new'
