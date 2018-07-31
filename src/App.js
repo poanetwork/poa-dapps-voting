@@ -111,10 +111,13 @@ class App extends Component {
   render() {
     const { commonStore, contractsStore } = this.props
     const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
-    console.log(contractsStore.netId)
 
     const search = this.shouldShowSearch() ? (
-      <input type="search" className="search-input" onChange={this.onSearch} />
+      <div className={`search-container`}>
+        <div className="container">
+          <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
+        </div>
+      </div>
     ) : (
       ''
     )
@@ -129,15 +132,15 @@ class App extends Component {
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
+        {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
             this.state.netId === '77' ? 'sokol' : ''
           }`}
         >
           <div className="container">
-            <div className="main-title-container">
+            <div className={`main-title-container ${this.shouldShowSearch() ? '' : 'no-search-on-top'}`}>
               <span className="main-title">{this.getTitle()}</span>
-              {search}
             </div>
           </div>
           <Route exact path={`/`} render={this.onBallotsRender} />

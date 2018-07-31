@@ -29,3 +29,28 @@
     color: $input-color;
   }
 }
+
+@mixin placeholder-full($color: #fff, $font-size: 14px) {
+  &::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: $color!important;
+      font-size: $font-size!important;
+  }
+  &:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: $color!important;
+      font-size: $font-size!important;
+      opacity: 1;
+  }
+  &::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: $color!important;
+      font-size: $font-size!important;
+      opacity: 1;
+  }
+  &:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: $color!important;
+      font-size: $font-size!important;
+  }
+}
