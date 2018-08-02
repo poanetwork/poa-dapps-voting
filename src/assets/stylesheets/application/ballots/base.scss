@@ -10,18 +10,14 @@
   }
   &-i {
     @extend %white-block;
-    background-color: rgba(240, 240, 240, 0.2);
-    &-not-finalized {
-      background-color: #fff;
-      border-color: rgba($primary-color, 0.3);
-    }
+    background-color: #fff;
     &-scale {
-      border-top: 1px solid #e5eef9;
+      border-top: 1px solid $base-border-color;
       display: flex;
       justify-content: space-between;
       margin-bottom: 30px;
-      margin-top: $desktop-indent;
-      padding: $desktop-indent 0 0 0;
+      margin-top: 30px;
+      padding: 30px 0 0 0;
       @media screen and (max-width: $tablet-width) {
         display: block;
         margin-top: $tablet-indent;
@@ -48,47 +44,19 @@
       }
     }
     &--name {
-      color: #333;
-      font-weight: bold;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    &--created {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAw1BMVEWAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6OAl6M9jT1MAAAAQHRSTlMAAQIDBQYHDA0bHB8gISQmJyg+P0BGR0lKU1RZYmNrbHV2iYqLo6Spqqusra7Cw8TFysvM29zk5ufo6/Lz+Pn8DzgVHgAAATNJREFUeNplk+1agkAQhQfRykQTrJTEUjSCvtTQECPk/q+qPQ7LsnR+7DOzL898LiRlOP46zfN0vXQM0tXydkWlndeqs/620LTtK3Z7LBo6OpLd5fDzl6nVubSnIXv3zIY/8N4HVGrwBj8bwjaR77SgmhYn5DWF5eE7ZoribkZkoIeI78ZJMmYrQkcGjZD9mq+SokjY6qKqEfniDIiFYMR6FqZPn+J8+A9dYX5QKs5eBaFz3p4wUkLwizrkvB2UcoZXJUwYHiqIsDclnBzAvicyrFYQpBW0lK0oqVbkEHR1fzEEHl/YhCHG1yKaoYi5zubl4Mn8wsqe6uwRK4tNmHaG717VsiP4mV1uih9G4FrttuUG7GGGTLOioUwyRI51Ftv6o94rtNcfNbCz2uB32KycCv0BfU5XCrQEyKwAAAAASUVORK5CYII=);
-      background-position: left center;
-      background-repeat: no-repeat;
-      background-size: 14px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      padding-left: 20px;
     }
     &--see-all-proposal {
       display: inline-block;
       margin-top: 5px;
     }
-    &--time {
-      color: #333;
-      font-size: 24px;
-      font-weight: bold;
-      @media screen and (max-width: $tablet-width) {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-      }
-    }
-    &--to-close {
-      color: #333;
-      text-transform: uppercase;
-      @media screen and (max-width: $tablet-width) {
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
     &--vote {
       @extend %_button;
       &-label {
+        color: #333;
         cursor: default;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 700;
         line-height: 1.2;
         @media screen and (max-width: $mobile-width) {
@@ -98,11 +66,13 @@
       &-label-right {
         margin-left: auto !important;
       }
-      &_no {
+      &_no,
+      &_yes {
         @media screen and (max-width: $tablet-width) {
           float: left;
           margin-left: 0;
           margin-right: 15px;
+          min-width: 51px;
         }
       }
     }

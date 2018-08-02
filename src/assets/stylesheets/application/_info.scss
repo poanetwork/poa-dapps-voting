@@ -1,18 +1,64 @@
+.info-container {
+  background-color: #f8f8f8;
+  margin-bottom: 20px;
+  margin-left: -#{ $desktop-indent };
+  margin-right: -#{ $desktop-indent };
+  padding-bottom: #{ $desktop-indent };
+  padding-left: #{ $desktop-indent };
+  padding-right: #{ $desktop-indent };
+  padding-top: #{ $desktop-indent };
+
+  @media screen and (max-width: $tablet-width) {
+    margin-left: -#{ $tablet-indent };
+    margin-right: -#{ $tablet-indent };
+    padding-left: #{ $tablet-indent };
+    padding-right: #{ $tablet-indent };
+  }
+
+}
 .info {
   color: #000;
 
   .ballots & {
-    @include image-2x('./images/info@2x.png', 32px, 32px);
-    align-items: center;
-    background-image: url(./images/info.png);
-    background-position: left center;
+    background-position: 0 7px;
     background-repeat: no-repeat;
-    display: flex;
+    color: #333333;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1.71;
     margin-bottom: 20px;
     max-width: 100%;
     min-height: 32px;
-    padding-left: 44px;
+    padding-left: 30px;
+    text-align: left;
     word-break: break-all;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &-minimum {
+      background-image: url('#{ $base-images-path }/icons/icon-min.svg');
+      background-size: 18px 18px;
+    }
+    &-details {
+      background-image: url('#{ $base-images-path }/icons/icon-info.svg');
+      background-size: 10px 18px;
+      position: relative;
+      &.collapsed {
+        height: 90px;
+        overflow: hidden;
+      }
+
+      .toggle-show {
+        color: $primary-color;
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 5px;
+      }
+    }
+
   }
 
   .new-form & {

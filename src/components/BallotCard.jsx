@@ -9,6 +9,7 @@ import swal from 'sweetalert2'
 const ACCEPT = 1
 const REJECT = 2
 const USDateTimeFormat = 'MM/DD/YYYY h:mm:ss A'
+const maxDetailsLength = 500
 
 const zeroTimeTo = '00:00'
 
@@ -47,7 +48,9 @@ export class BallotCard extends React.Component {
 
   @computed
   get finalizeButtonClass() {
-    const cls = this.isFinalized ? 'btn btn-primary btn-finalize disabled' : 'btn btn-primary btn-finalize'
+    const cls = this.isFinalized
+      ? 'btn btn-primary btn-finalize disabled text-capitalize'
+      : 'btn btn-primary btn-finalize text-capitalize'
     return cls
   }
 
@@ -350,6 +353,13 @@ export class BallotCard extends React.Component {
     } else {
       this.getHasAlreadyVoted()
     }
+    this.state = {
+      detailsCollapsed: this.memo.length > maxDetailsLength
+    }
+  }
+
+  toggleDetails = () => {
+    this.setState(prevState => ({ detailsCollapsed: !prevState.detailsCollapsed }))
   }
 
   componentDidMount() {
@@ -399,6 +409,14 @@ export class BallotCard extends React.Component {
     )
     let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : ''
     const threshold = this.getThreshold(contractsStore, votingType)
+    let toggleShowMore =
+      this.memo.length > maxDetailsLength ? (
+        <span className="toggle-show more" onClick={this.toggleDetails}>
+          {this.state.detailsCollapsed ? 'More...' : 'Less'}
+        </span>
+      ) : (
+        ''
+      )
     return (
       <div className={ballotClass}>
         <div className="ballots-about">
@@ -408,7 +426,6 @@ export class BallotCard extends React.Component {
             </div>
             <div className="ballots-about-td ballots-about-td-value">
               <p className="ballots-i--name">{this.creator}</p>
-              <p className="ballots-i--created">{this.startTime}</p>
             </div>
           </div>
           {children}
@@ -417,8 +434,10 @@ export class BallotCard extends React.Component {
               <p className="ballots-about-i--title">Ballot Time</p>
             </div>
             <div className="ballots-about-td ballots-about-td-value">
-              <p className="ballots-i--time">{this.timeTo.displayValue}</p>
-              <p className="ballots-i--to-close">{this.timeTo.title}</p>
+              <p className="ballots-i--created">{this.startTime}</p>
+              <p className="ballots-i--time">
+                {this.timeTo.displayValue}&nbsp;({this.timeTo.title})
+              </p>
             </div>
           </div>
         </div>
@@ -459,11 +478,17 @@ export class BallotCard extends React.Component {
             </button>
           </div>
         </div>
-        <div className="info">
-          Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
+        <div className="info-container">
+          <div className="info info-minimum">
+            Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
+          </div>
+          <div className={`info info-details ${this.state.detailsCollapsed ? 'collapsed' : ''}`}>
+            {this.state.detailsCollapsed
+              ? this.memo.substr(0, this.memo.lastIndexOf(' ', maxDetailsLength))
+              : this.memo}
+            {toggleShowMore}
+          </div>
         </div>
-        <div className="info">{this.memo}</div>
-        <hr />
         <div className="ballots-footer">
           <div className="ballots-footer-left">
             <button type="button" onClick={e => this.finalize(e)} className={this.finalizeButtonClass}>
