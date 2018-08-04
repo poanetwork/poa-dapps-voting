@@ -18,6 +18,7 @@ export default class VotingToChangeMinThreshold {
     )
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
     this.address = VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS
+    this.instance = this.votingToChangeMinThresholdInstance
   }
 
   //setters
@@ -77,22 +78,10 @@ export default class VotingToChangeMinThreshold {
     return null
   }
 
-  getMiningByVotingKey(_votingKey) {
-    return this.votingToChangeMinThresholdInstance.methods.getMiningByVotingKey(_votingKey).call()
-  }
-
-  async getValidatorActiveBallots(_votingKey) {
-    let miningKey
-    try {
-      miningKey = await this.getMiningByVotingKey(_votingKey)
-    } catch (e) {
-      miningKey = '0x0000000000000000000000000000000000000000'
-    }
-    return await this.votingToChangeMinThresholdInstance.methods.validatorActiveBallots(miningKey).call()
-  }
-
-  async getBallotLimit(_votingKey) {
-    const currentLimit = await this.votingToChangeMinThresholdInstance.methods.getBallotLimitPerValidator().call()
-    return currentLimit - (await this.getValidatorActiveBallots(_votingKey))
+  async getBallotLimit(_miningKey, _limitPerValidator) {
+    const _activeBallots = await this.votingToChangeMinThresholdInstance.methods
+      .validatorActiveBallots(_miningKey)
+      .call()
+    return _limitPerValidator - _activeBallots
   }
 }

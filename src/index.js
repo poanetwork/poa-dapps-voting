@@ -41,6 +41,7 @@ class AppMainRouter extends Component {
 
         let setPoaConsensus = contractsStore.setPoaConsensus(web3Config)
         let setBallotsStorage = contractsStore.setBallotsStorage(web3Config)
+        let setKeysManager = contractsStore.setKeysManager(web3Config)
         let setProxyStorage = contractsStore.setProxyStorage(web3Config)
         let setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config)
         let setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config)
@@ -50,6 +51,7 @@ class AppMainRouter extends Component {
         await Promise.all([
           setPoaConsensus,
           setBallotsStorage,
+          setKeysManager,
           setProxyStorage,
           setVotingToChangeKeys,
           setVotingToChangeMinThreshold,
