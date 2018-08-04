@@ -16,8 +16,7 @@ export default class ValidatorMetadata {
     this.metadataInstance = new web3_10.eth.Contract(MetadataAbi, METADATA_ADDRESS)
   }
 
-  async getValidatorFullName({ votingKey, miningKey }) {
-    miningKey = miningKey || (await this.getMiningByVoting(votingKey))
+  async getValidatorFullName(miningKey) {
     let validator
     if (this.metadataInstance.methods.getValidatorName) {
       validator = await this.metadataInstance.methods.getValidatorName(miningKey).call()
@@ -28,9 +27,5 @@ export default class ValidatorMetadata {
       firstName: toAscii(validator.firstName),
       lastName: toAscii(validator.lastName)
     }
-  }
-
-  async getMiningByVoting(votingKey) {
-    return await this.metadataInstance.methods.getMiningByVotingKey(votingKey).call()
   }
 }

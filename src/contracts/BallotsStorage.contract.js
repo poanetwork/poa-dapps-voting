@@ -13,4 +13,13 @@ export default class BallotsStorage {
 
     this.ballotsStorageInstance = new web3_10.eth.Contract(ballotsStorageAbi, BALLOTS_STORAGE_ADDRESS)
   }
+
+  areKeysBallotParamsValid({ ballotType, affectedKey, affectedKeyType, miningKey }) {
+    if (!this.ballotsStorageInstance.methods.areKeysBallotParamsValid) {
+      return null
+    }
+    return this.ballotsStorageInstance.methods
+      .areKeysBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey)
+      .call()
+  }
 }

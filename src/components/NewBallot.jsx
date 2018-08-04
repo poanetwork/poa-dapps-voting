@@ -218,9 +218,13 @@ export class NewBallot extends React.Component {
           miningKey: ballotStore.ballotKeys.miningKey.value,
           ballotType: ballotStore.ballotKeys.keysBallotType
         }
-        let areBallotParamsValid = await contractsStore.votingToChangeKeys.areBallotParamsValid(
-          inputToAreBallotParamsValid
-        )
+        let areBallotParamsValid
+        areBallotParamsValid = await contractsStore.ballotsStorage.areKeysBallotParamsValid(inputToAreBallotParamsValid)
+        if (areBallotParamsValid === null) {
+          areBallotParamsValid = await contractsStore.votingToChangeKeys.areBallotParamsValid(
+            inputToAreBallotParamsValid
+          )
+        }
         if (ballotStore.ballotKeys.keysBallotType === ballotStore.KeysBallotType.add) {
           if (ballotStore.ballotKeys.keyType !== ballotStore.KeyType.mining) {
             if (!ballotStore.ballotKeys.miningKey.value) {
@@ -239,7 +243,6 @@ export class NewBallot extends React.Component {
       let methodToCreateBallot
       let contractType
       let contractInstance
-      //let web3 = new Web3(contractsStore.web3Instance.currentProvider)
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys

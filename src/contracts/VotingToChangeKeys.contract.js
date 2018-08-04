@@ -15,6 +15,7 @@ export default class VotingToChangeKeys {
     this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS)
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
     this.address = VOTING_TO_CHANGE_KEYS_ADDRESS
+    this.instance = this.votingToChangeKeysInstance
   }
 
   //setters
@@ -44,6 +45,9 @@ export default class VotingToChangeKeys {
 
   //getters
   areBallotParamsValid({ ballotType, affectedKey, affectedKeyType, miningKey }) {
+    if (!this.doesMethodExist('areBallotParamsValid')) {
+      return null
+    }
     return this.votingToChangeKeysInstance.methods
       .areBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey)
       .call()
@@ -83,22 +87,8 @@ export default class VotingToChangeKeys {
     return null
   }
 
-  getMiningByVotingKey(_votingKey) {
-    return this.votingToChangeKeysInstance.methods.getMiningByVotingKey(_votingKey).call()
-  }
-
-  async getValidatorActiveBallots(_votingKey) {
-    let miningKey
-    try {
-      miningKey = await this.getMiningByVotingKey(_votingKey)
-    } catch (e) {
-      miningKey = '0x0000000000000000000000000000000000000000'
-    }
-    return await this.votingToChangeKeysInstance.methods.validatorActiveBallots(miningKey).call()
-  }
-
-  async getBallotLimit(_votingKey) {
-    const currentLimit = await this.votingToChangeKeysInstance.methods.getBallotLimitPerValidator().call()
-    return currentLimit - (await this.getValidatorActiveBallots(_votingKey))
+  async getBallotLimit(_miningKey, _limitPerValidator) {
+    const _activeBallots = await this.votingToChangeKeysInstance.methods.validatorActiveBallots(_miningKey).call()
+    return _limitPerValidator - _activeBallots
   }
 }
