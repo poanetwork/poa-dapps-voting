@@ -338,15 +338,6 @@ class ContractsStore {
   @action
   async getBallotsLimits() {
     if (this.web3Instance && this.netId) {
-      //let setVotingToChangeKeys = this.setVotingToChangeKeys({ web3Instance: this.web3Instance, netId: this.netId })
-      //let setVotingToChangeMinThreshold = this.setVotingToChangeMinThreshold({
-      //  web3Instance: this.web3Instance,
-      //  netId: this.netId
-      //})
-      //let setVotingToChangeProxy = this.setVotingToChangeProxy({ web3Instance: this.web3Instance, netId: this.netId })
-
-      //await Promise.all([setVotingToChangeKeys, setVotingToChangeMinThreshold, setVotingToChangeProxy])
-
       const limitPerValidator = await this.ballotsStorage.ballotsStorageInstance.methods
         .getBallotLimitPerValidator()
         .call()
