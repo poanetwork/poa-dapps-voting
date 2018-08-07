@@ -54,3 +54,15 @@
       font-size: $font-size!important;
   }
 }
+
+// #avoid text selection
+@mixin not-selectable-text() {
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  user-select: none;
+  /* Likely future */
+}

@@ -1,3 +1,5 @@
+$padding-left-items: 25px;
+
 .info-container {
   background-color: #f8f8f8;
   margin-bottom: 20px;
@@ -52,7 +54,7 @@
       }
 
       .toggle-show {
-        color: $primary-color;
+        color: #333;
         cursor: pointer;
         display: inline-block;
         margin-left: 5px;
@@ -66,38 +68,47 @@
   }
 
   &-title {
-    position: relative;
+    color: $gray-text-color;
+    font-size: 16px;
+    font-weight: 400;
     margin-bottom: 30px;
-    padding-left: 44px;
+    padding-left: 25px;
+    position: relative;
 
     &:before {
-      @include image-2x('./images/info@2x.png', 32px, 32px);
+      background-image: url('#{ $base-images-path }/icons/icon-info.svg');
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 10px 18px;
       content: '';
-      position: absolute;
+      height: 32px;
       left: 0;
+      position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
+      width: 10px;
     }
   }
 
   &-i {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.71;
+    margin-bottom: 20px;
+    padding-left: $padding-left-items;
     position: relative;
-    margin-bottom: 10px;
-    padding-left: 12px;
-    line-height: 18px;
-    font-size: 12px;
 
     &:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 7px;
-      width: 4px;
-      height: 4px;
+      $circle-dimensions: 6px;
+
+      background-color: #333;
       border-radius: 50%;
-      background-color: $primary-color;
+      content: '';
+      height: $circle-dimensions;
+      left: 0;
+      position: absolute;
+      top: 8px;
+      width: $circle-dimensions;
     }
   }
 }
