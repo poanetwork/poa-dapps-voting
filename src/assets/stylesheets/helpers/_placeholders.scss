@@ -43,6 +43,9 @@
   &:focus {
     border-color: $primary-color;
     color: $input-color;
+    .sokol & {
+      border-color: $primary-color-sokol;
+    }
   }
 }
 

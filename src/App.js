@@ -107,13 +107,17 @@ class App extends Component {
       return this.state.navigationData[0].title
     }
   }
+  getNetIdClass() {
+    const { contractsStore } = this.props
+    return contractsStore.netId === '77' ? 'sokol' : ''
+  }
 
   render() {
     const { commonStore, contractsStore } = this.props
     const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
 
     const search = this.shouldShowSearch() ? (
-      <div className={`search-container`}>
+      <div className={`search-container ${this.getNetIdClass()}`}>
         <div className="container">
           <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
         </div>
@@ -135,7 +139,7 @@ class App extends Component {
         {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            this.state.netId === '77' ? 'sokol' : ''
+            contractsStore.netId === '77' ? 'sokol' : ''
           }`}
         >
           <div className="container">

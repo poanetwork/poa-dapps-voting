@@ -16,10 +16,16 @@
 
     &_yes {
       background-color: $danger-color;
+      .sokol & {
+        background-color: $danger-color-sokol;
+      }
     }
 
     &_no {
       background-color: $success-color;
+      .sokol & {
+        background-color: $success-color-sokol;
+      }
     }
   }
 

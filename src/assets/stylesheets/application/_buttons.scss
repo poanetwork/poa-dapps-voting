@@ -3,6 +3,26 @@
   padding-right: 45px;
 }
 
+@mixin make-themed-btn($selector-name: '', $background-color: '', $box-shadow-color: '') {
+
+  @if($selector-name != '') {
+
+    &.#{ $selector-name } {
+      background-color: $background-color;
+
+      @if($box-shadow-color != '') {
+        box-shadow: 0px 5px 10px 0 rgba($box-shadow-color...);
+      }
+
+      &:hover {
+        background-color: darken($background-color, 10%);
+      }
+    }
+
+  }
+
+}
+
 button,
 input,
 textarea {
@@ -24,36 +44,27 @@ textarea {
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.15s background-color;
-  &.btn-primary {
-    background-color: $primary-color;
-    box-shadow: 0px 5px 10px 0 rgba(92, 52, 162, 0.3);
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
+
+  @include make-themed-btn('btn-primary', $primary-color, (92, 52, 162, 0.3));
+  @include make-themed-btn('btn-success', $success-color, (96, 219, 151, 0.3));
+  @include make-themed-btn('btn-danger', $danger-color, (242, 27, 87, 0.3));
+
+  .sokol & {
+    @include make-themed-btn('btn-primary', $primary-color-sokol, (106, 201, 185, 0.3));
+    @include make-themed-btn('btn-success', $success-color-sokol, (96, 219, 151, 0.3));
+    @include make-themed-btn('btn-danger', $danger-color-sokol, (242, 76, 103, 0.33));
   }
-  &.btn-secondary {
-    background-color: $secondary-color;
-    &:hover {
-      background-color: darken($secondary-color, 10%);
-    }
-  }
-  &.btn-success {
-    background-color: $success-color;
-    box-shadow: 0px 5px 10px 0 rgba(96, 219, 151, 0.3);
-    &:hover {
-      background-color: darken($success-color, 10%);
-    }
-  }
-  &.btn-danger {
-    background-color: $danger-color;
-    box-shadow: 0px 5px 10px 0 rgba(242, 27, 87, 0.3);
-    &:hover {
-      background-color: darken($danger-color, 10%);
-    }
-  }
+
   &.btn-new {
     background-image: url('#{ $base-images-path }/icons/icon-add.svg');
     @include btn-background-properties();
+  }
+  &.btn-load-more {
+    background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
+    @include btn-background-properties();
+    .sokol & {
+      background-image: url('#{ $base-images-path }/icons/icon-load-more-sokol.svg');
+    }
   }
   &.btn-transparent {
     color: $primary-color;
@@ -61,22 +72,21 @@ textarea {
     &:hover {
       opacity: 0.8;
     }
-  }
-  &.btn-load-more {
-    background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
-    @include btn-background-properties();
-  }
-  &.no-shadow {
-    box-shadow: none;
+    .sokol & {
+      color: $primary-color-sokol;
+    }
   }
   &[disabled],
   &.disabled {
-    color: #333333;
-    cursor: default;
-    background-color: #f0f0f0;;
-    box-shadow: none;
-    &:hover {
+    &,
+    .sokol & {
+      color: #333333;
+      cursor: default;
       background-color: #f0f0f0;;
+      box-shadow: none;
+      &:hover {
+        background-color: #f0f0f0;;
+      }
     }
   }
   &.btn-finalize {
@@ -86,6 +96,10 @@ textarea {
     &.disabled {
       background-image: url('#{ $base-images-path }/icons/icon-finalize-black.svg');
     }
+  }
+  // helpers
+  &.no-shadow {
+    box-shadow: none;
   }
   &.text-lowercase {
     text-transform: lowercase;

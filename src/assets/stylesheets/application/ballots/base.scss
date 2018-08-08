@@ -91,10 +91,19 @@ textarea {
 
 .color-primary {
   color: $primary-color;
+  .sokol & {
+    color: $primary-color-sokol;
+  }
 }
 .color-danger {
   color: $danger-color;
+  .sokol & {
+    color: $danger-color-sokol;
+  }
 }
 .color-success {
   color: $success-color;
+  .sokol & {
+    color: $success-color-sokol;
+  }
 }

@@ -3,8 +3,9 @@
   box-sizing: border-box;
   height: $search-container-height;
   padding: 10px 0 0 0;
+
   &.sokol {
-    background-color: $secondary-color-darker;
+    background-color: $primary-color-darker-sokol;
   }
 
   @media screen and (max-width: $mobile-width) {
@@ -35,10 +36,9 @@
   padding-left: 30px;
   width: 100%;
 
-  &:hover {
-    color: #fff;
+  .sokol & {
+    background-image: url('#{ $base-images-path }/icons/icon-search-sokol.svg');
   }
 
   @include placeholder-full($color: rgba(255, 255, 255, 0.5));
-
 }

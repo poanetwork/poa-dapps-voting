@@ -3,15 +3,13 @@ $base-images-path: '../assets/images';
 // colors
 $primary-color: #5c34a2;
 $primary-color-darker: #45277a;
-$secondary-color: #6ac9b9;
-$secondary-color-darker: darken(#6ac9b9, 10%);
+$primary-color-sokol: #6ac9b9;
+$primary-color-darker-sokol: #41b19e;
 $danger-color: #f21b57;
+$danger-color-sokol: #f24c67;
 $success-color: #60db97;
+$success-color-sokol: #6ac9b9;
 $gray-text-color: #333;
-
-// buttons
-$btn-primary-bg: $primary-color;
-$btn-secondary-bg: #61db97;
 
 // borders
 $base-border-color: #e4e4e4;
@@ -20,7 +18,7 @@ $base-border-color: #e4e4e4;
 $container-width: 960px;
 $container-responsive-width: 980px;
 $tablet-width: 768px;
-$mobile-width: 414px;
+$mobile-width: 767px;
 $small-mobile-width: 360px;
 
 // header

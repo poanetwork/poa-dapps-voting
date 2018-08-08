@@ -7,7 +7,7 @@
   position: absolute;
 
   &.sokol {
-    background-color: $secondary-color;
+    background-color: $primary-color-sokol;
   }
 
   .container {
@@ -31,15 +31,19 @@
   }
 
   &-logo {
-    @include image-2x('#{ $base-images-path}/logos/logo_voting_dapp_footer@2x.png');
-    background-image: url('#{ $base-images-path}/logos/logo_voting_dapp_footer.png');
+    background-image: url('#{ $base-images-path}/logos/logo-poa.svg');
     background-repeat: no-repeat;
     background-size: contain;
     display: block;
-    height: 20px;
+    height: 18px;
     left: 0;
     order: 0;
-    width: 123px;
+    width: 139px;
+
+    &.sokol {
+      background-image: url('#{ $base-images-path}/logos/logo-sokol.svg');
+      width: 144px;
+    }
   }
 
   &-rights {

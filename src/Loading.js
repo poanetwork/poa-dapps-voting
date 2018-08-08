@@ -12,8 +12,9 @@ const styles = netId => {
     case '77':
       return sokol
     case '99':
-    default:
       return core
+    default:
+      return {}
   }
 }
 const Loading = ({ netId }) => (

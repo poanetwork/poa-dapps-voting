@@ -26,6 +26,9 @@
       top: 50%;
       transform: translateY(-50%);
       width: 4px;
+      .sokol & {
+        background-color: $primary-color-sokol;
+      }
     }
 
     &_active {
@@ -33,6 +36,10 @@
 
       &:before {
         opacity: 1;
+      }
+
+      .sokol & {
+        color: $primary-color-sokol;
       }
 
     }

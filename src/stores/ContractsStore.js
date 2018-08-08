@@ -35,6 +35,7 @@ class ContractsStore {
   @observable proxyBallotThreshold
   @observable validatorLimits
   @observable validatorsMetadata
+  @observable netId
 
   constructor() {
     this.votingKey = null
