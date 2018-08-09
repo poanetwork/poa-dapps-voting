@@ -8,6 +8,11 @@
       margin-bottom: $mobile-indent;
     }
   }
+
+  &-about {
+    margin-top: -8px;
+  }
+
   &-i {
     @extend %white-block;
     background-color: #fff;
@@ -30,7 +35,7 @@
       &-column {
         display: flex;
         justify-content: space-between;
-        width: 48%;
+        width: 47.5%;
         @media screen and (max-width: $tablet-width) {
           overflow: hidden;
           width: 100%;
@@ -68,11 +73,13 @@
       }
       &_no,
       &_yes {
+        line-height: 44px;
+        min-width: 55px;
+        text-transform: capitalize;
         @media screen and (max-width: $tablet-width) {
           float: left;
           margin-left: 0;
           margin-right: 15px;
-          min-width: 51px;
         }
       }
     }

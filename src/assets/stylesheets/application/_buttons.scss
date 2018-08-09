@@ -61,6 +61,8 @@ textarea {
   }
   &.btn-load-more {
     background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
+    font-size: 16px;
+    font-weight: 400;
     @include btn-background-properties();
     .sokol & {
       background-image: url('#{ $base-images-path }/icons/icon-load-more-sokol.svg');

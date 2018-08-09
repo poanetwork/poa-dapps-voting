@@ -2,7 +2,7 @@ $padding-left-items: 25px;
 
 .info-container {
   background-color: #f8f8f8;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   margin-left: -#{ $desktop-indent };
   margin-right: -#{ $desktop-indent };
   padding-bottom: #{ $desktop-indent };
@@ -54,10 +54,13 @@ $padding-left-items: 25px;
       }
 
       .toggle-show {
-        color: #333;
+        color: $primary-color;
         cursor: pointer;
         display: inline-block;
         margin-left: 5px;
+        .sokol & {
+          color: $primary-color-sokol;
+        }
       }
     }
 

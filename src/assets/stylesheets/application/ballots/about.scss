@@ -71,8 +71,12 @@
     &.ballots-about-td-value {
       color: #333;
       font-size: 14px;
-      padding-left: 5px;
-      padding-right: 5px;
+
+      .ballots-about-i_action &,
+      .ballots-about-i_type & {
+        text-transform: capitalize;
+      }
+
       @media screen and (max-width: $tablet-width) {
         padding-left: 0;
         padding-right: 0;
