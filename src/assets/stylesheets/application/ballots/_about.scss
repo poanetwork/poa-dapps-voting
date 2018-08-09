@@ -1,4 +1,6 @@
 .ballots-about {
+  $cell-right-padding: 12px;
+
   @media screen and (max-width: $tablet-width) {
     display: table;
     width: 100%;
@@ -30,7 +32,8 @@
       width: 30%;
     }
     &_key {
-      width: 26%;
+      padding-right: $cell-right-padding;
+      width: calc(26% - #{ $cell-right-padding });
       word-break: break-all;
     }
     &_key_wide {
