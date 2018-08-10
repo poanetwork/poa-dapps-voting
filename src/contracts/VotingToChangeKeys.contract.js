@@ -6,11 +6,11 @@ export default class VotingToChangeKeys {
   async init({ web3, netId }) {
     const { VOTING_TO_CHANGE_KEYS_ADDRESS } = networkAddresses(netId)
     console.log('VotingToChangeKeys address', VOTING_TO_CHANGE_KEYS_ADDRESS)
-    let web3_10 = new Web3(web3.currentProvider)
+    const web3_10 = new Web3(web3.currentProvider)
 
     const branch = helpers.getBranch(netId)
 
-    let votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
+    const votingToChangeKeysABI = await helpers.getABI(branch, 'VotingToChangeKeys')
 
     this.votingToChangeKeysInstance = new web3_10.eth.Contract(votingToChangeKeysABI, VOTING_TO_CHANGE_KEYS_ADDRESS)
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
