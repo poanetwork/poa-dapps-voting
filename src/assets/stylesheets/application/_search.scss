@@ -18,7 +18,7 @@
 
 }
 
-.search-input {
+input.search-input {
   background-color: transparent;
   background-image: url('#{ $base-images-path }/icons/icon-search.svg');
   background-position: 0 50%;
@@ -27,7 +27,6 @@
   border-radius: 0;
   border: none;
   box-sizing: border-box;
-  color: #fff;
   display: block;
   font-size: 14px;
   font-weight: 400;
@@ -35,10 +34,14 @@
   outline: none;
   padding-left: 30px;
   width: 100%;
-
+  &,
+  &:focus
+  &:hover,
+  &:active {
+    color: #fff;
+  }
   .sokol & {
     background-image: url('#{ $base-images-path }/icons/icon-search-sokol.svg');
   }
-
   @include placeholder-full($color: rgba(255, 255, 255, 0.5));
 }
