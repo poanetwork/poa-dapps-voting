@@ -6,11 +6,11 @@ export default class VotingToChangeMinThreshold {
   async init({ web3, netId }) {
     const { VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS } = networkAddresses(netId)
     console.log('VotingToChangeMinThreshold address', VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS)
-    let web3_10 = new Web3(web3.currentProvider)
+    const web3_10 = new Web3(web3.currentProvider)
 
     const branch = helpers.getBranch(netId)
 
-    let votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
+    const votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
 
     this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(
       votingToChangeMinThresholdABI,
