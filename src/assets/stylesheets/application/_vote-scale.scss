@@ -1,5 +1,5 @@
 .vote-scale {
-  background-color: fade-out(#e5eef9, 0.5);
+  background-color: #f0f0f0;
   border-radius: 5px;
   clear: left;
   height: 10px;
@@ -27,16 +27,32 @@
         background-color: $success-color-sokol;
       }
     }
+
+    &_send {
+      background-color: $success-color;
+      .sokol & {
+        background-color: $success-color-sokol;
+      }
+    }
+
+    &_burn {
+      background-color: $danger-color;
+      .sokol & {
+        background-color: $danger-color-sokol;
+      }
+    }
+
+    &_freeze {
+      background-color: $freeze-color;
+      .sokol & {
+        background-color: $freeze-color-sokol;
+      }
+    }
+
   }
 
   &--container {
     width: 100%;
-    max-width: 350px;
-
-    @media screen and (max-width: $tablet-width) {
-      float: right;
-      max-width: 100%;
-    }
   }
 
   &--value {

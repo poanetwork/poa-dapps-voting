@@ -441,12 +441,73 @@ export class BallotCard extends React.Component {
             </div>
           </div>
         </div>
+        {/* Send / Burn / Freeze */}
         <div className="ballots-i-scale">
+          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+            <button
+              className="btn btn-success ballots-i--vote_btn xl m-r-20"
+              onClick={e => this.vote({ choice: ACCEPT })}
+              type="button"
+            >
+              Send
+            </button>
+            <div className="vote-scale--container">
+              <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
+              <div className={voteScaleClass}>
+                <div
+                  className="vote-scale--fill vote-scale--fill_send"
+                  style={{ width: `${this.votesForPercents}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+            <button
+              type="button"
+              onClick={e => this.vote({ choice: REJECT })}
+              className="btn btn-danger ballots-i--vote_btn xl m-r-20"
+            >
+              Burn
+            </button>
+            <div className="vote-scale--container">
+              <p className="vote-scale--votes">{this.votesAgainstNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
+              <div className={voteScaleClass}>
+                <div
+                  className="vote-scale--fill vote-scale--fill_burn"
+                  style={{ width: `${this.votesAgainstPercents}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+            <button
+              type="button"
+              onClick={e => this.vote({ choice: REJECT })}
+              className="btn btn-freeze ballots-i--vote_btn xl m-r-20"
+            >
+              Freeze
+            </button>
+            <div className="vote-scale--container">
+              <p className="vote-scale--votes">{this.votesAgainstNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
+              <div className={voteScaleClass}>
+                <div
+                  className="vote-scale--fill vote-scale--fill_freeze"
+                  style={{ width: `${this.votesAgainstPercents}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* No / yes */}
+        {/* <div className="ballots-i-scale">
           <div className="ballots-i-scale-column">
             <button
               type="button"
               onClick={e => this.vote({ choice: REJECT })}
-              className="btn btn-danger ballots-i--vote_no ballots-i--vote_btn"
+              className="btn btn-danger ballots-i--vote_btn m-r-20"
             >
               No
             </button>
@@ -461,7 +522,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
           </div>
-          <div className="ballots-i-scale-column">
+          <div className="ballots-i-scale-column reverse-responsive">
             <div className="vote-scale--container">
               <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
               <p className="vote-scale--percentage">{this.votesForPercents}%</p>
@@ -470,14 +531,14 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <button
-              className="btn btn-success ballots-i--vote_yes ballots-i--vote_btn"
+              className="btn btn-success ballots-i--vote_btn m-l-20"
               onClick={e => this.vote({ choice: ACCEPT })}
               type="button"
             >
               Yes
             </button>
           </div>
-        </div>
+        </div> */}
         <div className="info-container">
           <div className="info info-minimum">
             Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
