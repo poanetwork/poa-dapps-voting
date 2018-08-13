@@ -455,7 +455,7 @@ export class BallotCard extends React.Component {
               <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
               <div className={voteScaleClass}>
                 <div
-                  className="vote-scale--fill vote-scale--fill_yes"
+                  className="vote-scale--fill vote-scale--fill_no"
                   style={{ width: `${this.votesAgainstPercents}%` }}
                 />
               </div>
@@ -466,7 +466,7 @@ export class BallotCard extends React.Component {
               <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
               <p className="vote-scale--percentage">{this.votesForPercents}%</p>
               <div className={voteScaleClass}>
-                <div className="vote-scale--fill vote-scale--fill_no" style={{ width: `${this.votesForPercents}%` }} />
+                <div className="vote-scale--fill vote-scale--fill_yes" style={{ width: `${this.votesForPercents}%` }} />
               </div>
             </div>
             <button

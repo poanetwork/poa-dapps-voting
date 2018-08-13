@@ -14,14 +14,14 @@
     height: 100%;
     border-radius: 3px;
 
-    &_yes {
+    &_no {
       background-color: $danger-color;
       .sokol & {
         background-color: $danger-color-sokol;
       }
     }
 
-    &_no {
+    &_yes {
       background-color: $success-color;
       .sokol & {
         background-color: $success-color-sokol;
