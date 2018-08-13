@@ -61,11 +61,14 @@ textarea {
   }
   &.btn-load-more {
     background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
-    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid $primary-color;
+    font-size: 17px;
     font-weight: 400;
     @include btn-background-properties();
     .sokol & {
       background-image: url('#{ $base-images-path }/icons/icon-load-more-sokol.svg');
+      border-color: $primary-color-sokol;
     }
   }
   &.btn-transparent {
