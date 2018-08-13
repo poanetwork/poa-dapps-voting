@@ -446,7 +446,7 @@ export class BallotCard extends React.Component {
             <button
               type="button"
               onClick={e => this.vote({ choice: REJECT })}
-              className="btn btn-danger ballots-i--vote_no"
+              className="btn btn-danger ballots-i--vote_no ballots-i--vote_btn"
             >
               No
             </button>
@@ -470,7 +470,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <button
-              className="btn btn-success ballots-i--vote_yes"
+              className="btn btn-success ballots-i--vote_yes ballots-i--vote_btn"
               onClick={e => this.vote({ choice: ACCEPT })}
               type="button"
             >
