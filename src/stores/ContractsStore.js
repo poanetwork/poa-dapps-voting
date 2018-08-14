@@ -3,6 +3,7 @@ import React from 'react'
 
 import PoaConsensus from '../contracts/PoaConsensus.contract'
 import BallotsStorage from '../contracts/BallotsStorage.contract'
+import KeysManager from '../contracts/KeysManager.contract'
 import ProxyStorage from '../contracts/ProxyStorage.contract'
 import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
@@ -21,6 +22,7 @@ import 'babel-polyfill'
 class ContractsStore {
   @observable poaConsensus
   @observable ballotsStorage
+  @observable keysManager
   @observable proxyStorage
   @observable votingToChangeKeys
   @observable votingToChangeMinThreshold
@@ -90,6 +92,15 @@ class ContractsStore {
     })
   }
 
+  @action('Set KeysManager contract')
+  setKeysManager = async web3Config => {
+    this.keysManager = new KeysManager()
+    await this.keysManager.init({
+      web3: web3Config.web3Instance,
+      netId: web3Config.netId
+    })
+  }
+
   @action('Set ProxyStorage contract')
   setProxyStorage = async web3Config => {
     this.proxyStorage = new ProxyStorage()
@@ -148,9 +159,7 @@ class ContractsStore {
   @action('Set mining key')
   setMiningKey = async web3Config => {
     try {
-      this.miningKey = await this.votingToChangeKeys.votingToChangeKeysInstance.methods
-        .getMiningByVotingKey(web3Config.defaultAccount)
-        .call()
+      this.miningKey = await this.keysManager.instance.methods.miningKeyByVoting(web3Config.defaultAccount).call()
     } catch (e) {
       console.log(e)
       this.miningKey = '0x0000000000000000000000000000000000000000'
@@ -329,20 +338,13 @@ class ContractsStore {
   @action
   async getBallotsLimits() {
     if (this.web3Instance && this.netId) {
-      let setVotingToChangeKeys = this.setVotingToChangeKeys({ web3Instance: this.web3Instance, netId: this.netId })
-      let setVotingToChangeMinThreshold = this.setVotingToChangeMinThreshold({
-        web3Instance: this.web3Instance,
-        netId: this.netId
-      })
-      let setVotingToChangeProxy = this.setVotingToChangeProxy({ web3Instance: this.web3Instance, netId: this.netId })
+      const limitPerValidator = await this.ballotsStorage.ballotsStorageInstance.methods
+        .getBallotLimitPerValidator()
+        .call()
 
-      await Promise.all([setVotingToChangeKeys, setVotingToChangeMinThreshold, setVotingToChangeProxy])
-
-      let getKeysLimit = await this.votingToChangeKeys.getBallotLimit(this.web3Instance.eth.defaultAccount)
-      let getMinThresholdLimit = await this.votingToChangeMinThreshold.getBallotLimit(
-        this.web3Instance.eth.defaultAccount
-      )
-      let getProxyLimit = await this.votingToChangeProxy.getBallotLimit(this.web3Instance.eth.defaultAccount)
+      let getKeysLimit = await this.votingToChangeKeys.getBallotLimit(this.miningKey, limitPerValidator)
+      let getMinThresholdLimit = await this.votingToChangeMinThreshold.getBallotLimit(this.miningKey, limitPerValidator)
+      let getProxyLimit = await this.votingToChangeProxy.getBallotLimit(this.miningKey, limitPerValidator)
 
       await Promise.all([getKeysLimit, getMinThresholdLimit, getProxyLimit]).then(
         ([keysLimit, minThresholdLimit, proxyLimit]) => {
@@ -360,7 +362,7 @@ class ContractsStore {
     const keys = await this.poaConsensus.getValidators()
     this.validatorsLength = keys.length
     keys.forEach(async key => {
-      const metadata = await this.validatorMetadata.getValidatorFullName({ miningKey: key })
+      const metadata = await this.validatorMetadata.getValidatorFullName(key)
       this.validatorsMetadata[key.toLowerCase()] = {
         label: `${key} ${metadata.lastName}`,
         lastNameAndKey: `${metadata.lastName} ${key}`,
