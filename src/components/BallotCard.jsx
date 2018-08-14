@@ -265,15 +265,23 @@ export class BallotCard extends React.Component {
       contract.address,
       contract.finalize(id),
       async tx => {
-        this.isFinalized = true
-        ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
-        if (this.canBeFinalized !== null) {
-          this.canBeFinalized = false
-          ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
-        }
-        swal('Congratulations!', messages.FINALIZED_SUCCESS_MSG, 'success').then(result => {
-          push(`${commonStore.rootPath}`)
+        const events = await contract.instance.getPastEvents('BallotFinalized', {
+          fromBlock: tx.blockNumber,
+          toBlock: tx.blockNumber
         })
+        if (events.length > 0) {
+          this.isFinalized = true
+          ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+          if (this.canBeFinalized !== null) {
+            this.canBeFinalized = false
+            ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
+          }
+          swal('Congratulations!', messages.FINALIZED_SUCCESS_MSG, 'success').then(result => {
+            push(`${commonStore.rootPath}`)
+          })
+        } else {
+          swal('Warning!', messages.INVALID_FINALIZE_MSG, 'warning')
+        }
       },
       messages.FINALIZE_FAILED_TX
     )
