@@ -22,9 +22,6 @@
       padding-right: $cell-right-padding;
     }
     &_name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       width: 12%;
     }
     &_action {
