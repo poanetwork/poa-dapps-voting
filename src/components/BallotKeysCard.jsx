@@ -36,7 +36,7 @@ export class BallotKeysCard extends React.Component {
 
     return (
       <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id} pos={pos}>
-        {/* <div className="ballots-about-i ballots-about-i_action">
+        <div className="ballots-about-i ballots-about-i_action">
           <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Action</p>
           </div>
@@ -62,8 +62,9 @@ export class BallotKeysCard extends React.Component {
             {newPayoutKey}
           </div>
         </div>
-        {miningKeyDiv} */}
-        <div className="ballots-about-i ballots-about-i_proposed_receiver">
+        {miningKeyDiv}
+        {/* TODO: New ballot type */}
+        {/* <div className="ballots-about-i ballots-about-i_proposed_receiver">
           <div className="ballots-about-td ballots-about-td-title">
             <p className="ballots-about-i--title">Proposed Receiver</p>
           </div>
@@ -78,7 +79,7 @@ export class BallotKeysCard extends React.Component {
           <div className="ballots-about-td ballots-about-td-value">
             <p>10000 POA</p>
           </div>
-        </div>
+        </div> */}
       </BallotCard>
     )
   }

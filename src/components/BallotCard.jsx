@@ -449,8 +449,8 @@ export class BallotCard extends React.Component {
             </div>
           </div>
         </div>
-        {/* Send / Burn / Freeze */}
-        <div className="ballots-i-scale">
+        {/* TODO: Send / Burn / Freeze */}
+        {/* <div className="ballots-i-scale">
           <div className="ballots-i-scale-column ballots-i-scale-column-3">
             <button
               className="btn btn-success ballots-i--vote_btn xl m-r-20"
@@ -508,9 +508,9 @@ export class BallotCard extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* No / yes */}
-        {/* <div className="ballots-i-scale">
+        <div className="ballots-i-scale">
           <div className="ballots-i-scale-column">
             <button
               type="button"
@@ -546,7 +546,7 @@ export class BallotCard extends React.Component {
               Yes
             </button>
           </div>
-        </div> */}
+        </div>
         <div className="info-container">
           <div className="info info-minimum">
             Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
