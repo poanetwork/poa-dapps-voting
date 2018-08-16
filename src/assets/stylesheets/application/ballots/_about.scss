@@ -22,6 +22,9 @@
       padding-right: $cell-right-padding;
     }
     &_name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       width: 12%;
     }
     &_action {
@@ -40,6 +43,14 @@
     }
     &_key_wide {
       width: 50%;
+      word-break: break-all;
+    }
+    &_proposed_receiver {
+      width: 45%;
+      word-break: break-all;
+    }
+    &_funds_amount {
+      width: 23%;
       word-break: break-all;
     }
     &_proposed-min-threshold {
