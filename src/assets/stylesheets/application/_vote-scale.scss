@@ -1,10 +1,10 @@
 .vote-scale {
+  background-color: #f0f0f0;
+  border-radius: 5px;
   clear: left;
+  height: 10px;
+  margin-top: 34px;
   overflow: hidden;
-  height: 6px;
-  margin-top: 30px;
-  border-radius: 3px;
-  background-color: fade-out(#e5eef9, 0.5);
 
   &-not-finalized {
     background-color: #ffffff;
@@ -14,23 +14,45 @@
     height: 100%;
     border-radius: 3px;
 
-    &_yes {
-      background-color: $danger-color;;
+    &_no {
+      background-color: $danger-color;
+      .sokol & {
+        background-color: $danger-color-sokol;
+      }
     }
 
-    &_no {
+    &_yes {
       background-color: $success-color;
+      .sokol & {
+        background-color: $success-color-sokol;
+      }
     }
+
+    &_send {
+      background-color: $success-color;
+      .sokol & {
+        background-color: $success-color-sokol;
+      }
+    }
+
+    &_burn {
+      background-color: $danger-color;
+      .sokol & {
+        background-color: $danger-color-sokol;
+      }
+    }
+
+    &_freeze {
+      background-color: $freeze-color;
+      .sokol & {
+        background-color: $freeze-color-sokol;
+      }
+    }
+
   }
 
   &--container {
     width: 100%;
-    max-width: 343px;
-
-    @media screen and (max-width: $tablet-width) {
-      float: right;
-      max-width: 100%;
-    }
   }
 
   &--value {

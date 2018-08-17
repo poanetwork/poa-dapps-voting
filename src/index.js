@@ -35,6 +35,7 @@ class AppMainRouter extends Component {
       .then(async web3Config => {
         let getSokolContractsAddresses = getContractsAddresses('sokol')
         let getCoreContractsAddresses = getContractsAddresses('core')
+
         await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses])
 
         contractsStore.setWeb3Instance(web3Config)

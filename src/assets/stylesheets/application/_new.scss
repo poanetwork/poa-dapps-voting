@@ -10,27 +10,30 @@
     }
 
     &-side {
-      padding-top: 30px;
-      padding-bottom: 30px;
       box-sizing: border-box;
+      padding-bottom: 30px;
+      padding-top: 30px;
 
       @media screen and (max-width: $tablet-width) {
         width: 100% !important;
       }
 
       &_left {
+        background-color: #f8f8f8;
+        padding-top: 0;
         width: 30%;
 
         @media screen and (max-width: $tablet-width) {
+          margin-bottom: 30px;
           padding-bottom: 0;
         }
       }
 
       &_right {
-        width: 70%;
-        border-left: 1px solid #e5eef9;
+        border-left: 1px solid $base-border-color;
         padding-left: 30px;
         padding-right: 30px;
+        width: 70%;
 
         @media screen and (max-width: $tablet-width) {
           border: 0;

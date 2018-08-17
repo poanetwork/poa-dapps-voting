@@ -1,7 +1,7 @@
 .app-container {
+  padding-bottom: 30px;
   padding-top: 40px;
   position: relative;
-  z-index: 1;
   &.app-container-open-mobile-menu {
     &:before {
       background-color: rgba(78, 44, 137, .8);
@@ -9,9 +9,9 @@
       content: '';
       display: none;
       left: 0;
-      position: absolute;
+      position: fixed;
       right: 0;
-      top: 0;
+      top: $header-mobile-menu-container-height + $header-height_mobile;
       z-index: 1234;
       @media screen and (max-width: $mobile-width) {
         display: block;
@@ -38,7 +38,7 @@
 
 .content {
   @media screen and (max-width: $mobile-width) {
-    padding-top: $header-height_mobile;
+    padding-top: $header-height_mobile + $search-container-height;
   }
   &.content-menu-open {
     padding-top: $header-mobile-menu-container-height + $header-height_mobile;
