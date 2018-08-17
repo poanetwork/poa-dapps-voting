@@ -18,28 +18,28 @@ class App extends Component {
       showMobileMenu: false,
       navigationData: [
         {
-          icon: '',
+          icon: 'link-icon-all',
           title: 'All',
           url: commonStore.rootPath,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-active',
           title: 'Active',
           url: `${commonStore.rootPath}/active`,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-to-finalize',
           title: 'To Finalize',
           url: `${commonStore.rootPath}/tofinalize`,
           class: ''
         },
         {
-          icon: '',
+          icon: 'link-icon-add',
           title: 'New Ballot',
           url: `${commonStore.rootPath}/new`,
-          class: 'btn btn-new-ballot btn-success btn-new'
+          class: 'btn btn-new-ballot btn-success btn-new no-shadow text-capitalize'
         }
         // {
         //   'icon': '',
@@ -107,14 +107,21 @@ class App extends Component {
       return this.state.navigationData[0].title
     }
   }
+  getNetIdClass() {
+    const { contractsStore } = this.props
+    return contractsStore.netId === '77' ? 'sokol' : ''
+  }
 
   render() {
     const { commonStore, contractsStore } = this.props
     const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
-    console.log(contractsStore.netId)
 
     const search = this.shouldShowSearch() ? (
-      <input type="search" className="search-input" onChange={this.onSearch} />
+      <div className={`search-container ${this.getNetIdClass()}`}>
+        <div className="container">
+          <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
+        </div>
+      </div>
     ) : (
       ''
     )
@@ -129,15 +136,15 @@ class App extends Component {
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
+        {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            this.state.netId === '77' ? 'sokol' : ''
+            contractsStore.netId === '77' ? 'sokol' : ''
           }`}
         >
           <div className="container">
-            <div className="main-title-container">
+            <div className={`main-title-container ${this.shouldShowSearch() ? '' : 'no-search-on-top'}`}>
               <span className="main-title">{this.getTitle()}</span>
-              {search}
             </div>
           </div>
           <Route exact path={`/`} render={this.onBallotsRender} />

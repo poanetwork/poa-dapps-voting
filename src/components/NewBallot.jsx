@@ -290,11 +290,17 @@ export class NewBallot extends React.Component {
 
   menuItemActive = ballotType => {
     const { ballotStore } = this.props
+
     if (ballotType == ballotStore.ballotType) {
       return 'ballot-types-i ballot-types-i_active'
     } else {
       return 'ballot-types-i'
     }
+  }
+
+  componentDidMount() {
+    const { ballotStore } = this.props
+    ballotStore.changeBallotType(null, ballotStore.BallotType.keys)
   }
 
   render() {
@@ -368,61 +374,10 @@ export class NewBallot extends React.Component {
               </div>
             </div>
             <hr />
-            <div className="hidden">
-              <div className="left">
-                <div className="radio-container">
-                  <input
-                    type="radio"
-                    name="ballot-type"
-                    id="ballot-for-validators"
-                    value={ballotStore.BallotType.keys}
-                    checked={ballotStore.isBallotForKey}
-                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
-                  />
-                  <label htmlFor="ballot-for-validators" className="radio">
-                    Validator Management Ballot
-                  </label>
-                  <p className="hint">Ballot to add, remove or swap any type of key for existing or new validators.</p>
-                </div>
-              </div>
-              <div className="right">
-                <div className="radio-container">
-                  <input
-                    type="radio"
-                    name="ballot-type"
-                    id="ballot-for-consensus"
-                    value={ballotStore.BallotType.minThreshold}
-                    checked={ballotStore.isBallotForMinThreshold}
-                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
-                  />
-                  <label htmlFor="ballot-for-consensus" className="radio">
-                    Consensus Threshold Ballot
-                  </label>
-                  <p className="hint">Ballot to change the minimum threshold for consensus to vote for keys.</p>
-                </div>
-              </div>
-              <div className="left">
-                <div className="radio-container">
-                  <input
-                    type="radio"
-                    name="ballot-type"
-                    id="ballot-for-proxy"
-                    value={ballotStore.BallotType.proxy}
-                    checked={ballotStore.isBallotForProxy}
-                    onChange={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
-                  />
-                  <label htmlFor="ballot-for-proxy" className="radio">
-                    Modify Proxy Contract Ballot
-                  </label>
-                  <p className="hint">Ballot to change one of the proxy contracts.</p>
-                </div>
-              </div>
-            </div>
-            <hr />
-            {validator}
             {keysTypes}
+            {validator}
             {metadata}
-            <button type="button" className="btn btn-primary add-ballot" onClick={e => this.onClick(e)}>
+            <button type="button" className="btn btn-primary btn-new text-capitalize" onClick={e => this.onClick(e)}>
               Add ballot
             </button>
           </div>

@@ -9,7 +9,7 @@
     right: 0;
     position: fixed;
     top: 0;
-    z-index: 123;
+    z-index: 124;
   }
 
   .container {
@@ -18,10 +18,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
 
-
-    @media screen and (max-width: $tablet-width) {
-
-    }
     @media screen and (max-width: $mobile-width) {
       width: 93%;
       padding: 22px 0;
@@ -29,7 +25,7 @@
   }
 
   &.sokol {
-    background-color: $secondary-color;
+    background-color: $primary-color-sokol;
   }
 
   // logos
@@ -70,9 +66,10 @@
 
   .link {
     color: #fff;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 16px;
-    margin-left: 30px;
+    line-height: 18px;
+    margin-left: 34px;
     opacity: 0.8;
     text-decoration: none;
     transition: opacity linear 0.1s;
@@ -97,26 +94,26 @@
     background-repeat: no-repeat;
 
     &-all {
-      background-image: url('#{ $base-images-path }/icons/icon-events.svg');
+      background-image: url('#{ $base-images-path }/icons/icon-all.svg');
     }
-    &-set-metadata {
-      background-image: url('#{ $base-images-path }/icons/icon-status.svg');
+    &-active {
+      background-image: url('#{ $base-images-path }/icons/icon-active.svg');
     }
-    &-pending-changes {
-      background-image: url('#{ $base-images-path }/icons/icon-statistics.svg');
+    &-to-finalize {
+      background-image: url('#{ $base-images-path }/icons/icon-to-finalize.svg');
     }
   }
 
   &.sokol {
     .link-icon {
       &-all {
-        background-image: url('#{ $base-images-path }/icons/icon-events-sokol.svg');
+        background-image: url('#{ $base-images-path }/icons/icon-all-sokol.svg');
       }
-      &-set-metadata {
-        background-image: url('#{ $base-images-path }/icons/icon-status-sokol.svg');
+      &-active {
+        background-image: url('#{ $base-images-path }/icons/icon-active-sokol.svg');
       }
-      &-pending-changes {
-        background-image: url('#{ $base-images-path }/icons/icon-statistics-sokol.svg');
+      &-to-finalize {
+        background-image: url('#{ $base-images-path }/icons/icon-to-finalize-sokol.svg');
       }
     }
   }
@@ -149,7 +146,7 @@
   &.sokol {
     .header-mobile-menu-container {
       @media screen and (max-width: $mobile-width) {
-        background-color: $secondary-color-darker;
+        background-color: $primary-color-darker-sokol;
       }
     }
   }
@@ -169,12 +166,22 @@
   }
 
   .btn.btn-new-ballot {
-    background-image: url('#{ $base-images-path }/btn-new-success.png');
-    height: 40px;
-    line-height: 40px;
+    height: 36px;
+    line-height: 36px;
     opacity: 1;
     .link-icon {
       display: none;
+    }
+  }
+
+  &.sokol {
+    .btn.btn-new-ballot {
+      background-color: #fff;
+      background-image: url('#{ $base-images-path }/icons/icon-add-sokol.svg');
+      color: $primary-color-sokol;
+      &:hover {
+        opacity: 0.9;
+      }
     }
   }
 
