@@ -356,8 +356,8 @@ export class BallotCard extends React.Component {
     // getMemo
     this.memo = votingState.memo
     // hasAlreadyVoted
-    if (votingState.hasOwnProperty('hasAlreadyVoted')) {
-      this.hasAlreadyVoted = votingState.hasAlreadyVoted
+    if (votingState.hasOwnProperty('alreadyVoted')) {
+      this.hasAlreadyVoted = votingState.alreadyVoted
     } else {
       this.getHasAlreadyVoted()
     }
