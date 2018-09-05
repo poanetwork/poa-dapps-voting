@@ -20,13 +20,14 @@ export default class VotingToChangeProxy {
 
   //setters
   createBallot({ startTime, endTime, proposedValue, contractType, memo }) {
-    let method
-    if (this.votingToChangeProxyInstance.methods.createBallot) {
-      method = this.votingToChangeProxyInstance.methods.createBallot
-    } else {
-      method = this.votingToChangeProxyInstance.methods.createBallotToChangeProxyAddress
+    if (!this.votingToChangeProxyInstance.methods.createBallot) {
+      return this.votingToChangeProxyInstance.methods
+        .createBallotToChangeProxyAddress(startTime, endTime, proposedValue, contractType, memo)
+        .encodeABI()
     }
-    return method(startTime, endTime, proposedValue, contractType, memo).encodeABI()
+    return this.votingToChangeProxyInstance.methods
+      .createBallot(startTime, endTime, contractType, memo, proposedValue)
+      .encodeABI()
   }
 
   vote(_id, choice) {

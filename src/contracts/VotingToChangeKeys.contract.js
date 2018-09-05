@@ -20,18 +20,19 @@ export default class VotingToChangeKeys {
 
   //setters
   createBallot({ startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo }) {
-    let method
     if (this.votingToChangeKeysInstance.methods.createBallot) {
-      method = this.votingToChangeKeysInstance.methods.createBallot
-    } else {
-      method = this.votingToChangeKeysInstance.methods.createVotingForKeys
+      return this.votingToChangeKeysInstance.methods
+        .createBallot(startTime, endTime, ballotType, affectedKeyType, memo, affectedKey, miningKey)
+        .encodeABI()
     }
-    return method(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo).encodeABI()
+    return this.votingToChangeKeysInstance.methods
+      .createVotingForKeys(startTime, endTime, affectedKey, affectedKeyType, miningKey, ballotType, memo)
+      .encodeABI()
   }
 
-  createBallotToAddNewValidator({ startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo }) {
+  createBallotToAddNewValidator({ startTime, endTime, memo, affectedKey, newVotingKey, newPayoutKey }) {
     return this.votingToChangeKeysInstance.methods
-      .createBallotToAddNewValidator(startTime, endTime, affectedKey, newVotingKey, newPayoutKey, memo)
+      .createBallotToAddNewValidator(startTime, endTime, memo, affectedKey, newVotingKey, newPayoutKey)
       .encodeABI()
   }
 
