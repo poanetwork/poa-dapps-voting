@@ -14,12 +14,12 @@ export default class BallotsStorage {
     this.ballotsStorageInstance = new web3_10.eth.Contract(ballotsStorageAbi, BALLOTS_STORAGE_ADDRESS)
   }
 
-  areKeysBallotParamsValid({ ballotType, affectedKey, affectedKeyType, miningKey }) {
+  areKeysBallotParamsValid({ ballotType, affectedKeyType, affectedKey, miningKey }) {
     if (!this.ballotsStorageInstance.methods.areKeysBallotParamsValid) {
       return null
     }
     return this.ballotsStorageInstance.methods
-      .areKeysBallotParamsValid(ballotType, affectedKey, affectedKeyType, miningKey)
+      .areKeysBallotParamsValid(ballotType, affectedKeyType, affectedKey, miningKey)
       .call()
   }
 }
