@@ -8,6 +8,9 @@ import swal from 'sweetalert2'
 
 const ACCEPT = 1
 const REJECT = 2
+const SEND = 1
+const BURN = 2
+const FREEZE = 3
 const USDateTimeFormat = 'MM/DD/YYYY h:mm:ss A'
 const maxDetailsLength = 500
 
@@ -98,6 +101,60 @@ export class BallotCard extends React.Component {
     }
 
     let votesPercents = Math.round((this.votesAgainstNumber / this.totalVoters) * 100)
+    if (isNaN(votesPercents)) votesPercents = 0
+    return votesPercents
+  }
+
+  @computed
+  get votesBurnNumber() {
+    let votes = this.burnVotes
+    if (isNaN(votes)) votes = 0
+    return votes
+  }
+
+  @computed
+  get votesBurnPercents() {
+    if (this.totalVoters <= 0) {
+      return 0
+    }
+
+    let votesPercents = Math.round((this.votesBurnNumber / this.totalVoters) * 100)
+    if (isNaN(votesPercents)) votesPercents = 0
+    return votesPercents
+  }
+
+  @computed
+  get votesFreezeNumber() {
+    let votes = this.freezeVotes
+    if (isNaN(votes)) votes = 0
+    return votes
+  }
+
+  @computed
+  get votesFreezePercents() {
+    if (this.totalVoters <= 0) {
+      return 0
+    }
+
+    let votesPercents = Math.round((this.votesFreezeNumber / this.totalVoters) * 100)
+    if (isNaN(votesPercents)) votesPercents = 0
+    return votesPercents
+  }
+
+  @computed
+  get votesSendNumber() {
+    let votes = this.sendVotes
+    if (isNaN(votes)) votes = 0
+    return votes
+  }
+
+  @computed
+  get votesSendPercents() {
+    if (this.totalVoters <= 0) {
+      return 0
+    }
+
+    let votesPercents = Math.round((this.votesSendNumber / this.totalVoters) * 100)
     if (isNaN(votesPercents)) votesPercents = 0
     return votesPercents
   }
@@ -202,8 +259,18 @@ export class BallotCard extends React.Component {
       async tx => {
         const ballotInfo = await contract.getBallotInfo(id, contractsStore.votingKey)
 
-        this.totalVoters = Number(ballotInfo.totalVoters)
-        this.progress = Number(ballotInfo.progress)
+        if (ballotInfo.hasOwnProperty('totalVoters')) {
+          this.totalVoters = Number(ballotInfo.totalVoters)
+        } else {
+          this.burnVotes = ballotInfo.burnVotes
+          this.freezeVotes = ballotInfo.freezeVotes
+          this.sendVotes = ballotInfo.sendVotes
+          this.totalVoters =
+            Number(ballotInfo.burnVotes) + Number(ballotInfo.freezeVotes) + Number(ballotInfo.sendVotes)
+        }
+        if (ballotInfo.hasOwnProperty('progress')) {
+          this.progress = Number(ballotInfo.progress)
+        }
         this.isFinalized = Boolean(ballotInfo.isFinalized)
         if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
           this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow)
@@ -212,8 +279,16 @@ export class BallotCard extends React.Component {
         }
         this.hasAlreadyVoted = true
 
-        ballotsStore.ballotCards[pos].props.votingState.totalVoters = this.totalVoters
-        ballotsStore.ballotCards[pos].props.votingState.progress = this.progress
+        if (ballotInfo.hasOwnProperty('totalVoters')) {
+          ballotsStore.ballotCards[pos].props.votingState.totalVoters = this.totalVoters
+        } else {
+          ballotsStore.ballotCards[pos].props.votingState.burnVotes = this.burnVotes
+          ballotsStore.ballotCards[pos].props.votingState.freezeVotes = this.freezeVotes
+          ballotsStore.ballotCards[pos].props.votingState.sendVotes = this.sendVotes
+        }
+        if (ballotInfo.hasOwnProperty('progress')) {
+          ballotsStore.ballotCards[pos].props.votingState.progress = this.progress
+        }
         ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
         ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
         ballotsStore.ballotCards[pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted
@@ -315,6 +390,8 @@ export class BallotCard extends React.Component {
         return contractsStore.votingToChangeMinThreshold
       case 'votingToChangeProxy':
         return contractsStore.votingToChangeProxy
+      case 'votingToManageEmissionFunds':
+        return contractsStore.votingToManageEmissionFunds
       case 'validatorMetadata':
         return contractsStore.validatorMetadata
       default:
@@ -330,6 +407,8 @@ export class BallotCard extends React.Component {
         return contractsStore.minThresholdBallotThreshold
       case 'votingToChangeProxy':
         return contractsStore.proxyBallotThreshold
+      case 'votingToManageEmissionFunds':
+        return contractsStore.emissionFundsBallotThreshold
       default:
         return contractsStore.keysBallotThreshold
     }
@@ -346,9 +425,18 @@ export class BallotCard extends React.Component {
     this.creator = votingState.creator
     this.creatorMiningKey = votingState.creatorMiningKey
     // getTotalVoters
-    this.totalVoters = Number(votingState.totalVoters)
+    if (votingState.hasOwnProperty('totalVoters')) {
+      this.totalVoters = Number(votingState.totalVoters)
+    } else {
+      this.burnVotes = Number(votingState.burnVotes)
+      this.freezeVotes = Number(votingState.freezeVotes)
+      this.sendVotes = Number(votingState.sendVotes)
+      this.totalVoters = this.burnVotes + this.freezeVotes + this.sendVotes
+    }
     // getProgress
-    this.progress = Number(votingState.progress)
+    if (votingState.hasOwnProperty('progress')) {
+      this.progress = Number(votingState.progress)
+    }
     // getIsFinalized
     this.isFinalized = votingState.isFinalized
     // canBeFinalizedNow
@@ -397,6 +485,8 @@ export class BallotCard extends React.Component {
         return 'Keys'
       case 'votingToChangeProxy':
         return 'Proxy'
+      case 'votingToManageEmissionFunds':
+        return 'EmissionFunds'
       default:
         return ''
     }
@@ -425,66 +515,25 @@ export class BallotCard extends React.Component {
       ) : (
         ''
       )
-    return (
-      <div className={ballotClass}>
-        <div className="ballots-about">
-          <div className="ballots-about-i ballots-about-i_name">
-            <div className="ballots-about-td ballots-about-td-title">
-              <p className="ballots-about-i--title">Proposer</p>
-            </div>
-            <div className="ballots-about-td ballots-about-td-value">
-              <p className="ballots-i--name">{this.creator}</p>
-            </div>
-          </div>
-          {children}
-          <div className="ballots-about-i ballots-about-i_time">
-            <div className="ballots-about-td ballots-about-td-title">
-              <p className="ballots-about-i--title">Ballot Time</p>
-            </div>
-            <div className="ballots-about-td ballots-about-td-value">
-              <p className="ballots-i--created">{this.startTime}</p>
-              <p className="ballots-i--time">
-                {this.timeTo.displayValue}&nbsp;({this.timeTo.title})
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* TODO: Send / Burn / Freeze */}
-        {/* <div className="ballots-i-scale">
-          <div className="ballots-i-scale-column ballots-i-scale-column-3">
-            <button
-              className="btn btn-success ballots-i--vote_btn xl m-r-20"
-              onClick={e => this.vote({ choice: ACCEPT })}
-              type="button"
-            >
-              Send
-            </button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
-              <div className={voteScaleClass}>
-                <div
-                  className="vote-scale--fill vote-scale--fill_send"
-                  style={{ width: `${this.votesForPercents}%` }}
-                />
-              </div>
-            </div>
-          </div>
+    let votingScale
+    if (votingType === 'votingToManageEmissionFunds') {
+      votingScale = (
+        <div className="ballots-i-scale">
           <div className="ballots-i-scale-column ballots-i-scale-column-3">
             <button
               type="button"
-              onClick={e => this.vote({ choice: REJECT })}
+              onClick={e => this.vote({ choice: BURN })}
               className="btn btn-danger ballots-i--vote_btn xl m-r-20"
             >
               Burn
             </button>
             <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesAgainstNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
+              <p className="vote-scale--votes">{this.votesBurnNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesBurnPercents}%</p>
               <div className={voteScaleClass}>
                 <div
                   className="vote-scale--fill vote-scale--fill_burn"
-                  style={{ width: `${this.votesAgainstPercents}%` }}
+                  style={{ width: `${this.votesBurnPercents}%` }}
                 />
               </div>
             </div>
@@ -492,24 +541,45 @@ export class BallotCard extends React.Component {
           <div className="ballots-i-scale-column ballots-i-scale-column-3">
             <button
               type="button"
-              onClick={e => this.vote({ choice: REJECT })}
+              onClick={e => this.vote({ choice: FREEZE })}
               className="btn btn-freeze ballots-i--vote_btn xl m-r-20"
             >
               Freeze
             </button>
             <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesAgainstNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
+              <p className="vote-scale--votes">{this.votesFreezeNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesFreezePercents}%</p>
               <div className={voteScaleClass}>
                 <div
                   className="vote-scale--fill vote-scale--fill_freeze"
-                  style={{ width: `${this.votesAgainstPercents}%` }}
+                  style={{ width: `${this.votesFreezePercents}%` }}
                 />
               </div>
             </div>
           </div>
-        </div> */}
-        {/* No / yes */}
+          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+            <button
+              className="btn btn-success ballots-i--vote_btn xl m-r-20"
+              onClick={e => this.vote({ choice: SEND })}
+              type="button"
+            >
+              Send
+            </button>
+            <div className="vote-scale--container">
+              <p className="vote-scale--votes">{this.votesSendNumber} Votes</p>
+              <p className="vote-scale--percentage">{this.votesSendPercents}%</p>
+              <div className={voteScaleClass}>
+                <div
+                  className="vote-scale--fill vote-scale--fill_send"
+                  style={{ width: `${this.votesSendPercents}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      votingScale = (
         <div className="ballots-i-scale">
           <div className="ballots-i-scale-column">
             <button
@@ -547,6 +617,33 @@ export class BallotCard extends React.Component {
             </button>
           </div>
         </div>
+      )
+    }
+    return (
+      <div className={ballotClass}>
+        <div className="ballots-about">
+          <div className="ballots-about-i ballots-about-i_name">
+            <div className="ballots-about-td ballots-about-td-title">
+              <p className="ballots-about-i--title">Proposer</p>
+            </div>
+            <div className="ballots-about-td ballots-about-td-value">
+              <p className="ballots-i--name">{this.creator}</p>
+            </div>
+          </div>
+          {children}
+          <div className="ballots-about-i ballots-about-i_time">
+            <div className="ballots-about-td ballots-about-td-title">
+              <p className="ballots-about-i--title">Ballot Time</p>
+            </div>
+            <div className="ballots-about-td ballots-about-td-value">
+              <p className="ballots-i--created">{this.startTime}</p>
+              <p className="ballots-i--time">
+                {this.timeTo.displayValue}&nbsp;({this.timeTo.title})
+              </p>
+            </div>
+          </div>
+        </div>
+        {votingScale}
         <div className="info-container">
           <div className="info info-minimum">
             Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal

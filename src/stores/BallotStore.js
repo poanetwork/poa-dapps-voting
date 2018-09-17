@@ -6,7 +6,8 @@ class BallotStore {
   BallotType = {
     keys: 1,
     minThreshold: 2,
-    proxy: 3
+    proxy: 3,
+    emissionFunds: 4
   }
   KeysBallotType = {
     add: 1,
@@ -34,6 +35,8 @@ class BallotStore {
   @observable ballotKeys
   @observable ballotMinThreshold
   @observable ballotProxy
+  @observable ballotEmissionFunds
+
   @observable memo
 
   constructor() {
@@ -59,6 +62,11 @@ class BallotStore {
       proposedAddress: '',
       contractType: ''
     }
+
+    this.ballotEmissionFunds = {
+      receiver: ''
+    }
+
     this.memo = ''
   }
 
@@ -81,6 +89,11 @@ class BallotStore {
   @computed
   get isBallotForProxy() {
     return this.ballotType === this.BallotType.proxy
+  }
+
+  @computed
+  get isBallotForEmissionFunds() {
+    return this.ballotType === this.BallotType.emissionFunds
   }
 
   @computed
