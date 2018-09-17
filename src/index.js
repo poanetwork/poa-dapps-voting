@@ -49,7 +49,7 @@ class AppMainRouter extends Component {
         let setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
         let setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
 
-        await Promise.all([
+        let promises = [
           setPoaConsensus,
           setBallotsStorage,
           setKeysManager,
@@ -58,7 +58,15 @@ class AppMainRouter extends Component {
           setVotingToChangeMinThreshold,
           setVotingToChangeProxy,
           setValidatorMetadata
-        ])
+        ]
+
+        if (web3Config.netId === '77') {
+          // if we're in Sokol
+          promises.push(contractsStore.setEmissionFunds(web3Config))
+          promises.push(contractsStore.setVotingToManageEmissionFunds(web3Config))
+        }
+
+        await Promise.all(promises)
 
         await contractsStore.setMiningKey(web3Config)
         await contractsStore.setVotingKey(web3Config)
@@ -67,7 +75,6 @@ class AppMainRouter extends Component {
         await contractsStore.getAllBallots()
 
         contractsStore.getKeysBallotThreshold()
-        contractsStore.getMinThresholdBallotThreshold()
         contractsStore.getProxyBallotThreshold()
         contractsStore.getBallotsLimits()
         console.log('votingKey', contractsStore.votingKey)
