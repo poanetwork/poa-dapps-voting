@@ -38,6 +38,9 @@ export class BallotCard extends React.Component {
   @observable creator
   @observable progress
   @observable totalVoters
+  @observable burnVotes
+  @observable freezeVotes
+  @observable sendVotes
   @observable isFinalized
   @observable canBeFinalized
   @observable hasAlreadyVoted
@@ -440,7 +443,11 @@ export class BallotCard extends React.Component {
     // getIsFinalized
     this.isFinalized = votingState.isFinalized
     // canBeFinalizedNow
-    this.canBeFinalized = votingState.hasOwnProperty('canBeFinalizedNow') ? votingState.canBeFinalizedNow : null
+    if (votingState.hasOwnProperty('canBeFinalizedNow')) {
+      this.canBeFinalized = votingState.canBeFinalizedNow
+    } else {
+      this.canBeFinalizedNow()
+    }
     // getMemo
     this.memo = votingState.memo
     // hasAlreadyVoted
