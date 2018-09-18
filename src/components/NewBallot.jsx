@@ -291,6 +291,7 @@ export class NewBallot extends React.Component {
         }
 
         if (currentTime < emissionReleaseTime) {
+          commonStore.hideLoading()
           const emissionReleaseTimeString = moment
             .unix(emissionReleaseTime)
             .utc()
@@ -301,6 +302,7 @@ export class NewBallot extends React.Component {
 
         const noActiveBallotExists = await votingContract.noActiveBallotExists()
         if (!noActiveBallotExists) {
+          commonStore.hideLoading()
           swal('Warning!', messages.PREVIOUS_BALLOT_NOT_FINALIZED, 'warning')
           return
         }
