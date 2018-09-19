@@ -76,6 +76,7 @@ class AppMainRouter extends Component {
 
         contractsStore.getKeysBallotThreshold()
         contractsStore.getProxyBallotThreshold()
+        contractsStore.getBallotCancelingThreshold()
         contractsStore.getBallotsLimits()
         console.log('votingKey', contractsStore.votingKey)
         console.log('miningKey', contractsStore.miningKey)

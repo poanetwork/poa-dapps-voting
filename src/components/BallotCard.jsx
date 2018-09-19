@@ -19,6 +19,7 @@ const zeroTimeTo = '00:00'
 @inject('commonStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
 export class BallotCard extends React.Component {
+  @observable cancelDeadline = 0
   @observable startTime
   @observable endTime
   @observable timeTo = {}
@@ -34,6 +35,11 @@ export class BallotCard extends React.Component {
     displayValue: zeroTimeTo,
     title: 'To close'
   }
+  @observable
+  timeToCancel = {
+    val: 0,
+    displayValue: zeroTimeTo
+  }
   @observable creatorMiningKey
   @observable creator
   @observable progress
@@ -42,34 +48,50 @@ export class BallotCard extends React.Component {
   @observable freezeVotes
   @observable sendVotes
   @observable isFinalized
+  @observable isCanceled = false
   @observable canBeFinalized
   @observable hasAlreadyVoted
   @observable memo
 
   @computed
-  get finalizeButtonDisplayName() {
-    const displayName = this.isFinalized ? 'Finalized' : 'Finalize ballot'
-    return displayName
-  }
-
-  @computed
-  get finalizeButtonClass() {
-    const cls = this.isFinalized
-      ? 'btn btn-primary btn-finalize disabled text-capitalize'
-      : 'btn btn-primary btn-finalize text-capitalize'
-    return cls
-  }
-
-  @computed
-  get finalizeDescription() {
+  get cancelOrFinalizeButtonDisplayName() {
     if (this.isFinalized) {
+      return 'Finalized'
+    } else if (this.isCanceled) {
+      return 'Canceled'
+    } else if (this.timeToCancel.val > 0) {
+      return 'Cancel ballot'
+    } else {
+      return 'Finalize ballot'
+    }
+  }
+
+  @computed
+  get cancelOrFinalizeButtonClass() {
+    if (this.isFinalized) {
+      return 'btn btn-primary btn-finalize disabled text-capitalize'
+    } else if (this.isCanceled) {
+      return 'btn btn-primary disabled text-capitalize'
+    } else if (this.timeToCancel.val > 0) {
+      return 'btn btn-danger text-capitalize'
+    } else {
+      return 'btn btn-primary btn-finalize text-capitalize'
+    }
+  }
+
+  @computed
+  get cancelOrFinalizeDescription() {
+    if (this.isFinalized || this.isCanceled) {
       return ''
+    } else if (this.timeToCancel.val > 0) {
+      return `You can cancel this ballot within ${this.timeToCancel.displayValue}`
+    } else {
+      let description = 'Finalization is available after ballot time is finished'
+      if (this.canBeFinalized !== null) {
+        description += ' or all validators are voted'
+      }
+      return description
     }
-    let description = 'Finalization is available after ballot time is finished'
-    if (this.canBeFinalized !== null) {
-      description += ' or all validators are voted'
-    }
-    return description
   }
 
   @computed
@@ -165,10 +187,20 @@ export class BallotCard extends React.Component {
   @action('Calculate time to start/finish')
   calcTimeTo = () => {
     const _now = moment()
+    const cancel = moment.utc(this.cancelDeadline, USDateTimeFormat)
     const start = moment.utc(this.startTime, USDateTimeFormat)
     const finish = moment.utc(this.endTime, USDateTimeFormat)
-    let msStart = start.diff(_now)
-    let msFinish = finish.diff(_now)
+    const msCancel = cancel.diff(_now)
+    const msStart = start.diff(_now)
+    const msFinish = finish.diff(_now)
+
+    if (msCancel > 0) {
+      this.timeToCancel.val = msCancel
+      this.timeToCancel.displayValue = this.formatMs(msCancel, ':mm:ss')
+    } else {
+      this.timeToCancel.val = 0
+      this.timeToCancel.displayValue = zeroTimeTo
+    }
 
     if (msStart > 0) {
       this.timeToStart.val = msStart + 5000
@@ -275,6 +307,9 @@ export class BallotCard extends React.Component {
           this.progress = Number(ballotInfo.progress)
         }
         this.isFinalized = Boolean(ballotInfo.isFinalized)
+        if (ballotInfo.hasOwnProperty('isCanceled')) {
+          this.isCanceled = Boolean(ballotInfo.isCanceled)
+        }
         if (ballotInfo.hasOwnProperty('canBeFinalizedNow')) {
           this.canBeFinalized = Boolean(ballotInfo.canBeFinalizedNow)
         } else {
@@ -293,6 +328,7 @@ export class BallotCard extends React.Component {
           ballotsStore.ballotCards[pos].props.votingState.progress = this.progress
         }
         ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+        ballotsStore.ballotCards[pos].props.votingState.isCanceled = this.isCanceled
         ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
         ballotsStore.ballotCards[pos].props.votingState.hasAlreadyVoted = this.hasAlreadyVoted
 
@@ -304,11 +340,69 @@ export class BallotCard extends React.Component {
     )
   }
 
-  finalize = async e => {
-    if (this.isFinalized) {
+  cancelOrFinalize = e => {
+    if (this.isFinalized || this.isCanceled) {
+      return
+    }
+    if (this.timeToCancel.val > 0) {
+      this.cancel(e)
+    } else {
+      this.finalize(e)
+    }
+  }
+
+  cancel = async e => {
+    console.log('cancel function called')
+    const { votingState, contractsStore, commonStore, ballotsStore, votingType, id, pos } = this.props
+    const { push } = this.props.routing
+    const contract = this.getContract(contractsStore, votingType)
+    let canCancel = true
+
+    if (!this.timeToCancel.val) {
+      canCancel = false
+    }
+    if (votingState.creator.toLowerCase() !== contractsStore.miningKey.toLowerCase()) {
+      canCancel = false
+    }
+    commonStore.showLoading()
+    if (!votingState.creationTime) {
+      canCancel = false
+    } else {
+      const currentTime = Number(await contract.getTime())
+      if (currentTime - votingState.creationTime > contractsStore.ballotCancelingThreshold) {
+        canCancel = false
+      }
+    }
+
+    if (!canCancel) {
+      commonStore.hideLoading()
+      swal('Warning!', messages.INVALID_CANCEL_MSG, 'warning')
       return
     }
 
+    sendTransactionByVotingKey(
+      this.props,
+      contract.address,
+      contract.cancelBallot(id),
+      async tx => {
+        this.isFinalized = false
+        this.isCanceled = true
+        ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+        ballotsStore.ballotCards[pos].props.votingState.isCanceled = this.isCanceled
+        if (this.canBeFinalized !== null) {
+          this.canBeFinalized = false
+          ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
+        }
+        swal('Congratulations!', messages.CANCELED_SUCCESS_MSG, 'success').then(result => {
+          push(`${commonStore.rootPath}`)
+        })
+      },
+      messages.CANCEL_BALLOT_FAILED_TX
+    )
+  }
+
+  finalize = async e => {
+    console.log('finalize function called')
     if (this.timeToStart.val > 0) {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
@@ -349,7 +443,9 @@ export class BallotCard extends React.Component {
         })
         if (events.length > 0) {
           this.isFinalized = true
+          this.isCanceled = false
           ballotsStore.ballotCards[pos].props.votingState.isFinalized = this.isFinalized
+          ballotsStore.ballotCards[pos].props.votingState.isCanceled = this.isCanceled
           if (this.canBeFinalized !== null) {
             this.canBeFinalized = false
             ballotsStore.ballotCards[pos].props.votingState.canBeFinalized = this.canBeFinalized
@@ -419,8 +515,17 @@ export class BallotCard extends React.Component {
 
   constructor(props) {
     super(props)
-    const { votingState } = this.props
+    const { votingState, contractsStore } = this.props
     // getTimes
+    if (
+      votingState.hasOwnProperty('creationTime') &&
+      contractsStore.ballotCancelingThreshold > 0 &&
+      votingState.creator === contractsStore.miningKey
+    ) {
+      this.cancelDeadline = moment
+        .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
+        .format(USDateTimeFormat)
+    }
     this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat)
     this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat)
     this.calcTimeTo()
@@ -442,6 +547,10 @@ export class BallotCard extends React.Component {
     }
     // getIsFinalized
     this.isFinalized = votingState.isFinalized
+    // getIsCanceled
+    if (votingState.hasOwnProperty('isCanceled')) {
+      this.isCanceled = votingState.isCanceled
+    }
     // canBeFinalizedNow
     if (votingState.hasOwnProperty('canBeFinalizedNow')) {
       this.canBeFinalized = votingState.canBeFinalizedNow
@@ -478,9 +587,12 @@ export class BallotCard extends React.Component {
   showCard = () => {
     let { commonStore } = this.props
     let checkToFinalizeFilter = commonStore.isToFinalizeFilter
-      ? !this.isFinalized && (this.timeToFinish.val === 0 || this.canBeFinalized) && this.timeToStart.val === 0
+      ? !this.isFinalized &&
+        !this.isCanceled &&
+        (this.timeToFinish.val === 0 || this.canBeFinalized) &&
+        this.timeToStart.val === 0
       : true
-    let show = commonStore.isActiveFilter ? !this.isFinalized : checkToFinalizeFilter
+    let show = commonStore.isActiveFilter ? !this.isFinalized && !this.isCanceled : checkToFinalizeFilter
     return show
   }
 
@@ -664,10 +776,10 @@ export class BallotCard extends React.Component {
         </div>
         <div className="ballots-footer">
           <div className="ballots-footer-left">
-            <button type="button" onClick={e => this.finalize(e)} className={this.finalizeButtonClass}>
-              {this.finalizeButtonDisplayName}
+            <button type="button" onClick={e => this.cancelOrFinalize(e)} className={this.cancelOrFinalizeButtonClass}>
+              {this.cancelOrFinalizeButtonDisplayName}
             </button>
-            <p>{this.finalizeDescription}</p>
+            <p>{this.cancelOrFinalizeDescription}</p>
           </div>
           {showHasAlreadyVotedLabel}
           <div className="ballots-i--vote-label">
