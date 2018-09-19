@@ -40,6 +40,8 @@ class ContractsStore {
   @observable keysBallotThreshold
   @observable minThresholdBallotThreshold
   @observable proxyBallotThreshold
+  @observable emissionFundsBallotThreshold
+  @observable ballotCancelingThreshold
   @observable validatorLimits
   @observable validatorsMetadata
   @observable netId
@@ -67,6 +69,13 @@ class ContractsStore {
   getProxyBallotThreshold = async () => {
     this.proxyBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getProxyThreshold().call()
     this.emissionFundsBallotThreshold = this.proxyBallotThreshold
+  }
+
+  @action('Get ballot canceling threshold')
+  getBallotCancelingThreshold = async () => {
+    this.ballotCancelingThreshold = this.votingToManageEmissionFunds
+      ? Number(await this.votingToManageEmissionFunds.ballotCancelingThreshold())
+      : 0
   }
 
   @action('Set web3Instance')

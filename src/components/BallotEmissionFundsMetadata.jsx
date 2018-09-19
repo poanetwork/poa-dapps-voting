@@ -35,16 +35,14 @@ export class BallotEmissionFundsMetadata extends React.Component {
     this.endDateTime = '...loading date...'
 
     let emissionReleaseTime = Number(await votingToManageEmissionFunds.emissionReleaseTime())
-    let emissionReleaseThreshold = 0
+    const emissionReleaseThreshold = Number(await votingToManageEmissionFunds.emissionReleaseThreshold())
     const currentTime = Number(await votingToManageEmissionFunds.getTime())
     const distributionThreshold = Number(await votingToManageEmissionFunds.distributionThreshold())
-    if (currentTime > emissionReleaseTime) {
-      emissionReleaseThreshold = Number(await votingToManageEmissionFunds.emissionReleaseThreshold())
-      const diff = Math.floor((currentTime - emissionReleaseTime) / emissionReleaseThreshold)
-      if (diff > 0) {
-        emissionReleaseTime += emissionReleaseThreshold * diff
-      }
-    }
+    emissionReleaseTime = votingToManageEmissionFunds.refreshEmissionReleaseTime(
+      emissionReleaseTime,
+      emissionReleaseThreshold,
+      currentTime
+    )
 
     const releasePlusDistribution = emissionReleaseTime + distributionThreshold
 
@@ -52,9 +50,6 @@ export class BallotEmissionFundsMetadata extends React.Component {
       this.beginDateTime = moment.unix(emissionReleaseTime).format(dateTimeFormat)
       this.endDateTime = moment.unix(releasePlusDistribution).format(dateTimeFormat)
     } else {
-      if (emissionReleaseThreshold === 0) {
-        emissionReleaseThreshold = Number(await votingToManageEmissionFunds.emissionReleaseThreshold())
-      }
       const futureEmissionReleaseTime = emissionReleaseTime + emissionReleaseThreshold
       this.beginDateTime = moment.unix(futureEmissionReleaseTime).format(dateTimeFormat)
       this.endDateTime = moment.unix(futureEmissionReleaseTime + distributionThreshold).format(dateTimeFormat)

@@ -17,7 +17,7 @@ export default class VotingToManageEmissionFunds {
   }
 
   // setters
-  cancelNewBallot() {
+  cancelBallot(_id) {
     return this.instance.methods.cancelNewBallot().encodeABI()
   }
 
@@ -52,6 +52,17 @@ export default class VotingToManageEmissionFunds {
 
   emissionReleaseTime() {
     return this.instance.methods.emissionReleaseTime().call()
+  }
+
+  refreshEmissionReleaseTime(emissionReleaseTime, emissionReleaseThreshold, currentTime) {
+    let emissionReleaseTimeRefreshed = emissionReleaseTime
+    if (currentTime > emissionReleaseTime) {
+      const diff = Math.floor((currentTime - emissionReleaseTime) / emissionReleaseThreshold)
+      if (diff > 0) {
+        emissionReleaseTimeRefreshed += emissionReleaseThreshold * diff
+      }
+    }
+    return emissionReleaseTimeRefreshed
   }
 
   getBallotInfo(_id, _votingKey) {

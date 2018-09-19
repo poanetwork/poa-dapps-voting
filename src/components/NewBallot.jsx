@@ -280,15 +280,15 @@ export class NewBallot extends React.Component {
 
       if (ballotStore.ballotType === ballotStore.BallotType.emissionFunds) {
         const votingContract = contractsStore.votingToManageEmissionFunds
+
         let emissionReleaseTime = Number(await votingContract.emissionReleaseTime())
+        const emissionReleaseThreshold = Number(await votingContract.emissionReleaseThreshold())
         const currentTime = Number(await votingContract.getTime())
-        if (currentTime > emissionReleaseTime) {
-          const emissionReleaseThreshold = Number(await votingContract.emissionReleaseThreshold())
-          const diff = Math.floor((currentTime - emissionReleaseTime) / emissionReleaseThreshold)
-          if (diff > 0) {
-            emissionReleaseTime += emissionReleaseThreshold * diff
-          }
-        }
+        emissionReleaseTime = votingContract.refreshEmissionReleaseTime(
+          emissionReleaseTime,
+          emissionReleaseThreshold,
+          currentTime
+        )
 
         if (currentTime < emissionReleaseTime) {
           commonStore.hideLoading()
