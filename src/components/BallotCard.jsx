@@ -194,7 +194,7 @@ export class BallotCard extends React.Component {
     const msStart = start.diff(_now)
     const msFinish = finish.diff(_now)
 
-    if (msCancel > 0) {
+    if (msCancel > 0 && !this.isCanceled) {
       this.timeToCancel.val = msCancel
       this.timeToCancel.displayValue = this.formatMs(msCancel, ':mm:ss')
     } else {
@@ -202,13 +202,13 @@ export class BallotCard extends React.Component {
       this.timeToCancel.displayValue = zeroTimeTo
     }
 
-    if (msStart > 0) {
+    if (msStart > 0 && !this.isCanceled) {
       this.timeToStart.val = msStart + 5000
       this.timeToStart.displayValue = this.formatMs(msStart, ':mm:ss')
       return (this.timeTo = this.timeToStart)
     }
 
-    if (msFinish > 0) {
+    if (msFinish > 0 && !this.isCanceled) {
       this.timeToStart.val = 0
       this.timeToFinish.val = msFinish
       this.timeToFinish.displayValue = this.formatMs(msFinish, ':mm:ss')
@@ -267,6 +267,10 @@ export class BallotCard extends React.Component {
   }
 
   vote = async ({ choice }) => {
+    if (this.isCanceled) {
+      swal('Warning!', messages.INVALID_VOTE_MSG, 'warning')
+      return
+    }
     if (this.timeToStart.val > 0) {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
@@ -522,13 +526,13 @@ export class BallotCard extends React.Component {
       contractsStore.ballotCancelingThreshold > 0 &&
       votingState.creatorMiningKey === contractsStore.miningKey
     ) {
+      votingState.creationTime = Number(votingState.creationTime)
       this.cancelDeadline = moment
         .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
         .format(USDateTimeFormat)
     }
     this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat)
     this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat)
-    this.calcTimeTo()
     // getCreator
     this.creator = votingState.creator
     this.creatorMiningKey = votingState.creatorMiningKey
@@ -551,6 +555,7 @@ export class BallotCard extends React.Component {
     if (votingState.hasOwnProperty('isCanceled')) {
       this.isCanceled = votingState.isCanceled
     }
+    this.calcTimeTo()
     // canBeFinalizedNow
     if (votingState.hasOwnProperty('canBeFinalizedNow')) {
       this.canBeFinalized = votingState.canBeFinalizedNow
