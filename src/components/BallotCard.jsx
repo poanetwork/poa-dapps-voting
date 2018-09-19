@@ -361,7 +361,7 @@ export class BallotCard extends React.Component {
     if (!this.timeToCancel.val) {
       canCancel = false
     }
-    if (votingState.creator.toLowerCase() !== contractsStore.miningKey.toLowerCase()) {
+    if (votingState.creatorMiningKey.toLowerCase() !== contractsStore.miningKey.toLowerCase()) {
       canCancel = false
     }
     commonStore.showLoading()
@@ -520,7 +520,7 @@ export class BallotCard extends React.Component {
     if (
       votingState.hasOwnProperty('creationTime') &&
       contractsStore.ballotCancelingThreshold > 0 &&
-      votingState.creator === contractsStore.miningKey
+      votingState.creatorMiningKey === contractsStore.miningKey
     ) {
       this.cancelDeadline = moment
         .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
