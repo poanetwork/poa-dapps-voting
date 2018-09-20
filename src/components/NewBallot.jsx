@@ -53,7 +53,7 @@ export class NewBallot extends React.Component {
         .add(minBallotDurationInHours, 'hours')
         .format()
       let neededMinutes = moment(minEndTime).diff(moment(ballotStore.endTime), 'minutes')
-      let neededHours = Math.floor(neededMinutes / 60)
+      const neededHours = Math.floor(neededMinutes / 60)
       let duration = moment.unix(ballotStore.endTimeUnix).diff(moment.unix(startTime), 'hours')
 
       if (duration < 0) {
@@ -75,7 +75,7 @@ export class NewBallot extends React.Component {
         .utc()
         .add(14, 'days')
         .format()
-      let exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes')
+      const exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes')
       if (exceededMinutes > 0) {
         swal('Warning!', messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS(duration), 'warning')
         commonStore.hideLoading()
@@ -177,8 +177,8 @@ export class NewBallot extends React.Component {
   createBallotForKeys = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime,
+      endTime,
       affectedKey: ballotStore.ballotKeys.affectedKey,
       affectedKeyType: ballotStore.ballotKeys.keyType,
       newVotingKey: ballotStore.ballotKeys.newVotingKey,
@@ -203,8 +203,8 @@ export class NewBallot extends React.Component {
   createBallotForMinThreshold = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime,
+      endTime,
       proposedValue: ballotStore.ballotMinThreshold.proposedValue,
       memo: ballotStore.memo
     }
@@ -214,8 +214,8 @@ export class NewBallot extends React.Component {
   createBallotForProxy = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime,
+      endTime,
       proposedValue: ballotStore.ballotProxy.proposedAddress,
       contractType: ballotStore.ballotProxy.contractType,
       memo: ballotStore.memo
@@ -226,8 +226,8 @@ export class NewBallot extends React.Component {
   createBallotForEmissionFunds = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime,
+      endTime,
       receiver: ballotStore.ballotEmissionFunds.receiver,
       memo: ballotStore.memo
     }
