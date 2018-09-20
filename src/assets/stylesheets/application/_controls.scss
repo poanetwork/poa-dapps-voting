@@ -136,4 +136,12 @@ button {
   padding-top: 12px;
   margin: 0;
   word-break: break-word;
+
+  a {
+    color: $primary-color;
+
+    .sokol & {
+      color: $primary-color-sokol;
+    }
+  }
 }

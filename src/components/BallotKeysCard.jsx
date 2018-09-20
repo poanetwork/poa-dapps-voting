@@ -63,23 +63,6 @@ export class BallotKeysCard extends React.Component {
           </div>
         </div>
         {miningKeyDiv}
-        {/* TODO: New ballot type */}
-        {/* <div className="ballots-about-i ballots-about-i_proposed_receiver">
-          <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Proposed Receiver</p>
-          </div>
-          <div className="ballots-about-td ballots-about-td-value">
-            <p>0x4432c441EE96ef387CEC496709967Be6E27f57C8</p>
-          </div>
-        </div>
-        <div className="ballots-about-i ballots-about-i_funds_amount">
-          <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Funds Amount</p>
-          </div>
-          <div className="ballots-about-td ballots-about-td-value">
-            <p>10000 POA</p>
-          </div>
-        </div> */}
       </BallotCard>
     )
   }

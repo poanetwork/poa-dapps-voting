@@ -116,6 +116,14 @@ export class Ballots extends React.Component {
         ) {
           continue
         }
+      } else if (contractType === ballotStore.BallotType.emissionFunds) {
+        if (
+          String(votingState.receiver)
+            .toLowerCase()
+            .includes(searchTerm)
+        ) {
+          continue
+        }
       }
 
       ballotCards.splice(i--, 1)

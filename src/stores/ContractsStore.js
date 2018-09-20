@@ -3,11 +3,13 @@ import React from 'react'
 
 import PoaConsensus from '../contracts/PoaConsensus.contract'
 import BallotsStorage from '../contracts/BallotsStorage.contract'
+import EmissionFunds from '../contracts/EmissionFunds.contract'
 import KeysManager from '../contracts/KeysManager.contract'
 import ProxyStorage from '../contracts/ProxyStorage.contract'
 import VotingToChangeKeys from '../contracts/VotingToChangeKeys.contract'
 import VotingToChangeMinThreshold from '../contracts/VotingToChangeMinThreshold.contract'
 import VotingToChangeProxy from '../contracts/VotingToChangeProxy.contract'
+import VotingToManageEmissionFunds from '../contracts/VotingToManageEmissionFunds.contract'
 import ValidatorMetadata from '../contracts/ValidatorMetadata.contract'
 import ballotStore from './BallotStore'
 import ballotsStore from './BallotsStore'
@@ -15,6 +17,7 @@ import commonStore from './CommonStore'
 import { BallotKeysCard } from '../components/BallotKeysCard.jsx'
 import { BallotMinThresholdCard } from '../components/BallotMinThresholdCard.jsx'
 import { BallotProxyCard } from '../components/BallotProxyCard.jsx'
+import { BallotEmissionFundsCard } from '../components/BallotEmissionFundsCard.jsx'
 import { constants } from '../constants'
 
 import 'babel-polyfill'
@@ -22,11 +25,13 @@ import 'babel-polyfill'
 class ContractsStore {
   @observable poaConsensus
   @observable ballotsStorage
+  @observable emissionFunds
   @observable keysManager
   @observable proxyStorage
   @observable votingToChangeKeys
   @observable votingToChangeMinThreshold
   @observable votingToChangeProxy
+  @observable votingToManageEmissionFunds
   @observable validatorMetadata
   @observable votingKey
   @observable miningKey
@@ -35,6 +40,8 @@ class ContractsStore {
   @observable keysBallotThreshold
   @observable minThresholdBallotThreshold
   @observable proxyBallotThreshold
+  @observable emissionFundsBallotThreshold
+  @observable ballotCancelingThreshold
   @observable validatorLimits
   @observable validatorsMetadata
   @observable netId
@@ -55,18 +62,20 @@ class ContractsStore {
   @action('Get keys ballot threshold')
   getKeysBallotThreshold = async () => {
     this.keysBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call()
-  }
-
-  @action('Get min threshold ballot threshold')
-  async getMinThresholdBallotThreshold() {
-    this.minThresholdBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods
-      .getBallotThreshold(1)
-      .call()
+    this.minThresholdBallotThreshold = this.keysBallotThreshold
   }
 
   @action('Get proxy ballot threshold')
   getProxyBallotThreshold = async () => {
     this.proxyBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getProxyThreshold().call()
+    this.emissionFundsBallotThreshold = this.proxyBallotThreshold
+  }
+
+  @action('Get ballot canceling threshold')
+  getBallotCancelingThreshold = async () => {
+    this.ballotCancelingThreshold = this.votingToManageEmissionFunds
+      ? Number(await this.votingToManageEmissionFunds.ballotCancelingThreshold())
+      : 0
   }
 
   @action('Set web3Instance')
@@ -88,6 +97,15 @@ class ContractsStore {
   setBallotsStorage = async web3Config => {
     this.ballotsStorage = new BallotsStorage()
     await this.ballotsStorage.init({
+      web3: web3Config.web3Instance,
+      netId: web3Config.netId
+    })
+  }
+
+  @action('Set EmissionFunds contract')
+  setEmissionFunds = async web3Config => {
+    this.emissionFunds = new EmissionFunds()
+    await this.emissionFunds.init({
       web3: web3Config.web3Instance,
       netId: web3Config.netId
     })
@@ -138,6 +156,15 @@ class ContractsStore {
     })
   }
 
+  @action('Set VotingToManageEmissionFunds contract')
+  setVotingToManageEmissionFunds = async web3Config => {
+    this.votingToManageEmissionFunds = new VotingToManageEmissionFunds()
+    await this.votingToManageEmissionFunds.init({
+      web3: web3Config.web3Instance,
+      netId: web3Config.netId
+    })
+  }
+
   @action('Set ValidatorMetadata contract')
   setValidatorMetadata = async web3Config => {
     this.validatorMetadata = new ValidatorMetadata()
@@ -171,12 +198,19 @@ class ContractsStore {
   getAllBallots = async () => {
     let keysNextBallotId = 0,
       minThresholdNextBallotId = 0,
-      proxyNextBallotId = 0
+      proxyNextBallotId = 0,
+      emissionFundsNextBallotId = 0
     try {
-      ;[keysNextBallotId, minThresholdNextBallotId, proxyNextBallotId] = await this.getAllBallotsNextIDs()
+      ;[
+        keysNextBallotId,
+        minThresholdNextBallotId,
+        proxyNextBallotId,
+        emissionFundsNextBallotId
+      ] = await this.getAllBallotsNextIDs()
       keysNextBallotId = Number(keysNextBallotId)
       minThresholdNextBallotId = Number(minThresholdNextBallotId)
       proxyNextBallotId = Number(proxyNextBallotId)
+      emissionFundsNextBallotId = Number(emissionFundsNextBallotId)
     } catch (e) {
       console.log(e.message)
     }
@@ -184,10 +218,12 @@ class ContractsStore {
     const allKeysPromise = this.getCards(keysNextBallotId, 'votingToChangeKeys')
     const allMinThresholdPromise = this.getCards(minThresholdNextBallotId, 'votingToChangeMinThreshold')
     const allProxyPromise = this.getCards(proxyNextBallotId, 'votingToChangeProxy')
+    const allEmissionFundsPromise = this.getCards(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
 
-    await Promise.all([allKeysPromise, allMinThresholdPromise, allProxyPromise])
+    await Promise.all([allKeysPromise, allMinThresholdPromise, allProxyPromise, allEmissionFundsPromise])
 
-    const allBallotsIDsLength = keysNextBallotId + minThresholdNextBallotId + proxyNextBallotId
+    const allBallotsIDsLength =
+      keysNextBallotId + minThresholdNextBallotId + proxyNextBallotId + emissionFundsNextBallotId
 
     if (allBallotsIDsLength === 0) {
       commonStore.hideLoading()
@@ -315,6 +351,17 @@ class ContractsStore {
           />
         )
         break
+      case 'votingToManageEmissionFunds':
+        card = (
+          <BallotEmissionFundsCard
+            id={id}
+            type={ballotStore.BallotType.emissionFunds}
+            key={ballotsStore.ballotCards.length}
+            pos={ballotsStore.ballotCards.length}
+            votingState={votingState}
+          />
+        )
+        break
       default:
         break
     }
@@ -333,7 +380,10 @@ class ContractsStore {
     const keysNextBallotId = this.votingToChangeKeys.nextBallotId()
     const minThresholdNextBallotId = this.votingToChangeMinThreshold.nextBallotId()
     const proxyNextBallotId = this.votingToChangeProxy.nextBallotId()
-    return Promise.all([keysNextBallotId, minThresholdNextBallotId, proxyNextBallotId])
+    const emissionFundsNextBallotId = this.votingToManageEmissionFunds
+      ? this.votingToManageEmissionFunds.nextBallotId()
+      : 0
+    return Promise.all([keysNextBallotId, minThresholdNextBallotId, proxyNextBallotId, emissionFundsNextBallotId])
   }
 
   @action

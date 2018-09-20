@@ -5,12 +5,14 @@ messages.invalidVotingKeyMsg = key => {
 messages.VOTED_SUCCESS_MSG = 'You successfully voted'
 messages.BALLOT_CREATED_SUCCESS_MSG = 'You successfully created a new ballot'
 messages.FINALIZED_SUCCESS_MSG = 'You successfully finalized'
+messages.CANCELED_SUCCESS_MSG = 'You successfully canceled'
 messages.ALREADY_FINALIZED_MSG = 'This ballot is already finalized'
 messages.INVALID_VOTE_MSG = "You can't vote on this ballot"
 messages.INVALID_FINALIZE_MSG = "You can't finalize this ballot"
+messages.INVALID_CANCEL_MSG = "You can't cancel this ballot"
 messages.AFFECTED_KEY_IS_NOT_ADDRESS_MSG = "Ballot affectedKey isn't address"
 messages.MINING_KEY_IS_NOT_ADDRESS_MSG = "Ballot miningKey isn't address"
-messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG = "Ballot proposedAddress isn't address"
+messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG = "Proposed address isn't address"
 messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG = 'Ballot end time should be greater than now'
 messages.BALLOT_TYPE_IS_EMPTY_MSG = 'Ballot type is empty'
 messages.NO_METAMASK_MSG = `You haven't chosen any account in MetaMask.
@@ -30,11 +32,17 @@ messages.SHOULD_BE_MORE_THAN_MIN_DURATION = (minDuration, duration, neededHours,
 messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS = duration => {
   return `Ballot end time should not be more than 14 days from now in UTC time. Current duration is ${duration} hours.`
 }
+messages.EMISSION_RELEASE_TIME_IN_FUTURE = emissionReleaseTime => {
+  return `You cannot create ballot right now. You'll be able to do that after ${emissionReleaseTime} UTC.`
+}
+messages.PREVIOUS_BALLOT_NOT_FINALIZED = 'Previous ballot should be finalized first.'
 messages.BALLOT_CREATE_FAILED_TX = `Your transaction was failed. Please make sure you set correct parameters for ballot creation.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in Metamask before you sign it.`
 messages.VOTE_FAILED_TX = `Your transaction was failed. Please make sure you haven't already voted for this ballot.
 Make sure you don't have Transaction Error. Exception thrown in contract code message in Metamask before you sign it.`
 messages.FINALIZE_FAILED_TX = `Your transaction was failed. Make sure you don't have Transaction Error.
+Exception thrown in contract code message in Metamask before you sign it.`
+messages.CANCEL_BALLOT_FAILED_TX = `Your transaction was failed. Make sure you don't have Transaction Error.
 Exception thrown in contract code message in Metamask before you sign it.`
 messages.DESCRIPTION_IS_EMPTY = 'Description cannot be empty'
 messages.wrongRepo = repo => {

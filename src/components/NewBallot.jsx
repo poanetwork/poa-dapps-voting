@@ -7,6 +7,7 @@ import { KeysTypes } from './KeysTypes.jsx'
 import { BallotKeysMetadata } from './BallotKeysMetadata.jsx'
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
 import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
+import { BallotEmissionFundsMetadata } from './BallotEmissionFundsMetadata.jsx'
 import { messages } from '../messages'
 import { constants } from '../constants'
 import { sendTransactionByVotingKey } from '../helpers'
@@ -44,40 +45,42 @@ export class NewBallot extends React.Component {
       return false
     }
 
-    const minBallotDurationInHours = constants.minBallotDurationInDays * 24
-    const startTime = this.getStartTimeUnix()
-    const minEndTime = moment
-      .utc()
-      .add(minBallotDurationInHours, 'hours')
-      .format()
-    let neededMinutes = moment(minEndTime).diff(moment(ballotStore.endTime), 'minutes')
-    let neededHours = Math.floor(neededMinutes / 60)
-    let duration = moment.unix(ballotStore.endTimeUnix).diff(moment.unix(startTime), 'hours')
+    if (!ballotStore.isBallotForEmissionFunds) {
+      const minBallotDurationInHours = constants.minBallotDurationInDays * 24
+      const startTime = this.getStartTimeUnix()
+      const minEndTime = moment
+        .utc()
+        .add(minBallotDurationInHours, 'hours')
+        .format()
+      let neededMinutes = moment(minEndTime).diff(moment(ballotStore.endTime), 'minutes')
+      const neededHours = Math.floor(neededMinutes / 60)
+      let duration = moment.unix(ballotStore.endTimeUnix).diff(moment.unix(startTime), 'hours')
 
-    if (duration < 0) {
-      duration = 0
-    }
+      if (duration < 0) {
+        duration = 0
+      }
 
-    if (neededMinutes > 0) {
-      neededMinutes = Math.abs(neededHours * 60 - neededMinutes)
-      swal(
-        'Warning!',
-        messages.SHOULD_BE_MORE_THAN_MIN_DURATION(minBallotDurationInHours, duration, neededHours, neededMinutes),
-        'warning'
-      )
-      commonStore.hideLoading()
-      return false
-    }
+      if (neededMinutes > 0) {
+        neededMinutes = Math.abs(neededHours * 60 - neededMinutes)
+        swal(
+          'Warning!',
+          messages.SHOULD_BE_MORE_THAN_MIN_DURATION(minBallotDurationInHours, duration, neededHours, neededMinutes),
+          'warning'
+        )
+        commonStore.hideLoading()
+        return false
+      }
 
-    const twoWeeks = moment
-      .utc()
-      .add(14, 'days')
-      .format()
-    let exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes')
-    if (exceededMinutes > 0) {
-      swal('Warning!', messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS(duration), 'warning')
-      commonStore.hideLoading()
-      return false
+      const twoWeeks = moment
+        .utc()
+        .add(14, 'days')
+        .format()
+      const exceededMinutes = moment(ballotStore.endTime).diff(moment(twoWeeks), 'minutes')
+      if (exceededMinutes > 0) {
+        swal('Warning!', messages.SHOULD_BE_LESS_OR_EQUAL_14_DAYS(duration), 'warning')
+        commonStore.hideLoading()
+        return false
+      }
     }
 
     if (ballotStore.isBallotForKey) {
@@ -132,7 +135,7 @@ export class NewBallot extends React.Component {
         }
       }
 
-      let isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress)
+      const isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress)
 
       if (!isAddress) {
         swal('Warning!', messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, 'warning')
@@ -141,7 +144,28 @@ export class NewBallot extends React.Component {
       }
     }
 
-    if (!ballotStore.isBallotForKey && !ballotStore.isBallotForMinThreshold && !ballotStore.isBallotForProxy) {
+    if (ballotStore.isBallotForEmissionFunds) {
+      if (ballotStore.ballotEmissionFunds.receiver.length === 0) {
+        swal('Warning!', `Address of funds receiver is empty`, 'warning')
+        commonStore.hideLoading()
+        return false
+      }
+
+      const isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotEmissionFunds.receiver)
+
+      if (!isAddress) {
+        swal('Warning!', messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, 'warning')
+        commonStore.hideLoading()
+        return false
+      }
+    }
+
+    if (
+      !ballotStore.isBallotForKey &&
+      !ballotStore.isBallotForMinThreshold &&
+      !ballotStore.isBallotForProxy &&
+      !ballotStore.isBallotForEmissionFunds
+    ) {
       swal('Warning!', messages.BALLOT_TYPE_IS_EMPTY_MSG, 'warning')
       commonStore.hideLoading()
       return false
@@ -150,11 +174,11 @@ export class NewBallot extends React.Component {
     return true
   }
 
-  createBallotForKeys = startTime => {
+  createBallotForKeys = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: ballotStore.endTimeUnix,
+      startTime,
+      endTime,
       affectedKey: ballotStore.ballotKeys.affectedKey,
       affectedKeyType: ballotStore.ballotKeys.keyType,
       newVotingKey: ballotStore.ballotKeys.newVotingKey,
@@ -176,27 +200,38 @@ export class NewBallot extends React.Component {
     return data
   }
 
-  createBallotForMinThreshold = startTime => {
+  createBallotForMinThreshold = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: ballotStore.endTimeUnix,
+      startTime,
+      endTime,
       proposedValue: ballotStore.ballotMinThreshold.proposedValue,
       memo: ballotStore.memo
     }
     return contractsStore.votingToChangeMinThreshold.createBallot(inputToMethod)
   }
 
-  createBallotForProxy = startTime => {
+  createBallotForProxy = (startTime, endTime) => {
     const { ballotStore, contractsStore } = this.props
     const inputToMethod = {
-      startTime: startTime,
-      endTime: ballotStore.endTimeUnix,
+      startTime,
+      endTime,
       proposedValue: ballotStore.ballotProxy.proposedAddress,
       contractType: ballotStore.ballotProxy.contractType,
       memo: ballotStore.memo
     }
     return contractsStore.votingToChangeProxy.createBallot(inputToMethod)
+  }
+
+  createBallotForEmissionFunds = (startTime, endTime) => {
+    const { ballotStore, contractsStore } = this.props
+    const inputToMethod = {
+      startTime,
+      endTime,
+      receiver: ballotStore.ballotEmissionFunds.receiver,
+      memo: ballotStore.memo
+    }
+    return contractsStore.votingToManageEmissionFunds.createBallot(inputToMethod)
   }
 
   onClick = async () => {
@@ -240,6 +275,44 @@ export class NewBallot extends React.Component {
         }
       }
 
+      let startTime = this.getStartTimeUnix()
+      let endTime = ballotStore.endTimeUnix
+
+      if (ballotStore.ballotType === ballotStore.BallotType.emissionFunds) {
+        const votingContract = contractsStore.votingToManageEmissionFunds
+
+        let emissionReleaseTime = Number(await votingContract.emissionReleaseTime())
+        const emissionReleaseThreshold = Number(await votingContract.emissionReleaseThreshold())
+        const currentTime = Number(await votingContract.getTime())
+        emissionReleaseTime = votingContract.refreshEmissionReleaseTime(
+          emissionReleaseTime,
+          emissionReleaseThreshold,
+          currentTime
+        )
+
+        if (currentTime < emissionReleaseTime) {
+          commonStore.hideLoading()
+          const emissionReleaseTimeString = moment
+            .unix(emissionReleaseTime)
+            .utc()
+            .format('MMM Do YYYY, h:mm:ss a')
+          swal('Warning!', messages.EMISSION_RELEASE_TIME_IN_FUTURE(emissionReleaseTimeString), 'warning')
+          return
+        }
+
+        const noActiveBallotExists = await votingContract.noActiveBallotExists()
+        if (!noActiveBallotExists) {
+          commonStore.hideLoading()
+          swal('Warning!', messages.PREVIOUS_BALLOT_NOT_FINALIZED, 'warning')
+          return
+        }
+
+        const distributionThreshold = Number(await votingContract.distributionThreshold())
+
+        startTime = currentTime + constants.startTimeOffsetInMinutes * 60
+        endTime = emissionReleaseTime + distributionThreshold
+      }
+
       let methodToCreateBallot
       let contractType
       let contractInstance
@@ -259,16 +332,19 @@ export class NewBallot extends React.Component {
           contractType = 'votingToChangeProxy'
           contractInstance = contractsStore.votingToChangeProxy.votingToChangeProxyInstance
           break
+        case ballotStore.BallotType.emissionFunds:
+          methodToCreateBallot = this.createBallotForEmissionFunds
+          contractType = 'votingToManageEmissionFunds'
+          contractInstance = contractsStore.votingToManageEmissionFunds.instance
+          break
         default:
           break
       }
 
-      const startTime = this.getStartTimeUnix()
-
       sendTransactionByVotingKey(
         this.props,
         contractInstance.options.address,
-        methodToCreateBallot(startTime),
+        methodToCreateBallot(startTime, endTime),
         async tx => {
           const events = await contractInstance.getPastEvents('BallotCreated', {
             fromBlock: tx.blockNumber,
@@ -322,9 +398,23 @@ export class NewBallot extends React.Component {
         metadata = <BallotProxyMetadata />
         minThreshold = contractsStore.proxyBallotThreshold
         break
+      case ballotStore.BallotType.emissionFunds:
+        metadata = <BallotEmissionFundsMetadata />
+        minThreshold = contractsStore.emissionFundsBallotThreshold
+        break
       default:
         break
     }
+    const emissionFundsManagementBallot = contractsStore.votingToManageEmissionFunds ? (
+      <div
+        className={this.menuItemActive(ballotStore.BallotType.emissionFunds)}
+        onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.emissionFunds)}
+      >
+        Emission Funds Ballot
+      </div>
+    ) : (
+      ''
+    )
     return (
       <section className="container new">
         <form action="" className="new-form">
@@ -348,12 +438,13 @@ export class NewBallot extends React.Component {
               >
                 Modify Proxy Contract Ballot
               </div>
+              {emissionFundsManagementBallot}
             </div>
             <div className="info">
-              <p className="info-title">Information of the ballot</p>
+              <p className="info-title">Limits of the ballot</p>
               <div className="info-i">
-                Minimum {minThreshold} from {contractsStore.validatorsLength}
-                validators are required to pass the proposal<br />
+                Minimum {minThreshold} from {contractsStore.validatorsLength} validators are required to pass the&nbsp;
+                proposal<br />
               </div>
               <div className="info-i">
                 You can create {contractsStore.validatorLimits.keys} ballot(s) for keys<br />
