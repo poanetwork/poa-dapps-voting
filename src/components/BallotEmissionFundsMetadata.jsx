@@ -92,9 +92,7 @@ export class BallotEmissionFundsMetadata extends React.Component {
                 value={ballotStore.ballotEmissionFunds.receiver}
                 onChange={e => ballotStore.changeBallotMetadata(e, 'receiver', 'ballotEmissionFunds')}
               />
-              <p className="hint">
-                The address which the funds will be sent to, in case of the majority of votes.
-              </p>
+              <p className="hint">The address which the funds will be sent to, in case of the majority of votes.</p>
             </div>
           </div>
           <div className="right">
