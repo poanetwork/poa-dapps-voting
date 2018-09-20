@@ -6,7 +6,7 @@ import { BallotCard } from './BallotCard.jsx'
 @observer
 export class BallotEmissionFundsCard extends React.Component {
   render() {
-    let { id, votingState, pos, contractsStore } = this.props
+    const { id, votingState, pos, contractsStore } = this.props
     const amount = contractsStore.web3Instance.fromWei(votingState.amount, 'ether')
     return (
       <BallotCard votingType="votingToManageEmissionFunds" votingState={votingState} id={id} pos={pos}>
