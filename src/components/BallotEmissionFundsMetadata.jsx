@@ -76,7 +76,7 @@ export class BallotEmissionFundsMetadata extends React.Component {
       note = <p>To be able to create a new ballot, the previous ballot of this type must be finalized.</p>
     }
     if (contractsStore.netId === '77') {
-      explorerLink = `https://sokol-explorer.poa.network/account/${contractsStore.emissionFunds.address}`
+      explorerLink = `https://sokol.poaexplorer.com/address/search/${contractsStore.emissionFunds.address}`
     } else {
       explorerLink = `https://poaexplorer.com/address/${contractsStore.emissionFunds.address}`
     }
