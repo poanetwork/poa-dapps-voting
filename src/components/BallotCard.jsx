@@ -757,7 +757,7 @@ export class BallotCard extends React.Component {
           {children}
           <div className="ballots-about-i ballots-about-i_time">
             <div className="ballots-about-td ballots-about-td-title">
-              <p className="ballots-about-i--title">Ballot Time</p>
+              <p className="ballots-about-i--title">Ballot Time (UTC)</p>
             </div>
             <div className="ballots-about-td ballots-about-td-value">
               <p className="ballots-i--created">{this.startTime}</p>
