@@ -29,7 +29,7 @@ export class BallotEmissionFundsMetadata extends React.Component {
   @action('Get beginDateTime and endDateTime')
   getDateTimeLimits = async () => {
     const { votingToManageEmissionFunds } = this.props.contractsStore
-    const dateTimeFormat = 'MM/DD/YYYY HH:mm'
+    const dateTimeFormat = 'MM/DD/YYYY h:mm A'
 
     this.beginDateTime = '...loading date...'
     this.endDateTime = '...loading date...'
@@ -69,7 +69,8 @@ export class BallotEmissionFundsMetadata extends React.Component {
     if (this.noActiveBallotExists === true) {
       note = (
         <p>
-          The ballot can be created starting from <b>{this.beginDateTime}</b> and will end on <b>{this.endDateTime}</b>.
+          The ballot can be created starting from <b>{this.beginDateTime}</b> (local time) and will end on{' '}
+          <b>{this.endDateTime}</b> (local time).
         </p>
       )
     } else if (this.noActiveBallotExists !== true) {
