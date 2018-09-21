@@ -1,12 +1,13 @@
 import React from 'react'
 import { observable, action } from 'mobx'
 import { inject, observer } from 'mobx-react'
+import { constants } from '../constants'
 import moment from 'moment'
 
 @inject('ballotStore', 'contractsStore')
 @observer
 export class BallotEmissionFundsMetadata extends React.Component {
-  @observable emissionFundsBalance
+  @observable emissionFundsBalance = 'Loading...'
   @observable noActiveBallotExists
   @observable beginDateTime
   @observable endDateTime
@@ -14,11 +15,8 @@ export class BallotEmissionFundsMetadata extends React.Component {
   @action('Get EmissionFunds balance')
   getEmissionFundsBalance = async () => {
     const { contractsStore } = this.props
-    this.emissionFundsBalance = 'Loading...'
-    this.emissionFundsBalance = contractsStore.web3Instance.fromWei(
-      await contractsStore.emissionFunds.balance(),
-      'ether'
-    )
+    this.emissionFundsBalance =
+      contractsStore.web3Instance.fromWei(await contractsStore.emissionFunds.balance(), 'ether') + ' POA'
   }
 
   @action('Get VotingToManageEmissionFunds.noActiveBallotExists')
@@ -61,6 +59,14 @@ export class BallotEmissionFundsMetadata extends React.Component {
     this.getEmissionFundsBalance()
     this.getNoActiveBallotExists()
     this.getDateTimeLimits()
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this.getEmissionFundsBalance, constants.getTransactionReceiptInterval)
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.interval)
   }
 
   render() {
