@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import Socials from './Socials.jsx'
 
 export const Footer = ({ netId }) => {
-  const footerClassName = netId === '77' ? 'sokol' : ''
+  const isTestnet = netId === '77' || netId === '79'
+  const footerClassName = isTestnet ? 'sokol' : ''
 
   return (
     <footer className={`footer ${footerClassName}`}>
