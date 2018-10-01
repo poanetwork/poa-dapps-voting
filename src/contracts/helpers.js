@@ -31,8 +31,12 @@ function getBranch(netId) {
   switch (netId) {
     case '77':
       return 'sokol'
+    case '79':
+      return 'dai-test'
     case '99':
       return 'core'
+    case '100':
+      return 'dai'
     default:
       return 'core'
   }

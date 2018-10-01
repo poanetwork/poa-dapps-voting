@@ -10,6 +10,8 @@ import { addressesURL, wrongRepoAlert } from './helpers'
 
 let SOKOL_ADDRESSES = {}
 let CORE_ADDRESSES = {}
+let DAI_TEST_ADDRESSES = {}
+let DAI_ADDRESSES = {}
 
 async function getContractsAddresses(branch) {
   let addr = addressesURL(branch)
@@ -26,8 +28,14 @@ async function getContractsAddresses(branch) {
     case 'core':
       CORE_ADDRESSES = contracts
       break
+    case 'dai':
+      DAI_ADDRESSES = contracts
+      break
     case 'sokol':
       SOKOL_ADDRESSES = contracts
+      break
+    case 'dai-test':
+      DAI_TEST_ADDRESSES = contracts
       break
     default:
       CORE_ADDRESSES = contracts
@@ -39,8 +47,12 @@ function getAddresses(netId) {
   switch (netId) {
     case '77':
       return SOKOL_ADDRESSES
+    case '79':
+      return DAI_TEST_ADDRESSES
     case '99':
       return CORE_ADDRESSES
+    case '100':
+      return DAI_ADDRESSES
     default:
       return CORE_ADDRESSES
   }

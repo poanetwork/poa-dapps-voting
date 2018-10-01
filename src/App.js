@@ -107,9 +107,11 @@ class App extends Component {
       return this.state.navigationData[0].title
     }
   }
+
   getNetIdClass() {
     const { contractsStore } = this.props
-    return contractsStore.netId === '77' ? 'sokol' : ''
+    const netId = contractsStore.netId
+    return netId === '77' || netId === '79' ? 'sokol' : ''
   }
 
   render() {
@@ -139,7 +141,7 @@ class App extends Component {
         {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            contractsStore.netId === '77' ? 'sokol' : ''
+            contractsStore.netId === '77' || contractsStore.netId === '79' ? 'sokol' : ''
           }`}
         >
           <div className="container">
