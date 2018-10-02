@@ -16,9 +16,17 @@ let getWeb3 = () => {
           let netIdName
           console.log('netId', netId)
           switch (netId) {
+            case '100':
+              netIdName = 'Dai'
+              console.log('This is Dai', netId)
+              break
             case '99':
               netIdName = 'Core'
               console.log('This is Core', netId)
+              break
+            case '79':
+              netIdName = 'Dai-Test'
+              console.log('This is Dai-Test', netId)
               break
             case '77':
               netIdName = 'Sokol'
