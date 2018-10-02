@@ -15,6 +15,7 @@ import swal from 'sweetalert2'
 import getWeb3 from './getWeb3'
 import 'babel-polyfill'
 import createBrowserHistory from 'history/createBrowserHistory'
+import { constants } from './constants'
 
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
@@ -60,7 +61,7 @@ class AppMainRouter extends Component {
           setValidatorMetadata
         ]
 
-        if (web3Config.netId === '77') {
+        if (web3Config.netId === constants.NETID_SOKOL) {
           // if we're in Sokol
           promises.push(contractsStore.setEmissionFunds(web3Config))
           promises.push(contractsStore.setVotingToManageEmissionFunds(web3Config))
