@@ -5,6 +5,9 @@ import React, { Component } from 'react'
 import { Header, Ballots, NewBallot, Settings, Footer } from './components'
 import { Route } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
+import swal from 'sweetalert2'
+import { messages } from './messages'
+import { constants } from './constants'
 
 @inject('commonStore', 'contractsStore')
 @observer
@@ -64,6 +67,18 @@ class App extends Component {
   }
 
   onNewBallotRender = () => {
+    const { commonStore, contractsStore } = this.props
+    if (!contractsStore.web3Instance) {
+      if (!commonStore.loading) {
+        swal({
+          title: 'Error',
+          html: messages.NO_METAMASK_MSG,
+          icon: 'error',
+          type: 'error'
+        })
+      }
+      return null
+    }
     return <NewBallot />
   }
 
@@ -111,7 +126,8 @@ class App extends Component {
   getNetIdClass() {
     const { contractsStore } = this.props
     const netId = contractsStore.netId
-    return netId === '77' || netId === '79' ? 'sokol' : ''
+    const isTestnet = netId === constants.NETID_SOKOL || netId === constants.NETID_DAI_TEST
+    return isTestnet ? 'sokol' : ''
   }
 
   render() {
@@ -128,6 +144,9 @@ class App extends Component {
       ''
     )
 
+    const netId = contractsStore.netId
+    const isTestnet = netId === constants.NETID_SOKOL || netId === constants.NETID_DAI_TEST
+
     return (
       <section className={`content ${this.state.showMobileMenu ? 'content-menu-open' : ''}`}>
         {loading}
@@ -141,7 +160,7 @@ class App extends Component {
         {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            contractsStore.netId === '77' || contractsStore.netId === '79' ? 'sokol' : ''
+            isTestnet ? 'sokol' : ''
           }`}
         >
           <div className="container">

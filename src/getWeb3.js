@@ -1,4 +1,5 @@
 import { messages } from './messages'
+import { constants } from './constants'
 
 let getWeb3 = () => {
   return new Promise((resolve, reject) => {
@@ -16,19 +17,19 @@ let getWeb3 = () => {
           let netIdName
           console.log('netId', netId)
           switch (netId) {
-            case '100':
+            case constants.NETID_DAI:
               netIdName = 'Dai'
               console.log('This is Dai', netId)
               break
-            case '99':
+            case constants.NETID_CORE:
               netIdName = 'Core'
               console.log('This is Core', netId)
               break
-            case '79':
+            case constants.NETID_DAI_TEST:
               netIdName = 'Dai-Test'
               console.log('This is Dai-Test', netId)
               break
-            case '77':
+            case constants.NETID_SOKOL:
               netIdName = 'Sokol'
               console.log('This is Sokol', netId)
               break

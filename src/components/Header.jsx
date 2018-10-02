@@ -7,9 +7,10 @@ import menuOpenIconBase from '../assets/images/icons/icon-close.svg'
 import menuOpenIconSokol from '../assets/images/icons/icon-close-sokol.svg'
 import NavigationLinks from './NavigationLinks.jsx'
 import MobileMenuLinks from './MobileMenuLinks.jsx'
+import { constants } from '../constants'
 
 export const Header = ({ netId, baseRootPath, navigationData, showMobileMenu, onMenuToggle }) => {
-  const isTestnet = netId === '77' || netId === '79'
+  const isTestnet = netId === constants.NETID_SOKOL || netId === constants.NETID_DAI_TEST
   const headerClassName = isTestnet ? 'sokol' : ''
   const logoImageName = isTestnet ? logoSokol : logoBase
   const menuIcon = isTestnet ? menuIconSokol : menuIconBase
