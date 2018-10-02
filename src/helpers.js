@@ -59,7 +59,12 @@ function sendTransactionByVotingKey(props, to, data, cb, warning) {
   )
 }
 
+function isTestnet(netId) {
+  return netId === constants.NETID_SOKOL || netId === constants.NETID_DAI_TEST
+}
+
 module.exports = {
-  toAscii: toAscii,
-  sendTransactionByVotingKey: sendTransactionByVotingKey
+  toAscii,
+  sendTransactionByVotingKey,
+  isTestnet
 }

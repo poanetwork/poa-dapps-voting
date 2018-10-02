@@ -2,11 +2,10 @@ import React from 'react'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import Socials from './Socials.jsx'
-import { constants } from '../constants'
+import { isTestnet } from '../helpers'
 
 export const Footer = ({ netId }) => {
-  const isTestnet = netId === constants.NETID_SOKOL || netId === constants.NETID_DAI_TEST
-  const footerClassName = isTestnet ? 'sokol' : ''
+  const footerClassName = isTestnet(netId) ? 'sokol' : ''
 
   return (
     <footer className={`footer ${footerClassName}`}>
