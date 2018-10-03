@@ -1,4 +1,5 @@
 import React from 'react'
+import { constants } from './constants'
 
 const styles = netId => {
   const core = {
@@ -9,11 +10,11 @@ const styles = netId => {
   }
 
   switch (netId) {
-    case '77':
-    case '79':
+    case constants.NETID_SOKOL:
+    case constants.NETID_DAI_TEST:
       return sokol
-    case '99':
-    case '100':
+    case constants.NETID_CORE:
+    case constants.NETID_DAI:
       return core
     default:
       return {}

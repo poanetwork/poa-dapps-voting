@@ -1,3 +1,4 @@
+import { constants } from '../constants'
 import { addressesURL, wrongRepoAlert } from './helpers'
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
@@ -45,13 +46,13 @@ async function getContractsAddresses(branch) {
 
 function getAddresses(netId) {
   switch (netId) {
-    case '77':
+    case constants.NETID_SOKOL:
       return SOKOL_ADDRESSES
-    case '79':
+    case constants.NETID_DAI_TEST:
       return DAI_TEST_ADDRESSES
-    case '99':
+    case constants.NETID_CORE:
       return CORE_ADDRESSES
-    case '100':
+    case constants.NETID_DAI:
       return DAI_ADDRESSES
     default:
       return CORE_ADDRESSES
@@ -59,6 +60,6 @@ function getAddresses(netId) {
 }
 
 module.exports = {
-  getContractsAddresses: getContractsAddresses,
+  getContractsAddresses,
   networkAddresses: getAddresses
 }

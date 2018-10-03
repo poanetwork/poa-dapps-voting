@@ -5,6 +5,9 @@ import React, { Component } from 'react'
 import { Header, Ballots, NewBallot, Settings, Footer } from './components'
 import { Route } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
+import swal from 'sweetalert2'
+import { messages } from './messages'
+import { isTestnet } from './helpers'
 
 @inject('commonStore', 'contractsStore')
 @observer
@@ -64,6 +67,18 @@ class App extends Component {
   }
 
   onNewBallotRender = () => {
+    const { commonStore, contractsStore } = this.props
+    if (!contractsStore.web3Instance) {
+      if (!commonStore.loading) {
+        swal({
+          title: 'Error',
+          html: messages.NO_METAMASK_MSG,
+          icon: 'error',
+          type: 'error'
+        })
+      }
+      return null
+    }
     return <NewBallot />
   }
 
@@ -110,8 +125,7 @@ class App extends Component {
 
   getNetIdClass() {
     const { contractsStore } = this.props
-    const netId = contractsStore.netId
-    return netId === '77' || netId === '79' ? 'sokol' : ''
+    return isTestnet(contractsStore.netId) ? 'sokol' : ''
   }
 
   render() {
@@ -141,7 +155,7 @@ class App extends Component {
         {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            contractsStore.netId === '77' || contractsStore.netId === '79' ? 'sokol' : ''
+            isTestnet(contractsStore.netId) ? 'sokol' : ''
           }`}
         >
           <div className="container">

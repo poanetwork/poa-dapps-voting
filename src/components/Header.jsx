@@ -7,13 +7,14 @@ import menuOpenIconBase from '../assets/images/icons/icon-close.svg'
 import menuOpenIconSokol from '../assets/images/icons/icon-close-sokol.svg'
 import NavigationLinks from './NavigationLinks.jsx'
 import MobileMenuLinks from './MobileMenuLinks.jsx'
+import { isTestnet } from '../helpers'
 
 export const Header = ({ netId, baseRootPath, navigationData, showMobileMenu, onMenuToggle }) => {
-  const isTestnet = netId === '77' || netId === '79'
-  const headerClassName = isTestnet ? 'sokol' : ''
-  const logoImageName = isTestnet ? logoSokol : logoBase
-  const menuIcon = isTestnet ? menuIconSokol : menuIconBase
-  const menuOpenIcon = isTestnet ? menuOpenIconSokol : menuOpenIconBase
+  const thisIsTestnet = isTestnet(netId)
+  const headerClassName = thisIsTestnet ? 'sokol' : ''
+  const logoImageName = thisIsTestnet ? logoSokol : logoBase
+  const menuIcon = thisIsTestnet ? menuIconSokol : menuIconBase
+  const menuOpenIcon = thisIsTestnet ? menuOpenIconSokol : menuOpenIconBase
 
   return (
     <header className={`header ${headerClassName}`}>
