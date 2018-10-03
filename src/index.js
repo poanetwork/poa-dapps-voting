@@ -36,8 +36,10 @@ class AppMainRouter extends Component {
       .then(async web3Config => {
         let getSokolContractsAddresses = getContractsAddresses('sokol')
         let getCoreContractsAddresses = getContractsAddresses('core')
+        let getDaiTestContractsAddresses = getContractsAddresses('dai-test')
+        // TODO: call `getContractsAddresses` only for the branch corresponding to the current `netId`
 
-        await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses])
+        await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses, getDaiTestContractsAddresses])
 
         contractsStore.setWeb3Instance(web3Config)
 
