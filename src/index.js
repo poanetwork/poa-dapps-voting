@@ -11,6 +11,7 @@ import ballotStore from './stores/BallotStore'
 import ballotsStore from './stores/BallotsStore'
 import contractsStore from './stores/ContractsStore'
 import { getContractsAddresses } from './contracts/addresses'
+import { getBranch } from './contracts/helpers'
 import swal from 'sweetalert2'
 import getWeb3 from './getWeb3'
 import 'babel-polyfill'
@@ -34,25 +35,20 @@ class AppMainRouter extends Component {
 
     getWeb3()
       .then(async web3Config => {
-        let getSokolContractsAddresses = getContractsAddresses('sokol')
-        let getCoreContractsAddresses = getContractsAddresses('core')
-        let getDaiTestContractsAddresses = getContractsAddresses('dai-test')
-        // TODO: call `getContractsAddresses` only for the branch corresponding to the current `netId`
-
-        await Promise.all([getSokolContractsAddresses, getCoreContractsAddresses, getDaiTestContractsAddresses])
+        await getContractsAddresses(getBranch(web3Config.netId))
 
         contractsStore.setWeb3Instance(web3Config)
 
-        let setPoaConsensus = contractsStore.setPoaConsensus(web3Config)
-        let setBallotsStorage = contractsStore.setBallotsStorage(web3Config)
-        let setKeysManager = contractsStore.setKeysManager(web3Config)
-        let setProxyStorage = contractsStore.setProxyStorage(web3Config)
-        let setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config)
-        let setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config)
-        let setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
-        let setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
+        const setPoaConsensus = contractsStore.setPoaConsensus(web3Config)
+        const setBallotsStorage = contractsStore.setBallotsStorage(web3Config)
+        const setKeysManager = contractsStore.setKeysManager(web3Config)
+        const setProxyStorage = contractsStore.setProxyStorage(web3Config)
+        const setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config)
+        const setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config)
+        const setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
+        const setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
 
-        let promises = [
+        const promises = [
           setPoaConsensus,
           setBallotsStorage,
           setKeysManager,
