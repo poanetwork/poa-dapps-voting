@@ -15,6 +15,7 @@ messages.MINING_KEY_IS_NOT_ADDRESS_MSG = "Ballot miningKey isn't address"
 messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG = "Proposed address isn't address"
 messages.END_TIME_SHOULD_BE_GREATER_THAN_NOW_MSG = 'Ballot end time should be greater than now'
 messages.BALLOT_TYPE_IS_EMPTY_MSG = 'Ballot type is empty'
+messages.USER_DENIED_ACCOUNT_ACCESS = 'You have denied access to your accounts'
 messages.NO_METAMASK_MSG = `You haven't chosen any account in MetaMask.
 Please, choose your voting key in MetaMask and reload the page.
 Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`
