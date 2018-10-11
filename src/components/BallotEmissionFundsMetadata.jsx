@@ -82,7 +82,7 @@ export class BallotEmissionFundsMetadata extends React.Component {
     } else if (this.noActiveBallotExists !== true) {
       note = <p>To be able to create a new ballot, the previous ballot of this type must be finalized.</p>
     }
-    if (contractsStore.netId === constants.NETID_SOKOL) {
+    if (constants.NETWORKS[contractsStore.netId].NAME.toLowerCase() === 'sokol') {
       explorerLink = `https://sokol.poaexplorer.com/address/search/${contractsStore.emissionFunds.address}`
     } else {
       explorerLink = `https://poaexplorer.com/address/${contractsStore.emissionFunds.address}`

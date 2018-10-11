@@ -1,16 +1,18 @@
 import Web3 from 'web3'
 import { networkAddresses } from './addresses'
 import helpers from './helpers'
+import { constants } from '../constants'
 
 export default class VotingToChangeMinThreshold {
   async init({ web3, netId }) {
-    const { VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS } = networkAddresses(netId)
+    const { VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS } = networkAddresses()
     console.log('VotingToChangeMinThreshold address', VOTING_TO_CHANGE_MIN_THRESHOLD_ADDRESS)
     const web3_10 = new Web3(web3.currentProvider)
 
-    const branch = helpers.getBranch(netId)
-
-    const votingToChangeMinThresholdABI = await helpers.getABI(branch, 'VotingToChangeMinThreshold')
+    const votingToChangeMinThresholdABI = await helpers.getABI(
+      constants.NETWORKS[netId].BRANCH,
+      'VotingToChangeMinThreshold'
+    )
 
     this.votingToChangeMinThresholdInstance = new web3_10.eth.Contract(
       votingToChangeMinThresholdABI,

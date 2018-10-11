@@ -1,16 +1,15 @@
 import Web3 from 'web3'
 import { networkAddresses } from './addresses'
 import helpers from './helpers'
+import { constants } from '../constants'
 
 export default class VotingToChangeProxy {
   async init({ web3, netId }) {
-    const { VOTING_TO_CHANGE_PROXY_ADDRESS } = networkAddresses(netId)
+    const { VOTING_TO_CHANGE_PROXY_ADDRESS } = networkAddresses()
     console.log('VotingToChangeProxy address', VOTING_TO_CHANGE_PROXY_ADDRESS)
     const web3_10 = new Web3(web3.currentProvider)
 
-    const branch = helpers.getBranch(netId)
-
-    const votingToChangeProxyABI = await helpers.getABI(branch, 'VotingToChangeProxyAddress')
+    const votingToChangeProxyABI = await helpers.getABI(constants.NETWORKS[netId].BRANCH, 'VotingToChangeProxyAddress')
 
     this.votingToChangeProxyInstance = new web3_10.eth.Contract(votingToChangeProxyABI, VOTING_TO_CHANGE_PROXY_ADDRESS)
     this.gasPrice = web3_10.utils.toWei('1', 'gwei')
