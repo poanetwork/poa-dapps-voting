@@ -1,4 +1,3 @@
-import Web3 from 'web3'
 import swal from 'sweetalert2'
 import { constants } from './constants'
 
@@ -23,7 +22,7 @@ function sleep(ms) {
 
 function sendTransactionByVotingKey(props, to, data, cb, warning) {
   const { commonStore, contractsStore } = props
-  const web3 = new Web3(contractsStore.web3Instance.currentProvider)
+  const web3 = contractsStore.web3Instance
 
   web3.eth.sendTransaction(
     {

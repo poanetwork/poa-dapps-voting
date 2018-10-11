@@ -100,7 +100,7 @@ export class NewBallot extends React.Component {
         }
       }
 
-      let isAffectedKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.affectedKey)
+      let isAffectedKeyAddress = contractsStore.web3Instance.utils.isAddress(ballotStore.ballotKeys.affectedKey)
 
       if (!isAffectedKeyAddress) {
         swal('Warning!', messages.AFFECTED_KEY_IS_NOT_ADDRESS_MSG, 'warning')
@@ -108,7 +108,7 @@ export class NewBallot extends React.Component {
         return false
       }
 
-      let isMiningKeyAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotKeys.miningKey.value)
+      let isMiningKeyAddress = contractsStore.web3Instance.utils.isAddress(ballotStore.ballotKeys.miningKey.value)
       if (!isMiningKeyAddress) {
         swal('Warning!', messages.MINING_KEY_IS_NOT_ADDRESS_MSG, 'warning')
         commonStore.hideLoading()
@@ -135,7 +135,7 @@ export class NewBallot extends React.Component {
         }
       }
 
-      const isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotProxy.proposedAddress)
+      const isAddress = contractsStore.web3Instance.utils.isAddress(ballotStore.ballotProxy.proposedAddress)
 
       if (!isAddress) {
         swal('Warning!', messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, 'warning')
@@ -151,7 +151,7 @@ export class NewBallot extends React.Component {
         return false
       }
 
-      const isAddress = contractsStore.web3Instance.isAddress(ballotStore.ballotEmissionFunds.receiver)
+      const isAddress = contractsStore.web3Instance.utils.isAddress(ballotStore.ballotEmissionFunds.receiver)
 
       if (!isAddress) {
         swal('Warning!', messages.PROPOSED_ADDRESS_IS_NOT_ADDRESS_MSG, 'warning')
@@ -320,17 +320,17 @@ export class NewBallot extends React.Component {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys
           contractType = 'votingToChangeKeys'
-          contractInstance = contractsStore.votingToChangeKeys.votingToChangeKeysInstance
+          contractInstance = contractsStore.votingToChangeKeys.instance
           break
         case ballotStore.BallotType.minThreshold:
           methodToCreateBallot = this.createBallotForMinThreshold
           contractType = 'votingToChangeMinThreshold'
-          contractInstance = contractsStore.votingToChangeMinThreshold.votingToChangeMinThresholdInstance
+          contractInstance = contractsStore.votingToChangeMinThreshold.instance
           break
         case ballotStore.BallotType.proxy:
           methodToCreateBallot = this.createBallotForProxy
           contractType = 'votingToChangeProxy'
-          contractInstance = contractsStore.votingToChangeProxy.votingToChangeProxyInstance
+          contractInstance = contractsStore.votingToChangeProxy.instance
           break
         case ballotStore.BallotType.emissionFunds:
           methodToCreateBallot = this.createBallotForEmissionFunds

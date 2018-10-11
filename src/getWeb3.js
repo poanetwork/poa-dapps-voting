@@ -1,3 +1,4 @@
+import Web3 from 'web3'
 import { messages } from './messages'
 import { constants } from './constants'
 
@@ -9,7 +10,7 @@ let getWeb3 = () => {
 
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (window.ethereum) {
-        web3 = new window.Web3(window.ethereum)
+        web3 = new Web3(window.ethereum)
         console.log('Injected web3 detected.')
         try {
           await window.ethereum.enable()
@@ -19,7 +20,7 @@ let getWeb3 = () => {
           return
         }
       } else if (typeof window.web3 !== 'undefined') {
-        web3 = new window.Web3(window.web3.currentProvider)
+        web3 = new Web3(window.web3.currentProvider)
         console.log('Injected web3 detected.')
       } else {
         console.error('Metamask not found')
@@ -27,40 +28,41 @@ let getWeb3 = () => {
         return
       }
 
-      web3.version.getNetwork((err, netId) => {
-        let netIdName
-        let errorMsg = null
+      const netId = await web3.eth.net.getId()
+      console.log('netId', netId)
 
-        console.log('netId', netId)
+      let netIdName
+      let errorMsg = null
 
-        if (netId in constants.NETWORKS) {
-          netIdName = constants.NETWORKS[netId].NAME
-          console.log(`This is ${netIdName}`)
-        } else {
-          netIdName = 'ERROR'
-          errorMsg = messages.WRONG_NETWORK_MSG
-          console.log('This is an unknown network.')
-        }
+      if (netId in constants.NETWORKS) {
+        netIdName = constants.NETWORKS[netId].NAME
+        console.log(`This is ${netIdName}`)
+      } else {
+        netIdName = 'ERROR'
+        errorMsg = messages.WRONG_NETWORK_MSG
+        console.log('This is an unknown network.')
+      }
 
-        document.title = `${netIdName} - POA Network Governance DApp`
+      document.title = `${netIdName} - POA Network Governance DApp`
 
-        if (errorMsg !== null) {
-          reject({ message: errorMsg })
-          return
-        }
+      if (errorMsg !== null) {
+        reject({ message: errorMsg })
+        return
+      }
 
-        var defaultAccount = web3.eth.defaultAccount || null
-        if (defaultAccount === null) {
-          reject({ message: messages.NO_METAMASK_MSG })
-          return
-        }
+      const accounts = await web3.eth.getAccounts()
 
-        resolve({
-          web3Instance: web3,
-          netIdName,
-          netId,
-          defaultAccount
-        })
+      var defaultAccount = accounts[0] || null
+      if (defaultAccount === null) {
+        reject({ message: messages.NO_METAMASK_MSG })
+        return
+      }
+
+      resolve({
+        web3Instance: web3,
+        netIdName,
+        netId,
+        defaultAccount
       })
     })
   })
