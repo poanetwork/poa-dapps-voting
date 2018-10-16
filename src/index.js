@@ -11,7 +11,6 @@ import ballotStore from './stores/BallotStore'
 import ballotsStore from './stores/BallotsStore'
 import contractsStore from './stores/ContractsStore'
 import { getContractsAddresses } from './contracts/addresses'
-import { getBranch } from './contracts/helpers'
 import swal from 'sweetalert2'
 import getWeb3 from './getWeb3'
 import 'babel-polyfill'
@@ -35,7 +34,7 @@ class AppMainRouter extends Component {
 
     getWeb3()
       .then(async web3Config => {
-        await getContractsAddresses(getBranch(web3Config.netId))
+        await getContractsAddresses(constants.NETWORKS[web3Config.netId].BRANCH)
 
         contractsStore.setWeb3Instance(web3Config)
 
@@ -48,7 +47,7 @@ class AppMainRouter extends Component {
         const setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
         const setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
 
-        const promises = [
+        let promises = [
           setPoaConsensus,
           setBallotsStorage,
           setKeysManager,
@@ -59,8 +58,9 @@ class AppMainRouter extends Component {
           setValidatorMetadata
         ]
 
-        if (web3Config.netId === constants.NETID_SOKOL) {
-          // if we're in Sokol
+        const networkName = constants.NETWORKS[web3Config.netId].NAME.toLowerCase()
+        if (networkName === 'core' || networkName === 'sokol') {
+          // if we're in Core or Sokol
           promises.push(contractsStore.setEmissionFunds(web3Config))
           promises.push(contractsStore.setVotingToManageEmissionFunds(web3Config))
         }

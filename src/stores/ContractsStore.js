@@ -61,13 +61,13 @@ class ContractsStore {
 
   @action('Get keys ballot threshold')
   getKeysBallotThreshold = async () => {
-    this.keysBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getBallotThreshold(1).call()
+    this.keysBallotThreshold = await this.ballotsStorage.instance.methods.getBallotThreshold(1).call()
     this.minThresholdBallotThreshold = this.keysBallotThreshold
   }
 
   @action('Get proxy ballot threshold')
   getProxyBallotThreshold = async () => {
-    this.proxyBallotThreshold = await this.ballotsStorage.ballotsStorageInstance.methods.getProxyThreshold().call()
+    this.proxyBallotThreshold = await this.ballotsStorage.instance.methods.getProxyThreshold().call()
     this.emissionFundsBallotThreshold = this.proxyBallotThreshold
   }
 
@@ -176,7 +176,7 @@ class ContractsStore {
 
   @action('Get validators length')
   getValidatorsLength = async () => {
-    this.validatorsLength = await this.poaConsensus.poaInstance.methods.getCurrentValidatorsLength().call()
+    this.validatorsLength = await this.poaConsensus.instance.methods.getCurrentValidatorsLength().call()
   }
 
   @action('Set voting key')
@@ -389,9 +389,7 @@ class ContractsStore {
   @action
   async getBallotsLimits() {
     if (this.web3Instance && this.netId) {
-      const limitPerValidator = await this.ballotsStorage.ballotsStorageInstance.methods
-        .getBallotLimitPerValidator()
-        .call()
+      const limitPerValidator = await this.ballotsStorage.instance.methods.getBallotLimitPerValidator().call()
 
       let getKeysLimit = await this.votingToChangeKeys.getBallotLimit(this.miningKey, limitPerValidator)
       let getMinThresholdLimit = await this.votingToChangeMinThreshold.getBallotLimit(this.miningKey, limitPerValidator)

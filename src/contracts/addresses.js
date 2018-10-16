@@ -1,4 +1,3 @@
-import { constants } from '../constants'
 import { addressesURL, wrongRepoAlert } from './helpers'
 // const local = {
 //     VOTING_TO_CHANGE_KEYS_ADDRESS: '0xecdbe3937cf6ff27f70480855cfe03254f915b48',
@@ -9,13 +8,10 @@ import { addressesURL, wrongRepoAlert } from './helpers'
 //     POA_ADDRESS: '0xf472e0e43570b9afaab67089615080cf7c20018d',
 // }
 
-let SOKOL_ADDRESSES = {}
-let CORE_ADDRESSES = {}
-let DAI_TEST_ADDRESSES = {}
-let DAI_ADDRESSES = {}
+let ADDRESSES = {}
 
 async function getContractsAddresses(branch) {
-  let addr = addressesURL(branch)
+  const addr = addressesURL(branch)
   let response
   try {
     response = await fetch(addr)
@@ -23,43 +19,16 @@ async function getContractsAddresses(branch) {
     return wrongRepoAlert(addr)
   }
 
-  let contracts = await response.json()
+  const contracts = await response.json()
 
-  switch (branch) {
-    case 'core':
-      CORE_ADDRESSES = contracts
-      break
-    case 'dai':
-      DAI_ADDRESSES = contracts
-      break
-    case 'sokol':
-      SOKOL_ADDRESSES = contracts
-      break
-    case 'dai-test':
-      DAI_TEST_ADDRESSES = contracts
-      break
-    default:
-      CORE_ADDRESSES = contracts
-      break
-  }
+  ADDRESSES = contracts
 }
 
-function getAddresses(netId) {
-  switch (netId) {
-    case constants.NETID_SOKOL:
-      return SOKOL_ADDRESSES
-    case constants.NETID_DAI_TEST:
-      return DAI_TEST_ADDRESSES
-    case constants.NETID_CORE:
-      return CORE_ADDRESSES
-    case constants.NETID_DAI:
-      return DAI_ADDRESSES
-    default:
-      return CORE_ADDRESSES
-  }
+function networkAddresses() {
+  return ADDRESSES
 }
 
 module.exports = {
   getContractsAddresses,
-  networkAddresses: getAddresses
+  networkAddresses
 }

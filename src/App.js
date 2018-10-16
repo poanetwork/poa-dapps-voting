@@ -7,7 +7,7 @@ import { Route } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import swal from 'sweetalert2'
 import { messages } from './messages'
-import { isTestnet } from './helpers'
+import { constants } from './constants'
 
 @inject('commonStore', 'contractsStore')
 @observer
@@ -124,8 +124,8 @@ class App extends Component {
   }
 
   getNetIdClass() {
-    const { contractsStore } = this.props
-    return isTestnet(contractsStore.netId) ? 'sokol' : ''
+    const { netId } = this.props.contractsStore
+    return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? 'sokol' : ''
   }
 
   render() {
@@ -142,6 +142,8 @@ class App extends Component {
       ''
     )
 
+    const isTestnet = contractsStore.netId in constants.NETWORKS && constants.NETWORKS[contractsStore.netId].TESTNET
+
     return (
       <section className={`content ${this.state.showMobileMenu ? 'content-menu-open' : ''}`}>
         {loading}
@@ -155,7 +157,7 @@ class App extends Component {
         {search}
         <div
           className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            isTestnet(contractsStore.netId) ? 'sokol' : ''
+            isTestnet ? 'sokol' : ''
           }`}
         >
           <div className="container">

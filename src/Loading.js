@@ -9,16 +9,11 @@ const styles = netId => {
     backgroundColor: 'rgba(47, 109, 99, 0.8)'
   }
 
-  switch (netId) {
-    case constants.NETID_SOKOL:
-    case constants.NETID_DAI_TEST:
-      return sokol
-    case constants.NETID_CORE:
-    case constants.NETID_DAI:
-      return core
-    default:
-      return {}
+  if (netId in constants.NETWORKS) {
+    return constants.NETWORKS[netId].TESTNET ? sokol : core
   }
+
+  return core
 }
 const Loading = ({ netId }) => (
   <div className="loading-container" style={styles(netId)}>
