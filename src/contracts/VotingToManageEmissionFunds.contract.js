@@ -69,6 +69,10 @@ export default class VotingToManageEmissionFunds {
     return this.instance.methods.getBallotInfo(_id).call()
   }
 
+  getQuorumState(_id) {
+    return this.instance.methods.getQuorumState(_id).call()
+  }
+
   getTime() {
     return this.instance.methods.getTime().call()
   }

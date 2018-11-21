@@ -52,6 +52,7 @@ export class BallotCard extends React.Component {
   @observable canBeFinalized
   @observable hasAlreadyVoted
   @observable memo
+  @observable quorumState
 
   @computed
   get cancelOrFinalizeButtonDisplayName() {
@@ -81,7 +82,19 @@ export class BallotCard extends React.Component {
 
   @computed
   get cancelOrFinalizeDescription() {
-    if (this.isFinalized || this.isCanceled) {
+    if (this.isFinalized) {
+      if (this.props.votingType === 'votingToManageEmissionFunds') {
+        switch (Number(this.quorumState)) {
+          case 2:
+            return 'The funds were sent to the proposed receiver address.'
+          case 3:
+            return 'The funds were burnt.'
+          case 4:
+            return 'The funds were frozen.'
+        }
+      }
+      return ''
+    } else if (this.isCanceled) {
       return ''
     } else if (this.timeToCancel.val > 0) {
       return `You can cancel this ballot within ${this.timeToCancel.displayValue}`
@@ -264,6 +277,11 @@ export class BallotCard extends React.Component {
     const { contractsStore, id, votingType } = this.props
     let _canBeFinalizedNow = await this.repeatGetProperty(contractsStore, votingType, id, 'canBeFinalizedNow', 0)
     this.canBeFinalized = _canBeFinalizedNow
+  }
+
+  getQuorumState = async () => {
+    const { contractsStore, id, votingType } = this.props
+    this.quorumState = await this.repeatGetProperty(contractsStore, votingType, id, 'getQuorumState', 0)
   }
 
   vote = async ({ choice }) => {
@@ -519,7 +537,7 @@ export class BallotCard extends React.Component {
 
   constructor(props) {
     super(props)
-    const { votingState, contractsStore } = this.props
+    const { votingState, contractsStore, votingType } = this.props
     // getTimes
     if (
       votingState.hasOwnProperty('creationTime') &&
@@ -569,6 +587,10 @@ export class BallotCard extends React.Component {
       this.hasAlreadyVoted = votingState.alreadyVoted
     } else {
       this.getHasAlreadyVoted()
+    }
+    if (votingType === 'votingToManageEmissionFunds') {
+      // getQuorumState
+      this.getQuorumState()
     }
     this.state = {
       detailsCollapsed: this.memo.length > maxDetailsLength
