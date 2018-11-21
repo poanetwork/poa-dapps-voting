@@ -237,13 +237,14 @@ export class NewBallot extends React.Component {
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore, ballotsStore } = this.props
     const { push } = this.props.routing
-    commonStore.showLoading()
-    const isValidVotingKey = contractsStore.isValidVotingKey
-    if (!isValidVotingKey) {
-      commonStore.hideLoading()
+    if (!contractsStore.votingKey) {
+      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
+      return
+    } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
       return
     }
+    commonStore.showLoading()
     const isFormValid = this.checkValidation()
     if (isFormValid) {
       if (ballotStore.ballotType === ballotStore.BallotType.keys) {
