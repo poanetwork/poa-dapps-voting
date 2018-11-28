@@ -295,7 +295,10 @@ export class BallotCard extends React.Component {
     }
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
-    if (!contractsStore.isValidVotingKey) {
+    if (!contractsStore.votingKey) {
+      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
+      return
+    } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
       return
     }
@@ -431,7 +434,10 @@ export class BallotCard extends React.Component {
     }
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
-    if (!contractsStore.isValidVotingKey) {
+    if (!contractsStore.votingKey) {
+      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
+      return
+    } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
       return
     }
