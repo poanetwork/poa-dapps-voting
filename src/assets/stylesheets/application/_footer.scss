@@ -1,13 +1,13 @@
 .footer {
   @extend %full-width;
 
-  background-color: $primary-color;
+  background-color: $poa-purple;
   bottom: 0;
   padding: 18px 0;
   position: absolute;
 
   &.sokol {
-    background-color: $primary-color-sokol;
+    background-color: $sokol-cyan;
   }
 
   .container {
@@ -16,7 +16,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
 
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       flex-direction: column;
     }
   }
@@ -24,7 +24,7 @@
   .socials {
     order: 2;
 
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       margin-top: 15px;
       order: 1;
     }
@@ -52,7 +52,7 @@
     order: 1;
     text-align: center;
 
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       line-height: normal;
       margin-top: 15px;
       order: 2;

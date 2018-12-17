@@ -1,0 +1,69 @@
+$base-images-path: '../images';
+
+// brand colors
+$poa-purple: #5c34a2;
+$poa-purple-darker: #45277a;
+$poa-freeze-color: #50bbda;
+$poa-danger-color: #f21b57;
+$poa-success-color: #60db97;
+
+$sokol-cyan: #6ac9b9;
+$sokol-cyan-sarker: #41b19e;
+$sokol-freeze-color: #50bbda;
+$sokol-danger-color: #f24c67;
+$sokol-success-color: #6ac9b9;
+
+$xdai-orange: #fec042;
+$xdai-gray: #f2f6f8;
+
+// colors
+$gray-text-color: #333;
+
+// typography
+$base-text-color: #000;
+$base-font-size: 14px;
+
+// borders
+$base-border-color: #e4e4e4;
+
+// layout
+$container-max-width: 1000px;
+$container-horizontal-padding-desktop: 20px;
+$container-horizontal-padding-tablet: 20px;
+$container-horizontal-padding-mobile: 10px;
+
+// widths
+$mobile-width: 767px; // TODO: Delete this when possible...
+
+$breakpoint-xs: 320px;
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1024px;
+$breakpoint-xxl: 1280px;
+$breakpoint-xxxl: 1366px;
+
+// header
+$header-links-container-height: 70px;
+$header-height_mobile: 70px;
+
+// search
+$search-container-height: 50px;
+
+// mobile menu
+$header-mobile-menu-container-height: 220px;
+
+// footer
+$footer-height: 60px;
+$footer-height_desktop: 66px;
+$footer-height_mobile: 132px;
+
+// misc
+$desktop-indent: 30px;
+$tablet-indent: 15px;
+$mobile-indent: 10px;
+
+// forms
+$input-height: 40px;
+$input-color: #202d3c;
+

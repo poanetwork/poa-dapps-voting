@@ -17,7 +17,7 @@
     }
   }
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     padding-top: $tablet-indent;
   }
 

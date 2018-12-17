@@ -18,11 +18,11 @@ body {
   color: #333;
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
-  padding-bottom: $footer-height_desktop;
+  // padding-bottom: $footer-height_desktop;
   position: relative;
   width: 100%;
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     padding-bottom: $footer-height_mobile;
   }
   @media screen and (max-width: $mobile-width) {
@@ -31,13 +31,13 @@ body {
 }
 
 a {
-  color: $primary-color;
+  color: $poa-purple;
   text-decoration: none;
   &:hover {
     text-decoration: underline;
   }
   .sokol {
-    color: $primary-color-sokol;
+    color: $sokol-cyan;
   }
 }
 
@@ -81,11 +81,11 @@ hr {
 }
 
 .container {
-  width: $container-width;
+  width: $container-max-width;
   margin: 0 auto;
   box-sizing: border-box;
 
-  @media screen and (max-width: $container-width) {
+  @media screen and (max-width: $container-max-width) {
     width: 100%;
     padding: 0 10px;
   }
@@ -98,7 +98,7 @@ hr {
   font-size: 30px;
   font-weight: normal;
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     font-size: 28px;
   }
 

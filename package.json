@@ -64,7 +64,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build -o origin",
-    "build-css": "node-sass-chokidar src/assets/App.scss -o src/assets --output-style=compressed",
+    "build-css": "node-sass-chokidar src/assets/stylesheets/index.scss -o src/assets/stylesheets/ --output-style=compressed",
     "watch-css": "nodemon -e scss -x \"npm run build-css\"",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",

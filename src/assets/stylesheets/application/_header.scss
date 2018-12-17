@@ -1,5 +1,5 @@
 .header {
-  background-color: $primary-color;
+  background-color: $poa-purple;
   position: relative;
   width: 100%;
   z-index: 9999;
@@ -25,7 +25,7 @@
   }
 
   &.sokol {
-    background-color: $primary-color-sokol;
+    background-color: $sokol-cyan;
   }
 
   // logos
@@ -46,7 +46,7 @@
       display: none;
     }
 
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       justify-content: flex-end;
       width: auto;
     }
@@ -138,7 +138,7 @@
 
   .header-mobile-menu-container {
     @media screen and (max-width: $mobile-width) {
-      background-color: $primary-color-darker;
+      background-color: $poa-purple-darker;
       height: $header-mobile-menu-container-height;
     }
   }
@@ -146,7 +146,7 @@
   &.sokol {
     .header-mobile-menu-container {
       @media screen and (max-width: $mobile-width) {
-        background-color: $primary-color-darker-sokol;
+        background-color: $sokol-cyan-sarker;
       }
     }
   }
@@ -178,7 +178,7 @@
     .btn.btn-new-ballot {
       background-color: #fff;
       background-image: url('#{ $base-images-path }/icons/icon-add-sokol.svg');
-      color: $primary-color-sokol;
+      color: $sokol-cyan;
       &:hover {
         opacity: 0.9;
       }

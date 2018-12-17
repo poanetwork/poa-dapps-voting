@@ -1,0 +1,9 @@
+@mixin brand-icon-styles() {
+    align-items: center;
+    border-radius: 3px;
+    display: flex;
+    font-size: 0;
+    justify-content: center;
+    line-height: 0;
+    transition: background-color 0.25s ease-out;
+}

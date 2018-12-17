@@ -1,13 +1,13 @@
-//import DevTools from 'mobx-react-devtools'
-import './assets/App.css'
-// import Loading from './components/Loading'
 import React, { Component } from 'react'
+import swal from 'sweetalert2'
 import { Header, Ballots, NewBallot, Settings, Footer, Loading } from './components'
 import { Route } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
-import swal from 'sweetalert2'
-import { messages } from './utils/messages'
 import { constants } from './utils/constants'
+import { inject, observer } from 'mobx-react'
+import { messages } from './utils/messages'
+import { getNetworkBranch } from './utils/utils'
+
+import './assets/stylesheets/index.css'
 
 @inject('commonStore', 'contractsStore')
 @observer
@@ -130,6 +130,7 @@ class App extends Component {
 
   render() {
     const { commonStore, contractsStore } = this.props
+    const networkBranch = contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
     const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
 
     const search = this.shouldShowSearch() ? (
@@ -138,9 +139,7 @@ class App extends Component {
           <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
         </div>
       </div>
-    ) : (
-      ''
-    )
+    ) : null
 
     const isTestnet = contractsStore.netId in constants.NETWORKS && constants.NETWORKS[contractsStore.netId].TESTNET
 
@@ -172,7 +171,7 @@ class App extends Component {
           <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender} />
           {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
         </div>
-        <Footer netId={contractsStore.netId} />
+        <Footer networkBranch={networkBranch} />
       </section>
     )
   }

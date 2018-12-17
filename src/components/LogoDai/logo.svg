@@ -1,0 +1,94 @@
+<svg
+    height="52"
+    width="172"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <defs>
+        <filter
+            id="a"
+            width="44"
+            height="52"
+            x="0"
+            y="0"
+            filterUnits="userSpaceOnUse"
+        >
+            <feOffset
+                dy="3"
+                in="SourceAlpha"
+            />
+            <feGaussianBlur
+                result="blurOut"
+                stdDeviation="2.449"
+            />
+            <feFlood
+                flood-color="#D2D5D7"
+                result="floodOut"
+            />
+            <feComposite
+                in="floodOut"
+                in2="blurOut"
+                operator="atop"
+            />
+            <feComponentTransfer>
+                <feFuncA
+                    slope=".5"
+                    type="linear"
+                />
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+        <linearGradient
+            id="b"
+            x1="0%"
+            x2="0%"
+            y1="100%"
+            y2="0%"
+        >
+            <stop
+                offset="0%"
+                stop-color="#FFAD45"
+            />
+            <stop
+                offset="100%"
+                stop-color="#FFD342"
+            />
+        </linearGradient>
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Nunito:400');
+            text {
+                font-family: "Nunito", sans-serif;
+            }
+        </style>
+    </defs>
+    <path
+        fill="#FFF"
+        fill-rule="evenodd"
+        d="M17.771 40.253c-3.368-2.101-9.884-6.163-10.841-6.762C5 32.154 5 30.021 5 30.021l.001-16.044S5 11.656 6.947 10.492l10.824-6.751c3.729-2.324 3.729-2.324 7.464.004l10.808 6.741c1.957 1.23 1.956 3.487 1.956 3.487v16.049s.001 2.235-1.956 3.485L25.232 40.25c-3.732 2.33-3.732 2.33-7.461.003z"
+        filter="url(#a)"
+    />
+    <path
+        fill="#FFF"
+        fill-rule="evenodd"
+        d="M30.055 13.884l-6.233 8.128 6.229 8.122h-4.644L21.5 25.039l-3.907 5.095h-4.644l6.229-8.122-6.233-8.128h4.644l3.911 5.1 3.911-5.1h4.644z"
+    />
+    <path
+        fill="url(#b)"
+        d="M30.055 13.884l-6.233 8.128 6.229 8.122h-4.644L21.5 25.039l-3.907 5.095h-4.644l6.229-8.122-6.233-8.128h4.644l3.911 5.1 3.911-5.1h4.644z"
+    />
+    <text
+        fill="#333"
+        font-family="Nunito"
+        font-size="14"
+        font-weight="400"
+        x="48"
+        y="26"
+    >Governance&#32;App</text>
+    <path
+        fill="#333"
+        fill-rule="evenodd"
+        d="M170 9a1 1 0 0 1 1 1v24a1 1 0 0 1-2 0V10a1 1 0 0 1 1-1z"
+    />
+</svg>

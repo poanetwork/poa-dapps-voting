@@ -28,10 +28,10 @@ textarea {
 }
 
 select {
-  @include image-2x('./images/select@2x.png', 8px, 4px);
+  @include image-2x('#{ $base-images-path }/select@2x.png', 8px, 4px);
   @extend %form-el;
   appearance: none;
-  background-image: url(./images/select.png);
+  background-image: url('#{ $base-images-path }/select.png');
   background-position: right 13px center;
   background-repeat: no-repeat;
   padding-right: 30px;
@@ -39,17 +39,17 @@ select {
 
 button {
   @extend %button;
-  background-color: fade-out($primary-color, 0.9);
-  color: $primary-color;
+  background-color: fade-out($poa-purple, 0.9);
+  color: $poa-purple;
 
   &.load-more {
     margin-bottom: 50px;
 
-    @media screen and (max-width: $container-width) {
+    @media screen and (max-width: $container-max-width) {
       margin-bottom: 80px;
     }
 
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       margin-top: 80px;
     }
   }
@@ -87,13 +87,13 @@ button {
   }
 
   input[type='radio']:checked + &-label {
-    background-color: $primary-color;
-    border-color: $primary-color;
+    background-color: $poa-purple;
+    border-color: $poa-purple;
     box-shadow: 0px 5px 10px 0 rgba(92, 52, 162, 0.3);
     color: #fff;
     .sokol & {
-      background-color: $primary-color-sokol;
-      border-color: $primary-color-sokol;
+      background-color: $sokol-cyan;
+      border-color: $sokol-cyan;
       box-shadow: 0px 5px 10px 0 rgba(106, 201, 185, 0.3);
     }
   }
@@ -102,7 +102,7 @@ button {
 .keys-radio-button-tr {
   display: flex;
   margin-bottom: 30px;
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     flex-direction: column;
   }
 }
@@ -117,7 +117,7 @@ button {
     display: flex;
     justify-content: center;
   }
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     margin-bottom: 15px;
     margin-right: 0;
     min-width: 100%;
@@ -138,10 +138,10 @@ button {
   word-break: break-word;
 
   a {
-    color: $primary-color;
+    color: $poa-purple;
 
     .sokol & {
-      color: $primary-color-sokol;
+      color: $sokol-cyan;
     }
   }
 }

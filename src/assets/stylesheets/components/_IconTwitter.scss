@@ -1,0 +1,7 @@
+.sw-IconTwitter {
+    @include brand-icon-styles();
+
+    .ft-SocialIcons & {
+        margin-right: 10px;
+    }
+}

@@ -15,37 +15,37 @@
     border-radius: 3px;
 
     &_no {
-      background-color: $danger-color;
+      background-color: $poa-danger-color;
       .sokol & {
-        background-color: $danger-color-sokol;
+        background-color: $sokol-danger-color;
       }
     }
 
     &_yes {
-      background-color: $success-color;
+      background-color: $poa-success-color;
       .sokol & {
-        background-color: $success-color-sokol;
+        background-color: $sokol-success-color;
       }
     }
 
     &_send {
-      background-color: $success-color;
+      background-color: $poa-success-color;
       .sokol & {
-        background-color: $success-color-sokol;
+        background-color: $sokol-success-color;
       }
     }
 
     &_burn {
-      background-color: $danger-color;
+      background-color: $poa-danger-color;
       .sokol & {
-        background-color: $danger-color-sokol;
+        background-color: $sokol-danger-color;
       }
     }
 
     &_freeze {
-      background-color: $freeze-color;
+      background-color: $poa-freeze-color;
       .sokol & {
-        background-color: $freeze-color-sokol;
+        background-color: $sokol-freeze-color;
       }
     }
 

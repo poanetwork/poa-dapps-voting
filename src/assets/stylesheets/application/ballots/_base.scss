@@ -1,7 +1,7 @@
 .ballots {
   .title {
     margin-bottom: 50px;
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       margin-bottom: $tablet-indent;
     }
     @media screen and (max-width: $mobile-width) {
@@ -22,7 +22,7 @@
       margin-bottom: 30px;
       margin-top: 30px;
       padding: 30px 0 0 0;
-      @media screen and (max-width: $tablet-width) {
+      @media screen and (max-width: $breakpoint-md) {
         display: block;
         margin-top: $tablet-indent;
         padding: $tablet-indent 0 0 0;
@@ -37,7 +37,7 @@
         justify-content: space-between;
         margin-right: 40px;
 
-        @media screen and (max-width: $tablet-width) {
+        @media screen and (max-width: $breakpoint-md) {
           margin-bottom: 30px;
           margin-right: 0;
           overflow: hidden;
@@ -49,7 +49,7 @@
         }
 
         &.reverse-responsive {
-          @media screen and (max-width: $tablet-width) {
+          @media screen and (max-width: $breakpoint-md) {
             flex-direction: row-reverse;
           }
         }
@@ -92,7 +92,7 @@
         &.m-l-20 {
           margin-left: 20px;
         }
-        @media screen and (max-width: $tablet-width) {
+        @media screen and (max-width: $breakpoint-md) {
           &.m-r-20,
           &.m-l-20 {
             margin-left: 0;
@@ -115,20 +115,20 @@ textarea {
 }
 
 .color-primary {
-  color: $primary-color;
+  color: $poa-purple;
   .sokol & {
-    color: $primary-color-sokol;
+    color: $sokol-cyan;
   }
 }
 .color-danger {
-  color: $danger-color;
+  color: $poa-danger-color;
   .sokol & {
-    color: $danger-color-sokol;
+    color: $sokol-danger-color;
   }
 }
 .color-success {
-  color: $success-color;
+  color: $poa-success-color;
   .sokol & {
-    color: $success-color-sokol;
+    color: $sokol-success-color;
   }
 }

@@ -45,16 +45,16 @@ textarea {
   text-transform: uppercase;
   transition: 0.15s background-color;
 
-  @include make-themed-btn('btn-primary', $primary-color, (92, 52, 162, 0.3));
-  @include make-themed-btn('btn-success', $success-color, (96, 219, 151, 0.3));
-  @include make-themed-btn('btn-danger', $danger-color, (242, 27, 87, 0.3));
-  @include make-themed-btn('btn-freeze', $freeze-color, (80, 187, 218, 0.3));
+  @include make-themed-btn('btn-primary', $poa-purple, (92, 52, 162, 0.3));
+  @include make-themed-btn('btn-success', $poa-success-color, (96, 219, 151, 0.3));
+  @include make-themed-btn('btn-danger', $poa-danger-color, (242, 27, 87, 0.3));
+  @include make-themed-btn('btn-freeze', $poa-freeze-color, (80, 187, 218, 0.3));
 
   .sokol & {
-    @include make-themed-btn('btn-primary', $primary-color-sokol, (106, 201, 185, 0.3));
-    @include make-themed-btn('btn-success', $success-color-sokol, (96, 219, 151, 0.3));
-    @include make-themed-btn('btn-danger', $danger-color-sokol, (242, 76, 103, 0.33));
-    @include make-themed-btn('btn-freeze', $freeze-color-sokol, (80, 187, 218, 0.3));
+    @include make-themed-btn('btn-primary', $sokol-cyan, (106, 201, 185, 0.3));
+    @include make-themed-btn('btn-success', $sokol-success-color, (96, 219, 151, 0.3));
+    @include make-themed-btn('btn-danger', $sokol-danger-color, (242, 76, 103, 0.33));
+    @include make-themed-btn('btn-freeze', $sokol-freeze-color, (80, 187, 218, 0.3));
   }
 
   &.btn-new {
@@ -64,23 +64,23 @@ textarea {
   &.btn-load-more {
     background-image: url('#{ $base-images-path }/icons/icon-load-more.svg');
     border-radius: 5px;
-    border: 2px solid $primary-color;
+    border: 2px solid $poa-purple;
     font-size: 17px;
     font-weight: 400;
     @include btn-background-properties();
     .sokol & {
       background-image: url('#{ $base-images-path }/icons/icon-load-more-sokol.svg');
-      border-color: $primary-color-sokol;
+      border-color: $sokol-cyan;
     }
   }
   &.btn-transparent {
-    color: $primary-color;
+    color: $poa-purple;
     background-color: transparent;
     &:hover {
       opacity: 0.8;
     }
     .sokol & {
-      color: $primary-color-sokol;
+      color: $sokol-cyan;
     }
   }
   &[disabled],

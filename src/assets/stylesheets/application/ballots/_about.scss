@@ -1,7 +1,7 @@
 .ballots-about {
   $cell-right-padding: 12px;
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     display: table;
     width: 100%;
   }
@@ -14,7 +14,7 @@
     display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       display: table-row;
       width: 100% !important;
     }
@@ -90,23 +90,23 @@
         text-transform: capitalize;
       }
 
-      @media screen and (max-width: $tablet-width) {
+      @media screen and (max-width: $breakpoint-md) {
         padding-left: 0;
         padding-right: 0;
       }
 
     }
-    @media screen and (max-width: $tablet-width) {
+    @media screen and (max-width: $breakpoint-md) {
       display: table-cell;
       vertical-align: top;
     }
     &:first-child {
-      @media screen and (max-width: $tablet-width) {
+      @media screen and (max-width: $breakpoint-md) {
         padding-right: 10px;
       }
     }
     #{$this}-i:not(:last-child) & {
-      @media screen and (max-width: $tablet-width) {
+      @media screen and (max-width: $breakpoint-md) {
         padding-bottom: 10px;
       }
     }

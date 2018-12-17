@@ -10,7 +10,7 @@ $padding-left-items: 25px;
   padding-right: #{ $desktop-indent };
   padding-top: #{ $desktop-indent };
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     margin-left: -#{ $tablet-indent };
     margin-right: -#{ $tablet-indent };
     padding-left: #{ $tablet-indent };
@@ -54,12 +54,12 @@ $padding-left-items: 25px;
       }
 
       .toggle-show {
-        color: $primary-color;
+        color: $poa-purple;
         cursor: pointer;
         display: inline-block;
         margin-left: 5px;
         .sokol & {
-          color: $primary-color-sokol;
+          color: $sokol-cyan;
         }
       }
     }

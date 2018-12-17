@@ -1,0 +1,12 @@
+$ft-SocialIcons_Icon-dimensions: 30px !default;
+
+.ft-SocialIcons {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+
+    @media (min-width: $breakpoint-md) {
+        padding-top: 0;
+    }
+}

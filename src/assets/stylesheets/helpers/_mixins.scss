@@ -25,7 +25,7 @@
     color: $input-color;
   }
   &:focus {
-    border-color: $primary-color;
+    border-color: $poa-purple;
     color: $input-color;
   }
 }
@@ -58,11 +58,49 @@
 // #avoid text selection
 @mixin not-selectable-text() {
   -moz-user-select: none;
-  /* Firefox all */
   -ms-user-select: none;
-  /* IE 10+ */
   -webkit-user-select: none;
-  /* Chrome all / Safari all */
   user-select: none;
-  /* Likely future */
+}
+
+// use for retina background images @1x / @2x / @3x
+@mixin image-retina($filename, $extension) {
+
+  background-image: url($filename + '.' + $extension);
+
+  @media  (-webkit-min-device-pixel-ratio: 2),
+          (-moz-min-device-pixel-ratio: 2),
+          (min-resolution: 192dpi),
+          (min-resolution: 2dppx) {
+      & {
+          background-image: url($filename + '@2x.' + $extension);
+      }
+  }
+
+  @media  (-webkit-min-device-pixel-ratio: 3),
+          (-moz-min-device-pixel-ratio: 3),
+          (min-resolution: 288dpi),
+          (min-resolution: 3dppx) {
+      & {
+          background-image: url($filename + '@3x.' + $extension);
+      }
+  }
+
+}
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+      content: "";
+      display: block;
+      padding-top: ($height / $width) * 100%;
+      width: 100%;
+  }
+  > .content-ratio {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+  }
 }

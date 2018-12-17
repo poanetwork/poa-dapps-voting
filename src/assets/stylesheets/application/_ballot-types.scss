@@ -15,7 +15,7 @@
     line-height: $i-height;
 
     &:before {
-      background-color: $primary-color;
+      background-color: $poa-purple;
       border-bottom-right-radius: 5px;
       border-top-right-radius: 5px;
       content: '';
@@ -27,19 +27,19 @@
       transform: translateY(-50%);
       width: 4px;
       .sokol & {
-        background-color: $primary-color-sokol;
+        background-color: $sokol-cyan;
       }
     }
 
     &_active {
-      color: $primary-color;
+      color: $poa-purple;
 
       &:before {
         opacity: 1;
       }
 
       .sokol & {
-        color: $primary-color-sokol;
+        color: $sokol-cyan;
       }
 
     }

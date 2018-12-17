@@ -1,5 +1,5 @@
 export { Ballots } from './Ballots.jsx'
-export { Footer } from './Footer.jsx'
+export { Footer } from './Footer/'
 export { Header } from './Header.jsx'
 export { Loading } from './Loading.jsx'
 export { NewBallot } from './NewBallot.jsx'

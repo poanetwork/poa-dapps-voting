@@ -17,7 +17,7 @@
   padding: $desktop-indent;
   transition: 0.15s box-shadow;
 
-  @media screen and (max-width: $tablet-width) {
+  @media screen and (max-width: $breakpoint-md) {
     margin-bottom: $tablet-indent;
     padding: $tablet-indent;
   }
@@ -41,10 +41,10 @@
     color: $input-color;
   }
   &:focus {
-    border-color: $primary-color;
+    border-color: $poa-purple;
     color: $input-color;
     .sokol & {
-      border-color: $primary-color-sokol;
+      border-color: $sokol-cyan;
     }
   }
 }

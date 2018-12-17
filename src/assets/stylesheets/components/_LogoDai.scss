@@ -1,0 +1,20 @@
+.sw-LogoDai {
+    display: block;
+    text-decoration: none;
+
+    .sw-Header & {
+        height: 58px;
+        width: 167px;
+    }
+
+    .sw-Footer & {
+        width: 120px;
+    }
+
+}
+
+.sw-LogoDai_Image {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
