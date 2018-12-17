@@ -2,8 +2,8 @@ import React from 'react'
 import moment from 'moment'
 import { observable, action, computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
-import { messages } from '../messages'
-import { sendTransactionByVotingKey } from '../helpers'
+import { messages } from '../utils/messages'
+import { sendTransactionByVotingKey } from '../utils/helpers'
 import swal from 'sweetalert2'
 
 const ACCEPT = 1
@@ -91,6 +91,8 @@ export class BallotCard extends React.Component {
             return 'The funds were burnt.'
           case 4:
             return 'The funds were frozen.'
+          default:
+            return 'Unknown error'
         }
       }
       return ''

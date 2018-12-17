@@ -18,7 +18,7 @@ import { BallotKeysCard } from '../components/BallotKeysCard.jsx'
 import { BallotMinThresholdCard } from '../components/BallotMinThresholdCard.jsx'
 import { BallotProxyCard } from '../components/BallotProxyCard.jsx'
 import { BallotEmissionFundsCard } from '../components/BallotEmissionFundsCard.jsx'
-import { constants } from '../constants'
+import { constants } from '../utils/constants'
 
 import 'babel-polyfill'
 

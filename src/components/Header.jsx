@@ -7,7 +7,7 @@ import menuOpenIconBase from '../assets/images/icons/icon-close.svg'
 import menuOpenIconSokol from '../assets/images/icons/icon-close-sokol.svg'
 import NavigationLinks from './NavigationLinks.jsx'
 import MobileMenuLinks from './MobileMenuLinks.jsx'
-import { constants } from '../constants'
+import { constants } from '../utils/constants'
 
 export const Header = ({ netId, baseRootPath, navigationData, showMobileMenu, onMenuToggle }) => {
   const thisIsTestnet = netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET

@@ -8,9 +8,9 @@ import { BallotKeysMetadata } from './BallotKeysMetadata.jsx'
 import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
 import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
 import { BallotEmissionFundsMetadata } from './BallotEmissionFundsMetadata.jsx'
-import { messages } from '../messages'
-import { constants } from '../constants'
-import { sendTransactionByVotingKey } from '../helpers'
+import { messages } from '../utils/messages'
+import { constants } from '../utils/constants'
+import { sendTransactionByVotingKey } from '../utils/helpers'
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
 export class NewBallot extends React.Component {
@@ -368,7 +368,7 @@ export class NewBallot extends React.Component {
   menuItemActive = ballotType => {
     const { ballotStore } = this.props
 
-    if (ballotType == ballotStore.ballotType) {
+    if (ballotType === ballotStore.ballotType) {
       return 'ballot-types-i ballot-types-i_active'
     } else {
       return 'ballot-types-i'

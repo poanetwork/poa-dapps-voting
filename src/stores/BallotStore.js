@@ -1,6 +1,6 @@
 import { observable, computed, action, toJS } from 'mobx'
 import moment from 'moment'
-import { constants } from '../constants'
+import { constants } from '../utils/constants'
 
 class BallotStore {
   BallotType = {

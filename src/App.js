@@ -1,13 +1,13 @@
 //import DevTools from 'mobx-react-devtools'
 import './assets/App.css'
-import Loading from './Loading'
+// import Loading from './components/Loading'
 import React, { Component } from 'react'
-import { Header, Ballots, NewBallot, Settings, Footer } from './components'
+import { Header, Ballots, NewBallot, Settings, Footer, Loading } from './components'
 import { Route } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import swal from 'sweetalert2'
-import { messages } from './messages'
-import { constants } from './constants'
+import { messages } from './utils/messages'
+import { constants } from './utils/constants'
 
 @inject('commonStore', 'contractsStore')
 @observer

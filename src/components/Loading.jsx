@@ -1,5 +1,5 @@
 import React from 'react'
-import { constants } from './constants'
+import { constants } from '../utils/constants'
 
 const styles = netId => {
   const core = {
@@ -15,7 +15,8 @@ const styles = netId => {
 
   return core
 }
-const Loading = ({ netId }) => (
+
+export const Loading = ({ netId }) => (
   <div className="loading-container" style={styles(netId)}>
     <div className="loading">
       <div className="loading-i" />
@@ -27,4 +28,3 @@ const Loading = ({ netId }) => (
     </div>
   </div>
 )
-export default Loading
