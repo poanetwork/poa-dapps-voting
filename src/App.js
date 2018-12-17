@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import swal from 'sweetalert2'
-import { Header, Ballots, NewBallot, Settings, Footer, Loading } from './components'
+import { Header, Ballots, NewBallot, Settings, Footer, Loading, BaseLoader } from './components'
 import { Route } from 'react-router-dom'
 import { constants } from './utils/constants'
 import { inject, observer } from 'mobx-react'
@@ -131,7 +131,6 @@ class App extends Component {
   render() {
     const { commonStore, contractsStore } = this.props
     const networkBranch = contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
-    const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
 
     const search = this.shouldShowSearch() ? (
       <div className={`search-container ${this.getNetIdClass()}`}>
@@ -143,9 +142,9 @@ class App extends Component {
 
     const isTestnet = contractsStore.netId in constants.NETWORKS && constants.NETWORKS[contractsStore.netId].TESTNET
 
-    return (
+    return networkBranch ? (
       <section className={`content ${this.state.showMobileMenu ? 'content-menu-open' : ''}`}>
-        {loading}
+        {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
           navigationData={this.state.navigationData}
@@ -173,6 +172,8 @@ class App extends Component {
         </div>
         <Footer networkBranch={networkBranch} />
       </section>
+    ) : (
+      <BaseLoader />
     )
   }
 }

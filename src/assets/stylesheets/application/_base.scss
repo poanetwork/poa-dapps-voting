@@ -22,12 +22,12 @@ body {
   position: relative;
   width: 100%;
 
-  @media screen and (max-width: $breakpoint-md) {
-    padding-bottom: $footer-height_mobile;
-  }
-  @media screen and (max-width: $mobile-width) {
-    padding-bottom: $footer-height_mobile;
-  }
+  // @media screen and (max-width: $breakpoint-md) {
+  //   padding-bottom: $footer-height_mobile;
+  // }
+  // @media screen and (max-width: $mobile-width) {
+  //   padding-bottom: $footer-height_mobile;
+  // }
 }
 
 a {
