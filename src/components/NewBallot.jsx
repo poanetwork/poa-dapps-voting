@@ -444,16 +444,20 @@ export class NewBallot extends React.Component {
               <p className="info-title">Limits of the ballot</p>
               <div className="info-i">
                 Minimum {minThreshold} from {contractsStore.validatorsLength} validators are required to pass the&nbsp;
-                proposal<br />
+                proposal
+                <br />
               </div>
               <div className="info-i">
-                You can create {contractsStore.validatorLimits.keys} ballot(s) for keys<br />
+                You can create {contractsStore.validatorLimits.keys} ballot(s) for keys
+                <br />
               </div>
               <div className="info-i">
-                You can create {contractsStore.validatorLimits.minThreshold} ballot(s) for consensus<br />
+                You can create {contractsStore.validatorLimits.minThreshold} ballot(s) for consensus
+                <br />
               </div>
               <div className="info-i">
-                You can create {contractsStore.validatorLimits.proxy} ballot(s) for proxy<br />
+                You can create {contractsStore.validatorLimits.proxy} ballot(s) for proxy
+                <br />
               </div>
             </div>
           </div>
