@@ -140,22 +140,21 @@ class App extends Component {
       </div>
     ) : null
 
-    const isTestnet = contractsStore.netId in constants.NETWORKS && constants.NETWORKS[contractsStore.netId].TESTNET
-
     return networkBranch ? (
-      <section className={`content ${this.state.showMobileMenu ? 'content-menu-open' : ''}`}>
+      <div className={`lo-App ${this.state.showMobileMenu ? 'lo-App-menu-open' : ''}`}>
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
           navigationData={this.state.navigationData}
           netId={contractsStore.netId}
+          networkBranch={networkBranch}
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
         {search}
-        <div
-          className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            isTestnet ? 'sokol' : ''
+        <section
+          className={`lo-App_Content lo-App_Content-${networkBranch} ${
+            this.state.showMobileMenu ? 'lo-App_Content-mobile-menu-open' : ''
           }`}
         >
           <div className="container">
@@ -168,10 +167,9 @@ class App extends Component {
           <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/tofinalize`} render={this.onToFinalizeBallotsRender} />
           <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender} />
-          {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
-        </div>
+        </section>
         <Footer networkBranch={networkBranch} />
-      </section>
+      </div>
     ) : (
       <BaseLoader />
     )

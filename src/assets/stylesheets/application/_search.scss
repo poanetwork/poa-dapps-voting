@@ -1,6 +1,7 @@
 .search-container {
   background-color: #502d8d;
   box-sizing: border-box;
+  flex-shrink: 0;
   height: $search-container-height;
   padding: 10px 0 0 0;
 

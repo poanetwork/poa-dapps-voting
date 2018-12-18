@@ -3,6 +3,7 @@
     background-color: $poa-purple;
     color: #fff;
     display: flex;
+    flex-shrink: 0;
     justify-content: center;
     min-height: 60px;
     overflow: hidden;

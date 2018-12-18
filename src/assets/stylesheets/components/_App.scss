@@ -1,0 +1,71 @@
+.lo-App {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: $header-height + $search-container-height;
+    width: 100%;
+
+    @media (min-width: $breakpoint-md) {
+        padding-top: 0;
+    }
+
+    &#{ & }-menu-open {
+        padding-top: $header-mobile-menu-container-height + $header-height;
+    }
+
+}
+
+.lo-App_Content {
+    flex-grow: 1;
+    padding-bottom: 30px;
+    padding-top: 40px;
+    position: relative;
+
+    &:before {
+        background-color: rgba($poa-purple, 0.5);
+        bottom: 0;
+        content: '';
+        display: none;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: $header-mobile-menu-container-height + $header-height;
+        z-index: 1234;
+    }
+
+    &#{ & }-core {
+        &:before {
+            background-color: rgba($poa-purple, 0.5);
+        }
+    }
+
+    &#{ & }-sokol {
+        &:before {
+            background-color: rgba($sokol-cyan, 0.5);
+        }
+    }
+
+    &#{ & }-dai {
+        &:before {
+            background-color: rgba($xdai-orange, 0.5);
+        }
+    }
+
+    &#{ & }-mobile-menu-open {
+        &:before {
+            display: block;
+        }
+    }
+}
+
+// @media screen and (max-width: $mobile-width) {
+//     #root,
+//     .app-container {
+//         height: 100%;
+//     }
+//     .app-container {
+//         padding-left: 10px;
+//         padding-right: 10px;
+//     }
+// }
+
