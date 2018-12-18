@@ -15,10 +15,10 @@
     width: 100%;
     z-index: 124;
 
-    @media (min-width: $mobile-width) {
-        position: relative;
-        z-index: 9999;
-    }
+    // @media (min-width: $mobile-width) {
+    //     position: relative;
+    //     z-index: 9999;
+    // }
 
     &#{ & }-menu-open {
         flex-direction: column;
@@ -37,74 +37,6 @@
         background-color: $xdai-gray;
     }
 
-
-    //// TODO: crap below, fix
-    &-logo {
-        display: block;
-        height: 26px;
-    } // header links
-
-    .links-container {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        height: $header-links-container-height;
-        margin-left: auto;
-        @media screen and (max-width: $mobile-width) {
-            display: none;
-        }
-        @media screen and (max-width: $breakpoint-md) {
-            justify-content: flex-end;
-            width: auto;
-        }
-    }
-
-    .link {
-        color: #fff;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 18px;
-        margin-left: 34px;
-        opacity: 0.8;
-        text-decoration: none;
-        transition: opacity linear 0.1s;
-        &:hover,
-        &.active {
-            opacity: 1;
-        }
-        @media screen and (max-width: $mobile-width) {
-            margin-left: 0;
-        }
-    }
-
-    .mobile-menu {
-        display: none;
-        @media screen and (max-width: $mobile-width) {
-            display: block;
-            order: 3;
-        }
-        .mobile-menu-icon {
-            width: 18px;
-            height: 14px;
-        }
-        .mobile-menu-open-icon {
-            width: 18px;
-            height: 18px;
-        }
-    }
-
-    .Select {
-        $select-mobile-width: 125px;
-        margin-left: 25px;
-        @media screen and (max-width: $mobile-width) {
-            margin-left: 0;
-            max-width: $select-mobile-width;
-            order: 2;
-            .Select-control {
-                max-width: $select-mobile-width;
-            }
-        }
-    }
     .btn.btn-new-ballot {
         height: 36px;
         line-height: 36px;
@@ -134,7 +66,15 @@
     min-height: $header-height;
 }
 
-.select-network-id {
-    background: #fff;
-    width: 40px;
+.sw-Header_Links {
+    align-items: center;
+    display: none;
+    height: $header-links-container-height;
+    justify-content: flex-end;
+    margin-left: auto;
+    width: auto;
+
+    @media (min-width: $breakpoint-md) {
+        display: flex;
+    }
 }

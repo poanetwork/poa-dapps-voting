@@ -44,12 +44,6 @@ class App extends Component {
           url: `${commonStore.rootPath}/new`,
           class: 'btn btn-new-ballot btn-success btn-new no-shadow text-capitalize'
         }
-        // {
-        //   'icon': '',
-        //   'title': 'Settings',
-        //   'url': `${ commonStore.rootPath }/settings`,
-        //    class: ''
-        // }
       ]
     }
   }

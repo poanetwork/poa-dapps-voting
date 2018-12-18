@@ -1,0 +1,22 @@
+.hd-IconMobileMenu {
+    display: block;
+    order: 3;
+
+    @media (min-width: $breakpoint-md) {
+        display: none;
+    }
+}
+
+.hd-IconMobileMenu_Path {
+    &#{ & }-core {
+        fill: $poa-menu-icon-color;
+    }
+
+    &#{ & }-sokol {
+        fill: $sokol-menu-icon-color;
+    }
+
+    &#{ & }-dai {
+        fill: $xdai-menu-icon-color;
+    }
+}

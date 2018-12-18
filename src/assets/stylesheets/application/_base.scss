@@ -15,28 +15,18 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: #ffffff;
   box-sizing: border-box;
-  color: #333;
+  color: $base-text-color;
   font-family: 'Nunito', sans-serif;
-  font-size: 14px;
-  // padding-bottom: $footer-height_desktop;
+  font-size: $base-font-size;
   position: relative;
   width: 100%;
-
-  // @media screen and (max-width: $breakpoint-md) {
-  //   padding-bottom: $footer-height_mobile;
-  // }
-  // @media screen and (max-width: $mobile-width) {
-  //   padding-bottom: $footer-height_mobile;
-  // }
 }
 
 a {
   color: $poa-purple;
   text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-  .sokol {
+
+  &.sokol {
     color: $sokol-cyan;
   }
 }

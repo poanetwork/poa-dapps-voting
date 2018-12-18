@@ -1,0 +1,43 @@
+.nl-NavigationLinks {
+    display: flex;
+}
+
+.nl-NavigationLinks_Link {
+    align-items: center;
+    color: #fff;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    height: 18px;
+    line-height: 18px;
+    margin-left: 0;
+    opacity: 0.8;
+    text-decoration: none;
+    transition: opacity linear 0.1s;
+
+    &:hover,
+    &.active {
+        opacity: 1;
+    }
+
+    &#{ & }-core {
+        color: #fff;
+    }
+
+    &#{ & }-sokol {
+        color: #fff;
+    }
+
+    &#{ & }-dai {
+        color: #333;
+    }
+
+    @media (min-width: $breakpoint-md) {
+        margin-left: 34px;
+    }
+}
+
+.nl-NavigationLinks_Text {
+    margin-left: 10px;
+    text-decoration: none;
+}

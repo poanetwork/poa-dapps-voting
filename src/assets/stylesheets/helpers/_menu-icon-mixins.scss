@@ -1,0 +1,13 @@
+@mixin menu-icon-colors() {
+    &#{ & }-core {
+        fill: $poa-menu-icon-color;
+    }
+
+    &#{ & }-sokol {
+        fill: $sokol-menu-icon-color;
+    }
+
+    &#{ & }-dai {
+        fill: $xdai-menu-icon-color;
+    }
+}

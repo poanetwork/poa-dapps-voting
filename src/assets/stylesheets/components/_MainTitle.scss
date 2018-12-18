@@ -1,12 +1,7 @@
 .sw-MainTitle {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   margin-bottom: 40px;
-
-  @media (min-width: $breakpoint-md) {
-    flex-direction: row;
-  }
 }
 
 .sw-MainTitle_Content {

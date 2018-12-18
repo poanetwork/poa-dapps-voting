@@ -14,16 +14,37 @@ constants.ABIsSources = {
   VotingToChangeProxyAddress: 'VotingToChangeProxyAddress.abi.json',
   VotingToManageEmissionFunds: 'VotingToManageEmissionFunds.abi.json'
 }
+
 constants.NEW_MINING_KEY = {
   label: 'New Mining Key',
   lastNameAndKey: '',
   fullName: '',
   value: '0x0000000000000000000000000000000000000000'
 }
+
 constants.minBallotDurationInDays = 2
 constants.startTimeOffsetInMinutes = 5
 constants.endTimeDefaultInMinutes = 2890
 constants.getTransactionReceiptInterval = 5000
+constants.rootPath = '/poa-dapps-voting'
+
+constants.navigationData = [
+  {
+    icon: 'all',
+    title: 'All',
+    url: constants.rootPath
+  },
+  {
+    icon: 'active',
+    title: 'Active',
+    url: `${constants.rootPath}/active`
+  },
+  {
+    icon: 'finalize',
+    title: 'To Finalize',
+    url: `${constants.rootPath}/tofinalize`
+  }
+]
 
 constants.NETWORKS = {
   '77': {
