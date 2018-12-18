@@ -48,7 +48,7 @@ export const SocialIcons = ({ extraClass = '', networkBranch = '' }) => {
         text="POA Github"
         url="https://github.com/poanetwork"
       />
-      <IconPOA text="POA Network" url="'https://poa.network" backgroundColor={backgroundColor} color={iconColor} />
+      <IconPOA text="POA Network" url="https://poa.net" backgroundColor={backgroundColor} color={iconColor} />
     </div>
   )
 }

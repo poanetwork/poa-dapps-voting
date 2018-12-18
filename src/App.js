@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import swal from 'sweetalert2'
-import { Header, Ballots, NewBallot, Settings, Footer, Loading, BaseLoader } from './components'
+import { Header, Ballots, NewBallot, Settings, Footer, Loading, BaseLoader, SearchBar, MainTitle } from './components'
 import { Route } from 'react-router-dom'
 import { constants } from './utils/constants'
 import { inject, observer } from 'mobx-react'
@@ -91,18 +91,11 @@ class App extends Component {
     commonStore.setSearchTerm(e.target.value.toLowerCase())
   }
 
-  shouldShowSearch = () => {
+  hideSearch = () => {
     const { commonStore } = this.props
     const currentPath = this.props.location.pathname
 
-    let showSearch =
-      currentPath === `${commonStore.rootPath}` ||
-      currentPath === '/' ||
-      currentPath === `${commonStore.rootPath}/` ||
-      currentPath === `${commonStore.rootPath}/active` ||
-      currentPath === `${commonStore.rootPath}/tofinalize`
-
-    return showSearch
+    return currentPath === `${commonStore.rootPath}/new`
   }
 
   toggleMobileMenu = () => {
@@ -132,14 +125,6 @@ class App extends Component {
     const { commonStore, contractsStore } = this.props
     const networkBranch = contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
 
-    const search = this.shouldShowSearch() ? (
-      <div className={`search-container ${this.getNetIdClass()}`}>
-        <div className="container">
-          <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
-        </div>
-      </div>
-    ) : null
-
     return networkBranch ? (
       <div className={`lo-App ${this.state.showMobileMenu ? 'lo-App-menu-open' : ''}`}>
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
@@ -151,17 +136,13 @@ class App extends Component {
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
-        {search}
+        {this.hideSearch() ? null : <SearchBar networkBranch={networkBranch} onSearch={this.onSearch} />}
         <section
           className={`lo-App_Content lo-App_Content-${networkBranch} ${
             this.state.showMobileMenu ? 'lo-App_Content-mobile-menu-open' : ''
           }`}
         >
-          <div className="container">
-            <div className={`main-title-container ${this.shouldShowSearch() ? '' : 'no-search-on-top'}`}>
-              <span className="main-title">{this.getTitle()}</span>
-            </div>
-          </div>
+          <MainTitle text={this.getTitle()} />
           <Route exact path={`/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender} />

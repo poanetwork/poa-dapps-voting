@@ -1,0 +1,20 @@
+.sw-MainTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 40px;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+  }
+}
+
+.sw-MainTitle_Content {
+  @include content-layout-width();
+}
+
+.sw-MainTitle_Text {
+  color: #333;
+  font-size: 24px;
+  line-height: 38px;
+}
