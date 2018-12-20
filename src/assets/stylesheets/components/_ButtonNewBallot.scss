@@ -1,0 +1,50 @@
+$sw-ButtonNewBallot-height: 36px;
+
+.sw-ButtonNewBallot {
+    align-items: center;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    height: $sw-ButtonNewBallot-height;
+    line-height: $sw-ButtonNewBallot-height;
+    opacity: 1;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    transition: 0.15s background-color;
+
+    &#{ & }-core {
+        background-color: $poa-green-color;
+        color: #fff;
+
+        &:hover {
+            background-color: darken($poa-green-color, 10%);
+        }
+    }
+
+    &#{ & }-sokol {
+        background-color: #fff;
+        color: $sokol-cyan;
+
+        &:hover {
+            background-color: darken(#fff, 5%);
+        }
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-menu-icon-color;
+        color: #fff;
+
+        &:hover {
+            background-color: lighten($poa-green-color, 5%);
+        }
+    }
+
+    .sw-Header_Links & {
+        margin-left: 40px;
+    }
+
+}

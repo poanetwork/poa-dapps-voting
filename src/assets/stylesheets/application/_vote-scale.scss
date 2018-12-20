@@ -22,16 +22,16 @@
     }
 
     &_yes {
-      background-color: $poa-success-color;
+      background-color: $poa-green-color;
       .sokol & {
-        background-color: $sokol-success-color;
+        background-color: $sokol-cyan;
       }
     }
 
     &_send {
-      background-color: $poa-success-color;
+      background-color: $poa-green-color;
       .sokol & {
-        background-color: $sokol-success-color;
+        background-color: $sokol-cyan;
       }
     }
 

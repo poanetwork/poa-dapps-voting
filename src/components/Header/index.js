@@ -1,8 +1,9 @@
 import React from 'react'
+import { ButtonNewBallot } from '../ButtonNewBallot'
+import { IconMobileMenu } from '../IconMobileMenu'
 import { Logo } from '../Logo'
 import { MobileMenuLinks } from '../MobileMenuLinks'
 import { NavigationLinks } from '../NavigationLinks'
-import { IconMobileMenu } from '../IconMobileMenu'
 
 export const Header = ({
   baseRootPath,
@@ -18,6 +19,7 @@ export const Header = ({
         <Logo networkBranch={networkBranch} href={baseRootPath} />
         <div className="sw-Header_Links">
           <NavigationLinks networkBranch={networkBranch} navigationData={navigationData} />
+          <ButtonNewBallot networkBranch={networkBranch} />
         </div>
         <IconMobileMenu networkBranch={networkBranch} isOpen={showMobileMenu} onClick={onMenuToggle} />
       </div>

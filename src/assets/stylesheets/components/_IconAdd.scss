@@ -1,0 +1,19 @@
+.sw-IconAdd {
+    .sw-ButtonNewBallot & {
+        margin-left: 10px;
+    }
+}
+
+.sw-IconAdd_Path {
+    &#{ & }-core {
+        fill: #fff;
+    }
+
+    &#{ & }-sokol {
+        fill: $sokol-cyan;;
+    }
+
+    &#{ & }-dai {
+        fill: #fff;
+    }
+}

@@ -127,8 +127,8 @@ textarea {
   }
 }
 .color-success {
-  color: $poa-success-color;
+  color: $poa-green-color;
   .sokol & {
-    color: $sokol-success-color;
+    color: $sokol-cyan;
   }
 }

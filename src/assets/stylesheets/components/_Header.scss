@@ -15,11 +15,6 @@
     width: 100%;
     z-index: 124;
 
-    // @media (min-width: $mobile-width) {
-    //     position: relative;
-    //     z-index: 9999;
-    // }
-
     &#{ & }-menu-open {
         flex-direction: column;
         height: auto;
@@ -37,24 +32,6 @@
         background-color: $xdai-gray;
     }
 
-    .btn.btn-new-ballot {
-        height: 36px;
-        line-height: 36px;
-        opacity: 1;
-        .link-icon {
-            display: none;
-        }
-    }
-    &.sokol {
-        .btn.btn-new-ballot {
-            background-color: #fff;
-            background-image: url('#{ $base-images-path }/icons/icon-add-sokol.svg');
-            color: $sokol-cyan;
-            &:hover {
-                opacity: 0.9;
-            }
-        }
-    }
 }
 
 .sw-Header_Content {

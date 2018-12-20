@@ -46,13 +46,13 @@ textarea {
   transition: 0.15s background-color;
 
   @include make-themed-btn('btn-primary', $poa-purple, (92, 52, 162, 0.3));
-  @include make-themed-btn('btn-success', $poa-success-color, (96, 219, 151, 0.3));
+  @include make-themed-btn('btn-success', $poa-green-color, (96, 219, 151, 0.3));
   @include make-themed-btn('btn-danger', $poa-danger-color, (242, 27, 87, 0.3));
   @include make-themed-btn('btn-freeze', $poa-freeze-color, (80, 187, 218, 0.3));
 
   .sokol & {
     @include make-themed-btn('btn-primary', $sokol-cyan, (106, 201, 185, 0.3));
-    @include make-themed-btn('btn-success', $sokol-success-color, (96, 219, 151, 0.3));
+    @include make-themed-btn('btn-success', $sokol-cyan, (96, 219, 151, 0.3));
     @include make-themed-btn('btn-danger', $sokol-danger-color, (242, 76, 103, 0.33));
     @include make-themed-btn('btn-freeze', $sokol-freeze-color, (80, 187, 218, 0.3));
   }
