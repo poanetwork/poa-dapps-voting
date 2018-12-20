@@ -110,7 +110,8 @@ export class BallotEmissionFundsMetadata extends React.Component {
                 Current balance of&nbsp;
                 <a href={explorerLink} target="_blank">
                   EmissionFunds contract
-                </a>.
+                </a>
+                .
               </p>
             </div>
           </div>
