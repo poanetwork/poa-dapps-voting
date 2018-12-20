@@ -20,14 +20,6 @@ export const Header = ({
           <NavigationLinks networkBranch={networkBranch} navigationData={navigationData} />
         </div>
         <IconMobileMenu networkBranch={networkBranch} isOpen={showMobileMenu} onClick={onMenuToggle} />
-        {/* <div className="mobile-menu">
-          <img
-            alt=""
-            className={showMobileMenu ? 'mobile-menu-open-icon' : 'mobile-menu-icon'}
-
-            src={showMobileMenu ? menuOpenIcon : menuIcon}
-          />
-        </div> */}
       </div>
     </header>
   )

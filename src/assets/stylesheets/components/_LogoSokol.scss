@@ -1,9 +1,9 @@
 .sw-LogoSokol {
-    display: block;
-    text-decoration: none;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 
     .sw-Header & {
-        height: 30px;
         width: 178px;
     }
 

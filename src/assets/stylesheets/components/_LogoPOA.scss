@@ -1,9 +1,9 @@
 .sw-LogoPOA {
-    display: block;
-    text-decoration: none;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 
     .sw-Header & {
-        height: 26px;
         width: 167px;
     }
 
