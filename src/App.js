@@ -131,12 +131,12 @@ class App extends Component {
           showMobileMenu={this.state.showMobileMenu}
         />
         {this.hideSearch() ? null : <SearchBar networkBranch={networkBranch} onSearch={this.onSearch} />}
+        <MainTitle text={this.getTitle()} />
         <section
           className={`lo-App_Content lo-App_Content-${networkBranch} ${
             this.state.showMobileMenu ? 'lo-App_Content-mobile-menu-open' : ''
           }`}
         >
-          <MainTitle text={this.getTitle()} />
           <Route exact path={`/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender} />

@@ -4,7 +4,7 @@ export const MainTitle = ({ extraClassName = '', text = '' }) => {
   return (
     <div className={`sw-MainTitle ${extraClassName}`}>
       <div className="sw-MainTitle_Content">
-        <span className="sw-MainTitle_Text">{text}</span>
+        <h1 className="sw-MainTitle_Text">{text}</h1>
       </div>
     </div>
   )
