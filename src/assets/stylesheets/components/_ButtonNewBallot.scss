@@ -47,4 +47,8 @@ $sw-ButtonNewBallot-height: 36px;
         margin-left: 40px;
     }
 
+    .hd-MobileMenuLinks & {
+        max-width: fit-content;
+        margin: 0 auto;
+    }
 }

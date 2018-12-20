@@ -5,20 +5,14 @@ import { Logo } from '../Logo'
 import { MobileMenuLinks } from '../MobileMenuLinks'
 import { NavigationLinks } from '../NavigationLinks'
 
-export const Header = ({
-  baseRootPath,
-  navigationData,
-  networkBranch = undefined,
-  onMenuToggle,
-  showMobileMenu = false
-}) => {
+export const Header = ({ baseRootPath, networkBranch = undefined, onMenuToggle, showMobileMenu = false }) => {
   return (
     <header className={`sw-Header sw-Header-${networkBranch} ${showMobileMenu ? 'sw-Header-menu-open' : ''}`}>
-      {showMobileMenu ? <MobileMenuLinks onMenuToggle={onMenuToggle} navigationData={navigationData} /> : null}
+      {showMobileMenu ? <MobileMenuLinks networkBranch={networkBranch} onClick={onMenuToggle} /> : null}
       <div className="sw-Header_Content">
         <Logo networkBranch={networkBranch} href={baseRootPath} />
         <div className="sw-Header_Links">
-          <NavigationLinks networkBranch={networkBranch} navigationData={navigationData} />
+          <NavigationLinks networkBranch={networkBranch} />
           <ButtonNewBallot networkBranch={networkBranch} />
         </div>
         <IconMobileMenu networkBranch={networkBranch} isOpen={showMobileMenu} onClick={onMenuToggle} />

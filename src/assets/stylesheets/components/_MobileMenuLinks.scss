@@ -1,56 +1,18 @@
 .hd-MobileMenuLinks {
     background-color: $poa-purple-darker;
-    height: $header-mobile-menu-container-height;
+    // height: $header-mobile-menu-container-height;
+    padding-bottom: 20px;
     width: 100%;
 
-    @media (min-width: $breakpoint-md) {
-        height: $header-height;
+    &#{ & }-core {
+        background-color: $poa-purple-darker;
     }
 
-    .sokol & { // TODO: Fix
+    &#{ & }-sokol {
         background-color: $sokol-cyan-darker;
     }
-}
 
-.hd-MobileMenuLinks_ItemsContainer {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: space-evenly;
-
-    @media (min-width: $breakpoint-md) {
-        display: none;
+    &#{ & }-dai {
+        background-color: $xdai-gray-darker;
     }
 }
-
-.hd-MobileMenuLinks_Item {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 18px;
-    margin-left: 0;
-    opacity: 0.8;
-    text-decoration: none;
-    transition: opacity linear 0.1s;
-
-    &:hover,
-    &#{ & }-active {
-        opacity: 1;
-    }
-
-    @media (min-width: $breakpoint-md) {
-        margin-left: 34px;
-    }
-}
-
-// TODO: Fix this mess
-.hd-MobileMenuLinks_Icon {
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    float: left;
-    height: 18px;
-    margin-right: 10px;
-    width: 18px;
-}
-

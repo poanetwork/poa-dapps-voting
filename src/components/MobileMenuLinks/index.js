@@ -1,22 +1,12 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { ButtonNewBallot } from '../ButtonNewBallot'
+import { NavigationLinks } from '../NavigationLinks'
 
-export const MobileMenuLinks = ({ onMenuToggle, navigationData }) => {
+export const MobileMenuLinks = ({ onClick, networkBranch }) => {
   return (
-    <div className="hd-MobileMenuLinks">
-      <div className="hd-MobileMenuLinks_ItemsContainer" onClick={onMenuToggle}>
-        {navigationData.map(item => (
-          <NavLink
-            activeClassName="hd-MobileMenuLinks_Item-active"
-            className={`hd-MobileMenuLinks_Item ${item.class}`}
-            exact
-            to={item.url}
-          >
-            <i className={`link-icon ${item.icon}`} />
-            <span className="hd-MobileMenuLinks_Text">{item.title}</span>
-          </NavLink>
-        ))}
-      </div>
+    <div className={`hd-MobileMenuLinks hd-MobileMenuLinks-${networkBranch}`} onClick={onClick}>
+      <NavigationLinks networkBranch={networkBranch} />
+      <ButtonNewBallot networkBranch={networkBranch} />
     </div>
   )
 }

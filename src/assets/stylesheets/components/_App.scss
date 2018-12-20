@@ -9,10 +9,6 @@
         padding-top: 0;
     }
 
-    &#{ & }-menu-open {
-        padding-top: $header-mobile-menu-container-height + $header-height;
-    }
-
 }
 
 .lo-App_Content {
@@ -20,6 +16,7 @@
     padding-bottom: 30px;
     padding-top: 40px;
     position: relative;
+    z-index: 1;
 
     &:before {
         background-color: rgba($poa-purple, 0.5);
@@ -29,8 +26,14 @@
         left: 0;
         position: fixed;
         right: 0;
-        top: $header-mobile-menu-container-height + $header-height;
+        top: 0;
         z-index: 1234;
+    }
+
+    &#{ & }-mobile-menu-open {
+        &:before {
+            display: block;
+        }
     }
 
     &#{ & }-core {
@@ -48,12 +51,6 @@
     &#{ & }-dai {
         &:before {
             background-color: rgba($xdai-orange, 0.5);
-        }
-    }
-
-    &#{ & }-mobile-menu-open {
-        &:before {
-            display: block;
         }
     }
 }
