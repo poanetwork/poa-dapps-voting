@@ -1,10 +1,13 @@
-.ballots-about {
+.sw-BallotAbout {
   $cell-right-padding: 12px;
+
+  margin-top: -8px;
 
   @media screen and (max-width: $breakpoint-md) {
     display: table;
     width: 100%;
   }
+
   $this: &;
   p {
     line-height: 28px;

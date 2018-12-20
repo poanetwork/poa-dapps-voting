@@ -104,16 +104,6 @@
   }
 }
 
-textarea {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  overflow: auto;
-  outline: none;
-  border-radius: 3px;
-  width: 100%;
-}
-
 .color-primary {
   color: $poa-purple;
   .sokol & {

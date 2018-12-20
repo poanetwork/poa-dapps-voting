@@ -1,0 +1,10 @@
+.tg-ToggleShow {
+    color: $poa-purple;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 5px;
+
+    .sokol & {
+        color: $sokol-cyan;
+    }
+}

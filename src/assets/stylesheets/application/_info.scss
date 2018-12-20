@@ -1,23 +1,5 @@
 $padding-left-items: 25px;
 
-.info-container {
-  background-color: #f8f8f8;
-  margin-bottom: 30px;
-  margin-left: -#{ $desktop-indent };
-  margin-right: -#{ $desktop-indent };
-  padding-bottom: #{ $desktop-indent };
-  padding-left: #{ $desktop-indent };
-  padding-right: #{ $desktop-indent };
-  padding-top: #{ $desktop-indent };
-
-  @media screen and (max-width: $breakpoint-md) {
-    margin-left: -#{ $tablet-indent };
-    margin-right: -#{ $tablet-indent };
-    padding-left: #{ $tablet-indent };
-    padding-right: #{ $tablet-indent };
-  }
-
-}
 .info {
   color: #000;
 

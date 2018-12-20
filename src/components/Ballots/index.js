@@ -139,6 +139,7 @@ export class Ballots extends React.Component {
 
   render() {
     const { ballotsStore, commonStore } = this.props
+
     let ballotCards = ballotsStore.ballotCards.toJS().sort((a, b) => {
       return b.props.votingState.startTime - a.props.votingState.startTime
     })
@@ -148,6 +149,7 @@ export class Ballots extends React.Component {
     }
 
     let loadMoreButton
+
     if (ballotCards.length > this.limit && !commonStore.isActiveFilter && !commonStore.isToFinalizeFilter) {
       loadMoreButton = (
         <div className="center">
@@ -160,10 +162,12 @@ export class Ballots extends React.Component {
           </button>
         </div>
       )
+
       ballotCards.splice(this.limit)
     }
+
     return (
-      <section className="container ballots">
+      <section className="sw-Ballots">
         {ballotCards}
         {loadMoreButton}
       </section>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { BallotCard } from './BallotCard.jsx'
+import { BallotCard } from './BallotCard'
 
 @inject('commonStore', 'routing')
 @observer
@@ -14,18 +14,18 @@ export class BallotKeysCard extends React.Component {
     let miningKeyDiv
 
     if (votingState.isAddMining) {
-      affectedKeyClassName = 'ballots-about-i_key_wide'
+      affectedKeyClassName = 'sw-BallotAbout-i_key_wide'
       if (votingState.newVotingKey || votingState.newPayoutKey) {
         affectedKey = <p>Mining: {votingState.affectedKey}</p>
         if (votingState.newVotingKey) newVotingKey = <p>Voting: {votingState.newVotingKey}</p>
         if (votingState.newPayoutKey) newPayoutKey = <p>Payout: {votingState.newPayoutKey}</p>
       }
     } else {
-      affectedKeyClassName = 'ballots-about-i_key'
+      affectedKeyClassName = 'sw-BallotAbout-i_key'
       miningKeyDiv = (
-        <div className="ballots-about-i ballots-about-i_key">
+        <div className="sw-BallotAbout-i sw-BallotAbout-i_key">
           <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Validator key</p>
+            <p className="sw-BallotAbout-i--title">Validator key</p>
           </div>
           <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.miningKey}</p>
@@ -36,25 +36,25 @@ export class BallotKeysCard extends React.Component {
 
     return (
       <BallotCard votingType="votingToChangeKeys" votingState={votingState} id={id} pos={pos}>
-        <div className="ballots-about-i ballots-about-i_action">
+        <div className="sw-BallotAbout-i sw-BallotAbout-i_action">
           <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Action</p>
+            <p className="sw-BallotAbout-i--title">Action</p>
           </div>
           <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.ballotTypeDisplayName}</p>
           </div>
         </div>
-        <div className="ballots-about-i ballots-about-i_type">
+        <div className="sw-BallotAbout-i sw-BallotAbout-i_type">
           <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Key type</p>
+            <p className="sw-BallotAbout-i--title">Key type</p>
           </div>
           <div className="ballots-about-td ballots-about-td-value">
             <p>{votingState.affectedKeyTypeDisplayName}</p>
           </div>
         </div>
-        <div className={`ballots-about-i ${affectedKeyClassName}`}>
+        <div className={`sw-BallotAbout-i ${affectedKeyClassName}`}>
           <div className="ballots-about-td ballots-about-td-title">
-            <p className="ballots-about-i--title">Affected key</p>
+            <p className="sw-BallotAbout-i--title">Affected key</p>
           </div>
           <div className="ballots-about-td ballots-about-td-value">
             {affectedKey}

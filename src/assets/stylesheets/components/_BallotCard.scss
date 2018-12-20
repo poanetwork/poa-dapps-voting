@@ -1,0 +1,150 @@
+.sw-BallotCard {
+    .title {
+        margin-bottom: 50px;
+        @media screen and (max-width: $breakpoint-md) {
+            margin-bottom: $tablet-indent;
+        }
+        @media screen and (max-width: $mobile-width) {
+            margin-bottom: $mobile-indent;
+        }
+    }
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid $base-border-color;
+    margin-bottom: 30px;
+    padding: $desktop-indent;
+    transition: 0.15s box-shadow;
+    @media screen and (max-width: $breakpoint-md) {
+        margin-bottom: $tablet-indent;
+        padding: $tablet-indent;
+    }
+}
+
+.sw-BallotCard_Scale {
+    border-top: 1px solid $base-border-color;
+    display: flex;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    padding: 30px 0 0 0;
+    @media screen and (max-width: $breakpoint-md) {
+        display: block;
+        margin-top: $tablet-indent;
+        padding: $tablet-indent 0 0 0;
+    }
+    @media screen and (max-width: $mobile-width) {
+        margin-top: $mobile-indent;
+        padding: $mobile-indent 0 0 0;
+    }
+}
+
+.sw-BallotCard_ScaleColumn {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    margin-right: 40px;
+    @media screen and (max-width: $breakpoint-md) {
+        margin-bottom: 30px;
+        margin-right: 0;
+        overflow: hidden;
+        width: 100%;
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+    &.reverse-responsive {
+        @media screen and (max-width: $breakpoint-md) {
+            flex-direction: row-reverse;
+        }
+    }
+}
+
+.sw-BallotCard_Name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sw-BallotCard_Vote {
+    border-radius: 2px;
+    border: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 36px;
+    outline: none;
+    padding: 0 13px;
+    text-transform: uppercase;
+    transition: 0.3s opacity;
+
+    &:hover {
+        opacity: 0.9;
+        text-decoration: none;
+    }
+}
+
+.sw-BallotCard_VoteLabel {
+    color: #333;
+    cursor: default;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    @media screen and (max-width: $mobile-width) {
+        margin-bottom: 25px;
+    }
+}
+
+.sw-BallotCard_VoteLabel-right {
+    margin-left: auto !important;
+}
+
+.sw-BallotCard_VoteButton {
+    line-height: 44px;
+    min-width: 55px;
+    text-transform: capitalize;
+
+    &.xl {
+        min-width: 78px;
+    }
+    &.m-r-20 {
+        margin-right: 20px;
+    }
+    &.m-l-20 {
+        margin-left: 20px;
+    }
+
+    @media screen and (max-width: $breakpoint-md) {
+        &.m-r-20,
+        &.m-l-20 {
+            margin-left: 0;
+            margin-right: 20px;
+        }
+    }
+}
+
+///////////////////////////
+///////////////////////////
+///////////////////////////
+///////////////////////////
+///////////////////////////
+.color-primary {
+    color: $poa-purple;
+    .sokol & {
+        color: $sokol-cyan;
+    }
+}
+
+.color-danger {
+    color: $poa-danger-color;
+    .sokol & {
+        color: $sokol-danger-color;
+    }
+}
+
+.color-success {
+    color: $poa-green-color;
+    .sokol & {
+        color: $sokol-cyan;
+    }
+}

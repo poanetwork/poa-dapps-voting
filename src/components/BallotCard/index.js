@@ -2,8 +2,8 @@ import React from 'react'
 import moment from 'moment'
 import { observable, action, computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
-import { messages } from '../utils/messages'
-import { sendTransactionByVotingKey } from '../utils/helpers'
+import { messages } from '../../utils/messages'
+import { sendTransactionByVotingKey } from '../../utils/helpers'
 import swal from 'sweetalert2'
 
 const ACCEPT = 1
@@ -648,14 +648,9 @@ export class BallotCard extends React.Component {
 
   render() {
     let { contractsStore, votingType, children } = this.props
-    let ballotClass = this.showCard()
-      ? this.isFinalized
-        ? 'ballots-i'
-        : 'ballots-i ballots-i-not-finalized'
-      : 'ballots-i display-none'
     let voteScaleClass = 'vote-scale'
     let hasAlreadyVotedLabel = (
-      <div className="ballots-i--vote ballots-i--vote-label ballots-i--vote-label-right ballots-i--vote_no">
+      <div className="sw-BallotCard_Vote sw-BallotCard_VoteLabel sw-BallotCard_VoteLabel-right sw-BallotCard_Vote_no">
         You already voted
       </div>
     )
@@ -663,21 +658,22 @@ export class BallotCard extends React.Component {
     const threshold = this.getThreshold(contractsStore, votingType)
     let toggleShowMore =
       this.memo.length > maxDetailsLength ? (
-        <span className="toggle-show more" onClick={this.toggleDetails}>
+        <span className="tg-ToggleShow" onClick={this.toggleDetails}>
           {this.state.detailsCollapsed ? 'More...' : 'Less'}
         </span>
       ) : (
         ''
       )
     let votingScale
+
     if (votingType === 'votingToManageEmissionFunds') {
       votingScale = (
-        <div className="ballots-i-scale">
-          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+        <div className="sw-BallotCard_Scale">
+          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
             <button
               type="button"
               onClick={e => this.vote({ choice: BURN })}
-              className="btn btn-danger ballots-i--vote_btn xl m-r-20"
+              className="btn btn-danger sw-BallotCard_VoteButton xl m-r-20"
             >
               Burn
             </button>
@@ -692,11 +688,11 @@ export class BallotCard extends React.Component {
               </div>
             </div>
           </div>
-          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
             <button
               type="button"
               onClick={e => this.vote({ choice: FREEZE })}
-              className="btn btn-freeze ballots-i--vote_btn xl m-r-20"
+              className="btn btn-freeze sw-BallotCard_VoteButton xl m-r-20"
             >
               Freeze
             </button>
@@ -711,9 +707,9 @@ export class BallotCard extends React.Component {
               </div>
             </div>
           </div>
-          <div className="ballots-i-scale-column ballots-i-scale-column-3">
+          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
             <button
-              className="btn btn-success ballots-i--vote_btn xl m-r-20"
+              className="btn btn-success sw-BallotCard_VoteButton xl m-r-20"
               onClick={e => this.vote({ choice: SEND })}
               type="button"
             >
@@ -734,12 +730,12 @@ export class BallotCard extends React.Component {
       )
     } else {
       votingScale = (
-        <div className="ballots-i-scale">
-          <div className="ballots-i-scale-column">
+        <div className="sw-BallotCard_Scale">
+          <div className="sw-BallotCard_ScaleColumn">
             <button
               type="button"
               onClick={e => this.vote({ choice: REJECT })}
-              className="btn btn-danger ballots-i--vote_btn m-r-20"
+              className="btn btn-danger sw-BallotCard_VoteButton m-r-20"
             >
               No
             </button>
@@ -754,7 +750,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
           </div>
-          <div className="ballots-i-scale-column reverse-responsive">
+          <div className="sw-BallotCard_ScaleColumn reverse-responsive">
             <div className="vote-scale--container">
               <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
               <p className="vote-scale--percentage">{this.votesForPercents}%</p>
@@ -763,7 +759,7 @@ export class BallotCard extends React.Component {
               </div>
             </div>
             <button
-              className="btn btn-success ballots-i--vote_btn m-l-20"
+              className="btn btn-success sw-BallotCard_VoteButton m-l-20"
               onClick={e => this.vote({ choice: ACCEPT })}
               type="button"
             >
@@ -773,23 +769,28 @@ export class BallotCard extends React.Component {
         </div>
       )
     }
+
     return (
-      <div className={ballotClass}>
-        <div className="ballots-about">
-          <div className="ballots-about-i ballots-about-i_name">
-            <div className="ballots-about-td ballots-about-td-title">
-              <p className="ballots-about-i--title">Proposer</p>
+      <div
+        className={`sw-BallotCard ${this.isFinalized ? 'ballots-i-not-finalized' : ''} ${
+          !this.showCard() ? 'hidden' : ''
+        }`}
+      >
+        <div className="sw-BallotAbout">
+          <div className="sw-BallotAbout-i sw-BallotAbout-i_name">
+            <div className="sw-BallotAbout-td sw-BallotAbout-td-title">
+              <p className="sw-BallotAbout-i--title">Proposer</p>
             </div>
-            <div className="ballots-about-td ballots-about-td-value">
-              <p className="ballots-i--name">{this.creator}</p>
+            <div className="sw-BallotAbout-td sw-BallotAbout-td-value">
+              <p className="sw-BallotCard_Name">{this.creator}</p>
             </div>
           </div>
           {children}
-          <div className="ballots-about-i ballots-about-i_time">
-            <div className="ballots-about-td ballots-about-td-title">
-              <p className="ballots-about-i--title">Ballot Time (UTC)</p>
+          <div className="sw-BallotAbout-i sw-BallotAbout-i_time">
+            <div className="sw-BallotAbout-td sw-BallotAbout-td-title">
+              <p className="sw-BallotAbout-i--title">Ballot Time (UTC)</p>
             </div>
-            <div className="ballots-about-td ballots-about-td-value">
+            <div className="sw-BallotAbout-td sw-BallotAbout-td-value">
               <p className="ballots-i--created">{this.startTime}</p>
               <p className="ballots-i--time">
                 {this.timeTo.displayValue}&nbsp;({this.timeTo.title})
@@ -798,11 +799,15 @@ export class BallotCard extends React.Component {
           </div>
         </div>
         {votingScale}
-        <div className="info-container">
-          <div className="info info-minimum">
+        <div className="bc-BallotInfoContainer">
+          <div className="bc-BallotInfoContainer_Info bc-BallotInfoContainer_Info-minimum">
             Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
           </div>
-          <div className={`info info-details ${this.state.detailsCollapsed ? 'collapsed' : ''}`}>
+          <div
+            className={`bc-BallotInfoContainer_Info bc-BallotInfoContainer_Info-details ${
+              this.state.detailsCollapsed ? 'bc-BallotInfoContainer_Info-collapsed' : ''
+            }`}
+          >
             {this.state.detailsCollapsed
               ? this.memo.substr(0, this.memo.lastIndexOf(' ', maxDetailsLength))
               : this.memo}
@@ -817,7 +822,7 @@ export class BallotCard extends React.Component {
             <p>{this.cancelOrFinalizeDescription}</p>
           </div>
           {showHasAlreadyVotedLabel}
-          <div className="ballots-i--vote-label">
+          <div className="sw-BallotCard_VoteLabel">
             {this.typeName(votingType)} Ballot ID: {this.props.id}
           </div>
         </div>

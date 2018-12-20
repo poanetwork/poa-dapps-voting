@@ -1,4 +1,4 @@
-export { Ballots } from './Ballots.jsx'
+export { Ballots } from './Ballots'
 export { BaseLoader } from './BaseLoader'
 export { Footer } from './Footer'
 export { Header } from './Header'
