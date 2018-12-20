@@ -4,11 +4,6 @@
     height: 100%;
     padding-top: $header-height + $search-container-height;
     width: 100%;
-
-    @media (min-width: $breakpoint-md) {
-        padding-top: 0;
-    }
-
 }
 
 .lo-App_Content {

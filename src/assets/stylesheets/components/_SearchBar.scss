@@ -12,14 +12,6 @@
     top: 70px;
     z-index: 123;
 
-    @media (min-width: $breakpoint-md) {
-        left: auto;
-        position: relative;
-        right: auto;
-        top: auto;
-        z-index: 1;
-    }
-
     &#{ & }-core {
         background-color: $poa-purple-darker;
     }
