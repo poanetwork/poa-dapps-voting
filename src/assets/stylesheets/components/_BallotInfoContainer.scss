@@ -7,6 +7,7 @@
     padding-left: #{ $desktop-indent };
     padding-right: #{ $desktop-indent };
     padding-top: #{ $desktop-indent };
+
     @media screen and (max-width: $breakpoint-md) {
         margin-left: -#{ $tablet-indent };
         margin-right: -#{ $tablet-indent };
@@ -48,5 +49,16 @@
     &#{ & }-collapsed {
         height: 90px;
         overflow: hidden;
+    }
+}
+
+.bc-BallotInfoContainer_ToggleShow {
+    color: $poa-purple;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 5px;
+
+    .sokol & {
+        color: $sokol-cyan;
     }
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import moment from 'moment'
-import { observable, action, computed } from 'mobx'
+import swal from 'sweetalert2'
+import { BallotDataPair } from '../BallotDataPair'
+import { BallotInfoContainer } from '../BallotInfoContainer'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../../utils/messages'
-import { BallotDataPair } from '../BallotDataPair'
+import { observable, action, computed } from 'mobx'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
-import swal from 'sweetalert2'
 
 const ACCEPT = 1
 const REJECT = 2
@@ -13,8 +14,6 @@ const SEND = 1
 const BURN = 2
 const FREEZE = 3
 const USDateTimeFormat = 'MM/DD/YYYY h:mm:ss A'
-const maxDetailsLength = 500
-
 const zeroTimeTo = '00:00'
 
 @inject('commonStore', 'contractsStore', 'routing', 'ballotsStore')
@@ -572,42 +571,41 @@ export class BallotCard extends React.Component {
       this.sendVotes = Number(votingState.sendVotes)
       this.totalVoters = this.burnVotes + this.freezeVotes + this.sendVotes
     }
+
     // getProgress
     if (votingState.hasOwnProperty('progress')) {
       this.progress = Number(votingState.progress)
     }
+
     // getIsFinalized
     this.isFinalized = votingState.isFinalized
+
     // getIsCanceled
     if (votingState.hasOwnProperty('isCanceled')) {
       this.isCanceled = votingState.isCanceled
     }
     this.calcTimeTo()
+
     // canBeFinalizedNow
     if (votingState.hasOwnProperty('canBeFinalizedNow')) {
       this.canBeFinalized = votingState.canBeFinalizedNow
     } else {
       this.canBeFinalizedNow()
     }
+
     // getMemo
     this.memo = votingState.memo
+
     // hasAlreadyVoted
     if (votingState.hasOwnProperty('alreadyVoted')) {
       this.hasAlreadyVoted = votingState.alreadyVoted
     } else {
       this.getHasAlreadyVoted()
     }
+
     if (votingType === 'votingToManageEmissionFunds') {
-      // getQuorumState
       this.getQuorumState()
     }
-    this.state = {
-      detailsCollapsed: this.memo.length > maxDetailsLength
-    }
-  }
-
-  toggleDetails = () => {
-    this.setState(prevState => ({ detailsCollapsed: !prevState.detailsCollapsed }))
   }
 
   componentDidMount() {
@@ -657,14 +655,6 @@ export class BallotCard extends React.Component {
     )
     let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : ''
     const threshold = this.getThreshold(contractsStore, votingType)
-    let toggleShowMore =
-      this.memo.length > maxDetailsLength ? (
-        <span className="tg-ToggleShow" onClick={this.toggleDetails}>
-          {this.state.detailsCollapsed ? 'More...' : 'Less'}
-        </span>
-      ) : (
-        ''
-      )
     let votingScale
 
     if (votingType === 'votingToManageEmissionFunds') {
@@ -787,21 +777,11 @@ export class BallotCard extends React.Component {
           />
         </div>
         {votingScale}
-        <div className="bc-BallotInfoContainer">
-          <div className="bc-BallotInfoContainer_Info bc-BallotInfoContainer_Info-minimum">
-            Minimum {threshold} from {contractsStore.validatorsLength} validators are required to pass the proposal
-          </div>
-          <div
-            className={`bc-BallotInfoContainer_Info bc-BallotInfoContainer_Info-details ${
-              this.state.detailsCollapsed ? 'bc-BallotInfoContainer_Info-collapsed' : ''
-            }`}
-          >
-            {this.state.detailsCollapsed
-              ? this.memo.substr(0, this.memo.lastIndexOf(' ', maxDetailsLength))
-              : this.memo}
-            {toggleShowMore}
-          </div>
-        </div>
+        <BallotInfoContainer
+          memo={this.memo}
+          threshold={threshold}
+          validatorsLength={contractsStore.validatorsLength}
+        />
         <div className="ballots-footer">
           <div className="ballots-footer-left">
             <button type="button" onClick={e => this.cancelOrFinalize(e)} className={this.cancelOrFinalizeButtonClass}>
