@@ -10,7 +10,6 @@ export class Validator extends React.Component {
   onSelectAutocomplete = async data => {
     const { validatorStore } = this.props
     let place = await geocodeByAddress(data)
-    console.log(place)
     let address_components = {
       postal_code: '',
       street_number: '',
@@ -18,9 +17,11 @@ export class Validator extends React.Component {
       locality: '',
       administrative_area_level_1: ''
     }
+
     for (let i = 0; i < place[0].address_components.length; i++) {
       let address_component = place[0].address_components[i]
       let addressType = address_component.types[0]
+
       switch (addressType) {
         case 'postal_code':
           address_components.postal_code = address_component.short_name

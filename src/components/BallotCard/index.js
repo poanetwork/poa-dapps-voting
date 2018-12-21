@@ -3,6 +3,7 @@ import moment from 'moment'
 import { observable, action, computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../../utils/messages'
+import { BallotDataPair } from '../BallotDataPair'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
 import swal from 'sweetalert2'
 
@@ -777,26 +778,13 @@ export class BallotCard extends React.Component {
         }`}
       >
         <div className="sw-BallotAbout">
-          <div className="sw-BallotAbout-i sw-BallotAbout-i_name">
-            <div className="sw-BallotAbout-td sw-BallotAbout-td-title">
-              <p className="sw-BallotAbout-i--title">Proposer</p>
-            </div>
-            <div className="sw-BallotAbout-td sw-BallotAbout-td-value">
-              <p className="sw-BallotCard_Name">{this.creator}</p>
-            </div>
-          </div>
+          <BallotDataPair dataType="name" title="Proposer" value={[this.creator]} />
           {children}
-          <div className="sw-BallotAbout-i sw-BallotAbout-i_time">
-            <div className="sw-BallotAbout-td sw-BallotAbout-td-title">
-              <p className="sw-BallotAbout-i--title">Ballot Time (UTC)</p>
-            </div>
-            <div className="sw-BallotAbout-td sw-BallotAbout-td-value">
-              <p className="ballots-i--created">{this.startTime}</p>
-              <p className="ballots-i--time">
-                {this.timeTo.displayValue}&nbsp;({this.timeTo.title})
-              </p>
-            </div>
-          </div>
+          <BallotDataPair
+            dataType="time"
+            title="Ballot Time (UTC)"
+            value={[this.startTime, `${this.timeTo.displayValue} (${this.timeTo.title})`]}
+          />
         </div>
         {votingScale}
         <div className="bc-BallotInfoContainer">
