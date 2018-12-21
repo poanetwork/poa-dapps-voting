@@ -1,0 +1,17 @@
+.sw-IconLoadMore_Path {
+    &#{ & }-core {
+        fill: $poa-purple;
+    }
+
+    &#{ & }-sokol {
+        fill: $sokol-cyan;
+    }
+
+    &#{ & }-dai {
+        fill: $xdai-gray-dark;
+    }
+
+    .sw-ButtonLoadMore:hover & {
+        opacity: 0.7;
+    }
+}

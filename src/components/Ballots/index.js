@@ -1,7 +1,9 @@
-import React from 'react'
-import { observable } from 'mobx'
-import { inject, observer } from 'mobx-react'
 import 'babel-polyfill'
+import React from 'react'
+import { ButtonLoadMore } from '../ButtonLoadMore'
+import { inject, observer } from 'mobx-react'
+import { observable } from 'mobx'
+import { getNetworkBranch } from '../../utils/utils'
 
 @inject('commonStore', 'ballotsStore', 'ballotStore', 'contractsStore')
 @observer
@@ -13,7 +15,6 @@ export class Ballots extends React.Component {
     this.limit = this.props.commonStore.loadMoreLimit
     this.step = this.limit
     this.onClick = this.onClick.bind(this)
-    this.networkBranch = this.props.networkBranch
   }
 
   onClick = async () => {
@@ -138,6 +139,12 @@ export class Ballots extends React.Component {
     commonStore.isToFinalizeFilter = this.props.isToFinalizeFilter
   }
 
+  getVotingNetworkBranch = () => {
+    const { contractsStore } = this.props
+
+    return contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
+  }
+
   render() {
     const { ballotsStore, commonStore } = this.props
 
@@ -149,18 +156,12 @@ export class Ballots extends React.Component {
       ballotCards = this.filterBySearchTerm(commonStore.searchTerm, ballotCards)
     }
 
-    let loadMoreButton
+    let loadMore = null
 
     if (ballotCards.length > this.limit && !commonStore.isActiveFilter && !commonStore.isToFinalizeFilter) {
-      loadMoreButton = (
-        <div className="center">
-          <button
-            type="button"
-            className="btn btn-transparent btn-load-more text-capitalize"
-            onClick={e => this.onClick(e)}
-          >
-            Load More Ballots
-          </button>
+      loadMore = (
+        <div className="sw-LoadMore">
+          <ButtonLoadMore networkBranch={this.getVotingNetworkBranch()} onClick={e => this.onClick(e)} />
         </div>
       )
 
@@ -170,7 +171,7 @@ export class Ballots extends React.Component {
     return (
       <section className="sw-Ballots">
         {ballotCards}
-        {loadMoreButton}
+        {loadMore}
       </section>
     )
   }
