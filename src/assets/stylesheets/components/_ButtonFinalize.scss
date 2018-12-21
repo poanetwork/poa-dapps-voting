@@ -1,0 +1,55 @@
+.sw-ButtonFinalize {
+    align-items: center;
+    border-radius: 5px;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    height: 42px;
+    justify-content: space-between;
+    line-height: 42px;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: 0.15s background-color;
+
+    &#{ & }-core {
+        background-color: $poa-purple;
+    }
+
+    &#{ & }-sokol {
+        background-color: $sokol-cyan;
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-orange;
+    }
+
+    &#{ & }-cancel {
+        background-color: #f21b57 !important;
+    }
+
+    &#{ & }-disabled {
+        background-color: #f0f0f0 !important;
+        color: #333;
+    }
+
+    .bc-BallotFooter & {
+        margin-top: 30px;
+        order: 3;
+        width: 100%;
+
+        @media (min-width: $breakpoint-md) {
+            margin-top: 0;
+            order: 0;
+            width: auto;
+        }
+    }
+}
+
+.sw-ButtonFinalize_Text {
+    margin-right: 50px;
+}

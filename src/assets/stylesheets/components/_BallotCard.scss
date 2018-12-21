@@ -1,13 +1,4 @@
 .sw-BallotCard {
-    .title {
-        margin-bottom: 50px;
-        @media screen and (max-width: $breakpoint-md) {
-            margin-bottom: $tablet-indent;
-        }
-        @media screen and (max-width: $mobile-width) {
-            margin-bottom: $mobile-indent;
-        }
-    }
     background-color: #fff;
     border-radius: 6px;
     border: 1px solid $base-border-color;
@@ -61,42 +52,6 @@
 .sw-BallotCard_Name {
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.sw-BallotCard_Vote {
-    border-radius: 2px;
-    border: 0;
-    box-sizing: border-box;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 36px;
-    outline: none;
-    padding: 0 13px;
-    text-transform: uppercase;
-    transition: 0.3s opacity;
-
-    &:hover {
-        opacity: 0.9;
-        text-decoration: none;
-    }
-}
-
-.sw-BallotCard_VoteLabel {
-    color: #333;
-    cursor: default;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.2;
-
-    @media screen and (max-width: $mobile-width) {
-        margin-bottom: 25px;
-    }
-}
-
-.sw-BallotCard_VoteLabel-right {
-    margin-left: auto !important;
 }
 
 .sw-BallotCard_VoteButton {

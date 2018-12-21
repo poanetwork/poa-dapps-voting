@@ -48,6 +48,12 @@ class App extends Component {
     }
   }
 
+  getVotingNetworkBranch = () => {
+    const { contractsStore } = this.props
+
+    return contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
+  }
+
   onBallotsRender = () => {
     return <Ballots isActiveFilter={false} />
   }
@@ -62,6 +68,7 @@ class App extends Component {
 
   onNewBallotRender = () => {
     const { commonStore, contractsStore } = this.props
+
     if (!contractsStore.web3Instance) {
       if (!commonStore.loading) {
         swal({
@@ -73,7 +80,7 @@ class App extends Component {
       }
       return null
     }
-    return <NewBallot />
+    return <NewBallot networkBranch={this.getVotingNetworkBranch()} />
   }
 
   onSettingsRender = () => {
@@ -117,7 +124,7 @@ class App extends Component {
 
   render() {
     const { commonStore, contractsStore } = this.props
-    const networkBranch = contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
+    const networkBranch = this.getVotingNetworkBranch()
 
     return networkBranch ? (
       <div className={`lo-App ${this.state.showMobileMenu ? 'lo-App-menu-open' : ''}`}>

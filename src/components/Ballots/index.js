@@ -13,6 +13,7 @@ export class Ballots extends React.Component {
     this.limit = this.props.commonStore.loadMoreLimit
     this.step = this.limit
     this.onClick = this.onClick.bind(this)
+    this.networkBranch = this.props.networkBranch
   }
 
   onClick = async () => {

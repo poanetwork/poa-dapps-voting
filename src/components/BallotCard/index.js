@@ -2,7 +2,9 @@ import React from 'react'
 import moment from 'moment'
 import swal from 'sweetalert2'
 import { BallotDataPair } from '../BallotDataPair'
+import { BallotFooter } from '../BallotFooter'
 import { BallotInfoContainer } from '../BallotInfoContainer'
+import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../../utils/messages'
 import { observable, action, computed } from 'mobx'
@@ -68,15 +70,11 @@ export class BallotCard extends React.Component {
   }
 
   @computed
-  get cancelOrFinalizeButtonClass() {
-    if (this.isFinalized) {
-      return 'btn btn-primary btn-finalize disabled text-capitalize'
-    } else if (this.isCanceled) {
-      return 'btn btn-primary disabled text-capitalize'
+  get cancelOrFinalizeButtonState() {
+    if (this.isFinalized || this.isCanceled) {
+      return 'disabled'
     } else if (this.timeToCancel.val > 0) {
-      return 'btn btn-danger text-capitalize'
-    } else {
-      return 'btn btn-primary btn-finalize text-capitalize'
+      return 'danger'
     }
   }
 
@@ -233,6 +231,71 @@ export class BallotCard extends React.Component {
     this.timeToFinish.val = 0
     this.timeToFinish.displayValue = zeroTimeTo
     return (this.timeTo = this.timeToFinish)
+  }
+
+  constructor(props) {
+    super(props)
+    const { votingState, contractsStore, votingType } = this.props
+    // getTimes
+    if (
+      votingState.hasOwnProperty('creationTime') &&
+      contractsStore.ballotCancelingThreshold > 0 &&
+      votingState.creatorMiningKey === contractsStore.miningKey
+    ) {
+      votingState.creationTime = Number(votingState.creationTime)
+      this.cancelDeadline = moment
+        .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
+        .format(USDateTimeFormat)
+    }
+    this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat)
+    this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat)
+    // getCreator
+    this.creator = votingState.creator
+    this.creatorMiningKey = votingState.creatorMiningKey
+    // getTotalVoters
+    if (votingState.hasOwnProperty('totalVoters')) {
+      this.totalVoters = Number(votingState.totalVoters)
+    } else {
+      this.burnVotes = Number(votingState.burnVotes)
+      this.freezeVotes = Number(votingState.freezeVotes)
+      this.sendVotes = Number(votingState.sendVotes)
+      this.totalVoters = this.burnVotes + this.freezeVotes + this.sendVotes
+    }
+
+    // getProgress
+    if (votingState.hasOwnProperty('progress')) {
+      this.progress = Number(votingState.progress)
+    }
+
+    // getIsFinalized
+    this.isFinalized = votingState.isFinalized
+
+    // getIsCanceled
+    if (votingState.hasOwnProperty('isCanceled')) {
+      this.isCanceled = votingState.isCanceled
+    }
+    this.calcTimeTo()
+
+    // canBeFinalizedNow
+    if (votingState.hasOwnProperty('canBeFinalizedNow')) {
+      this.canBeFinalized = votingState.canBeFinalizedNow
+    } else {
+      this.canBeFinalizedNow()
+    }
+
+    // getMemo
+    this.memo = votingState.memo
+
+    // hasAlreadyVoted
+    if (votingState.hasOwnProperty('alreadyVoted')) {
+      this.hasAlreadyVoted = votingState.alreadyVoted
+    } else {
+      this.getHasAlreadyVoted()
+    }
+
+    if (votingType === 'votingToManageEmissionFunds') {
+      this.getQuorumState()
+    }
   }
 
   formatMs(ms, format) {
@@ -543,71 +606,6 @@ export class BallotCard extends React.Component {
     }
   }
 
-  constructor(props) {
-    super(props)
-    const { votingState, contractsStore, votingType } = this.props
-    // getTimes
-    if (
-      votingState.hasOwnProperty('creationTime') &&
-      contractsStore.ballotCancelingThreshold > 0 &&
-      votingState.creatorMiningKey === contractsStore.miningKey
-    ) {
-      votingState.creationTime = Number(votingState.creationTime)
-      this.cancelDeadline = moment
-        .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
-        .format(USDateTimeFormat)
-    }
-    this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat)
-    this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat)
-    // getCreator
-    this.creator = votingState.creator
-    this.creatorMiningKey = votingState.creatorMiningKey
-    // getTotalVoters
-    if (votingState.hasOwnProperty('totalVoters')) {
-      this.totalVoters = Number(votingState.totalVoters)
-    } else {
-      this.burnVotes = Number(votingState.burnVotes)
-      this.freezeVotes = Number(votingState.freezeVotes)
-      this.sendVotes = Number(votingState.sendVotes)
-      this.totalVoters = this.burnVotes + this.freezeVotes + this.sendVotes
-    }
-
-    // getProgress
-    if (votingState.hasOwnProperty('progress')) {
-      this.progress = Number(votingState.progress)
-    }
-
-    // getIsFinalized
-    this.isFinalized = votingState.isFinalized
-
-    // getIsCanceled
-    if (votingState.hasOwnProperty('isCanceled')) {
-      this.isCanceled = votingState.isCanceled
-    }
-    this.calcTimeTo()
-
-    // canBeFinalizedNow
-    if (votingState.hasOwnProperty('canBeFinalizedNow')) {
-      this.canBeFinalized = votingState.canBeFinalizedNow
-    } else {
-      this.canBeFinalizedNow()
-    }
-
-    // getMemo
-    this.memo = votingState.memo
-
-    // hasAlreadyVoted
-    if (votingState.hasOwnProperty('alreadyVoted')) {
-      this.hasAlreadyVoted = votingState.alreadyVoted
-    } else {
-      this.getHasAlreadyVoted()
-    }
-
-    if (votingType === 'votingToManageEmissionFunds') {
-      this.getQuorumState()
-    }
-  }
-
   componentDidMount() {
     this.interval = setInterval(() => {
       this.calcTimeTo()
@@ -645,17 +643,19 @@ export class BallotCard extends React.Component {
     }
   }
 
+  getVotingNetworkBranch = () => {
+    const { contractsStore } = this.props
+
+    return contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
+  }
+
   render() {
     let { contractsStore, votingType, children } = this.props
     let voteScaleClass = 'vote-scale'
-    let hasAlreadyVotedLabel = (
-      <div className="sw-BallotCard_Vote sw-BallotCard_VoteLabel sw-BallotCard_VoteLabel-right sw-BallotCard_Vote_no">
-        You already voted
-      </div>
-    )
-    let showHasAlreadyVotedLabel = this.hasAlreadyVoted ? hasAlreadyVotedLabel : ''
-    const threshold = this.getThreshold(contractsStore, votingType)
     let votingScale
+
+    const threshold = this.getThreshold(contractsStore, votingType)
+    const networkBranch = this.getVotingNetworkBranch()
 
     if (votingType === 'votingToManageEmissionFunds') {
       votingScale = (
@@ -762,11 +762,7 @@ export class BallotCard extends React.Component {
     }
 
     return (
-      <div
-        className={`sw-BallotCard ${this.isFinalized ? 'ballots-i-not-finalized' : ''} ${
-          !this.showCard() ? 'hidden' : ''
-        }`}
-      >
+      <div className={`sw-BallotCard ${!this.showCard() ? 'hidden' : ''}`}>
         <div className="sw-BallotAbout">
           <BallotDataPair dataType="name" title="Proposer" value={[this.creator]} />
           {children}
@@ -782,18 +778,16 @@ export class BallotCard extends React.Component {
           threshold={threshold}
           validatorsLength={contractsStore.validatorsLength}
         />
-        <div className="ballots-footer">
-          <div className="ballots-footer-left">
-            <button type="button" onClick={e => this.cancelOrFinalize(e)} className={this.cancelOrFinalizeButtonClass}>
-              {this.cancelOrFinalizeButtonDisplayName}
-            </button>
-            <p>{this.cancelOrFinalizeDescription}</p>
-          </div>
-          {showHasAlreadyVotedLabel}
-          <div className="sw-BallotCard_VoteLabel">
-            {this.typeName(votingType)} Ballot ID: {this.props.id}
-          </div>
-        </div>
+        <BallotFooter
+          buttonState={this.cancelOrFinalizeButtonState}
+          buttonText={this.cancelOrFinalizeButtonDisplayName}
+          description={this.cancelOrFinalizeDescription}
+          networkBranch={networkBranch}
+          onClick={e => this.cancelOrFinalize(e)}
+          voteId={this.props.id}
+          voteType={this.typeName(votingType)}
+          voted={this.hasAlreadyVoted}
+        />
       </div>
     )
   }
