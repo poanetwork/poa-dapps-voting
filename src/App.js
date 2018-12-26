@@ -15,36 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    const { commonStore } = this.props
-
     this.state = {
-      showMobileMenu: false,
-      navigationData: [
-        {
-          icon: 'link-icon-all',
-          title: 'All',
-          url: commonStore.rootPath,
-          class: ''
-        },
-        {
-          icon: 'link-icon-active',
-          title: 'Active',
-          url: `${commonStore.rootPath}/active`,
-          class: ''
-        },
-        {
-          icon: 'link-icon-to-finalize',
-          title: 'To Finalize',
-          url: `${commonStore.rootPath}/tofinalize`,
-          class: ''
-        },
-        {
-          icon: 'link-icon-add',
-          title: 'New Ballot',
-          url: `${commonStore.rootPath}/new`,
-          class: 'btn btn-new-ballot btn-success btn-new no-shadow text-capitalize'
-        }
-      ]
+      showMobileMenu: false
     }
   }
 
@@ -104,17 +76,13 @@ class App extends Component {
   }
 
   getTitle = () => {
-    const currentPath = this.props.location.pathname
+    let obj = constants.navigationData.find(element => element.url === this.props.location.pathname)
 
-    if (currentPath === `${this.state.navigationData[1].url}`) {
-      return this.state.navigationData[1].title
-    } else if (currentPath === `${this.state.navigationData[2].url}`) {
-      return this.state.navigationData[2].title
-    } else if (currentPath === `${this.state.navigationData[3].url}`) {
-      return this.state.navigationData[3].title
-    } else {
-      return this.state.navigationData[0].title
+    if (obj) {
+      return obj.title
     }
+
+    return 'All'
   }
 
   getNetIdClass() {
@@ -131,7 +99,6 @@ class App extends Component {
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
-          navigationData={this.state.navigationData}
           netId={contractsStore.netId}
           networkBranch={networkBranch}
           onMenuToggle={this.toggleMobileMenu}
