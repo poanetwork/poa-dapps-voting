@@ -12,6 +12,8 @@
 }
 
 .vt-VoteProgressBar_Progress {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
     height: 100%;
 
     &#{ & }-negative#{ & }-core {
