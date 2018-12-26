@@ -4,6 +4,8 @@ import swal from 'sweetalert2'
 import { BallotDataPair } from '../BallotDataPair'
 import { BallotFooter } from '../BallotFooter'
 import { BallotInfoContainer } from '../BallotInfoContainer'
+import { ButtonVoting } from '../ButtonVoting'
+import { VoteProgressBar } from '../VoteProgressBar'
 import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../../utils/messages'
@@ -651,7 +653,6 @@ export class BallotCard extends React.Component {
 
   render() {
     let { contractsStore, votingType, children } = this.props
-    let voteScaleClass = 'vote-scale'
     let votingScale
 
     const threshold = this.getThreshold(contractsStore, votingType)
@@ -661,61 +662,49 @@ export class BallotCard extends React.Component {
       votingScale = (
         <div className="sw-BallotCard_Scale">
           <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <button
-              type="button"
+            <ButtonVoting
+              networkBranch={networkBranch}
               onClick={e => this.vote({ choice: BURN })}
-              className="btn btn-danger sw-BallotCard_VoteButton xl m-r-20"
-            >
-              Burn
-            </button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesBurnNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesBurnPercents}%</p>
-              <div className={voteScaleClass}>
-                <div
-                  className="vote-scale--fill vote-scale--fill_burn"
-                  style={{ width: `${this.votesBurnPercents}%` }}
-                />
-              </div>
-            </div>
+              size="md"
+              text="Burn"
+              type="negative"
+            />
+            <VoteProgressBar
+              networkBranch={networkBranch}
+              type="negative"
+              votesAmount={this.votesBurnNumber}
+              votesPercentage={this.votesBurnPercents}
+            />
           </div>
           <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <button
-              type="button"
+            <ButtonVoting
+              networkBranch={networkBranch}
               onClick={e => this.vote({ choice: FREEZE })}
-              className="btn btn-freeze sw-BallotCard_VoteButton xl m-r-20"
-            >
-              Freeze
-            </button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesFreezeNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesFreezePercents}%</p>
-              <div className={voteScaleClass}>
-                <div
-                  className="vote-scale--fill vote-scale--fill_freeze"
-                  style={{ width: `${this.votesFreezePercents}%` }}
-                />
-              </div>
-            </div>
+              size="md"
+              text="Freeze"
+              type="neutral"
+            />
+            <VoteProgressBar
+              networkBranch={networkBranch}
+              type="neutral"
+              votesAmount={this.votesFreezeNumber}
+              votesPercentage={this.votesFreezePercents}
+            />
           </div>
           <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <button
-              className="btn btn-success sw-BallotCard_VoteButton xl m-r-20"
+            <ButtonVoting
+              networkBranch={networkBranch}
               onClick={e => this.vote({ choice: SEND })}
-              type="button"
-            >
-              Send
-            </button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesSendNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesSendPercents}%</p>
-              <div className={voteScaleClass}>
-                <div
-                  className="vote-scale--fill vote-scale--fill_send"
-                  style={{ width: `${this.votesSendPercents}%` }}
-                />
-              </div>
-            </div>
+              size="md"
+              text="Send"
+              type="positive"
+            />
+            <VoteProgressBar
+              networkBranch={networkBranch}
+              type="positive"
+              votesAmount={this.votesSendNumber}
+              votesPercentage={this.votesSendPercents}
+            />
           </div>
         </div>
       )
@@ -723,39 +712,33 @@ export class BallotCard extends React.Component {
       votingScale = (
         <div className="sw-BallotCard_Scale">
           <div className="sw-BallotCard_ScaleColumn">
-            <button
-              type="button"
+            <ButtonVoting
+              networkBranch={networkBranch}
               onClick={e => this.vote({ choice: REJECT })}
-              className="btn btn-danger sw-BallotCard_VoteButton m-r-20"
-            >
-              No
-            </button>
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesAgainstNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesAgainstPercents}%</p>
-              <div className={voteScaleClass}>
-                <div
-                  className="vote-scale--fill vote-scale--fill_no"
-                  style={{ width: `${this.votesAgainstPercents}%` }}
-                />
-              </div>
-            </div>
+              text="No"
+              type="negative"
+            />
+            <VoteProgressBar
+              networkBranch={networkBranch}
+              type="negative"
+              votesAmount={this.votesAgainstNumber}
+              votesPercentage={this.votesAgainstPercents}
+            />
           </div>
           <div className="sw-BallotCard_ScaleColumn reverse-responsive">
-            <div className="vote-scale--container">
-              <p className="vote-scale--votes">{this.votesForNumber} Votes</p>
-              <p className="vote-scale--percentage">{this.votesForPercents}%</p>
-              <div className={voteScaleClass}>
-                <div className="vote-scale--fill vote-scale--fill_yes" style={{ width: `${this.votesForPercents}%` }} />
-              </div>
-            </div>
-            <button
-              className="btn btn-success sw-BallotCard_VoteButton m-l-20"
+            <VoteProgressBar
+              networkBranch={networkBranch}
+              type="positive"
+              votesAmount={this.votesForNumber}
+              votesPercentage={this.votesForPercents}
+            />
+            <ButtonVoting
+              networkBranch={networkBranch}
               onClick={e => this.vote({ choice: ACCEPT })}
-              type="button"
-            >
-              Yes
-            </button>
+              side="right"
+              text="Yes"
+              type="positive"
+            />
           </div>
         </div>
       )
