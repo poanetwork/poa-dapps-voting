@@ -4,8 +4,7 @@ import swal from 'sweetalert2'
 import { BallotDataPair } from '../BallotDataPair'
 import { BallotFooter } from '../BallotFooter'
 import { BallotInfoContainer } from '../BallotInfoContainer'
-import { ButtonVoting } from '../ButtonVoting'
-import { VoteProgressBar } from '../VoteProgressBar'
+import { Votes } from '../Votes'
 import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
 import { messages } from '../../utils/messages'
@@ -653,95 +652,53 @@ export class BallotCard extends React.Component {
 
   render() {
     let { contractsStore, votingType, children } = this.props
-    let votingScale
+    let votes
 
     const threshold = this.getThreshold(contractsStore, votingType)
     const networkBranch = this.getVotingNetworkBranch()
 
     if (votingType === 'votingToManageEmissionFunds') {
-      votingScale = (
-        <div className="sw-BallotCard_Scale">
-          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <ButtonVoting
-              networkBranch={networkBranch}
-              onClick={e => this.vote({ choice: BURN })}
-              size="md"
-              text="Burn"
-              type="negative"
-            />
-            <VoteProgressBar
-              networkBranch={networkBranch}
-              type="negative"
-              votesAmount={this.votesBurnNumber}
-              votesPercentage={this.votesBurnPercents}
-            />
-          </div>
-          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <ButtonVoting
-              networkBranch={networkBranch}
-              onClick={e => this.vote({ choice: FREEZE })}
-              size="md"
-              text="Freeze"
-              type="neutral"
-            />
-            <VoteProgressBar
-              networkBranch={networkBranch}
-              type="neutral"
-              votesAmount={this.votesFreezeNumber}
-              votesPercentage={this.votesFreezePercents}
-            />
-          </div>
-          <div className="sw-BallotCard_ScaleColumn sw-BallotCard_ScaleColumn-3">
-            <ButtonVoting
-              networkBranch={networkBranch}
-              onClick={e => this.vote({ choice: SEND })}
-              size="md"
-              text="Send"
-              type="positive"
-            />
-            <VoteProgressBar
-              networkBranch={networkBranch}
-              type="positive"
-              votesAmount={this.votesSendNumber}
-              votesPercentage={this.votesSendPercents}
-            />
-          </div>
-        </div>
-      )
+      votes = [
+        {
+          onClick: e => this.vote({ choice: BURN }),
+          text: 'Burn',
+          type: 'negative',
+          votesAmount: this.votesBurnNumber,
+          votesPercentage: this.votesBurnPercents
+        },
+        {
+          onClick: e => this.vote({ choice: FREEZE }),
+          text: 'Freeze',
+          type: 'neutral',
+          votesAmount: this.votesFreezeNumber,
+          votesPercentage: this.votesFreezePercents
+        },
+        {
+          onClick: e => this.vote({ choice: SEND }),
+          text: 'Send',
+          type: 'positive',
+          votesAmount: this.votesSendNumber,
+          votesPercentage: this.votesSendPercents
+        }
+      ]
     } else {
-      votingScale = (
-        <div className="sw-BallotCard_Scale">
-          <div className="sw-BallotCard_ScaleColumn">
-            <ButtonVoting
-              networkBranch={networkBranch}
-              onClick={e => this.vote({ choice: REJECT })}
-              text="No"
-              type="negative"
-            />
-            <VoteProgressBar
-              networkBranch={networkBranch}
-              type="negative"
-              votesAmount={this.votesAgainstNumber}
-              votesPercentage={this.votesAgainstPercents}
-            />
-          </div>
-          <div className="sw-BallotCard_ScaleColumn reverse-responsive">
-            <VoteProgressBar
-              networkBranch={networkBranch}
-              type="positive"
-              votesAmount={this.votesForNumber}
-              votesPercentage={this.votesForPercents}
-            />
-            <ButtonVoting
-              networkBranch={networkBranch}
-              onClick={e => this.vote({ choice: ACCEPT })}
-              side="right"
-              text="Yes"
-              type="positive"
-            />
-          </div>
-        </div>
-      )
+      votes = [
+        {
+          onClick: e => this.vote({ choice: REJECT }),
+          text: 'No',
+          type: 'negative',
+          votesAmount: this.votesAgainstNumber,
+          votesPercentage: this.votesAgainstPercents
+        },
+        {
+          onClick: e => this.vote({ choice: ACCEPT }),
+          side: 'right',
+          text: 'Yes',
+          type: 'positive',
+          votesAmount: this.votesForNumber,
+          votesPercentage: this.votesForPercents
+        }
+      ]
     }
 
     return (
@@ -755,7 +712,7 @@ export class BallotCard extends React.Component {
             value={[this.startTime, `${this.timeTo.displayValue} (${this.timeTo.title})`]}
           />
         </div>
-        {votingScale}
+        <Votes networkBranch={networkBranch} votes={votes} />
         <BallotInfoContainer
           memo={this.memo}
           threshold={threshold}

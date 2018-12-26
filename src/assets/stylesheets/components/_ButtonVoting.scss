@@ -9,19 +9,19 @@
     font-weight: 700;
     line-height: 42px;
     margin-right: 20px;
+    min-width: 55px;
     outline: none;
     padding: 0 15px;
     text-decoration: none;
     text-transform: uppercase;
     transition: 0.15s background-color linear;
-    width: 55px;
 
     &#{ & }-sm {
-        width: 55px;
+        min-width: 55px;
     }
 
     &#{ & }-md {
-        width: 78px;
+        min-width: 78px;
     }
 
     @media (min-width: $breakpoint-xl) {
@@ -33,6 +33,7 @@
         &#{ & }-right {
             margin-left: 20px;
             margin-right: 0;
+            order: 2;
         }
     }
 

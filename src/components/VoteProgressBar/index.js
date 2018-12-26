@@ -3,9 +3,9 @@ import React from 'react'
 export const VoteProgressBar = ({
   extraClassName = '',
   networkBranch,
+  type = 'positive',
   votesAmount = '',
-  votesPercentage = '',
-  type = 'positive'
+  votesPercentage = ''
 }) => {
   return (
     <div className={`vt-VoteProgressBar ${extraClassName} vt-VoteProgressBar-${networkBranch}`}>

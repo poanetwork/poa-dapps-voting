@@ -40,4 +40,16 @@
     .sw-ButtonLoadMore:hover & {
         opacity: 0.7;
     }
+
+    .sw-ButtonLoadMore-core & {
+        color: $poa-purple;
+    }
+
+    .sw-ButtonLoadMore-sokol & {
+        color: $sokol-cyan;
+    }
+
+    .sw-ButtonLoadMore-dai & {
+        color: $xdai-gray;
+    }
 }
