@@ -5,6 +5,7 @@ import { BallotEmissionFundsMetadata } from '../BallotEmissionFundsMetadata'
 import { BallotKeysMetadata } from '../BallotKeysMetadata'
 import { BallotMinThresholdMetadata } from '../BallotMinThresholdMetadata'
 import { BallotProxyMetadata } from '../BallotProxyMetadata'
+import { ButtonAddBallot } from '../ButtonAddBallot'
 import { KeysTypes } from '../KeysTypes'
 import { NewBallotMenu } from '../NewBallotMenu'
 import { NewBallotMenuInfo } from '../NewBallotMenuInfo'
@@ -247,6 +248,7 @@ export class NewBallot extends React.Component {
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore, ballotsStore } = this.props
     const { push } = this.props.routing
+
     if (!contractsStore.votingKey) {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return
@@ -254,8 +256,11 @@ export class NewBallot extends React.Component {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
       return
     }
+
     commonStore.showLoading()
+
     const isFormValid = this.checkValidation()
+
     if (isFormValid) {
       if (ballotStore.ballotType === ballotStore.BallotType.keys) {
         const inputToAreBallotParamsValid = {
@@ -414,8 +419,6 @@ export class NewBallot extends React.Component {
   render() {
     const { contractsStore, ballotStore } = this.props
     const networkBranch = this.getVotingNetworkBranch()
-    let validator = ballotStore.isNewValidatorPersonalData ? <Validator /> : ''
-    let keysTypes = ballotStore.isBallotForKey ? <KeysTypes /> : ''
     let metadata
     let minThreshold = 0
 
@@ -461,12 +464,10 @@ export class NewBallot extends React.Component {
               </div>
             </div>
             <hr />
-            {keysTypes}
-            {validator}
+            {ballotStore.isBallotForKey ? <KeysTypes /> : null}
+            {ballotStore.isNewValidatorPersonalData ? <Validator /> : null}
             {metadata}
-            <button type="button" className="btn btn-primary btn-new text-capitalize" onClick={e => this.onClick(e)}>
-              Add ballot
-            </button>
+            <ButtonAddBallot onClick={e => this.onClick(e)} networkBranch={networkBranch} />
           </div>
         </form>
       </section>
