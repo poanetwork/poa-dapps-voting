@@ -1,11 +1,11 @@
 .lo-FormElement {
-    margin-bottom: 30px;
+    margin-bottom: $base-grid-gap;
 }
 
 label {
     color: $gray-text-color;
     display: inline-block;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.2;
     margin-bottom: 15px;
 }

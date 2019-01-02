@@ -5,6 +5,10 @@
     height: 100%;
     padding-top: $header-height + $search-container-height;
     width: 100%;
+
+    &#{ & }-no-search-bar {
+        padding-top: $header-height;
+    }
 }
 
 .lo-App_Content {

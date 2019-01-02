@@ -9,6 +9,7 @@ import { ButtonAddBallot } from '../ButtonAddBallot'
 import { KeysTypes } from '../KeysTypes'
 import { NewBallotMenu } from '../NewBallotMenu'
 import { NewBallotMenuInfo } from '../NewBallotMenuInfo'
+import { Separator } from '../Separator'
 import { Validator } from '../Validator'
 import { constants } from '../../utils/constants'
 import { getNetworkBranch } from '../../utils/utils'
@@ -459,12 +460,10 @@ export class NewBallot extends React.Component {
           <div className="new-NewBallot_FormContent">
             <div className="form-el">
               <label>Description of the ballot</label>
-              <div>
-                <textarea rows="4" value={ballotStore.memo} onChange={e => ballotStore.setMemo(e)} />
-              </div>
+              <textarea rows="4" value={ballotStore.memo} onChange={e => ballotStore.setMemo(e)} />
             </div>
-            <hr />
-            {ballotStore.isBallotForKey ? <KeysTypes /> : null}
+            <Separator />
+            {ballotStore.isBallotForKey ? <KeysTypes networkBranch={networkBranch} /> : null}
             {ballotStore.isNewValidatorPersonalData ? <Validator /> : null}
             {metadata}
             <ButtonAddBallot onClick={e => this.onClick(e)} networkBranch={networkBranch} />

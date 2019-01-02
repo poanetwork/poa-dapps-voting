@@ -90,12 +90,20 @@ class App extends Component {
     return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? 'sokol' : ''
   }
 
+  isNewBallotPage() {
+    return `${constants.rootPath}/new` === this.props.location.pathname
+  }
+
   render() {
     const { commonStore, contractsStore } = this.props
     const networkBranch = this.getVotingNetworkBranch()
 
     return networkBranch ? (
-      <div className={`lo-App ${this.state.showMobileMenu ? 'lo-App-menu-open' : ''}`}>
+      <div
+        className={`lo-App ${this.isNewBallotPage() ? 'lo-App-no-search-bar' : ''} ${
+          this.state.showMobileMenu ? 'lo-App-menu-open' : ''
+        }`}
+      >
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}

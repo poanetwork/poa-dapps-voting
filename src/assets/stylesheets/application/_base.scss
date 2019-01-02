@@ -31,15 +31,6 @@ a {
   }
 }
 
-hr {
-  display: block;
-  width: 100%;
-  height: 1px;
-  margin: 10px 0 30px;
-  border: 0;
-  background-color: $base-border-color;
-}
-
 .center {
   text-align: center;
 }
@@ -78,21 +69,5 @@ hr {
   @media screen and (max-width: $container-max-width) {
     width: 100%;
     padding: 0 10px;
-  }
-}
-
-.title {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  color: #38454f;
-  font-size: 30px;
-  font-weight: normal;
-
-  @media screen and (max-width: $breakpoint-md) {
-    font-size: 28px;
-  }
-
-  @media screen and (max-width: $mobile-width) {
-    font-size: 26px;
   }
 }
