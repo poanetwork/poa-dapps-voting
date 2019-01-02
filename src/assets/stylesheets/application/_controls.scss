@@ -1,59 +1,4 @@
-label {
-  color: $gray-text-color;
-  display: inline-block;
-  font-size: 13px;
-  line-height: 1.2;
-  margin-bottom: 15px;
-}
 
-input,
-textarea {
-  @extend %form-el;
-
-  &:focus {
-    border-color: #fff;
-  }
-
-  &[type='radio'] {
-    display: none;
-  }
-}
-
-textarea {
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  height: 70px;
-  resize: none;
-}
-
-select {
-  @include image-2x('#{ $base-images-path }/select@2x.png', 8px, 4px);
-  @extend %form-el;
-  appearance: none;
-  background-image: url('#{ $base-images-path }/select.png');
-  background-position: right 13px center;
-  background-repeat: no-repeat;
-  padding-right: 30px;
-}
-
-button {
-  @extend %button;
-  background-color: fade-out($poa-purple, 0.9);
-  color: $poa-purple;
-
-  &.load-more {
-    margin-bottom: 50px;
-
-    @media screen and (max-width: $container-max-width) {
-      margin-bottom: 80px;
-    }
-
-    @media screen and (max-width: $breakpoint-md) {
-      margin-top: 80px;
-    }
-  }
-}
 
 .radio-button {
   position: relative;
@@ -124,9 +69,9 @@ button {
   }
 }
 
-.form-el {
-  margin-bottom: 30px;
-}
+// .form-el {
+//   margin-bottom: 30px;
+// }
 
 .hint {
   color: #777;

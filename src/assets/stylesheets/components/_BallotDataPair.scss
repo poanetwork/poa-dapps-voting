@@ -20,6 +20,7 @@ $cell-right-padding: 12px;
 
     &#{ & }-name {
         width: 12%;
+        word-break: break-word;
     }
     &#{ & }-action {
         width: 8%;
