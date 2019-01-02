@@ -18,10 +18,13 @@ export class BallotInfoContainer extends React.Component {
   }
 
   render() {
-    let { memo = '', threshold, validatorsLength } = this.props
+    let { memo = '', threshold, validatorsLength, networkBranch } = this.props
     let toggleShowMore =
       memo.length > MAX_DETAILS_LENGTH ? (
-        <span className="bc-BallotInfoContainer_ToggleShow" onClick={this.toggleDetails}>
+        <span
+          className={`bc-BallotInfoContainer_ToggleShow bc-BallotInfoContainer_ToggleShow-${networkBranch}`}
+          onClick={this.toggleDetails}
+        >
           {this.state.detailsCollapsed ? 'More...' : 'Less'}
         </span>
       ) : (

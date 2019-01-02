@@ -58,7 +58,16 @@
     display: inline-block;
     margin-left: 5px;
 
-    .sokol & {
+    &#{ & }-core {
+        color: $poa-purple;
+    }
+
+    &#{ & }-sokol {
         color: $sokol-cyan;
     }
+
+    &#{ & }-dai {
+        color: $xdai-orange;
+    }
+
 }

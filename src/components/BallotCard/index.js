@@ -715,6 +715,7 @@ export class BallotCard extends React.Component {
         <Votes networkBranch={networkBranch} votes={votes} />
         <BallotInfoContainer
           memo={this.memo}
+          networkBranch={networkBranch}
           threshold={threshold}
           validatorsLength={contractsStore.validatorsLength}
         />
