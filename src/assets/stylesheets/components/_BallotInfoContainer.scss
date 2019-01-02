@@ -36,12 +36,12 @@
     }
 
     &#{ & }-minimum {
-        background-image: url('#{ $base-images-path }/icons/icon-min.svg');
+        background-image: url('#{ $base-images-path }/BallotInfoContainer/min.svg');
         background-size: 18px 18px;
     }
 
     &#{ & }-details {
-        background-image: url('#{ $base-images-path }/icons/icon-info.svg');
+        background-image: url('#{ $base-images-path }/BallotInfoContainer/info.svg');
         background-size: 10px 18px;
         position: relative;
     }

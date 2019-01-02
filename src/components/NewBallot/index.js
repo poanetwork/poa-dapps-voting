@@ -1,22 +1,32 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
 import moment from 'moment'
 import swal from 'sweetalert2'
-import { Validator } from './Validator.jsx'
-import { KeysTypes } from './KeysTypes.jsx'
-import { BallotKeysMetadata } from './BallotKeysMetadata.jsx'
-import { BallotMinThresholdMetadata } from './BallotMinThresholdMetadata.jsx'
-import { BallotProxyMetadata } from './BallotProxyMetadata.jsx'
-import { BallotEmissionFundsMetadata } from './BallotEmissionFundsMetadata.jsx'
-import { messages } from '../utils/messages'
-import { constants } from '../utils/constants'
-import { sendTransactionByVotingKey } from '../utils/helpers'
+import { BallotEmissionFundsMetadata } from '../BallotEmissionFundsMetadata'
+import { BallotKeysMetadata } from '../BallotKeysMetadata'
+import { BallotMinThresholdMetadata } from '../BallotMinThresholdMetadata'
+import { BallotProxyMetadata } from '../BallotProxyMetadata'
+import { KeysTypes } from '../KeysTypes'
+import { NewBallotMenu } from '../NewBallotMenu'
+import { NewBallotMenuInfo } from '../NewBallotMenuInfo'
+import { Validator } from '../Validator'
+import { constants } from '../../utils/constants'
+import { getNetworkBranch } from '../../utils/utils'
+import { inject, observer } from 'mobx-react'
+import { messages } from '../../utils/messages'
+import { sendTransactionByVotingKey } from '../../utils/helpers'
+
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
 export class NewBallot extends React.Component {
   constructor(props) {
     super(props)
     this.onClick = this.onClick.bind(this)
+  }
+
+  getVotingNetworkBranch = () => {
+    const { contractsStore } = this.props
+
+    return contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
   }
 
   getStartTimeUnix() {
@@ -365,27 +375,50 @@ export class NewBallot extends React.Component {
     }
   }
 
-  menuItemActive = ballotType => {
-    const { ballotStore } = this.props
-
-    if (ballotType === ballotStore.ballotType) {
-      return 'ballot-types-i ballot-types-i_active'
-    } else {
-      return 'ballot-types-i'
-    }
-  }
-
   componentDidMount() {
     const { ballotStore } = this.props
     ballotStore.changeBallotType(null, ballotStore.BallotType.keys)
   }
 
+  getMenuItems() {
+    const { contractsStore, ballotStore } = this.props
+    let items = [
+      {
+        active: ballotStore.BallotType.keys === ballotStore.ballotType,
+        onClick: e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys),
+        text: 'Validator Management Ballot'
+      },
+      {
+        active: ballotStore.BallotType.minThreshold === ballotStore.ballotType,
+        onClick: e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold),
+        text: 'Consensus Threshold Ballot'
+      },
+      {
+        active: ballotStore.BallotType.proxy === ballotStore.ballotType,
+        onClick: e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy),
+        text: 'Modify Proxy Contract Ballot'
+      }
+    ]
+
+    if (contractsStore.votingToManageEmissionFunds) {
+      items.push({
+        active: ballotStore.BallotType.emissionFunds === ballotStore.ballotType,
+        onClick: e => ballotStore.changeBallotType(e, ballotStore.BallotType.emissionFunds),
+        text: 'Emission Funds Ballot'
+      })
+    }
+
+    return items
+  }
+
   render() {
     const { contractsStore, ballotStore } = this.props
+    const networkBranch = this.getVotingNetworkBranch()
     let validator = ballotStore.isNewValidatorPersonalData ? <Validator /> : ''
     let keysTypes = ballotStore.isBallotForKey ? <KeysTypes /> : ''
     let metadata
     let minThreshold = 0
+
     switch (ballotStore.ballotType) {
       case ballotStore.BallotType.keys:
         metadata = <BallotKeysMetadata />
@@ -406,63 +439,21 @@ export class NewBallot extends React.Component {
       default:
         break
     }
-    const emissionFundsManagementBallot = contractsStore.votingToManageEmissionFunds ? (
-      <div
-        className={this.menuItemActive(ballotStore.BallotType.emissionFunds)}
-        onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.emissionFunds)}
-      >
-        Emission Funds Ballot
-      </div>
-    ) : (
-      ''
-    )
+
     return (
-      <section className="container new">
-        <form action="" className="new-form">
-          <div className="new-form-side new-form-side_left">
-            <div className="ballot-types">
-              <div
-                className={this.menuItemActive(ballotStore.BallotType.keys)}
-                onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.keys)}
-              >
-                Validator Management Ballot
-              </div>
-              <div
-                className={this.menuItemActive(ballotStore.BallotType.minThreshold)}
-                onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.minThreshold)}
-              >
-                Consensus Threshold Ballot
-              </div>
-              <div
-                className={this.menuItemActive(ballotStore.BallotType.proxy)}
-                onClick={e => ballotStore.changeBallotType(e, ballotStore.BallotType.proxy)}
-              >
-                Modify Proxy Contract Ballot
-              </div>
-              {emissionFundsManagementBallot}
-            </div>
-            <div className="info">
-              <p className="info-title">Limits of the ballot</p>
-              <div className="info-i">
-                Minimum {minThreshold} from {contractsStore.validatorsLength} validators are required to pass the&nbsp;
-                proposal
-                <br />
-              </div>
-              <div className="info-i">
-                You can create {contractsStore.validatorLimits.keys} ballot(s) for keys
-                <br />
-              </div>
-              <div className="info-i">
-                You can create {contractsStore.validatorLimits.minThreshold} ballot(s) for consensus
-                <br />
-              </div>
-              <div className="info-i">
-                You can create {contractsStore.validatorLimits.proxy} ballot(s) for proxy
-                <br />
-              </div>
-            </div>
+      <section className="new-NewBallot">
+        <form className="new-NewBallot_Form">
+          <div className="new-NewBallot_MenuContainer">
+            <NewBallotMenu menuItems={this.getMenuItems()} networkBranch={networkBranch} />
+            <NewBallotMenuInfo
+              keys={contractsStore.validatorLimits.keys}
+              minThreshold={minThreshold}
+              proxy={contractsStore.validatorLimits.proxy}
+              validatorLimitsMinThreshold={contractsStore.validatorLimits.minThreshold}
+              validatorsLength={contractsStore.validatorsLength}
+            />
           </div>
-          <div className="new-form-side new-form-side_right">
+          <div className="new-NewBallot_FormContent">
             <div className="form-el">
               <label>Description of the ballot</label>
               <div>

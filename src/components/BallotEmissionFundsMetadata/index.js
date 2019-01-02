@@ -1,8 +1,8 @@
 import React from 'react'
-import { observable, action } from 'mobx'
-import { inject, observer } from 'mobx-react'
-import { constants } from '../utils/constants'
 import moment from 'moment'
+import { constants } from '../../utils/constants'
+import { inject, observer } from 'mobx-react'
+import { observable, action } from 'mobx'
 
 @inject('ballotStore', 'contractsStore')
 @observer

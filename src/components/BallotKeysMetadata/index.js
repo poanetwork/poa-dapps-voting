@@ -1,6 +1,6 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
+import { inject, observer } from 'mobx-react'
 
 @inject('ballotStore', 'contractsStore')
 @observer

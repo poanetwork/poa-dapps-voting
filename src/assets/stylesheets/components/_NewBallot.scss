@@ -1,0 +1,44 @@
+.new-NewBallot {
+    @include content-layout-width();
+}
+
+.new-NewBallot_Form {
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid $base-border-color;
+    display: block;
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: 0.15s box-shadow, 0.15s -webkit-box-shadow;
+
+    @media (min-width: $breakpoint-md) {
+        display: flex;
+    }
+}
+
+.new-NewBallot_MenuContainer {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid $base-border-color;
+    box-sizing: border-box;
+    padding-bottom: 30px;
+    padding-top: 0;
+    width: 100%;
+
+    @media (min-width: $breakpoint-md) {
+        border-bottom: none;
+        min-width: 300px;
+        width: 300px;
+    }
+}
+
+.new-NewBallot_FormContent {
+    box-sizing: border-box;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+
+    @media (min-width: $breakpoint-md) {
+        border-left: 1px solid $base-border-color;
+    }
+}
