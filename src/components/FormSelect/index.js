@@ -21,7 +21,15 @@ export const FormSelect = ({
       <label className="frm-FormSelect_Title" htmlFor={id}>
         {title}
       </label>
-      <Select.Creatable name={name} id={id} value={value} onChange={onChange} options={options} disabled={disabled} />
+      <Select.Creatable
+        className="frm-FormSelect_Select"
+        name={name}
+        id={id}
+        value={value}
+        onChange={onChange}
+        options={options}
+        disabled={disabled}
+      />
       {hint ? <FormHint text={hint} networkBranch={networkBranch} /> : null}
     </div>
   )
