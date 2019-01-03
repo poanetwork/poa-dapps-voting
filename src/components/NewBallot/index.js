@@ -468,9 +468,12 @@ export class NewBallot extends React.Component {
             />
             <Separator />
             {ballotStore.isBallotForKey ? <KeysTypes networkBranch={networkBranch} /> : null}
-            {ballotStore.isNewValidatorPersonalData ? <Validator /> : null}
+            {ballotStore.isNewValidatorPersonalData ? <Validator networkBranch={networkBranch} /> : null}
             {metadata}
-            <ButtonAddBallot onClick={e => this.onClick(e)} networkBranch={networkBranch} />
+            <Separator />
+            <div className="new-NewBallot_ButtonContainer">
+              <ButtonAddBallot onClick={e => this.onClick(e)} networkBranch={networkBranch} />
+            </div>
           </div>
         </form>
       </section>

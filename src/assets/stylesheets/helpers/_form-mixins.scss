@@ -31,3 +31,21 @@
         }
     }
 }
+
+@mixin form-row-base-styles-wrapped($wrapper-selector) {
+
+    #{ $wrapper-selector } & {
+        @include form-row-base-styles();
+    }
+
+}
+
+@mixin form-row-base-styles() {
+
+    margin-bottom: $base-grid-gap;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+}

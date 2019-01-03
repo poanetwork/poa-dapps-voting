@@ -1,8 +1,8 @@
-.frm-BallotKeysMetadata {
+.frm-Validator {
     margin-bottom: $base-grid-gap;
 }
 
-.frm-BallotKeysMetadata_Row {
+.frm-Validator_Row {
     @include form-row-base-styles();
     display: grid;
     grid-row-gap: $base-grid-gap;
