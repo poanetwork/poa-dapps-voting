@@ -1,0 +1,13 @@
+.frm-BallotKeysMetadata_Row {
+    margin-bottom: $base-grid-gap;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (min-width: $breakpoint-md) {
+        display: grid;
+        grid-column-gap: $base-grid-gap;
+        grid-template-columns: 1fr 1fr;
+    }
+}

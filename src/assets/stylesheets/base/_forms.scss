@@ -11,9 +11,11 @@ label {
 }
 
 input {
+    // TODO: delete
     @include form-element-base-style();
     height: $input-height;
 
+    // TODO: keep
     &[type='radio'] {
         display: none;
     }
@@ -29,6 +31,7 @@ textarea {
 }
 
 select {
+    // TODO: delete
     @include form-element-base-style();
     @include image-2x('#{ $base-images-path }/Base/select@2x.png', 8px, 4px);
     appearance: none;

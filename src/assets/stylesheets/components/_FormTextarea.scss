@@ -1,0 +1,8 @@
+.frm-FormTextarea_Field {
+    @include form-element-base-style();
+    height: 70px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    resize: none;
+    width: 100%;
+}

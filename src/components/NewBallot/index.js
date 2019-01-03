@@ -6,6 +6,7 @@ import { BallotKeysMetadata } from '../BallotKeysMetadata'
 import { BallotMinThresholdMetadata } from '../BallotMinThresholdMetadata'
 import { BallotProxyMetadata } from '../BallotProxyMetadata'
 import { ButtonAddBallot } from '../ButtonAddBallot'
+import { FormTextarea } from '../FormTextarea'
 import { KeysTypes } from '../KeysTypes'
 import { NewBallotMenu } from '../NewBallotMenu'
 import { NewBallotMenuInfo } from '../NewBallotMenuInfo'
@@ -425,7 +426,7 @@ export class NewBallot extends React.Component {
 
     switch (ballotStore.ballotType) {
       case ballotStore.BallotType.keys:
-        metadata = <BallotKeysMetadata />
+        metadata = <BallotKeysMetadata networkBranch={networkBranch} />
         minThreshold = contractsStore.keysBallotThreshold
         break
       case ballotStore.BallotType.minThreshold:
@@ -458,10 +459,13 @@ export class NewBallot extends React.Component {
             />
           </div>
           <div className="new-NewBallot_FormContent">
-            <div className="form-el">
-              <label>Description of the ballot</label>
-              <textarea rows="4" value={ballotStore.memo} onChange={e => ballotStore.setMemo(e)} />
-            </div>
+            <FormTextarea
+              id="datetime-local"
+              networkBranch={networkBranch}
+              onChange={e => ballotStore.setMemo(e)}
+              title="Description of the ballot"
+              value={ballotStore.memo}
+            />
             <Separator />
             {ballotStore.isBallotForKey ? <KeysTypes networkBranch={networkBranch} /> : null}
             {ballotStore.isNewValidatorPersonalData ? <Validator /> : null}
