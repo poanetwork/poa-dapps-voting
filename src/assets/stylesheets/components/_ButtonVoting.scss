@@ -42,7 +42,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-negative-poa, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-negative-poa, 10%);
+            background-color: darken($voting-negative-poa, 10%);
         }
     }
 
@@ -51,7 +51,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-neutral-poa, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-neutral-poa, 10%);
+            background-color: darken($voting-neutral-poa, 10%);
         }
     }
 
@@ -60,7 +60,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-positive-poa, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-positive-poa, 10%);
+            background-color: darken($voting-positive-poa, 10%);
         }
     }
 
@@ -69,7 +69,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-negative-sokol, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-negative-sokol, 10%);
+            background-color: darken($voting-negative-sokol, 10%);
         }
     }
 
@@ -78,7 +78,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-neutral-sokol, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-neutral-sokol, 10%);
+            background-color: darken($voting-neutral-sokol, 10%);
         }
     }
 
@@ -87,7 +87,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-positive-sokol, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-positive-sokol, 10%);
+            background-color: darken($voting-positive-sokol, 10%);
         }
     }
 
@@ -96,7 +96,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-negative-dai, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-negative-dai, 10%);
+            background-color: darken($voting-negative-dai, 10%);
         }
     }
 
@@ -105,7 +105,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-neutral-dai, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-neutral-dai, 10%);
+            background-color: darken($voting-neutral-dai, 10%);
         }
     }
 
@@ -114,7 +114,7 @@
         box-shadow: 0 5px 10px 0 rgba($voting-positive-dai, 0.3);
 
         &:hover {
-            background-color: darkenb($voting-positive-dai, 10%);
+            background-color: darken($voting-positive-dai, 10%);
         }
     }
 
