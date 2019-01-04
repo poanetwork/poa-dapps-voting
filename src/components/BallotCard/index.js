@@ -317,7 +317,7 @@ export class BallotCard extends React.Component {
         contractsStore.votingKey
       )
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message)
     }
     this.hasAlreadyVoted = _hasAlreadyVoted
   }
@@ -328,7 +328,7 @@ export class BallotCard extends React.Component {
     try {
       _isValidVote = await this.getContract(contractsStore, votingType).isValidVote(id, contractsStore.votingKey)
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message)
     }
     return _isValidVote
   }
@@ -443,7 +443,6 @@ export class BallotCard extends React.Component {
   }
 
   cancel = async e => {
-    console.log('cancel function called')
     const { votingState, contractsStore, commonStore, ballotsStore, votingType, id, pos } = this.props
     const { push } = this.props.routing
     const contract = this.getContract(contractsStore, votingType)
@@ -493,7 +492,6 @@ export class BallotCard extends React.Component {
   }
 
   finalize = async e => {
-    console.log('finalize function called')
     if (this.timeToStart.val > 0) {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
@@ -515,7 +513,7 @@ export class BallotCard extends React.Component {
     await this.canBeFinalizedNow()
     let _canBeFinalized = this.canBeFinalized
     if (_canBeFinalized === null) {
-      console.log('canBeFinalizedNow is not existed')
+      console.log('canBeFinalizedNow does not exist')
       _canBeFinalized = !(await this.isActive())
     }
     if (!_canBeFinalized) {
