@@ -438,7 +438,7 @@ export class NewBallot extends React.Component {
         minThreshold = contractsStore.proxyBallotThreshold
         break
       case ballotStore.BallotType.emissionFunds:
-        metadata = <BallotEmissionFundsMetadata />
+        metadata = <BallotEmissionFundsMetadata networkBranch={networkBranch} />
         minThreshold = contractsStore.emissionFundsBallotThreshold
         break
       default:

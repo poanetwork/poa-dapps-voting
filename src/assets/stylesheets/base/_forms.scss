@@ -1,43 +1,5 @@
-.lo-FormElement {
-    margin-bottom: $base-grid-gap;
-}
-
-label {
-    color: $gray-text-color;
-    display: inline-block;
-    font-size: 14px;
-    line-height: 1.2;
-    margin-bottom: 15px;
-}
-
 input {
-    // TODO: delete
-    @include form-element-base-style();
-    height: $input-height;
-
-    // TODO: keep
     &[type='radio'] {
         display: none;
     }
-}
-
-textarea {
-    @include form-element-base-style();
-    height: 70px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    resize: none;
-    width: 100%;
-}
-
-select {
-    // TODO: delete
-    @include form-element-base-style();
-    @include image-2x('#{ $base-images-path }/Base/select@2x.png', 8px, 4px);
-    appearance: none;
-    background-image: url('#{ $base-images-path }/Base/select.png');
-    background-position: right 13px center;
-    background-repeat: no-repeat;
-    height: $input-height;
-    padding-right: 30px;
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import { FormInput } from '../FormInput'
 import { constants } from '../../utils/constants'
 import { inject, observer } from 'mobx-react'
 import { observable, action } from 'mobx'
@@ -11,6 +12,13 @@ export class BallotEmissionFundsMetadata extends React.Component {
   @observable noActiveBallotExists
   @observable beginDateTime
   @observable endDateTime
+
+  constructor(props) {
+    super(props)
+    this.getEmissionFundsBalance()
+    this.getNoActiveBallotExists()
+    this.getDateTimeLimits()
+  }
 
   @action('Get EmissionFunds balance')
   getEmissionFundsBalance = async () => {
@@ -54,13 +62,6 @@ export class BallotEmissionFundsMetadata extends React.Component {
     }
   }
 
-  constructor(props) {
-    super(props)
-    this.getEmissionFundsBalance()
-    this.getNoActiveBallotExists()
-    this.getDateTimeLimits()
-  }
-
   componentDidMount() {
     this.interval = setInterval(this.getEmissionFundsBalance, constants.getTransactionReceiptInterval)
   }
@@ -70,8 +71,9 @@ export class BallotEmissionFundsMetadata extends React.Component {
   }
 
   render() {
-    const { ballotStore, contractsStore } = this.props
+    const { ballotStore, contractsStore, networkBranch } = this.props
     let note, explorerLink
+
     if (this.noActiveBallotExists === true) {
       note = (
         <p>
@@ -82,43 +84,35 @@ export class BallotEmissionFundsMetadata extends React.Component {
     } else if (this.noActiveBallotExists !== true) {
       note = <p>To be able to create a new ballot, the previous ballot of this type must be finalized.</p>
     }
+
     if (constants.NETWORKS[contractsStore.netId].NAME.toLowerCase() === 'sokol') {
       explorerLink = `https://sokol.poaexplorer.com/address/search/${contractsStore.emissionFunds.address}`
     } else {
       explorerLink = `https://poaexplorer.com/address/${contractsStore.emissionFunds.address}`
     }
+
     return (
-      <div>
-        <div className="hidden">
-          <div className="left">
-            <div className="form-el">
-              <label htmlFor="receiver">Address of funds receiver</label>
-              <input
-                type="text"
-                id="receiver"
-                value={ballotStore.ballotEmissionFunds.receiver}
-                onChange={e => ballotStore.changeBallotMetadata(e, 'receiver', 'ballotEmissionFunds')}
-              />
-              <p className="hint">The address which the funds will be sent to, in case of the majority of votes.</p>
-            </div>
-          </div>
-          <div className="right">
-            <div className="form-el">
-              <label htmlFor="amount">Current amount of funds</label>
-              <input type="text" id="amount" value={this.emissionFundsBalance} disabled="disabled" />
-              <p className="hint">
-                Current balance of&nbsp;
-                <a href={explorerLink} target="_blank">
-                  EmissionFunds contract
-                </a>
-                .
-              </p>
-            </div>
-          </div>
+      <div className="frm-BallotEmissionFundsMetadata">
+        <div className="frm-BallotEmissionFundsMetadata_Row">
+          <FormInput
+            hint="The address which the funds will be sent to, in case of the majority of votes."
+            id="receiver"
+            networkBranch={networkBranch}
+            onChange={e => ballotStore.changeBallotMetadata(e, 'receiver', 'ballotEmissionFunds')}
+            title="Address of funds receiver"
+            value={ballotStore.ballotEmissionFunds.receiver}
+          />
+          <FormInput
+            disabled={true}
+            hint={`Current balance of <a href=${explorerLink} target="_blank">EmissionFunds contract</a>.`}
+            id="amount"
+            networkBranch={networkBranch}
+            onChange={e => ballotStore.changeBallotMetadata(e, 'receiver', 'ballotEmissionFunds')}
+            title="Current amount of funds"
+            value={this.emissionFundsBalance}
+          />
         </div>
-        <hr />
         {note}
-        <br />
       </div>
     )
   }

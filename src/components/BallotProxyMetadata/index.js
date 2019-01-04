@@ -1,5 +1,4 @@
 import React from 'react'
-import Select from 'react-select'
 import { FormInput } from '../FormInput'
 import { FormSelect } from '../FormSelect'
 import { inject, observer } from 'mobx-react'
