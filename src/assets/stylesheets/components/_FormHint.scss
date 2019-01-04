@@ -5,6 +5,7 @@
     line-height: 1.38;
     margin: 0;
     padding-top: 12px;
+    word-break: break-all;  // hack for FF, leave it as it is
     word-break: break-word;
 
     &#{ & }-core {

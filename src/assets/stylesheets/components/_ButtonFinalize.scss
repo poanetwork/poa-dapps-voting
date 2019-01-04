@@ -18,23 +18,47 @@
 
     &#{ & }-core {
         background-color: $poa-purple;
+
+        &:active,
+        &:hover {
+            background-color: darken($poa-purple, 10%);
+        }
     }
 
     &#{ & }-sokol {
         background-color: $sokol-cyan;
+
+        &:active,
+        &:hover {
+            background-color: darken($sokol-cyan, 10%);
+        }
     }
 
     &#{ & }-dai {
         background-color: $xdai-orange;
+
+        &:active,
+        &:hover {
+            background-color: darken($xdai-orange, 10%);
+        }
     }
 
     &#{ & }-cancel {
-        background-color: #f21b57 !important;
+        &,
+        &:active,
+        &:hover {
+            background-color: #f21b57 !important;
+        }
     }
 
     &#{ & }-disabled {
-        background-color: #f0f0f0 !important;
-        color: #333;
+        &,
+        &:active,
+        &:hover {
+            cursor: default;
+            background-color: #f0f0f0 !important;
+            color: #333;
+        }
     }
 
     .bc-BallotFooter & {

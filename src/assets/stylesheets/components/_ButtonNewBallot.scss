@@ -18,6 +18,7 @@ $sw-ButtonNewBallot-height: 36px;
 
     &#{ & }-core {
         background-color: $poa-green-color;
+        box-shadow: 0 5px 10px 0 rgba($poa-purple, 0.3);
         color: #fff;
 
         &:active,
@@ -28,6 +29,7 @@ $sw-ButtonNewBallot-height: 36px;
 
     &#{ & }-sokol {
         background-color: #fff;
+        box-shadow: 0 5px 10px 0 rgba($sokol-cyan, 0.3);
         color: $sokol-cyan;
 
         &:active,
@@ -38,6 +40,7 @@ $sw-ButtonNewBallot-height: 36px;
 
     &#{ & }-dai {
         background-color: $xdai-menu-icon-color;
+        box-shadow: 0 5px 10px 0 rgba($xdai-menu-icon-color, 0.3);
         color: #fff;
 
         &:active,
@@ -51,6 +54,7 @@ $sw-ButtonNewBallot-height: 36px;
     }
 
     .hd-MobileMenuLinks & {
+        box-shadow: none;
         height: 50px;
         justify-content: center;
         margin: 0;

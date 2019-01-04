@@ -24,10 +24,9 @@
         &:hover,
         &:active,
         &:focus {
-            border-color: darken($base-border-color, 10%);
+            background-color: #f9f9f9;
+            border-color: $base-border-color;
             color: $input-color;
-            cursor: not-allowed;
-            opacity: 0.5;
         }
     }
 }
