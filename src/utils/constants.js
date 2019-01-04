@@ -43,6 +43,11 @@ constants.navigationData = [
     icon: 'finalize',
     title: 'To Finalize',
     url: `${constants.rootPath}/tofinalize`
+  },
+  {
+    disabled: true,
+    title: 'New',
+    url: `${constants.rootPath}/new`
   }
 ]
 

@@ -1,4 +1,4 @@
-import { observable, computed, action, toJS } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import moment from 'moment'
 import { constants } from '../utils/constants'
 

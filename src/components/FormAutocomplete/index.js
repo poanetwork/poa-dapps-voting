@@ -16,7 +16,7 @@ export const FormAutocomplete = ({
   return (
     <div className={`frm-FormAutocomplete ${extraClassName}`}>
       <FormFieldTitle htmlFor={id} text={title} />
-      <PlacesAutocomplete onSelect={onSelect} inputProps={inputProps} autocompleteItem={autocompleteItem} />
+      <PlacesAutocomplete autocompleteItem={autocompleteItem} inputProps={inputProps} onSelect={onSelect} />
       {hint ? <FormHint text={hint} networkBranch={networkBranch} /> : null}
     </div>
   )
