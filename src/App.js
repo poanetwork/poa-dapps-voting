@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import swal from 'sweetalert2'
 import { Header, Ballots, NewBallot, Settings, Footer, Loading, BaseLoader, SearchBar, MainTitle } from './components'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import { constants } from './utils/constants'
+import { getNetworkBranch } from './utils/utils'
 import { inject, observer } from 'mobx-react'
 import { messages } from './utils/messages'
-import { getNetworkBranch } from './utils/utils'
 
 import './assets/stylesheets/index.css'
 
@@ -119,7 +119,17 @@ class App extends Component {
             this.state.showMobileMenu ? 'lo-App_Content-mobile-menu-open' : ''
           }`}
         >
-          <Route exact path={`/`} render={this.onBallotsRender} />
+          <Route
+            exact
+            path={`/`}
+            render={props => (
+              <Redirect
+                to={{
+                  pathname: `${commonStore.rootPath}/`
+                }}
+              />
+            )}
+          />
           <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/tofinalize`} render={this.onToFinalizeBallotsRender} />
