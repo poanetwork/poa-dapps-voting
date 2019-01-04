@@ -430,7 +430,7 @@ export class NewBallot extends React.Component {
         minThreshold = contractsStore.keysBallotThreshold
         break
       case ballotStore.BallotType.minThreshold:
-        metadata = <BallotMinThresholdMetadata />
+        metadata = <BallotMinThresholdMetadata networkBranch={networkBranch} />
         minThreshold = contractsStore.minThresholdBallotThreshold
         break
       case ballotStore.BallotType.proxy:
