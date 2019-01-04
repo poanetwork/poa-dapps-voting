@@ -334,6 +334,7 @@ export class NewBallot extends React.Component {
       let methodToCreateBallot
       let contractType
       let contractInstance
+
       switch (ballotStore.ballotType) {
         case ballotStore.BallotType.keys:
           methodToCreateBallot = this.createBallotForKeys

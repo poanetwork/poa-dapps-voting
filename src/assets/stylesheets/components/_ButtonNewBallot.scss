@@ -20,6 +20,7 @@ $sw-ButtonNewBallot-height: 36px;
         background-color: $poa-green-color;
         color: #fff;
 
+        &:active,
         &:hover {
             background-color: darken($poa-green-color, 10%);
         }
@@ -29,6 +30,7 @@ $sw-ButtonNewBallot-height: 36px;
         background-color: #fff;
         color: $sokol-cyan;
 
+        &:active,
         &:hover {
             background-color: darken(#fff, 5%);
         }
@@ -38,6 +40,7 @@ $sw-ButtonNewBallot-height: 36px;
         background-color: $xdai-menu-icon-color;
         color: #fff;
 
+        &:active,
         &:hover {
             background-color: lighten($xdai-menu-icon-color, 5%);
         }
@@ -48,7 +51,8 @@ $sw-ButtonNewBallot-height: 36px;
     }
 
     .hd-MobileMenuLinks & {
-        max-width: fit-content;
-        margin: 0 auto;
+        height: 50px;
+        justify-content: center;
+        margin: 0;
     }
 }

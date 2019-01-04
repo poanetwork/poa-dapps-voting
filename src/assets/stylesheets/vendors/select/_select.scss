@@ -15,7 +15,7 @@ $select-input-bg-disabled:          #f9f9f9 !default;
 $select-input-bg-focus:             #fff !default;
 $select-input-border-color:         $base-border-color !default;
 $select-input-border-radius:        3px !default;
-$select-input-border-focus:         $poa-purple !default;
+$select-input-border-focus:         darken($base-border-color, 10%) !default;
 $select-input-box-shadow-focus:     none !default;
 $select-input-border-width:         1px !default;
 $select-input-height:               40px !default;
@@ -34,12 +34,12 @@ $select-menu-max-height:            200px !default;
 $select-menu-box-shadow:            $select-input-hover-box-shadow !default;
 
 $select-option-color:               lighten($select-text-color, 20%) !default;
-$select-option-bg:                  $select-input-bg !default;
+$select-option-bg:                  #fff !default;
 $select-option-focused-color:       $select-text-color !default;
-$select-option-focused-bg:          #f2f9fc !default; // pale blue
-$select-option-selected-color:      $select-text-color !default;
-$select-option-selected-bg:         #f5faff !default; // lightest blue
-$select-option-disabled-color:      lighten($select-text-color, 60%) !default;
+$select-option-focused-bg:          $base-border-color !default; // pale blue
+$select-option-selected-color:      #000 !default;
+$select-option-selected-bg:         lighten($base-border-color, 5%) !default; // lightest blue
+$select-option-disabled-color:      lighten($base-border-color, 60%) !default;
 
 $select-noresults-color:            lighten($select-text-color, 40%) !default;
 
@@ -65,11 +65,11 @@ $select-item-gutter:                5px !default;
 $select-item-padding-vertical:      2px !default;
 $select-item-padding-horizontal:    5px !default;
 $select-item-font-size:             .9em !default;
-$select-item-color:                 #08c !default; // pale blue
+$select-item-color:                 #000 !default; // pale blue
 $select-item-bg:                    #f2f9fc !default;
 $select-item-border-color:          #e5eef9 !default;
-$select-item-hover-color:           darken($select-item-color, 5%) !default; // pale blue
-$select-item-hover-bg:              darken($select-item-bg, 5%) !default;
-$select-item-disabled-color:        #333 !default;
+$select-item-hover-color:           darken($base-border-color, 10%)  !default; // pale blue
+$select-item-hover-bg:              darken($base-border-color, 10%)  !default;
+$select-item-disabled-color:        #999 !default;
 $select-item-disabled-bg:           #fcfcfc !default;
 $select-item-disabled-border-color: darken($select-item-disabled-bg, 10%) !default;
