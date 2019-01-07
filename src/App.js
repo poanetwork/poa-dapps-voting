@@ -135,7 +135,7 @@ class App extends Component {
           <Route exact path={`${commonStore.rootPath}/tofinalize`} render={this.onToFinalizeBallotsRender} />
           <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender} />
         </section>
-        <Footer networkBranch={networkBranch} />
+        <Footer baseRootPath={commonStore.rootPath} networkBranch={networkBranch} />
       </div>
     ) : (
       <BaseLoader />

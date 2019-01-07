@@ -2,10 +2,10 @@ import React from 'react'
 
 export const IconAll = ({ networkBranch }) => {
   return (
-    <svg className={`nl-IconAll`} xmlns="http://www.w3.org/2000/svg" width="16" height="18">
+    <svg className={`nl-IconAll`} xmlns="http://www.w3.org/2000/svg" width="18" height="17">
       <path
         className={`nl-IconAll_Path nl-IconAll_Path-${networkBranch}`}
-        d="M15 15h-5a1 1 0 0 1-1-1v-3H2v6a1 1 0 0 1-2 0V1a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h4a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1zM9 2H2v7h7V2zm2 11h3V6h-3v7z"
+        d="M16 10.95V11H2v-.05a2.502 2.502 0 0 1 0-4.9V6h14v.05a2.502 2.502 0 0 1 0 4.9zM16 8H2v1h14V8zm0-3.05V5H2v-.05a2.502 2.502 0 0 1 0-4.9V0h14v.05a2.502 2.502 0 0 1 0 4.9zM16 2H2v1h14V2zM2 12.05V12h14v.05a2.502 2.502 0 0 1 0 4.9V17H2v-.05a2.502 2.502 0 0 1 0-4.9zM2 15h14v-1H2v1z"
         fillRule="evenodd"
       />
     </svg>

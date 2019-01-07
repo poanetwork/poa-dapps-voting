@@ -46,7 +46,7 @@ constants.navigationData = [
   },
   {
     disabled: true,
-    title: 'New',
+    title: 'New Ballot',
     url: `${constants.rootPath}/new`
   }
 ]

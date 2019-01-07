@@ -80,4 +80,12 @@ $cell-right-padding: 12px;
     line-height: 28px;
     margin: 0;
     text-align: left;
+
+    &#{ & }-action {
+        text-transform: capitalize;
+    }
+
+    &#{ & }-type {
+        text-transform: capitalize;
+    }
 }

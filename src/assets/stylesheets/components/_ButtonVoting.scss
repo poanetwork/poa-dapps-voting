@@ -13,7 +13,7 @@
     outline: none;
     padding: 0 15px;
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: capitalize;
     transition: 0.15s background-color linear;
 
     &#{ & }-sm {

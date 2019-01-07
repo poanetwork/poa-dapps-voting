@@ -6,7 +6,7 @@ export const BallotDataPair = ({ dataType = '', title = '', value = [] }) => {
       <h2 className="blc-BallotDataPair_Title">{title}</h2>
       {value.map((item, index) => {
         return (
-          <p className="blc-BallotDataPair_Value" key={index}>
+          <p className={`blc-BallotDataPair_Value blc-BallotDataPair_Value-${dataType}`} key={index}>
             {item}
           </p>
         )

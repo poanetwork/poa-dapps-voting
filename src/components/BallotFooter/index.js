@@ -18,7 +18,7 @@ export const BallotFooter = ({
       {description ? <p className="bc-BallotFooter_Description">{description}</p> : null}
       {voted ? <div className="bc-BallotFooter_Voted">You already voted</div> : null}
       <div className="bc-BallotFooter_ID">
-        {voteType} Ballot ID: {voteId}
+        {voteType} Ballot ID: <span className="bc-BallotFooter_voteID">{voteId}</span>
       </div>
     </div>
   )
