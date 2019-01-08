@@ -9,6 +9,7 @@
 }
 
 .nl-NavigationLinks_Link {
+    @include not-selectable-text();
     align-items: center;
     color: #fff;
     display: flex;
@@ -25,6 +26,11 @@
     &:hover,
     &.active {
         opacity: 1;
+    }
+
+    &.active {
+        cursor: default;
+        pointer-events: none;
     }
 
     &#{ & }-core {

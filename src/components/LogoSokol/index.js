@@ -1,10 +1,11 @@
 import React from 'react'
 import logoSokol from './logo.svg'
+import { NavLink } from 'react-router-dom'
 
 export const LogoSokol = ({ href = null, extraClass = '' }) => {
   return (
-    <a href={href} className={`sw-LogoSokol ${extraClass}`}>
+    <NavLink to={href} className={`sw-LogoSokol ${extraClass}`}>
       <img className="sw-LogoSokol_Image" src={logoSokol} alt="" />
-    </a>
+    </NavLink>
   )
 }

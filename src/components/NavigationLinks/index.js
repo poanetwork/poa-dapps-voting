@@ -1,7 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { constants } from '../../utils/constants'
 import { NavigationIcon } from '../NavigationIcon'
+import { constants } from '../../utils/constants'
+import { scrollToTop } from '../../utils/utils'
 
 export const NavigationLinks = ({ networkBranch }) => {
   return (
@@ -14,6 +15,7 @@ export const NavigationLinks = ({ networkBranch }) => {
               className={`nl-NavigationLinks_Link nl-NavigationLinks_Link-${networkBranch}`}
               exact
               key={index}
+              onClick={scrollToTop()}
               to={item.url}
             >
               <NavigationIcon networkBranch={networkBranch} icon={item.icon} />

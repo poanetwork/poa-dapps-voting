@@ -1,6 +1,7 @@
 $sw-ButtonNewBallot-height: 36px;
 
 .sw-ButtonNewBallot {
+    @include not-selectable-text();
     align-items: center;
     border-radius: 3px;
     color: #fff;
@@ -25,6 +26,14 @@ $sw-ButtonNewBallot-height: 36px;
         &:hover {
             background-color: darken($poa-green-color, 10%);
         }
+
+        &.active {
+            &,
+            &:active,
+            &:hover {
+                background-color: $poa-green-color;
+            }
+        }
     }
 
     &#{ & }-sokol {
@@ -35,6 +44,14 @@ $sw-ButtonNewBallot-height: 36px;
         &:active,
         &:hover {
             background-color: darken(#fff, 5%);
+        }
+
+        &.active {
+            &,
+            &:active,
+            &:hover {
+                background-color: #fff;
+            }
         }
     }
 
@@ -47,6 +64,19 @@ $sw-ButtonNewBallot-height: 36px;
         &:hover {
             background-color: lighten($xdai-menu-icon-color, 5%);
         }
+
+        &.active {
+            &,
+            &:active,
+            &:hover {
+                background-color: $xdai-menu-icon-color;
+            }
+        }
+    }
+
+    &.active {
+        cursor: pointer;
+        pointer-events: none;
     }
 
     .sw-Header_Links & {

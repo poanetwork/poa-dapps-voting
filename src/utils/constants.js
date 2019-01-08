@@ -32,7 +32,7 @@ constants.navigationData = [
   {
     icon: 'all',
     title: 'All',
-    url: constants.rootPath
+    url: `${constants.rootPath}`
   },
   {
     icon: 'active',
