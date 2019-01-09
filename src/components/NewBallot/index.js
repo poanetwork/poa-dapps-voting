@@ -461,7 +461,7 @@ export class NewBallot extends React.Component {
           </div>
           <div className="new-NewBallot_FormContent">
             <FormTextarea
-              id="datetime-local"
+              id="ballot-description"
               networkBranch={networkBranch}
               onChange={e => ballotStore.setMemo(e)}
               title="Description of the ballot"
