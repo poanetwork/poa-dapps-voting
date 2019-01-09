@@ -1,0 +1,121 @@
+.vt-ButtonVoting {
+    border-radius: 5px;
+    border: 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 42px;
+    margin-right: 20px;
+    min-width: 55px;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: 0.15s background-color linear;
+
+    &#{ & }-sm {
+        min-width: 55px;
+    }
+
+    &#{ & }-md {
+        min-width: 78px;
+    }
+
+    @media (min-width: $breakpoint-xl) {
+        &#{ & }-left {
+            margin-left: 0;
+            margin-right: 20px;
+        }
+
+        &#{ & }-right {
+            margin-left: 20px;
+            margin-right: 0;
+            order: 2;
+        }
+    }
+
+    &#{ & }-negative#{ & }-core {
+        background-color: $voting-negative-poa;
+        box-shadow: 0 5px 10px 0 rgba($voting-negative-poa, 0.3);
+
+        &:hover {
+            background-color: darken($voting-negative-poa, 10%);
+        }
+    }
+
+    &#{ & }-neutral#{ & }-core {
+        background-color: $voting-neutral-poa;
+        box-shadow: 0 5px 10px 0 rgba($voting-neutral-poa, 0.3);
+
+        &:hover {
+            background-color: darken($voting-neutral-poa, 10%);
+        }
+    }
+
+    &#{ & }-positive#{ & }-core {
+        background-color: $voting-positive-poa;
+        box-shadow: 0 5px 10px 0 rgba($voting-positive-poa, 0.3);
+
+        &:hover {
+            background-color: darken($voting-positive-poa, 10%);
+        }
+    }
+
+    &#{ & }-negative#{ & }-sokol {
+        background-color: $voting-negative-sokol;
+        box-shadow: 0 5px 10px 0 rgba($voting-negative-sokol, 0.3);
+
+        &:hover {
+            background-color: darken($voting-negative-sokol, 10%);
+        }
+    }
+
+    &#{ & }-neutral#{ & }-sokol {
+        background-color: $voting-neutral-sokol;
+        box-shadow: 0 5px 10px 0 rgba($voting-neutral-sokol, 0.3);
+
+        &:hover {
+            background-color: darken($voting-neutral-sokol, 10%);
+        }
+    }
+
+    &#{ & }-positive#{ & }-sokol {
+        background-color: $voting-positive-sokol;
+        box-shadow: 0 5px 10px 0 rgba($voting-positive-sokol, 0.3);
+
+        &:hover {
+            background-color: darken($voting-positive-sokol, 10%);
+        }
+    }
+
+    &#{ & }-negative#{ & }-dai {
+        background-color: $voting-negative-dai;
+        box-shadow: 0 5px 10px 0 rgba($voting-negative-dai, 0.3);
+
+        &:hover {
+            background-color: darken($voting-negative-dai, 10%);
+        }
+    }
+
+    &#{ & }-neutral#{ & }-dai {
+        background-color: $voting-neutral-dai;
+        box-shadow: 0 5px 10px 0 rgba($voting-neutral-dai, 0.3);
+
+        &:hover {
+            background-color: darken($voting-neutral-dai, 10%);
+        }
+    }
+
+    &#{ & }-positive#{ & }-dai {
+        background-color: $voting-positive-dai;
+        box-shadow: 0 5px 10px 0 rgba($voting-positive-dai, 0.3);
+
+        &:hover {
+            background-color: darken($voting-positive-dai, 10%);
+        }
+    }
+
+}

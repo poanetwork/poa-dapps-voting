@@ -1,0 +1,7 @@
+.sw-IconTelegram {
+    @include brand-icon-styles();
+
+    .ft-SocialIcons & {
+        margin-right: 10px;
+    }
+}

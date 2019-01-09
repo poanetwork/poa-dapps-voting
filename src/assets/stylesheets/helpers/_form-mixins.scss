@@ -1,0 +1,50 @@
+@mixin form-element-base-style {
+    transition: 0.25s background-color, 0.25s border-color;
+    background-color: #fff;
+    border-radius: 3px;
+    border: 1px solid $base-border-color;
+    box-sizing: border-box;
+    color: $input-color;
+    display: block;
+    font-size: 14px;
+    outline: none;
+    padding: 0 10px;
+    width: 100%;
+
+    &:hover,
+    &:active,
+    &:focus {
+        border-color: darken($base-border-color, 10%);
+        color: $input-color;
+    }
+
+    &[disabled],
+    &.disabled {
+        &,
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: #f9f9f9;
+            border-color: $base-border-color;
+            color: $input-color;
+        }
+    }
+}
+
+@mixin form-row-base-styles-wrapped($wrapper-selector) {
+
+    #{ $wrapper-selector } & {
+        @include form-row-base-styles();
+    }
+
+}
+
+@mixin form-row-base-styles() {
+
+    margin-bottom: $base-grid-gap;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+}

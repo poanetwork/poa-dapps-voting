@@ -1,0 +1,56 @@
+.lo-App {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: $header-height + $search-container-height;
+    width: 100%;
+
+    &#{ & }-no-search-bar {
+        padding-top: $header-height;
+    }
+}
+
+.lo-App_Content {
+    flex-grow: 1;
+    max-width: 100%;
+    padding-bottom: 30px;
+    position: relative;
+    z-index: 1;
+
+    &:before {
+        background-color: rgba($poa-purple, 0.5);
+        bottom: 0;
+        content: '';
+        display: none;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 1234;
+    }
+
+    &#{ & }-mobile-menu-open {
+        &:before {
+            display: block;
+        }
+    }
+
+    &#{ & }-core {
+        &:before {
+            background-color: rgba($poa-purple, 0.5);
+        }
+    }
+
+    &#{ & }-sokol {
+        &:before {
+            background-color: rgba($sokol-cyan, 0.5);
+        }
+    }
+
+    &#{ & }-dai {
+        &:before {
+            background-color: rgba($xdai-orange, 0.5);
+        }
+    }
+}

@@ -1,0 +1,15 @@
+.frm-Validator {
+    margin-bottom: $base-grid-gap;
+}
+
+.frm-Validator_Row {
+    @include form-row-base-styles();
+    display: grid;
+    grid-row-gap: $base-grid-gap;
+    grid-template-columns: 1fr;
+
+    @media (min-width: $breakpoint-xxl) {
+        grid-column-gap: $base-grid-gap;
+        grid-template-columns: 1fr 1fr;
+    }
+}

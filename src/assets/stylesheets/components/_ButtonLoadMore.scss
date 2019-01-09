@@ -1,0 +1,55 @@
+.sw-ButtonLoadMore {
+    align-items: center;
+    background-color: transparent;
+    background-size: 14px 14px;
+    border-radius: 5px;
+    border: 2px solid $poa-purple;
+    color: $poa-purple;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 400;
+    height: 42px;
+    justify-content: center;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    width: 100%;
+
+    &#{ & }-core {
+        border-color: $poa-purple;
+    }
+
+    &#{ & }-sokol {
+        border-color: $sokol-cyan;
+    }
+
+    &#{ & }-dai {
+        border-color: $xdai-gray;
+    }
+
+    @media (min-width: $breakpoint-md) {
+        width: auto;
+    }
+
+}
+
+.sw-ButtonLoadMore_Text {
+    margin-right: 15px;
+
+    .sw-ButtonLoadMore:hover & {
+        opacity: 0.7;
+    }
+
+    .sw-ButtonLoadMore-core & {
+        color: $poa-purple;
+    }
+
+    .sw-ButtonLoadMore-sokol & {
+        color: $sokol-cyan;
+    }
+
+    .sw-ButtonLoadMore-dai & {
+        color: $xdai-gray;
+    }
+}

@@ -1,0 +1,79 @@
+.ld-Loading {
+    align-items: center;
+    background-color: rgba($poa-purple, 0.5);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000000;
+
+    &#{ & }-core {
+        background-color: rgba($poa-purple, 0.5);
+    }
+
+    &#{ & }-sokol {
+        background-color: rgba($sokol-cyan, 0.5);
+    }
+
+    &#{ & }-dai {
+        background-color: rgba($xdai-orange, 0.5);
+    }
+}
+
+.ld-Loading_Animation {
+    display: flex;
+    justify-content: space-between;
+    width: 206px;
+}
+
+.ld-Loading_Image {
+    margin-bottom: 40px;
+    width: 120px;
+}
+
+.ld-Loading_AnimationItem {
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: fadeOut;
+    animation-timing-function: linear;
+    background-color: #fff;
+    border-radius: 50%;
+    height: 9px;
+    opacity: .2;
+    width: 9px;
+
+    &:nth-child(2) {
+        animation-delay: .1s;
+    }
+    &:nth-child(3) {
+        animation-delay: .2s;
+    }
+    &:nth-child(4) {
+        animation-delay: .3s;
+    }
+    &:nth-child(5) {
+        animation-delay: .4s;
+    }
+    &:nth-child(6) {
+        animation-delay: .5s;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: .2;
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: .2;
+        transform: scale(0.3);
+    }
+}

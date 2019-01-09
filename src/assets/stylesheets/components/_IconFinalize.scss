@@ -1,0 +1,21 @@
+.sw-IconFinalize_Path {
+    &#{ & }-core {
+        fill: #fff;
+    }
+
+    &#{ & }-sokol {
+        fill: #fff;
+    }
+
+    &#{ & }-dai {
+        fill: #fff;
+    }
+
+    .sw-ButtonFinalize-danger & {
+        fill: #fff !important;
+    }
+
+    .sw-ButtonFinalize-disabled & {
+        fill: #333 !important;
+    }
+}

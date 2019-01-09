@@ -1,0 +1,53 @@
+.bc-BallotFooter {
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: $breakpoint-md) {
+        align-items: center;
+        flex-direction: row;
+    }
+
+}
+
+.bc-BallotFooter_Description {
+    color: #777;
+    font-size: 14px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 18px;
+    max-width: 340px;
+
+    @media (min-width: $breakpoint-md) {
+        padding-left: 15px;
+    }
+}
+
+.bc-BallotFooter_Voted {
+    box-sizing: border-box;
+    color: #333;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-left: auto;
+    padding: 0 13px;
+    text-transform: uppercase;
+}
+
+.bc-BallotFooter_ID {
+    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.1;
+    margin-top: 10px;
+
+    @media (min-width: $breakpoint-md) {
+        margin-left: auto;
+        margin-top: 0;
+    }
+}
+
+.bc-BallotFooter_voteID {
+    font-weight: 700;
+}

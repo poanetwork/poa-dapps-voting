@@ -1,0 +1,91 @@
+$cell-right-padding: 12px;
+
+.blc-BallotDataPair {
+    box-sizing: border-box;
+    display: table-row;
+    min-width: 100%;
+    padding-right: 0;
+    position: relative;
+    vertical-align: top;
+
+    @media (min-width: $breakpoint-md) {
+        display: inline-block;
+        min-width: 0;
+        padding-right: $cell-right-padding;
+    }
+
+    &:last-child {
+        padding-right: 0;
+    }
+
+    &#{ & }-name {
+        width: 12%;
+        word-break: break-word;
+    }
+    &#{ & }-action {
+        width: 8%;
+    }
+    &#{ & }-type {
+        width: 8%;
+    }
+    &#{ & }-proposal {
+        width: 30%;
+    }
+    &#{ & }-key {
+        width: 26%;
+        word-break: break-all;
+    }
+    &#{ & }-key-wide {
+        width: 50%;
+        word-break: break-all;
+    }
+    &#{ & }-proposed-receiver {
+        width: 45%;
+        word-break: break-all;
+    }
+    &#{ & }-funds-amount {
+        width: 23%;
+        word-break: break-all;
+    }
+    &#{ & }-proposed-min-threshold {
+        width: 30%;
+        word-break: break-all;
+    }
+    &#{ & }-contract-type {
+        width: 25%;
+        word-break: break-all;
+    }
+    &#{ & }-proposed-address {
+        width: 30%;
+        word-break: break-all;
+    }
+    &#{ & }-time {
+        width: 20%;
+    }
+}
+
+.blc-BallotDataPair_Title {
+    color: #777;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 0;
+    text-align: left;
+}
+
+.blc-BallotDataPair_Value {
+    color: #333;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 0;
+    text-align: left;
+
+    &#{ & }-action {
+        text-transform: capitalize;
+    }
+
+    &#{ & }-type {
+        text-transform: capitalize;
+    }
+}

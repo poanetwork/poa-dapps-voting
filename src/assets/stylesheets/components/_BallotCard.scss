@@ -1,0 +1,38 @@
+.sw-BallotCard {
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid $base-border-color;
+    margin-bottom: 30px;
+    padding: $desktop-indent;
+    transition: 0.15s box-shadow;
+    @media screen and (max-width: $breakpoint-md) {
+        margin-bottom: $tablet-indent;
+        padding: $tablet-indent;
+    }
+}
+
+///////////////////////////
+///////////////////////////
+///////////////////////////
+///////////////////////////
+///////////////////////////
+.color-primary {
+    color: $poa-purple;
+    .sokol & {
+        color: $sokol-cyan;
+    }
+}
+
+.color-danger {
+    color: $poa-danger-color;
+    .sokol & {
+        color: $sokol-danger-color;
+    }
+}
+
+.color-success {
+    color: $poa-green-color;
+    .sokol & {
+        color: $sokol-cyan;
+    }
+}

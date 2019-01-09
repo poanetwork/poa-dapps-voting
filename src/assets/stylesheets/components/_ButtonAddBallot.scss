@@ -1,0 +1,47 @@
+$sw-ButtonAddBallot-height: 44px;
+
+.sw-ButtonAddBallot {
+    align-items: center;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    height: $sw-ButtonAddBallot-height;
+    justify-content: space-between;
+    line-height: $sw-ButtonAddBallot-height;
+    opacity: 1;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    transition: 0.15s background-color;
+
+    &#{ & }-core {
+        background-color: $poa-purple;
+        color: #fff;
+
+        &:hover {
+            background-color: darken($poa-purple, 10%);
+        }
+    }
+
+    &#{ & }-sokol {
+        background-color: $sokol-cyan;
+        color: #fff;
+
+        &:hover {
+            background-color: darken($sokol-cyan, 5%);
+        }
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-orange;
+        color: #fff;
+
+        &:hover {
+            background-color: lighten($xdai-orange, 5%);
+        }
+    }
+}

@@ -1,0 +1,52 @@
+.mn-NewBallotMenuInfo {
+    padding: 30px;
+}
+
+.mn-NewBallotMenuInfo_Title {
+    color: #333;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 30px;
+    padding-left: 25px;
+    position: relative;
+
+    &::before {
+        background-image: url('#{ $base-images-path }/NewBallotMenuInfo/icon.svg');
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 10px 18px;
+        content: '';
+        height: 32px;
+        left: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+    }
+}
+
+.mn-NewBallotMenuInfo_List {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mn-NewBallotMenuInfo_ListItem {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.71;
+    margin-bottom: 20px;
+    padding-left: 25px;
+    position: relative;
+
+    &::before {
+        background-color: #333;
+        border-radius: 50%;
+        content: '';
+        height: 6px;
+        left: 0;
+        position: absolute;
+        top: 8px;
+        width: 6px;
+    }
+}

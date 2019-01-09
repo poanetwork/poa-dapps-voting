@@ -1,0 +1,14 @@
+@mixin brand-icon-styles() {
+    align-items: center;
+    border-radius: 3px;
+    display: flex;
+    font-size: 0;
+    justify-content: center;
+    line-height: 0;
+    transition: box-shadow 0.15s ease-out;
+
+    &:active,
+    &:hover {
+        box-shadow: 0 0 15px 0 rgba(#666, 0.3);
+    }
+}

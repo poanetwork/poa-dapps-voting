@@ -1,0 +1,16 @@
+@mixin content-layout-width() {
+    max-width: 100%;
+    padding-left: $container-horizontal-padding-mobile;
+    padding-right: $container-horizontal-padding-mobile;
+    width: $container-max-width;
+
+    @media (min-width: $breakpoint-md) {
+        padding-left: $container-horizontal-padding-tablet;
+        padding-right: $container-horizontal-padding-tablet;
+    }
+
+    @media (min-width: $breakpoint-xl) {
+        padding-left: $container-horizontal-padding-desktop;
+        padding-right: $container-horizontal-padding-desktop;
+    }
+}

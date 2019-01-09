@@ -1,0 +1,53 @@
+.new-NewBallot {
+    @include content-layout-width();
+}
+
+.new-NewBallot_Form {
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid $base-border-color;
+    display: block;
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: 0.15s box-shadow;
+
+    @media (min-width: $breakpoint-md) {
+        display: flex;
+    }
+}
+
+.new-NewBallot_MenuContainer {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid $base-border-color;
+    box-sizing: border-box;
+    padding-bottom: 30px;
+    padding-top: 0;
+    width: 100%;
+
+    @media (min-width: $breakpoint-md) {
+        border-bottom: none;
+        min-width: 300px;
+        width: 300px;
+    }
+
+}
+
+.new-NewBallot_FormContent {
+    box-sizing: border-box;
+    flex-grow: 1;
+    padding: 30px;
+
+    @media (min-width: $breakpoint-md) {
+        border-left: 1px solid $base-border-color;
+    }
+}
+
+.new-NewBallot_ButtonContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @media (min-width: $breakpoint-xxl) {
+        grid-column-gap: $base-grid-gap;
+        grid-template-columns: 1fr 1fr;
+    }
+}

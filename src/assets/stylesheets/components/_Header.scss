@@ -1,0 +1,57 @@
+.sw-Header {
+    align-items: center;
+    background-color: $poa-purple;
+    color: #fff;
+    display: flex;
+    flex-shrink: 0;
+    height: $header-height;
+    justify-content: center;
+    left: 0;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: background-color 0.25s ease-out;
+    width: 100%;
+    z-index: 124;
+
+    &#{ & }-menu-open {
+        flex-direction: column;
+        height: auto;
+    }
+
+    &#{ & }-core {
+        background-color: $poa-purple;
+    }
+
+    &#{ & }-sokol {
+        background-color: $sokol-cyan;
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-gray;
+    }
+
+}
+
+.sw-Header_Content {
+    @include content-layout-width();
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    min-height: $header-height;
+}
+
+.sw-Header_Links {
+    align-items: center;
+    display: none;
+    height: $header-links-container-height;
+    justify-content: flex-end;
+    margin-left: auto;
+    width: auto;
+
+    @media (min-width: $breakpoint-md) {
+        display: flex;
+    }
+}

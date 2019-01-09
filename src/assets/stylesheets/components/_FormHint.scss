@@ -1,0 +1,28 @@
+.frm-FormHint {
+    color: #777;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.38;
+    margin: 0;
+    padding-top: 12px;
+    word-break: break-all;  // hack for FF, leave it as it is
+    word-break: break-word;
+
+    &#{ & }-core {
+        a {
+            color: $poa-purple;
+        }
+    }
+
+    &#{ & }-sokol {
+        a {
+            color: $sokol-cyan;
+        }
+    }
+
+    &#{ & }-dai {
+        a {
+            color: $xdai-orange;
+        }
+    }
+}

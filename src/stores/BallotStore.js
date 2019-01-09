@@ -1,6 +1,6 @@
-import { observable, computed, action, toJS } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import moment from 'moment'
-import { constants } from '../constants'
+import { constants } from '../utils/constants'
 
 class BallotStore {
   BallotType = {
@@ -72,7 +72,6 @@ class BallotStore {
 
   @computed
   get endTimeUnix() {
-    console.log(this.endTime)
     return moment(this.endTime).unix()
   }
 
@@ -133,19 +132,16 @@ class BallotStore {
 
   @action('change ballot type')
   changeBallotType = (e, _ballotType) => {
-    console.log('change ballot type', _ballotType)
     this.ballotType = _ballotType
   }
 
   @action('change keys ballot type')
   changeKeysBallotType = (e, _keysBallotType) => {
-    console.log('change keys ballot type', _keysBallotType)
     this.ballotKeys.keysBallotType = _keysBallotType
   }
 
   @action('change affected key type')
   changeKeyType = (e, _keyType) => {
-    console.log('change affected key type', _keyType)
     this.ballotKeys.keyType = _keyType
   }
 
@@ -154,17 +150,14 @@ class BallotStore {
     let newVal = e ? (e.target ? e.target.value : e.value) : ''
     if (parent) this[parent][field] = newVal
     else this[field] = newVal
-    console.log('ballot metadata', field, parent ? this[parent][field] : this[field])
   }
   @action('change ballot metadata')
   setMiningKey = value => {
     this.ballotKeys.miningKey = value
-    console.log('ballot mining key', toJS(value))
   }
 
   @action('Set ballot memo')
   setMemo(e) {
-    console.log('memo', this.memo)
     this.memo = e.target.value
   }
 }

@@ -1,13 +1,13 @@
-//import DevTools from 'mobx-react-devtools'
-import './assets/App.css'
-import Loading from './Loading'
 import React, { Component } from 'react'
-import { Header, Ballots, NewBallot, Settings, Footer } from './components'
-import { Route } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
 import swal from 'sweetalert2'
-import { messages } from './messages'
-import { constants } from './constants'
+import { Header, Ballots, NewBallot, Settings, Footer, Loading, BaseLoader, SearchBar, MainTitle } from './components'
+import { Route, Redirect } from 'react-router-dom'
+import { constants } from './utils/constants'
+import { getNetworkBranch } from './utils/utils'
+import { inject, observer } from 'mobx-react'
+import { messages } from './utils/messages'
+
+import './assets/stylesheets/index.css'
 
 @inject('commonStore', 'contractsStore')
 @observer
@@ -15,43 +15,15 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    const { commonStore } = this.props
-
     this.state = {
-      showMobileMenu: false,
-      navigationData: [
-        {
-          icon: 'link-icon-all',
-          title: 'All',
-          url: commonStore.rootPath,
-          class: ''
-        },
-        {
-          icon: 'link-icon-active',
-          title: 'Active',
-          url: `${commonStore.rootPath}/active`,
-          class: ''
-        },
-        {
-          icon: 'link-icon-to-finalize',
-          title: 'To Finalize',
-          url: `${commonStore.rootPath}/tofinalize`,
-          class: ''
-        },
-        {
-          icon: 'link-icon-add',
-          title: 'New Ballot',
-          url: `${commonStore.rootPath}/new`,
-          class: 'btn btn-new-ballot btn-success btn-new no-shadow text-capitalize'
-        }
-        // {
-        //   'icon': '',
-        //   'title': 'Settings',
-        //   'url': `${ commonStore.rootPath }/settings`,
-        //    class: ''
-        // }
-      ]
+      showMobileMenu: false
     }
+  }
+
+  getVotingNetworkBranch = () => {
+    const { contractsStore } = this.props
+
+    return contractsStore.netId ? getNetworkBranch(contractsStore.netId) : null
   }
 
   onBallotsRender = () => {
@@ -68,6 +40,7 @@ class App extends Component {
 
   onNewBallotRender = () => {
     const { commonStore, contractsStore } = this.props
+
     if (!contractsStore.web3Instance) {
       if (!commonStore.loading) {
         swal({
@@ -79,7 +52,7 @@ class App extends Component {
       }
       return null
     }
-    return <NewBallot />
+    return <NewBallot networkBranch={this.getVotingNetworkBranch()} />
   }
 
   onSettingsRender = () => {
@@ -91,18 +64,11 @@ class App extends Component {
     commonStore.setSearchTerm(e.target.value.toLowerCase())
   }
 
-  shouldShowSearch = () => {
+  hideSearch = () => {
     const { commonStore } = this.props
     const currentPath = this.props.location.pathname
 
-    let showSearch =
-      currentPath === `${commonStore.rootPath}` ||
-      currentPath === '/' ||
-      currentPath === `${commonStore.rootPath}/` ||
-      currentPath === `${commonStore.rootPath}/active` ||
-      currentPath === `${commonStore.rootPath}/tofinalize`
-
-    return showSearch
+    return currentPath === `${commonStore.rootPath}/new`
   }
 
   toggleMobileMenu = () => {
@@ -110,17 +76,13 @@ class App extends Component {
   }
 
   getTitle = () => {
-    const currentPath = this.props.location.pathname
+    let obj = constants.navigationData.find(element => element.url === this.props.location.pathname)
 
-    if (currentPath === `${this.state.navigationData[1].url}`) {
-      return this.state.navigationData[1].title
-    } else if (currentPath === `${this.state.navigationData[2].url}`) {
-      return this.state.navigationData[2].title
-    } else if (currentPath === `${this.state.navigationData[3].url}`) {
-      return this.state.navigationData[3].title
-    } else {
-      return this.state.navigationData[0].title
+    if (obj) {
+      return obj.title
     }
+
+    return 'All'
   }
 
   getNetIdClass() {
@@ -128,52 +90,55 @@ class App extends Component {
     return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? 'sokol' : ''
   }
 
+  isNewBallotPage() {
+    return `${constants.rootPath}/new` === this.props.location.pathname
+  }
+
   render() {
     const { commonStore, contractsStore } = this.props
-    const loading = commonStore.loading ? <Loading netId={contractsStore.netId} /> : ''
+    const networkBranch = this.getVotingNetworkBranch()
 
-    const search = this.shouldShowSearch() ? (
-      <div className={`search-container ${this.getNetIdClass()}`}>
-        <div className="container">
-          <input type="search" className="search-input" onChange={this.onSearch} placeholder="Search..." />
-        </div>
-      </div>
-    ) : (
-      ''
-    )
-
-    const isTestnet = contractsStore.netId in constants.NETWORKS && constants.NETWORKS[contractsStore.netId].TESTNET
-
-    return (
-      <section className={`content ${this.state.showMobileMenu ? 'content-menu-open' : ''}`}>
-        {loading}
+    return networkBranch ? (
+      <div
+        className={`lo-App ${this.isNewBallotPage() ? 'lo-App-no-search-bar' : ''} ${
+          this.state.showMobileMenu ? 'lo-App-menu-open' : ''
+        }`}
+      >
+        {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
-          navigationData={this.state.navigationData}
           netId={contractsStore.netId}
+          networkBranch={networkBranch}
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
-        {search}
-        <div
-          className={`app-container ${this.state.showMobileMenu ? 'app-container-open-mobile-menu' : ''} ${
-            isTestnet ? 'sokol' : ''
+        {this.hideSearch() ? null : <SearchBar networkBranch={networkBranch} onSearch={this.onSearch} />}
+        <MainTitle text={this.getTitle()} />
+        <section
+          className={`lo-App_Content lo-App_Content-${networkBranch} ${
+            this.state.showMobileMenu ? 'lo-App_Content-mobile-menu-open' : ''
           }`}
         >
-          <div className="container">
-            <div className={`main-title-container ${this.shouldShowSearch() ? '' : 'no-search-on-top'}`}>
-              <span className="main-title">{this.getTitle()}</span>
-            </div>
-          </div>
-          <Route exact path={`/`} render={this.onBallotsRender} />
+          <Route
+            exact
+            path={`/`}
+            render={props => (
+              <Redirect
+                to={{
+                  pathname: `${commonStore.rootPath}/`
+                }}
+              />
+            )}
+          />
           <Route exact path={`${commonStore.rootPath}/`} render={this.onBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/active`} render={this.onActiveBallotsRender} />
           <Route exact path={`${commonStore.rootPath}/tofinalize`} render={this.onToFinalizeBallotsRender} />
           <Route path={`${commonStore.rootPath}/new`} render={this.onNewBallotRender} />
-          {/*<Route path={`${commonStore.rootPath}/settings`} render={this.onSettingsRender}/>*/}
-        </div>
-        <Footer netId={contractsStore.netId} />
-      </section>
+        </section>
+        <Footer baseRootPath={commonStore.rootPath} networkBranch={networkBranch} />
+      </div>
+    ) : (
+      <BaseLoader />
     )
   }
 }

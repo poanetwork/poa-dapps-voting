@@ -1,0 +1,71 @@
+.sw-SearchBar {
+    background-color: $poa-purple-darker;
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+    height: $search-container-height;
+    justify-content: center;
+    left: 0;
+    padding: 10px 0 0 0;
+    position: fixed;
+    right: 0;
+    top: 70px;
+    z-index: 123;
+
+    &#{ & }-core {
+        background-color: $poa-purple-darker;
+    }
+    &#{ & }-sokol {
+        background-color: $sokol-cyan-darker;
+    }
+    &#{ & }-dai {
+        background-color: $xdai-gray-darker;
+    }
+}
+
+.sw-SearchBar_Content {
+    @include content-layout-width();
+}
+
+@mixin input-color($placeholder-color, $input-color) {
+    &,
+    &:focus,
+    &:hover,
+    &:active {
+        color: $input-color;
+    }
+
+    @include placeholder-full($color: $placeholder-color);
+}
+
+.sw-SearchBar_Input {
+    background-color: transparent;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    border-radius: 0;
+    border: none;
+    box-sizing: border-box;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 30px;
+    outline: none;
+    padding-left: 30px;
+    width: 100%;
+
+
+
+    &#{ & }-core {
+        @include input-color(rgba(255, 255, 255, 0.5), #fff);
+        background-image: url('#{ $base-images-path }/SearchBar/core.svg');
+    }
+    &#{ & }-sokol {
+        @include input-color(rgba(255, 255, 255, 0.5), #fff);
+        background-image: url('#{ $base-images-path }/SearchBar/sokol.svg');
+    }
+    &#{ & }-dai {
+        @include input-color(rgba(51, 51, 51, 0.5), #333);
+        background-image: url('#{ $base-images-path }/SearchBar/dai.svg');
+    }
+}

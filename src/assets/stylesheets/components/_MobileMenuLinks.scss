@@ -1,0 +1,17 @@
+.hd-MobileMenuLinks {
+    background-color: $poa-purple-darker;
+    padding: 10px;
+    width: 100%;
+
+    &#{ & }-core {
+        background-color: $poa-purple-darker;
+    }
+
+    &#{ & }-sokol {
+        background-color: $sokol-cyan-darker;
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-gray-darker;
+    }
+}

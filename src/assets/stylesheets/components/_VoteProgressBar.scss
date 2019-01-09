@@ -1,0 +1,69 @@
+.vt-VoteProgressBar {
+    width: 100%;
+}
+
+.vt-VoteProgressBar_Scale {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    clear: left;
+    height: 10px;
+    margin-top: 34px;
+    overflow: hidden;
+}
+
+.vt-VoteProgressBar_Progress {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 100%;
+
+    &#{ & }-negative#{ & }-core {
+        background-color: $voting-negative-poa;
+    }
+
+    &#{ & }-neutral#{ & }-core {
+        background-color: $voting-neutral-poa;
+    }
+
+    &#{ & }-positive#{ & }-core {
+        background-color: $voting-positive-poa;
+    }
+
+    &#{ & }-negative#{ & }-sokol {
+        background-color: $voting-negative-sokol;
+    }
+
+    &#{ & }-neutral#{ & }-sokol {
+        background-color: $voting-neutral-sokol;
+    }
+
+    &#{ & }-positive#{ & }-sokol {
+        background-color: $voting-positive-sokol;
+    }
+
+    &#{ & }-negative#{ & }-dai {
+        background-color: $voting-negative-dai;
+    }
+
+    &#{ & }-neutral#{ & }-dai {
+        background-color: $voting-neutral-dai;
+    }
+
+    &#{ & }-positive#{ & }-dai {
+        background-color: $voting-positive-dai;
+    }
+}
+
+.vt-VoteProgressBar_Votes {
+    color: $gray-text-color;
+    float: right;
+    font-size: 13px;
+    margin: 0 0 0 10px;
+}
+
+.vt-VoteProgressBar_Percentage {
+    color: #000;
+    float: right;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+}

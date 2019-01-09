@@ -1,0 +1,12 @@
+.frm-FormSelect_Select {
+    select {
+        @include form-element-base-style();
+        @include image-2x('#{ $base-images-path }/Base/select@2x.png', 8px, 4px);
+        appearance: none;
+        background-image: url('#{ $base-images-path }/Base/select.png');
+        background-position: right 13px center;
+        background-repeat: no-repeat;
+        height: $input-height;
+        padding-right: 30px;
+    }
+}

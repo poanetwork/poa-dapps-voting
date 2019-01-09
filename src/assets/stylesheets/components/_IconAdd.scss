@@ -1,0 +1,33 @@
+@mixin path-colors($parent-class: '', $fill-core: #fff, $fill-sokol: #fff, $fill-dai: #fff) {
+
+    #{ $parent-class } &#{ & }-core {
+        fill: $fill-core;
+    }
+
+    #{ $parent-class } &#{ & }-sokol {
+        fill: $fill-sokol;
+    }
+
+    #{ $parent-class } &#{ & }-dai {
+        fill: $fill-dai;
+    }
+
+}
+
+.sw-IconAdd {
+    .sw-ButtonNewBallot & {
+        margin-left: 10px;
+    }
+
+    .sw-ButtonAddBallot & {
+        margin-left: 10px;
+    }
+}
+
+.sw-IconAdd_Path {
+
+    @include path-colors('.sw-ButtonNewBallot', #fff, $sokol-cyan, #fff);
+
+    @include path-colors('.sw-ButtonAddBallot');
+
+}

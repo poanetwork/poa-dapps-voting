@@ -1,0 +1,57 @@
+.sw-Footer {
+    align-items: center;
+    background-color: $poa-purple;
+    color: #fff;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    min-height: 60px;
+    overflow: hidden;
+    padding: 16px 0;
+    transition: background-color 0.25s ease-out;
+    width: 100%;
+
+    &#{ & }-core {
+        background-color: $poa-purple;
+    }
+
+    &#{ & }-sokol {
+        background-color: $sokol-cyan;
+    }
+
+    &#{ & }-dai {
+        background-color: $xdai-gray;
+    }
+}
+
+.sw-Footer_Content {
+    @include content-layout-width();
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (min-width: $breakpoint-md) {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.sw-Footer_Text {
+    color: #fff;
+    flex-grow: 1;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0;
+    padding: 15px 0 0 0;
+    text-align: center;
+
+    @media (min-width: $breakpoint-md) {
+        padding-top: 0;
+    }
+
+    .sw-Footer-dai & {
+        color: #333;
+    }
+}

@@ -1,0 +1,83 @@
+.frm-KeysTypes {
+    margin-bottom: $base-grid-gap;
+}
+
+.frm-KeysTypes_Row {
+    @include form-row-base-styles();
+    display: grid;
+    grid-row-gap: $base-grid-gap;
+    grid-template-columns: 1fr;
+
+    @media (min-width: $breakpoint-md) {
+        grid-column-gap: $base-grid-gap;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.frm-KeysTypes_Button {
+    position: relative;
+}
+
+.frm-KeysTypes_Label {
+    @include not-selectable-text();
+    border-radius: 3px;
+    border: 1px solid $base-border-color;
+    color: $gray-text-color;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 50px;
+    margin: 0;
+    outline: none;
+    padding: 0 15px;
+    text-decoration: none;
+    text-transform: capitalize;
+    text-align: center;
+    transition: 0.15s background-color ease-out, 0.15s border-color ease-out;
+    position: relative;
+    white-space: nowrap;
+    z-index: 1;
+
+    &:hover {
+        border-color: darken($base-border-color, 15%);
+    }
+
+    .frm-KeysTypes_Radio:checked + &#{ & }-core {
+        &,
+        &:hover {
+            background-color: $poa-purple;
+            border-color: $poa-purple;
+            box-shadow: 0 5px 10px 0 rgba($poa-purple, 0.3);
+            color: #fff;
+        }
+    }
+
+    .frm-KeysTypes_Radio:checked + &#{ & }-sokol {
+        &,
+        &:hover {
+            background-color: $sokol-cyan;
+            border-color: $sokol-cyan;
+            box-shadow: 0 5px 10px 0 rgba($sokol-cyan, 0.3);
+            color: #fff;
+        }
+    }
+
+    .frm-KeysTypes_Radio:checked + &#{ & }-dai {
+        &,
+        &:hover {
+            background-color: $xdai-orange;
+            border-color: $xdai-orange;
+            box-shadow: 0 5px 10px 0 rgba($xdai-orange, 0.3);
+            color: #fff;
+        }
+    }
+}
+
+.frm-KeysTypes_Radio {
+    height: 100%;
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+    z-index: 12;
+}

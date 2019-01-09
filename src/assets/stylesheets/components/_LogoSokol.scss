@@ -1,0 +1,20 @@
+.sw-LogoSokol {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    .sw-Header & {
+        width: 178px;
+    }
+
+    .sw-Footer & {
+        height: 26px;
+    }
+
+}
+
+.sw-LogoSokol_Image {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
