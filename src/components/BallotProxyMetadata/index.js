@@ -7,21 +7,18 @@ import { inject, observer } from 'mobx-react'
 @observer
 export class BallotProxyMetadata extends React.Component {
   render() {
-    const { ballotStore, contractsStore, networkBranch } = this.props
+    const { ballotStore, networkBranch } = this.props
     let options = [
-      /*0*/ { value: '', label: '' },
-      /*1*/ { value: '1', label: ballotStore.ProxyBallotType[1] }, // KeysManager
-      /*2*/ { value: '2', label: ballotStore.ProxyBallotType[2] }, // VotingToChangeKeys
-      /*3*/ { value: '3', label: ballotStore.ProxyBallotType[3] }, // VotingToChangeMinThreshold
-      /*4*/ { value: '4', label: ballotStore.ProxyBallotType[4] }, // VotingToChangeProxy
-      /*5*/ { value: '5', label: ballotStore.ProxyBallotType[5] }, // BallotsStorage
-      /*6*/ { value: '7', label: ballotStore.ProxyBallotType[7] }, // ValidatorMetadata
-      /*7*/ { value: '8', label: ballotStore.ProxyBallotType[8] } // ProxyStorage
+      { value: '', label: '' },
+      { value: '1', label: ballotStore.ProxyBallotType[1] }, // KeysManager
+      { value: '2', label: ballotStore.ProxyBallotType[2] }, // VotingToChangeKeys
+      { value: '3', label: ballotStore.ProxyBallotType[3] }, // VotingToChangeMinThreshold
+      { value: '4', label: ballotStore.ProxyBallotType[4] }, // VotingToChangeProxy
+      { value: '5', label: ballotStore.ProxyBallotType[5] }, // BallotsStorage
+      { value: '7', label: ballotStore.ProxyBallotType[7] }, // ValidatorMetadata
+      { value: '8', label: ballotStore.ProxyBallotType[8] }, // ProxyStorage
+      { value: '9', label: ballotStore.ProxyBallotType[9] } // RewardByBlock
     ]
-
-    if (!contractsStore.proxyStorage || !contractsStore.proxyStorage.doesMethodExist('getValidatorMetadata')) {
-      options.splice(6) // keep 0-5 and remove 6-... items if ProxyStorage is old
-    }
 
     return (
       <div className="frm-BallotProxyMetadata">
