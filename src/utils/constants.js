@@ -64,12 +64,6 @@ constants.NETWORKS = {
     BRANCH: 'core',
     TESTNET: false
   },
-  '79': {
-    NAME: 'Dai-Test',
-    RPC: 'https://dai-test.poa.network',
-    BRANCH: 'dai-test',
-    TESTNET: true
-  },
   '100': {
     NAME: 'Dai',
     RPC: 'https://dai.poa.network',
