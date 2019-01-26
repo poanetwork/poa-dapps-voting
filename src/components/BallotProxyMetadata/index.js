@@ -2,6 +2,7 @@ import React from 'react'
 import { FormInput } from '../FormInput'
 import { FormSelect } from '../FormSelect'
 import { inject, observer } from 'mobx-react'
+import { constants } from '../../utils/constants'
 import { getNetworkName } from '../../utils/utils'
 
 @inject('ballotStore', 'contractsStore')
@@ -21,7 +22,7 @@ export class BallotProxyMetadata extends React.Component {
       /*8*/ { value: '9', label: ballotStore.ProxyBallotType[9] } // RewardByBlock
     ]
 
-    if (getNetworkName(contractsStore.netId).toLowerCase() != 'sokol') {
+    if (getNetworkName(contractsStore.netId).toLowerCase() !== constants.SOKOL) {
       options.splice(8) // keep 0-7 items and remove 8th if the network is not Sokol
     }
 

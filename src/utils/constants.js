@@ -51,23 +51,27 @@ constants.navigationData = [
   }
 ]
 
+constants.SOKOL = 'sokol'
+constants.CORE = 'core'
+constants.DAI = 'dai'
+
 constants.NETWORKS = {
   '77': {
     NAME: 'Sokol',
     RPC: 'https://sokol.poa.network',
-    BRANCH: 'sokol',
+    BRANCH: constants.SOKOL,
     TESTNET: true
   },
   '99': {
     NAME: 'Core',
     RPC: 'https://core.poa.network',
-    BRANCH: 'core',
+    BRANCH: constants.CORE,
     TESTNET: false
   },
   '100': {
     NAME: 'Dai',
     RPC: 'https://dai.poa.network',
-    BRANCH: 'dai',
+    BRANCH: constants.DAI,
     TESTNET: false
   }
 }

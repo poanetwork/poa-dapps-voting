@@ -72,7 +72,7 @@ export class BallotEmissionFundsMetadata extends React.Component {
 
   render() {
     const { ballotStore, contractsStore, networkBranch } = this.props
-    let note, explorerLink
+    let note
 
     if (this.noActiveBallotExists === true) {
       note = (
@@ -85,11 +85,8 @@ export class BallotEmissionFundsMetadata extends React.Component {
       note = <p>To be able to create a new ballot, the previous ballot of this type must be finalized.</p>
     }
 
-    if (constants.NETWORKS[contractsStore.netId].NAME.toLowerCase() === 'sokol') {
-      explorerLink = `https://sokol.poaexplorer.com/address/search/${contractsStore.emissionFunds.address}`
-    } else {
-      explorerLink = `https://poaexplorer.com/address/${contractsStore.emissionFunds.address}`
-    }
+    const networkName = constants.NETWORKS[contractsStore.netId].NAME.toLowerCase()
+    const explorerLink = `https://blockscout.com/poa/${networkName}/address/${contractsStore.emissionFunds.address}`
 
     return (
       <div className="frm-BallotEmissionFundsMetadata">

@@ -87,7 +87,7 @@ class App extends Component {
 
   getNetIdClass() {
     const { netId } = this.props.contractsStore
-    return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? 'sokol' : ''
+    return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? constants.SOKOL : ''
   }
 
   isNewBallotPage() {
