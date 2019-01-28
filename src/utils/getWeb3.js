@@ -52,7 +52,7 @@ let getWeb3 = () => {
         console.log('No web3 instance injected, using Local web3.')
         console.error('Metamask not found')
 
-        netId = netIdByName('core')
+        netId = netIdByName(constants.CORE)
 
         const network = constants.NETWORKS[netId]
 

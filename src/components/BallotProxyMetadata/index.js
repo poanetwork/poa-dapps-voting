@@ -2,6 +2,8 @@ import React from 'react'
 import { FormInput } from '../FormInput'
 import { FormSelect } from '../FormSelect'
 import { inject, observer } from 'mobx-react'
+import { constants } from '../../utils/constants'
+import { getNetworkName } from '../../utils/utils'
 
 @inject('ballotStore', 'contractsStore')
 @observer
@@ -16,11 +18,12 @@ export class BallotProxyMetadata extends React.Component {
       /*4*/ { value: '4', label: ballotStore.ProxyBallotType[4] }, // VotingToChangeProxy
       /*5*/ { value: '5', label: ballotStore.ProxyBallotType[5] }, // BallotsStorage
       /*6*/ { value: '7', label: ballotStore.ProxyBallotType[7] }, // ValidatorMetadata
-      /*7*/ { value: '8', label: ballotStore.ProxyBallotType[8] } // ProxyStorage
+      /*7*/ { value: '8', label: ballotStore.ProxyBallotType[8] }, // ProxyStorage
+      /*8*/ { value: '9', label: ballotStore.ProxyBallotType[9] } // RewardByBlock
     ]
 
-    if (!contractsStore.proxyStorage || !contractsStore.proxyStorage.doesMethodExist('getValidatorMetadata')) {
-      options.splice(6) // keep 0-5 and remove 6-... items if ProxyStorage is old
+    if (getNetworkName(contractsStore.netId).toLowerCase() !== constants.SOKOL) {
+      options.splice(8) // keep 0-7 items and remove 8th if the network is not Sokol
     }
 
     return (

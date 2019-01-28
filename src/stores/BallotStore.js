@@ -26,7 +26,8 @@ class BallotStore {
     4: 'VotingToChangeProxy',
     5: 'BallotsStorage',
     7: 'ValidatorMetadata',
-    8: 'ProxyStorage'
+    8: 'ProxyStorage',
+    9: 'RewardByBlock'
   }
   @observable ballotType
   @observable keysBallotType
