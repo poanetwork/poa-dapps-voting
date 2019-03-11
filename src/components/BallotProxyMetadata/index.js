@@ -22,12 +22,6 @@ export class BallotProxyMetadata extends React.Component {
       /*8*/ { value: '9', label: ballotStore.ProxyBallotType[9] } // RewardByBlock
     ]
 
-    const networkName = getNetworkName(contractsStore.netId).toLowerCase()
-
-    if (networkName !== constants.SOKOL && networkName !== constants.DAI) {
-      options.splice(8) // keep 0-7 items and remove 8th if the network is not Sokol or xDai
-    }
-
     return (
       <div className="frm-BallotProxyMetadata">
         <div className="frm-BallotProxyMetadata_Row">
