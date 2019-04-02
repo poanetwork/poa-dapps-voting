@@ -63,6 +63,7 @@ export class Validator extends React.Component {
   }
 
   render() {
+    return null // Temporarily empty (until we implement https://github.com/poanetwork/poa-dapps-voting/issues/120)
     const { validatorStore, networkBranch } = this.props
     const inputProps = {
       value: validatorStore.address,

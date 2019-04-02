@@ -42,15 +42,16 @@ export class NewBallot extends React.Component {
   checkValidation() {
     const { commonStore, contractsStore, ballotStore, validatorStore } = this.props
 
-    if (ballotStore.isNewValidatorPersonalData) {
-      for (let validatorProp in validatorStore) {
-        if (validatorStore[validatorProp].length === 0) {
-          swal('Warning!', `Validator ${validatorProp} is empty`, 'warning')
-          commonStore.hideLoading()
-          return false
-        }
-      }
-    }
+    // Temporarily commented (until we implement https://github.com/poanetwork/poa-dapps-voting/issues/120)
+    // if (ballotStore.isNewValidatorPersonalData) {
+    //   for (let validatorProp in validatorStore) {
+    //     if (validatorStore[validatorProp].length === 0) {
+    //       swal('Warning!', `Validator ${validatorProp} is empty`, 'warning')
+    //       commonStore.hideLoading()
+    //       return false
+    //     }
+    //   }
+    // }
 
     if (!ballotStore.memo) {
       swal('Warning!', messages.DESCRIPTION_IS_EMPTY, 'warning')
