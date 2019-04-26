@@ -11,6 +11,10 @@
         fill: $xdai-gray-dark;
     }
 
+    &#{ & }-kovan {
+        fill: $kovan-cyan;
+    }
+
     .sw-ButtonLoadMore:hover & {
         opacity: 0.7;
     }

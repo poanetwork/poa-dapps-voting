@@ -85,11 +85,6 @@ class App extends Component {
     return 'All'
   }
 
-  getNetIdClass() {
-    const { netId } = this.props.contractsStore
-    return netId in constants.NETWORKS && constants.NETWORKS[netId].TESTNET ? constants.SOKOL : ''
-  }
-
   isNewBallotPage() {
     return `${constants.rootPath}/new` === this.props.location.pathname
   }

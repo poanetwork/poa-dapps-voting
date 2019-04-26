@@ -43,6 +43,15 @@
         }
     }
 
+    &#{ & }-kovan {
+        background-color: $kovan-cyan;
+
+        &:active,
+        &:hover {
+            background-color: darken($kovan-cyan, 10%);
+        }
+    }
+
     &#{ & }-cancel {
         &,
         &:active,

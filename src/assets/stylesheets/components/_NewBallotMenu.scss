@@ -50,4 +50,12 @@
             background-color: $xdai-orange;
         }
     }
+
+    &#{ & }-kovan#{ & }-active {
+       color: $kovan-cyan;
+
+        &::before {
+            background-color: $kovan-cyan;
+        }
+    }
 }

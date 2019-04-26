@@ -21,6 +21,9 @@
     &#{ & }-dai {
         background-color: $xdai-gray-darker;
     }
+    &#{ & }-kovan {
+        background-color: $kovan-cyan-darker;
+    }
 }
 
 .sw-SearchBar_Content {
@@ -67,5 +70,9 @@
     &#{ & }-dai {
         @include input-color(rgba(51, 51, 51, 0.5), #333);
         background-image: url('#{ $base-images-path }/SearchBar/dai.svg');
+    }
+    &#{ & }-kovan {
+        @include input-color(rgba(255, 255, 255, 0.5), #fff);
+        background-image: url('#{ $base-images-path }/SearchBar/kovan.svg');
     }
 }

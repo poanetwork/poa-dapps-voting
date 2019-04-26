@@ -51,6 +51,18 @@
     &#{ & }-positive#{ & }-dai {
         background-color: $voting-positive-dai;
     }
+
+    &#{ & }-negative#{ & }-kovan {
+        background-color: $voting-negative-kovan;
+    }
+
+    &#{ & }-neutral#{ & }-kovan {
+        background-color: $voting-neutral-kovan;
+    }
+
+    &#{ & }-positive#{ & }-kovan {
+        background-color: $voting-positive-kovan;
+    }
 }
 
 .vt-VoteProgressBar_Votes {

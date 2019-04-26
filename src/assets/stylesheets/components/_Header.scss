@@ -32,6 +32,10 @@
         background-color: $xdai-gray;
     }
 
+    &#{ & }-kovan {
+        background-color: $kovan-cyan;
+    }
+
 }
 
 .sw-Header_Content {

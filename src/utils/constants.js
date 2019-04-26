@@ -54,8 +54,15 @@ constants.navigationData = [
 constants.SOKOL = 'sokol'
 constants.CORE = 'core'
 constants.DAI = 'dai'
+constants.KOVAN = 'kovan'
 
 constants.NETWORKS = {
+  '42': {
+    NAME: 'Kovan',
+    RPC: 'https://kovan.infura.io/',
+    BRANCH: constants.KOVAN,
+    TESTNET: true
+  },
   '77': {
     NAME: 'Sokol',
     RPC: 'https://sokol.poa.network',

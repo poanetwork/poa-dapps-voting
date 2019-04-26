@@ -72,6 +72,19 @@
         }
     }
 
+    &#{ & }-kovan {
+        color: #fff;
+
+        &:active,
+        &.active {
+            background-color: darken($kovan-cyan-darker, 10%);
+
+            @media (min-width: $breakpoint-md) {
+                background-color: transparent;
+            }
+        }
+    }
+
     .hd-MobileMenuLinks & {
         display: flex;
         flex-grow: 1;

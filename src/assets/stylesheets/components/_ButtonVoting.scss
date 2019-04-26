@@ -118,4 +118,31 @@
         }
     }
 
+    &#{ & }-negative#{ & }-kovan {
+        background-color: $voting-negative-kovan;
+        box-shadow: 0 5px 10px 0 rgba($voting-negative-kovan, 0.3);
+
+        &:hover {
+            background-color: darken($voting-negative-kovan, 10%);
+        }
+    }
+
+    &#{ & }-neutral#{ & }-kovan {
+        background-color: $voting-neutral-kovan;
+        box-shadow: 0 5px 10px 0 rgba($voting-neutral-kovan, 0.3);
+
+        &:hover {
+            background-color: darken($voting-neutral-kovan, 10%);
+        }
+    }
+
+    &#{ & }-positive#{ & }-kovan {
+        background-color: $voting-positive-kovan;
+        box-shadow: 0 5px 10px 0 rgba($voting-positive-kovan, 0.3);
+
+        &:hover {
+            background-color: darken($voting-positive-kovan, 10%);
+        }
+    }
+
 }

@@ -72,6 +72,16 @@
             color: #fff;
         }
     }
+
+    .frm-KeysTypes_Radio:checked + &#{ & }-kovan {
+        &,
+        &:hover {
+            background-color: $kovan-cyan;
+            border-color: $kovan-cyan;
+            box-shadow: 0 5px 10px 0 rgba($kovan-cyan, 0.3);
+            color: #fff;
+        }
+    }
 }
 
 .frm-KeysTypes_Radio {

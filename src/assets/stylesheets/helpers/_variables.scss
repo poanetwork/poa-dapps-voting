@@ -20,6 +20,12 @@ $xdai-gray: #f2f6f8;
 $xdai-gray-dark: #333;
 $xdai-menu-icon-color: #333;
 
+$kovan-cyan: #6ac9b9;
+$kovan-cyan-darker: #41b19e;
+$kovan-freeze-color: #50bbda;
+$kovan-danger-color: #f24c67;
+$kovan-menu-icon-color: #fff;
+
 // colors
 $gray-text-color: #333;
 
@@ -83,6 +89,10 @@ $voting-positive-sokol: #6ac9b9;
 $voting-negative-dai: #f21b57;
 $voting-neutral-dai: #50bbda;
 $voting-positive-dai: #60db97;
+
+$voting-negative-kovan: #f24c67;
+$voting-neutral-kovan: #50bbda;
+$voting-positive-kovan: #6ac9b9;
 
 // grid stuff
 $base-grid-gap: 30px;

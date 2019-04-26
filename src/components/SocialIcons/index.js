@@ -9,7 +9,8 @@ const getIconBackgroundColor = networkBranch => {
     {
       dai: '#e3e7e9',
       poa: '#fff',
-      sokol: '#fff'
+      sokol: '#fff',
+      kovan: '#fff'
     }[networkBranch] || '#fff'
   )
 }
@@ -19,7 +20,8 @@ const getIconColor = networkBranch => {
     {
       dai: '#333',
       poa: '#5c34a2',
-      sokol: '#6ac9b9'
+      sokol: '#6ac9b9',
+      kovan: '#6ac9b9'
     }[networkBranch] || '#5c34a2'
   )
 }
