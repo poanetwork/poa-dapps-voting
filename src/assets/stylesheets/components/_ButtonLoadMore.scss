@@ -28,6 +28,10 @@
         border-color: $xdai-gray;
     }
 
+    &#{ & }-kovan {
+        border-color: $kovan-cyan;
+    }
+
     @media (min-width: $breakpoint-md) {
         width: auto;
     }
@@ -51,5 +55,9 @@
 
     .sw-ButtonLoadMore-dai & {
         color: $xdai-gray;
+    }
+
+    .sw-ButtonLoadMore-kovan & {
+        color: $kovan-cyan;
     }
 }

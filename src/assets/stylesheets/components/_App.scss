@@ -53,4 +53,10 @@
             background-color: rgba($xdai-orange, 0.5);
         }
     }
+
+    &#{ & }-kovan {
+        &:before {
+            background-color: rgba($kovan-cyan, 0.5);
+        }
+    }
 }

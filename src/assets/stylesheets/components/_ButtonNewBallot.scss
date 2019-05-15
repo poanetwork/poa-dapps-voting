@@ -74,6 +74,25 @@ $sw-ButtonNewBallot-height: 36px;
         }
     }
 
+    &#{ & }-kovan {
+        background-color: #fff;
+        box-shadow: 0 5px 10px 0 rgba($kovan-cyan, 0.3);
+        color: $kovan-cyan;
+
+        &:active,
+        &:hover {
+            background-color: darken(#fff, 5%);
+        }
+
+        &.active {
+            &,
+            &:active,
+            &:hover {
+                background-color: #fff;
+            }
+        }
+    }
+
     &.active {
         cursor: pointer;
         pointer-events: none;

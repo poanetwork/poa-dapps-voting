@@ -44,4 +44,13 @@ $sw-ButtonAddBallot-height: 44px;
             background-color: lighten($xdai-orange, 5%);
         }
     }
+
+    &#{ & }-kovan {
+        background-color: $kovan-cyan;
+        color: #fff;
+
+        &:hover {
+            background-color: darken($kovan-cyan, 5%);
+        }
+    }
 }
