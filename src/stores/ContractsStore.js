@@ -413,9 +413,9 @@ class ContractsStore {
     keys.forEach(async key => {
       const metadata = await this.validatorMetadata.getValidatorFullName(key)
       this.validatorsMetadata[key.toLowerCase()] = {
-        label: `${key} ${metadata.lastName}`,
-        lastNameAndKey: `${metadata.lastName} ${key}`,
-        fullName: `${metadata.firstName} ${metadata.lastName}`,
+        label: `${key} ${metadata.lastName}`.trim(),
+        lastNameAndKey: `${metadata.lastName} ${key}`.trim(),
+        fullName: `${metadata.firstName} ${metadata.lastName}`.trim(),
         value: key
       }
     })
