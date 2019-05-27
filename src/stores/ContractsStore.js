@@ -43,6 +43,7 @@ class ContractsStore {
   @observable emissionFundsBallotThreshold
   @observable ballotCancelingThreshold
   @observable validatorLimits
+  @observable minBallotDuration
   @observable validatorsMetadata
   @observable netId
 
@@ -51,6 +52,7 @@ class ContractsStore {
     this.miningKey = null
     this.validatorsMetadata = {}
     this.validatorLimits = { keys: null, minThreshold: null, proxy: null }
+    this.minBallotDuration = { keys: 0, minThreshold: 0, proxy: 0 }
   }
 
   @computed
@@ -388,21 +390,50 @@ class ContractsStore {
 
   @action
   async getBallotsLimits() {
-    if (this.web3Instance && this.netId) {
-      const limitPerValidator = await this.ballotsStorage.instance.methods.getBallotLimitPerValidator().call()
+    return new Promise(async resolve => {
+      if (this.web3Instance && this.netId) {
+        const limitPerValidator = await this.ballotsStorage.instance.methods.getBallotLimitPerValidator().call()
 
-      let getKeysLimit = await this.votingToChangeKeys.getBallotLimit(this.miningKey, limitPerValidator)
-      let getMinThresholdLimit = await this.votingToChangeMinThreshold.getBallotLimit(this.miningKey, limitPerValidator)
-      let getProxyLimit = await this.votingToChangeProxy.getBallotLimit(this.miningKey, limitPerValidator)
+        const getKeysLimit = await this.votingToChangeKeys.getBallotLimit(this.miningKey, limitPerValidator)
+        const getMinThresholdLimit = await this.votingToChangeMinThreshold.getBallotLimit(
+          this.miningKey,
+          limitPerValidator
+        )
+        const getProxyLimit = await this.votingToChangeProxy.getBallotLimit(this.miningKey, limitPerValidator)
 
-      await Promise.all([getKeysLimit, getMinThresholdLimit, getProxyLimit]).then(
-        ([keysLimit, minThresholdLimit, proxyLimit]) => {
-          this.validatorLimits.keys = keysLimit
-          this.validatorLimits.minThreshold = minThresholdLimit
-          this.validatorLimits.proxy = proxyLimit
-        }
-      )
-    }
+        const getKeysMinBallotDuration = await this.votingToChangeKeys.minBallotDuration()
+        const getMinThresholdMinBallotDuration = await this.votingToChangeMinThreshold.minBallotDuration()
+        const getProxyMinBallotDuration = await this.votingToChangeProxy.minBallotDuration()
+
+        await Promise.all([
+          getKeysLimit,
+          getMinThresholdLimit,
+          getProxyLimit,
+          getKeysMinBallotDuration,
+          getMinThresholdMinBallotDuration,
+          getProxyMinBallotDuration
+        ]).then(
+          ([
+            keysLimit,
+            minThresholdLimit,
+            proxyLimit,
+            keysMinBallotDuration,
+            minThresholdMinBallotDuration,
+            proxyMinBallotDuration
+          ]) => {
+            this.validatorLimits.keys = keysLimit
+            this.validatorLimits.minThreshold = minThresholdLimit
+            this.validatorLimits.proxy = proxyLimit
+            this.minBallotDuration.keys = keysMinBallotDuration
+            this.minBallotDuration.minThreshold = minThresholdMinBallotDuration
+            this.minBallotDuration.proxy = proxyMinBallotDuration
+            resolve()
+          }
+        )
+      } else {
+        resolve()
+      }
+    })
   }
 
   @action

@@ -73,7 +73,8 @@ class AppMainRouter extends Component {
         contractsStore.getKeysBallotThreshold()
         contractsStore.getProxyBallotThreshold()
         contractsStore.getBallotCancelingThreshold()
-        contractsStore.getBallotsLimits()
+
+        await contractsStore.getBallotsLimits()
 
         await contractsStore.getAllValidatorMetadata()
         await contractsStore.getAllBallots()
