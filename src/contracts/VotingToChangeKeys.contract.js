@@ -85,4 +85,8 @@ export default class VotingToChangeKeys {
     const _activeBallots = await this.instance.methods.validatorActiveBallots(_miningKey).call()
     return _limitPerValidator - _activeBallots
   }
+
+  async minBallotDuration() {
+    return await this.instance.methods.minBallotDuration().call()
+  }
 }

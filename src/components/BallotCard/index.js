@@ -23,7 +23,9 @@ const zeroTimeTo = '00:00'
 @observer
 export class BallotCard extends React.Component {
   @observable cancelDeadline = 0
+  @observable nowTimeUnix
   @observable startTime
+  @observable startTimeUnix
   @observable endTime
   @observable timeTo = {}
   @observable
@@ -56,6 +58,7 @@ export class BallotCard extends React.Component {
   @observable hasAlreadyVoted
   @observable memo
   @observable quorumState
+  @observable minBallotDuration
 
   @computed
   get cancelOrFinalizeButtonDisplayName() {
@@ -101,7 +104,7 @@ export class BallotCard extends React.Component {
       return `You can cancel this ballot within ${this.timeToCancel.displayValue}`
     } else {
       let description = 'Finalization is available after ballot time is finished'
-      if (this.canBeFinalized !== null) {
+      if (this.canBeFinalized !== null && this.nowTimeUnix - this.startTimeUnix > this.minBallotDuration) {
         description += ' or all validators are voted'
       }
       return description
@@ -208,6 +211,10 @@ export class BallotCard extends React.Component {
     const msStart = start.diff(_now)
     const msFinish = finish.diff(_now)
 
+    this.nowTimeUnix = moment()
+      .utc()
+      .unix()
+
     if (msCancel > 0 && !this.isCanceled) {
       this.timeToCancel.val = msCancel
       this.timeToCancel.displayValue = this.formatMs(msCancel, ':mm:ss')
@@ -248,6 +255,7 @@ export class BallotCard extends React.Component {
         .utc((votingState.creationTime + contractsStore.ballotCancelingThreshold) * 1000)
         .format(USDateTimeFormat)
     }
+    this.startTimeUnix = moment.utc(votingState.startTime * 1000) / 1000
     this.startTime = moment.utc(votingState.startTime * 1000).format(USDateTimeFormat)
     this.endTime = moment.utc(votingState.endTime * 1000).format(USDateTimeFormat)
     // getCreator
@@ -297,6 +305,8 @@ export class BallotCard extends React.Component {
     if (votingType === 'votingToManageEmissionFunds') {
       this.getQuorumState()
     }
+
+    this.minBallotDuration = this.getMinBallotDuration(contractsStore, votingType)
   }
 
   formatMs(ms, format) {
@@ -602,6 +612,19 @@ export class BallotCard extends React.Component {
         return contractsStore.emissionFundsBallotThreshold
       default:
         return contractsStore.keysBallotThreshold
+    }
+  }
+
+  getMinBallotDuration(contractsStore, votingType) {
+    switch (votingType) {
+      case 'votingToChangeKeys':
+        return contractsStore.minBallotDuration.keys
+      case 'votingToChangeMinThreshold':
+        return contractsStore.minBallotDuration.minThreshold
+      case 'votingToChangeProxy':
+        return contractsStore.minBallotDuration.proxy
+      default:
+        return 0
     }
   }
 
