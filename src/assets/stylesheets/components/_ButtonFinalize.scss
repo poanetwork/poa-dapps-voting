@@ -35,11 +35,11 @@
     }
 
     &#{ & }-dai {
-        background-color: $xdai-orange;
+        background-color: $xdai-green;
 
         &:active,
         &:hover {
-            background-color: darken($xdai-orange, 10%);
+            background-color: darken($xdai-green, 10%);
         }
     }
 

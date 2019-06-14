@@ -60,7 +60,7 @@
     }
 
     &#{ & }-dai {
-        color: #333;
+        color: #fff;
 
         &:active,
         &.active {
@@ -77,7 +77,7 @@
 
         &:active,
         &.active {
-            background-color: darken($kovan-cyan-darker, 10%);
+            background-color: darken(#fff, 10%);
 
             @media (min-width: $breakpoint-md) {
                 background-color: transparent;
