@@ -66,9 +66,9 @@
     .frm-KeysTypes_Radio:checked + &#{ & }-dai {
         &,
         &:hover {
-            background-color: $xdai-orange;
-            border-color: $xdai-orange;
-            box-shadow: 0 5px 10px 0 rgba($xdai-orange, 0.3);
+            background-color: $xdai-green;
+            border-color: $xdai-green;
+            box-shadow: 0 5px 10px 0 rgba($xdai-green, 0.3);
             color: #fff;
         }
     }

@@ -37,11 +37,11 @@ $sw-ButtonAddBallot-height: 44px;
     }
 
     &#{ & }-dai {
-        background-color: $xdai-orange;
+        background-color: $xdai-green;
         color: #fff;
 
         &:hover {
-            background-color: lighten($xdai-orange, 5%);
+            background-color: lighten($xdai-green, 5%);
         }
     }
 
