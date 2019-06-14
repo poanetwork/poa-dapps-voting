@@ -14,7 +14,7 @@ $sokol-freeze-color: #50bbda;
 $sokol-danger-color: #f24c67;
 $sokol-menu-icon-color: #fff;
 
-$xdai-green: #16d1a5;
+$xdai-green: #15bba6;
 $xdai-gray-darker: #132942;
 $xdai-gray: #173250;
 $xdai-gray-dark: #333;
@@ -88,7 +88,7 @@ $voting-positive-sokol: #6ac9b9;
 
 $voting-negative-dai: #f21b57;
 $voting-neutral-dai: #50bbda;
-$voting-positive-dai: #60db97;
+$voting-positive-dai: $xdai-green;
 
 $voting-negative-kovan: #f24c67;
 $voting-neutral-kovan: #50bbda;
