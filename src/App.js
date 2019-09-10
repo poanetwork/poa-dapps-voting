@@ -102,8 +102,10 @@ class App extends Component {
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
+          injectedWeb3={contractsStore.injectedWeb3}
           netId={contractsStore.netId}
           networkBranch={networkBranch}
+          onChange={this.props.onNetworkChange}
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />

@@ -6,6 +6,10 @@ class BallotsStore {
   constructor() {
     this.ballotCards = []
   }
+
+  reset() {
+    this.ballotCards = []
+  }
 }
 
 const ballotsStore = new BallotsStore()

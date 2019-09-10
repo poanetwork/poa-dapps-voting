@@ -1,0 +1,8 @@
+.top-Select {
+  flex-grow: 1;
+  max-width: 140px;
+
+  @media (min-width: $breakpoint-xl) {
+      margin-left: 20px;
+  }
+}

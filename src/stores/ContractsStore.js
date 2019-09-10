@@ -46,6 +46,7 @@ class ContractsStore {
   @observable minBallotDuration
   @observable validatorsMetadata
   @observable netId
+  @observable injectedWeb3
 
   constructor() {
     this.votingKey = null
@@ -53,6 +54,7 @@ class ContractsStore {
     this.validatorsMetadata = {}
     this.validatorLimits = { keys: null, minThreshold: null, proxy: null }
     this.minBallotDuration = { keys: 0, minThreshold: 0, proxy: 0 }
+    this.injectedWeb3 = true
   }
 
   @computed
@@ -84,6 +86,21 @@ class ContractsStore {
   setWeb3Instance = web3Config => {
     this.web3Instance = web3Config.web3Instance
     this.netId = web3Config.netId
+    this.injectedWeb3 = web3Config.injectedWeb3
+  }
+
+  @action('Reset contracts')
+  resetContracts = () => {
+    this.poaConsensus = null
+    this.ballotsStorage = null
+    this.emissionFunds = null
+    this.keysManager = null
+    this.proxyStorage = null
+    this.votingToChangeKeys = null
+    this.votingToChangeMinThreshold = null
+    this.votingToChangeProxy = null
+    this.votingToManageEmissionFunds = null
+    this.validatorMetadata = null
   }
 
   @action('Set PoA Consensus contract')

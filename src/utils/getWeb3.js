@@ -29,6 +29,7 @@ let getWeb3 = () => {
       let netIdName
       let netId
       let defaultAccount = null
+      let injectedWeb3 = web3 !== null
 
       if (web3) {
         netId = await web3.eth.net.getId()
@@ -71,10 +72,24 @@ let getWeb3 = () => {
         web3Instance: web3,
         netIdName,
         netId,
-        defaultAccount
+        defaultAccount,
+        injectedWeb3
       })
     })
   })
+}
+
+export const changeNetwork = netId => {
+  const network = constants.NETWORKS[netId]
+  const provider = new Web3.providers.HttpProvider(network.RPC)
+  const web3Instance = new Web3(provider)
+  return {
+    web3Instance,
+    netIdName: network.NAME,
+    netId,
+    defaultAccount: null,
+    injectedWeb3: false
+  }
 }
 
 export default getWeb3
