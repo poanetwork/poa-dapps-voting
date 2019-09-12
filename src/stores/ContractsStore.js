@@ -87,6 +87,7 @@ class ContractsStore {
     this.web3Instance = web3Config.web3Instance
     this.netId = web3Config.netId
     this.injectedWeb3 = web3Config.injectedWeb3
+    this.networkMatch = web3Config.networkMatch
   }
 
   @action('Reset contracts')
@@ -199,14 +200,14 @@ class ContractsStore {
   }
 
   @action('Set voting key')
-  setVotingKey = web3Config => {
-    this.votingKey = web3Config.defaultAccount
+  setVotingKey = account => {
+    this.votingKey = account
   }
 
   @action('Set mining key')
-  setMiningKey = async web3Config => {
+  setMiningKey = async account => {
     try {
-      this.miningKey = await this.keysManager.instance.methods.miningKeyByVoting(web3Config.defaultAccount).call()
+      this.miningKey = await this.keysManager.instance.methods.miningKeyByVoting(account).call()
     } catch (e) {
       console.log(e)
       this.miningKey = '0x0000000000000000000000000000000000000000'

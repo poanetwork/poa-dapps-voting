@@ -255,6 +255,9 @@ export class NewBallot extends React.Component {
     if (!contractsStore.votingKey) {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return
+    } else if (!contractsStore.networkMatch) {
+      swal('Warning!', messages.NETWORK_MATCH_ERROR, 'warning')
+      return
     } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
       return

@@ -7,7 +7,7 @@ import ballotsStore from './stores/BallotsStore'
 import commonStore from './stores/CommonStore'
 import contractsStore from './stores/ContractsStore'
 import createBrowserHistory from 'history/createBrowserHistory'
-import getWeb3, { changeNetwork } from './utils/getWeb3'
+import getWeb3 from './utils/getWeb3'
 import registerServiceWorker from './utils/registerServiceWorker'
 import swal from 'sweetalert2'
 import validatorStore from './stores/ValidatorStore'
@@ -32,7 +32,12 @@ class AppMainRouter extends Component {
     super(props)
     commonStore.showLoading()
 
-    getWeb3()
+    window.addEventListener('load', () => this.initChain())
+  }
+
+  initChain = () => {
+    const netId = window.localStorage.netId
+    getWeb3(netId, this.onAccountChange)
       .then(async web3Config => {
         await this.initialize(web3Config)
         commonStore.hideLoading()
@@ -83,8 +88,7 @@ class AppMainRouter extends Component {
 
     await Promise.all(promises)
 
-    await contractsStore.setMiningKey(web3Config)
-    await contractsStore.setVotingKey(web3Config)
+    await this.setKeys(web3Config.defaultAccount)
 
     contractsStore.getKeysBallotThreshold()
     contractsStore.getProxyBallotThreshold()
@@ -94,23 +98,26 @@ class AppMainRouter extends Component {
 
     await contractsStore.getAllValidatorMetadata()
     await contractsStore.getAllBallots()
+  }
+
+  onNetworkChange = e => {
+    commonStore.showLoading()
+    window.localStorage.netId = e.value
+    contractsStore.resetContracts()
+    ballotsStore.reset()
+    this.initChain()
+  }
+
+  onAccountChange = account => {
+    this.setKeys(account)
+  }
+
+  setKeys = async account => {
+    await contractsStore.setMiningKey(account)
+    await contractsStore.setVotingKey(account)
 
     console.log('votingKey', contractsStore.votingKey)
     console.log('miningKey', contractsStore.miningKey)
-  }
-
-  onNetworkChange = async e => {
-    commonStore.showLoading()
-
-    const netId = e.value
-    const web3Config = changeNetwork(netId)
-
-    contractsStore.resetContracts()
-    ballotsStore.reset()
-
-    await this.initialize(web3Config)
-
-    commonStore.hideLoading()
   }
 
   render() {
