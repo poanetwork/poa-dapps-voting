@@ -1,0 +1,93 @@
+.NetworkSelect {
+	display: flex;
+	@media (min-width: $breakpoint-md) {
+		position: relative;
+		margin-left: 34px;
+		&:hover { 
+			.NetworkSelect_List {
+				display: block;
+			}
+		}
+	}
+}
+
+.sw-Header_Content .NetworkSelect {
+	display: none;
+	@media (min-width: $breakpoint-md) {
+		display: flex;
+	}
+}
+
+.NetworkSelect_Top {
+	display: flex;
+	align-items: center;
+	opacity: .7;
+	transition: .15s ease-in;
+	height: 50px;
+	width: 100%;
+	justify-content: center;
+	cursor: pointer;
+	&:hover {
+		opacity: 1;
+		@media (min-width: $breakpoint-md) {
+			.nl-IconNetwork_Arrow {
+				transform: rotate(180deg);
+			}
+		}
+	}
+}
+
+.nl-NavigationLinks_Link.opacityFull {
+	opacity: 1;
+	flex-direction: column;
+	height: auto !important;
+}
+
+.nl-IconNetwork_Arrow {
+	margin-left: 10px;
+	transition: .15s ease-in;
+	path {
+		fill: #fff;
+		opacity: .52;
+	}
+}
+
+.NetworkSelect_List {
+	font-size: 14px;
+	font-weight: 600;
+	list-style: none;
+	padding-left: 0;
+	width: 100%;
+	margin: 0;
+	@media (min-width: $breakpoint-md) {
+		display: none;
+		position: absolute;
+		top: 100%;
+		right: 0;
+		background-color: #fff;
+		width: 180px;
+		border-radius: 4px 0 4px 4px;
+		box-shadow: 0 5px 10px rgba(#000, .05);
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+	a {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+		color: #fff;
+		transition: .15s ease-in;
+		height: 50px;
+		@media (min-width: $breakpoint-md) {
+			padding: 8px 18px;
+			height: auto;
+			color: $base-text-color;
+			justify-content: flex-start;
+			&:hover {
+				background-color: #f7f7f7;
+			}
+		}
+	}
+}
