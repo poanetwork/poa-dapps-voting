@@ -7,7 +7,7 @@ import { BallotInfoContainer } from '../BallotInfoContainer'
 import { Votes } from '../Votes'
 import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
-import { messages } from '../../utils/messages'
+import messages from '../../utils/messages'
 import { observable, action, computed } from 'mobx'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
 
@@ -375,7 +375,7 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return
     } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.NETWORK_MATCH_ERROR, 'warning')
+      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
       return
     } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
@@ -515,7 +515,7 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return
     } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.NETWORK_MATCH_ERROR, 'warning')
+      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
       return
     } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')

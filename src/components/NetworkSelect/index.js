@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { constants } from '../../utils/constants'
-import helpers from '../../utils/helpers'
 
 export default class NetworkSelect extends Component {
   changeNetworkRPC(e) {
@@ -9,7 +8,7 @@ export default class NetworkSelect extends Component {
     let getCurrentClickedLinkId = ''
     for (const _netId in constants.NETWORKS) {
       if (constants.NETWORKS[_netId].FULLNAME === getCurrentClickedLink) {
-        getCurrentClickedLinkId = helpers.netIdByName(constants.NETWORKS[_netId].BRANCH)
+        getCurrentClickedLinkId = _netId
       }
     }
     this.props.onChange({ value: getCurrentClickedLinkId })
@@ -17,21 +16,41 @@ export default class NetworkSelect extends Component {
 
   render() {
     let networkFullNames = []
-    let currentNetworkBranch = ''
+    let currentNetworkFullName = ''
 
-    for (const _netId in constants.NETWORKS) {
-      networkFullNames.push(constants.NETWORKS[_netId].FULLNAME)
-      if (constants.NETWORKS[_netId].NAME.toLowerCase() === this.props.networkBranch) {
-        currentNetworkBranch = constants.NETWORKS[_netId].FULLNAME
+    const networks = constants.NETWORKS
+
+    let netIds = []
+    Object.keys(networks)
+      .sort((a, b) => (networks[a].SORTORDER > networks[b].SORTORDER ? 1 : -1))
+      .forEach(function(_netId) {
+        netIds.push(_netId)
+      })
+
+    let selectedNetworkIndex = -1
+
+    netIds.forEach(_netId => {
+      networkFullNames.push(networks[_netId].FULLNAME)
+      if (networks[_netId].BRANCH === this.props.networkBranch) {
+        currentNetworkFullName = networks[_netId].FULLNAME
+        selectedNetworkIndex = networkFullNames.length - 1
       }
-    }
-    const listItems = networkFullNames.map(number => (
-      <li key={number.toString()}>
-        <a href="#" onClick={e => this.changeNetworkRPC(e)}>
-          {number}
-        </a>
-      </li>
-    ))
+    })
+
+    const listItems = networkFullNames.map((name, index) => {
+      let className = ''
+      if (index === selectedNetworkIndex) {
+        className = 'currentNetwork'
+      }
+      return (
+        <li key={name.toString()} className={className}>
+          <a href="#" onClick={e => this.changeNetworkRPC(e)}>
+            {name}
+          </a>
+        </li>
+      )
+    })
+
     return (
       <div className={`NetworkSelect nl-NavigationLinks_Link opacityFull`}>
         <div className={`NetworkSelect_Top`}>
@@ -42,7 +61,7 @@ export default class NetworkSelect extends Component {
             />
           </svg>
           <span className={`nl-NavigationLinks_Text nl-NavigationLinks_Text-${this.props.networkBranch}`}>
-            {currentNetworkBranch}
+            {currentNetworkFullName}
           </span>
           <svg className={`nl-IconNetwork_Arrow`} xmlns="http://www.w3.org/2000/svg" width="8" height="4">
             <path d="M0 0h8L4 4 0 0z" />

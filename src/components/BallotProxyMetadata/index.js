@@ -2,14 +2,12 @@ import React from 'react'
 import { FormInput } from '../FormInput'
 import { FormSelect } from '../FormSelect'
 import { inject, observer } from 'mobx-react'
-import { constants } from '../../utils/constants'
-import { getNetworkName } from '../../utils/utils'
 
-@inject('ballotStore', 'contractsStore')
+@inject('ballotStore')
 @observer
 export class BallotProxyMetadata extends React.Component {
   render() {
-    const { ballotStore, contractsStore, networkBranch } = this.props
+    const { ballotStore, networkBranch } = this.props
     let options = [
       /*0*/ { value: '', label: '' },
       /*1*/ { value: '1', label: ballotStore.ProxyBallotType[1] }, // KeysManager

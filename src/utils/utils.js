@@ -12,8 +12,8 @@ export const getNetworkBranch = netId => {
   return constants.NETWORKS[netId].BRANCH
 }
 
-export const getNetworkName = netId => {
-  return constants.NETWORKS[netId].NAME
+export const getNetworkFullName = netId => {
+  return constants.NETWORKS[netId].FULLNAME
 }
 
 export const scrollToTop = () => {

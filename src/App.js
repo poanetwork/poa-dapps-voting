@@ -5,7 +5,7 @@ import { Route, Redirect } from 'react-router-dom'
 import { constants } from './utils/constants'
 import { getNetworkBranch } from './utils/utils'
 import { inject, observer } from 'mobx-react'
-import { messages } from './utils/messages'
+import messages from './utils/messages'
 
 import './assets/stylesheets/index.css'
 
@@ -41,16 +41,32 @@ class App extends Component {
   onNewBallotRender = () => {
     const { commonStore, contractsStore } = this.props
 
-    if (!contractsStore.web3Instance) {
-      if (!commonStore.loading) {
+    if (!commonStore.loading) {
+      if (!contractsStore.injectedWeb3) {
+        commonStore.hideLoading()
         swal({
           title: 'Error',
           html: messages.NO_METAMASK_MSG,
           icon: 'error',
           type: 'error'
         })
+      } else if (!contractsStore.networkMatch) {
+        commonStore.hideLoading()
+        swal({
+          title: 'Warning!',
+          html: messages.networkMatchError(contractsStore.netId),
+          icon: 'warning',
+          type: 'warning'
+        })
+      } else if (contractsStore.votingKey && !contractsStore.isValidVotingKey) {
+        commonStore.hideLoading()
+        swal({
+          title: 'Warning!',
+          html: messages.invalidVotingKeyMsg(contractsStore.votingKey),
+          icon: 'warning',
+          type: 'warning'
+        })
       }
-      return null
     }
     return <NewBallot networkBranch={this.getVotingNetworkBranch()} />
   }
@@ -91,7 +107,9 @@ class App extends Component {
 
   render() {
     const { commonStore, contractsStore } = this.props
-    const networkBranch = this.getVotingNetworkBranch()
+    const networkBranch = commonStore.loadingNetworkBranch
+      ? commonStore.loadingNetworkBranch
+      : this.getVotingNetworkBranch()
 
     return networkBranch ? (
       <div
@@ -102,7 +120,6 @@ class App extends Component {
         {commonStore.loading ? <Loading networkBranch={networkBranch} /> : null}
         <Header
           baseRootPath={commonStore.rootPath}
-          injectedWeb3={contractsStore.injectedWeb3}
           netId={contractsStore.netId}
           networkBranch={networkBranch}
           onChange={this.props.onNetworkChange}

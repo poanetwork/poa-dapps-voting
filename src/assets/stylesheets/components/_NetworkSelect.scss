@@ -71,6 +71,11 @@
 		padding-top: 8px;
 		padding-bottom: 8px;
 	}
+	li.currentNetwork {
+		@media (max-width: $breakpoint-md) {
+			display: none;
+		}
+	}
 	a {
 		display: flex;
 		width: 100%;

@@ -16,6 +16,7 @@ import { Router, Route } from 'react-router-dom'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import { constants } from './utils/constants'
 import { getContractsAddresses } from './contracts/addresses'
+import { getNetworkBranch } from './utils/utils'
 
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
@@ -101,10 +102,11 @@ class AppMainRouter extends Component {
   }
 
   onNetworkChange = e => {
-    commonStore.showLoading()
+    commonStore.showLoading(getNetworkBranch(e.value))
     window.localStorage.netId = e.value
     contractsStore.resetContracts()
     ballotsStore.reset()
+    commonStore.setSearchTerm('')
     this.initChain()
   }
 

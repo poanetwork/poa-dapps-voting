@@ -15,7 +15,7 @@ import { Validator } from '../Validator'
 import { constants } from '../../utils/constants'
 import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
-import { messages } from '../../utils/messages'
+import messages from '../../utils/messages'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
 
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
@@ -40,9 +40,10 @@ export class NewBallot extends React.Component {
   }
 
   checkValidation() {
-    const { commonStore, contractsStore, ballotStore, validatorStore } = this.props
+    const { commonStore, contractsStore, ballotStore } = this.props
 
     // Temporarily commented (until we implement https://github.com/poanetwork/poa-dapps-voting/issues/120)
+    // const { validatorStore } = this.props
     // if (ballotStore.isNewValidatorPersonalData) {
     //   for (let validatorProp in validatorStore) {
     //     if (validatorStore[validatorProp].length === 0) {
@@ -256,7 +257,7 @@ export class NewBallot extends React.Component {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return
     } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.NETWORK_MATCH_ERROR, 'warning')
+      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
       return
     } else if (!contractsStore.isValidVotingKey) {
       swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')

@@ -54,7 +54,7 @@ class ContractsStore {
     this.validatorsMetadata = {}
     this.validatorLimits = { keys: null, minThreshold: null, proxy: null }
     this.minBallotDuration = { keys: 0, minThreshold: 0, proxy: 0 }
-    this.injectedWeb3 = true
+    this.injectedWeb3 = false
   }
 
   @computed

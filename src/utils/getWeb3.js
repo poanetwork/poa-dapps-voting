@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import helpers from './helpers'
 import { constants } from './constants'
 
-const defaultNetId = helpers.netIdByName(constants.CORE)
+const defaultNetId = helpers.netIdByBranch(constants.CORE)
 
 export default async function getWeb3(netId = defaultNetId, onAccountChange) {
   let web3 = null
@@ -23,8 +23,8 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
   }
 
   const network = constants.NETWORKS[netId]
+  const injectedWeb3 = web3 !== null
   let netIdName = network.NAME
-  let injectedWeb3 = web3 !== null
   let defaultAccount = null
   let networkMatch = false
 
@@ -57,7 +57,7 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
     web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
   }
 
-  document.title = `${netIdName} - POA Validators DApp`
+  document.title = `${netIdName} - POA Governance DApp`
 
   return {
     web3Instance: web3,
