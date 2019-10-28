@@ -49,7 +49,6 @@ class AppMainRouter extends Component {
         swal({
           title: 'Error',
           html: generateElement(error.message),
-          icon: 'error',
           type: 'error'
         })
       })
@@ -106,7 +105,6 @@ class AppMainRouter extends Component {
     window.localStorage.netId = e.value
     contractsStore.resetContracts()
     ballotsStore.reset()
-    commonStore.setSearchTerm('')
     this.initChain()
   }
 

@@ -44,9 +44,7 @@ export default class NetworkSelect extends Component {
       }
       return (
         <li key={name.toString()} className={className}>
-          <a href="#" onClick={e => this.changeNetworkRPC(e)}>
-            {name}
-          </a>
+          <button onClick={e => this.changeNetworkRPC(e)}>{name}</button>
         </li>
       )
     })

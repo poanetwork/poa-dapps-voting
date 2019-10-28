@@ -76,7 +76,7 @@
 			display: none;
 		}
 	}
-	a {
+	button {
 		display: flex;
 		width: 100%;
 		align-items: center;
@@ -85,6 +85,9 @@
 		color: #fff;
 		transition: .15s ease-in;
 		height: 50px;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
 		@media (min-width: $breakpoint-md) {
 			padding: 8px 18px;
 			height: auto;

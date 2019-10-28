@@ -47,7 +47,6 @@ class App extends Component {
         swal({
           title: 'Error',
           html: messages.NO_METAMASK_MSG,
-          icon: 'error',
           type: 'error'
         })
       } else if (!contractsStore.networkMatch) {
@@ -55,7 +54,6 @@ class App extends Component {
         swal({
           title: 'Warning!',
           html: messages.networkMatchError(contractsStore.netId),
-          icon: 'warning',
           type: 'warning'
         })
       } else if (contractsStore.votingKey && !contractsStore.isValidVotingKey) {
@@ -63,7 +61,6 @@ class App extends Component {
         swal({
           title: 'Warning!',
           html: messages.invalidVotingKeyMsg(contractsStore.votingKey),
-          icon: 'warning',
           type: 'warning'
         })
       }
@@ -76,8 +73,7 @@ class App extends Component {
   }
 
   onSearch = e => {
-    const { commonStore } = this.props
-    commonStore.setSearchTerm(e.target.value.toLowerCase())
+    this.setSearchTerm(e.target.value)
   }
 
   hideSearch = () => {
@@ -101,6 +97,19 @@ class App extends Component {
     return 'All'
   }
 
+  setSearchTerm = term => {
+    const { commonStore } = this.props
+    commonStore.setSearchTerm(term.toLowerCase())
+    if (this.refs.searchBar) {
+      this.refs.searchBar.setSearchTerm(term)
+    }
+  }
+
+  onNetworkChange = e => {
+    this.setSearchTerm('')
+    this.props.onNetworkChange(e)
+  }
+
   isNewBallotPage() {
     return `${constants.rootPath}/new` === this.props.location.pathname
   }
@@ -122,11 +131,18 @@ class App extends Component {
           baseRootPath={commonStore.rootPath}
           netId={contractsStore.netId}
           networkBranch={networkBranch}
-          onChange={this.props.onNetworkChange}
+          onChange={this.onNetworkChange}
           onMenuToggle={this.toggleMobileMenu}
           showMobileMenu={this.state.showMobileMenu}
         />
-        {this.hideSearch() ? null : <SearchBar networkBranch={networkBranch} onSearch={this.onSearch} />}
+        {this.hideSearch() ? null : (
+          <SearchBar
+            networkBranch={networkBranch}
+            onSearch={this.onSearch}
+            searchTerm={commonStore.searchTerm}
+            ref="searchBar"
+          />
+        )}
         <MainTitle text={this.getTitle()} />
         <section
           className={`lo-App_Content lo-App_Content-${networkBranch} ${

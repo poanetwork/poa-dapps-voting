@@ -1,11 +1,24 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
 
-@inject('commonStore')
-@observer
 export class SearchBar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { searchTerm: '' }
+  }
+
+  setSearchTerm(searchTerm) {
+    this.setState({ searchTerm })
+  }
+
+  componentDidMount() {
+    const { searchTerm } = this.props
+    if (searchTerm !== undefined) {
+      this.setSearchTerm(searchTerm)
+    }
+  }
+
   render() {
-    const { commonStore, networkBranch, onSearch } = this.props
+    const { networkBranch, onSearch } = this.props
     return (
       <div className={`sw-SearchBar sw-SearchBar-${networkBranch}`}>
         <div className="sw-SearchBar_Content">
@@ -14,7 +27,7 @@ export class SearchBar extends React.Component {
             onChange={onSearch}
             placeholder="Search..."
             type="search"
-            value={commonStore.searchTerm}
+            value={this.state.searchTerm}
           />
         </div>
       </div>

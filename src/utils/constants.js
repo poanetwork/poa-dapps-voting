@@ -62,7 +62,6 @@ constants.NETWORKS = {
     FULLNAME: 'Kovan Testnet',
     RPC: 'https://kovan.infura.io/v3/1125fe73d87c4e5396678f4e3089b3dd',
     BRANCH: constants.KOVAN,
-    TESTNET: true,
     SORTORDER: 3
   },
   '77': {
@@ -70,7 +69,6 @@ constants.NETWORKS = {
     FULLNAME: 'Sokol Testnet',
     RPC: 'https://sokol.poa.network',
     BRANCH: constants.SOKOL,
-    TESTNET: true,
     SORTORDER: 4
   },
   '99': {
@@ -78,7 +76,6 @@ constants.NETWORKS = {
     FULLNAME: 'POA Core',
     RPC: 'https://core.poa.network',
     BRANCH: constants.CORE,
-    TESTNET: false,
     SORTORDER: 1
   },
   '100': {
@@ -86,7 +83,6 @@ constants.NETWORKS = {
     FULLNAME: 'xDai Stable Chain',
     RPC: 'https://dai.poa.network',
     BRANCH: constants.DAI,
-    TESTNET: false,
     SORTORDER: 2
   }
 }

@@ -17,6 +17,7 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
     } catch (e) {
       throw Error('You have denied access to your accounts')
     }
+    window.ethereum.autoRefreshOnNetworkChange = true
   } else if (window.web3) {
     web3 = new Web3(window.web3.currentProvider)
     console.log('Injected web3 detected.')

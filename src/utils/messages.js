@@ -48,7 +48,7 @@ messages.wrongRepo = repo => {
 }
 messages.networkMatchError = function(netId) {
   const networkName = getNetworkFullName(Number(netId))
-  return `Networks in DApp and MetaMask do not match. Switch MetaMask to ${networkName} or change the network in DApp.`
+  return `Networks in DApp and MetaMask do not match. Switch MetaMask to <b>${networkName}</b> or change the network in DApp.`
 }
 
 export default messages
