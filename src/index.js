@@ -16,6 +16,7 @@ import { Router, Route } from 'react-router-dom'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import { constants } from './utils/constants'
 import { getContractsAddresses } from './contracts/addresses'
+import { getNetworkBranch } from './utils/utils'
 
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
@@ -32,56 +33,14 @@ class AppMainRouter extends Component {
     super(props)
     commonStore.showLoading()
 
-    getWeb3()
+    window.addEventListener('load', () => this.initChain())
+  }
+
+  initChain = () => {
+    const netId = window.localStorage.netId
+    getWeb3(netId, this.onAccountChange)
       .then(async web3Config => {
-        await getContractsAddresses(constants.NETWORKS[web3Config.netId].BRANCH)
-
-        contractsStore.setWeb3Instance(web3Config)
-
-        const setPoaConsensus = contractsStore.setPoaConsensus(web3Config)
-        const setBallotsStorage = contractsStore.setBallotsStorage(web3Config)
-        const setKeysManager = contractsStore.setKeysManager(web3Config)
-        const setProxyStorage = contractsStore.setProxyStorage(web3Config)
-        const setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config)
-        const setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config)
-        const setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
-        const setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
-
-        let promises = [
-          setPoaConsensus,
-          setBallotsStorage,
-          setKeysManager,
-          setProxyStorage,
-          setVotingToChangeKeys,
-          setVotingToChangeMinThreshold,
-          setVotingToChangeProxy,
-          setValidatorMetadata
-        ]
-
-        const networkName = constants.NETWORKS[web3Config.netId].NAME.toLowerCase()
-        if (networkName === constants.CORE || networkName === constants.SOKOL) {
-          // if we're in Core or Sokol
-          promises.push(contractsStore.setEmissionFunds(web3Config))
-          promises.push(contractsStore.setVotingToManageEmissionFunds(web3Config))
-        }
-
-        await Promise.all(promises)
-
-        await contractsStore.setMiningKey(web3Config)
-        await contractsStore.setVotingKey(web3Config)
-
-        contractsStore.getKeysBallotThreshold()
-        contractsStore.getProxyBallotThreshold()
-        contractsStore.getBallotCancelingThreshold()
-
-        await contractsStore.getBallotsLimits()
-
-        await contractsStore.getAllValidatorMetadata()
-        await contractsStore.getAllBallots()
-
-        console.log('votingKey', contractsStore.votingKey)
-        console.log('miningKey', contractsStore.miningKey)
-
+        await this.initialize(web3Config)
         commonStore.hideLoading()
       })
       .catch(error => {
@@ -90,17 +49,82 @@ class AppMainRouter extends Component {
         swal({
           title: 'Error',
           html: generateElement(error.message),
-          icon: 'error',
           type: 'error'
         })
       })
+  }
+
+  initialize = async web3Config => {
+    await getContractsAddresses(constants.NETWORKS[web3Config.netId].BRANCH)
+
+    contractsStore.setWeb3Instance(web3Config)
+
+    const setPoaConsensus = contractsStore.setPoaConsensus(web3Config)
+    const setBallotsStorage = contractsStore.setBallotsStorage(web3Config)
+    const setKeysManager = contractsStore.setKeysManager(web3Config)
+    const setProxyStorage = contractsStore.setProxyStorage(web3Config)
+    const setVotingToChangeKeys = contractsStore.setVotingToChangeKeys(web3Config)
+    const setVotingToChangeMinThreshold = contractsStore.setVotingToChangeMinThreshold(web3Config)
+    const setVotingToChangeProxy = contractsStore.setVotingToChangeProxy(web3Config)
+    const setValidatorMetadata = contractsStore.setValidatorMetadata(web3Config)
+
+    let promises = [
+      setPoaConsensus,
+      setBallotsStorage,
+      setKeysManager,
+      setProxyStorage,
+      setVotingToChangeKeys,
+      setVotingToChangeMinThreshold,
+      setVotingToChangeProxy,
+      setValidatorMetadata
+    ]
+
+    const networkName = constants.NETWORKS[web3Config.netId].NAME.toLowerCase()
+    if (networkName === constants.CORE || networkName === constants.SOKOL) {
+      // if we're in Core or Sokol
+      promises.push(contractsStore.setEmissionFunds(web3Config))
+      promises.push(contractsStore.setVotingToManageEmissionFunds(web3Config))
+    }
+
+    await Promise.all(promises)
+
+    await this.setKeys(web3Config.defaultAccount)
+
+    contractsStore.getKeysBallotThreshold()
+    contractsStore.getProxyBallotThreshold()
+    contractsStore.getBallotCancelingThreshold()
+
+    await contractsStore.getBallotsLimits()
+
+    await contractsStore.getAllValidatorMetadata()
+    await contractsStore.getAllBallots()
+  }
+
+  onNetworkChange = e => {
+    commonStore.showLoading(getNetworkBranch(e.value))
+    window.localStorage.netId = e.value
+    contractsStore.resetContracts()
+    ballotsStore.reset()
+    this.initChain()
+  }
+
+  onAccountChange = account => {
+    this.setKeys(account)
+  }
+
+  setKeys = async account => {
+    await contractsStore.setMiningKey(account)
+    await contractsStore.setVotingKey(account)
+
+    console.log('votingKey', contractsStore.votingKey)
+    console.log('miningKey', contractsStore.miningKey)
   }
 
   render() {
     return (
       <Provider {...stores}>
         <Router history={history}>
-          <Route component={App} />
+          <Route component={props => <App onNetworkChange={this.onNetworkChange} {...props} />} />
         </Router>
       </Provider>
     )

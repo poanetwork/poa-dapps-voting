@@ -1,7 +1,7 @@
 import React from 'react'
-import { FormAutocomplete } from '../FormAutocomplete'
-import { FormInput } from '../FormInput'
-import { FormSelect } from '../FormSelect'
+//import { FormAutocomplete } from '../FormAutocomplete'
+//import { FormInput } from '../FormInput'
+//import { FormSelect } from '../FormSelect'
 import { constants } from '../../utils/constants'
 import { geocodeByAddress } from 'react-places-autocomplete'
 import { inject, observer } from 'mobx-react'
@@ -64,6 +64,7 @@ export class Validator extends React.Component {
 
   render() {
     return null // Temporarily empty (until we implement https://github.com/poanetwork/poa-dapps-voting/issues/120)
+    /*
     const { validatorStore, networkBranch } = this.props
     const inputProps = {
       value: validatorStore.address,
@@ -190,5 +191,6 @@ export class Validator extends React.Component {
         </div>
       </div>
     )
+    */
   }
 }

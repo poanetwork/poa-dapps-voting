@@ -58,10 +58,10 @@ function sendTransactionByVotingKey(props, to, data, cb, warning) {
   )
 }
 
-function netIdByName(netName) {
-  const netNameLowerCase = netName.toLowerCase()
+function netIdByBranch(branch) {
+  const branchLowerCase = branch.toLowerCase()
   for (let netId in constants.NETWORKS) {
-    if (constants.NETWORKS[netId].NAME.toLowerCase() === netNameLowerCase) {
+    if (constants.NETWORKS[netId].BRANCH.toLowerCase() === branchLowerCase) {
       return netId
     }
   }
@@ -71,5 +71,5 @@ function netIdByName(netName) {
 module.exports = {
   toAscii,
   sendTransactionByVotingKey,
-  netIdByName
+  netIdByBranch
 }

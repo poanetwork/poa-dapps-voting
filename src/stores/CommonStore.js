@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 
 class CommonStore {
   @observable loading
+  @observable loadingNetworkBranch
   @observable rootPath
   @observable isActiveFilter
   @observable isToFinalizeFilter
@@ -10,6 +11,7 @@ class CommonStore {
 
   constructor() {
     this.loading = false
+    this.loadingNetworkBranch = null
     this.isActiveFilter = false
     this.isToFinalizeFilter = false
     this.rootPath = '/poa-dapps-voting'
@@ -17,13 +19,15 @@ class CommonStore {
   }
 
   @action('show loading')
-  showLoading() {
+  showLoading(loadingNetworkBranch) {
     this.loading = true
+    this.loadingNetworkBranch = loadingNetworkBranch
   }
 
   @action('hide loading')
   hideLoading() {
     this.loading = false
+    this.loadingNetworkBranch = null
   }
 
   @action('set search term')

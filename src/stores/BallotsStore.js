@@ -4,6 +4,10 @@ class BallotsStore {
   @observable ballotCards
 
   constructor() {
+    this.reset()
+  }
+
+  reset() {
     this.ballotCards = []
   }
 }

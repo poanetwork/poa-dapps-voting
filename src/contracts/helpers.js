@@ -1,5 +1,5 @@
 import { constants } from '../utils/constants'
-import { messages } from '../utils/messages'
+import messages from '../utils/messages'
 import swal from 'sweetalert2'
 
 function addressesURL(branch) {

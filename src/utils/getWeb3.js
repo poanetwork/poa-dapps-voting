@@ -1,80 +1,71 @@
 import Web3 from 'web3'
-import { messages } from './messages'
+import helpers from './helpers'
 import { constants } from './constants'
-import { netIdByName } from './helpers'
 
-let getWeb3 = () => {
-  return new Promise((resolve, reject) => {
-    // Wait for loading completion to avoid race conditions with web3 injection timing.
-    window.addEventListener('load', async () => {
-      let web3 = null
+const defaultNetId = helpers.netIdByBranch(constants.CORE)
 
-      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-      if (window.ethereum) {
-        web3 = new Web3(window.ethereum)
-        console.log('Injected web3 detected.')
-        try {
-          await window.ethereum.enable()
-        } catch (e) {
-          console.error('User denied account access')
-          reject({ message: messages.USER_DENIED_ACCOUNT_ACCESS })
-          return
-        }
-      } else if (typeof window.web3 !== 'undefined') {
-        web3 = new Web3(window.web3.currentProvider)
-        console.log('Injected web3 detected.')
+export default async function getWeb3(netId = defaultNetId, onAccountChange) {
+  let web3 = null
+  netId = Number(netId)
+
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (window.ethereum) {
+    web3 = new Web3(window.ethereum)
+    console.log('Injected web3 detected.')
+    try {
+      await window.ethereum.enable()
+    } catch (e) {
+      throw Error('You have denied access to your accounts')
+    }
+    window.ethereum.autoRefreshOnNetworkChange = true
+  } else if (window.web3) {
+    web3 = new Web3(window.web3.currentProvider)
+    console.log('Injected web3 detected.')
+  }
+
+  const network = constants.NETWORKS[netId]
+  const injectedWeb3 = web3 !== null
+  let netIdName = network.NAME
+  let defaultAccount = null
+  let networkMatch = false
+
+  if (web3) {
+    const accounts = await web3.eth.getAccounts()
+    defaultAccount = accounts[0] || null
+
+    if (!defaultAccount) {
+      console.error('Unlock your wallet')
+    }
+
+    let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
+    web3.currentProvider.publicConfigStore.on('update', function(obj) {
+      const account = obj.selectedAddress
+      if (account && account !== currentAccount) {
+        currentAccount = account
+        onAccountChange(account)
       }
-
-      let errorMsg = null
-      let netIdName
-      let netId
-      let defaultAccount = null
-
-      if (web3) {
-        netId = await web3.eth.net.getId()
-        console.log('netId', netId)
-
-        if (!(netId in constants.NETWORKS)) {
-          netIdName = 'ERROR'
-          errorMsg = messages.WRONG_NETWORK_MSG
-          console.log('This is an unknown network.')
-        } else {
-          netIdName = constants.NETWORKS[netId].NAME
-          console.log(`This is ${netIdName}`)
-        }
-
-        const accounts = await web3.eth.getAccounts()
-
-        defaultAccount = accounts[0] || null
-      } else {
-        // Fallback to local if no web3 injection.
-
-        console.log('No web3 instance injected, using Local web3.')
-        console.error('Metamask not found')
-
-        netId = netIdByName(constants.CORE)
-
-        const network = constants.NETWORKS[netId]
-
-        web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
-        netIdName = network.NAME
-      }
-
-      document.title = `${netIdName} - POA Network Governance DApp`
-
-      if (errorMsg !== null) {
-        reject({ message: errorMsg })
-        return
-      }
-
-      resolve({
-        web3Instance: web3,
-        netIdName,
-        netId,
-        defaultAccount
-      })
     })
-  })
-}
 
-export default getWeb3
+    const web3NetId = await web3.eth.net.getId()
+    if (web3NetId === netId) {
+      networkMatch = true
+    } else {
+      web3 = null
+    }
+  }
+
+  if (!web3) {
+    web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
+  }
+
+  document.title = `${netIdName} - POA Governance DApp`
+
+  return {
+    web3Instance: web3,
+    netId,
+    netIdName,
+    injectedWeb3,
+    defaultAccount,
+    networkMatch
+  }
+}

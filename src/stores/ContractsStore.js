@@ -46,6 +46,7 @@ class ContractsStore {
   @observable minBallotDuration
   @observable validatorsMetadata
   @observable netId
+  @observable injectedWeb3
 
   constructor() {
     this.votingKey = null
@@ -53,6 +54,7 @@ class ContractsStore {
     this.validatorsMetadata = {}
     this.validatorLimits = { keys: null, minThreshold: null, proxy: null }
     this.minBallotDuration = { keys: 0, minThreshold: 0, proxy: 0 }
+    this.injectedWeb3 = false
   }
 
   @computed
@@ -84,6 +86,22 @@ class ContractsStore {
   setWeb3Instance = web3Config => {
     this.web3Instance = web3Config.web3Instance
     this.netId = web3Config.netId
+    this.injectedWeb3 = web3Config.injectedWeb3
+    this.networkMatch = web3Config.networkMatch
+  }
+
+  @action('Reset contracts')
+  resetContracts = () => {
+    this.poaConsensus = null
+    this.ballotsStorage = null
+    this.emissionFunds = null
+    this.keysManager = null
+    this.proxyStorage = null
+    this.votingToChangeKeys = null
+    this.votingToChangeMinThreshold = null
+    this.votingToChangeProxy = null
+    this.votingToManageEmissionFunds = null
+    this.validatorMetadata = null
   }
 
   @action('Set PoA Consensus contract')
@@ -182,14 +200,14 @@ class ContractsStore {
   }
 
   @action('Set voting key')
-  setVotingKey = web3Config => {
-    this.votingKey = web3Config.defaultAccount
+  setVotingKey = account => {
+    this.votingKey = account
   }
 
   @action('Set mining key')
-  setMiningKey = async web3Config => {
+  setMiningKey = async account => {
     try {
-      this.miningKey = await this.keysManager.instance.methods.miningKeyByVoting(web3Config.defaultAccount).call()
+      this.miningKey = await this.keysManager.instance.methods.miningKeyByVoting(account).call()
     } catch (e) {
       console.log(e)
       this.miningKey = '0x0000000000000000000000000000000000000000'
