@@ -320,6 +320,10 @@ export class BallotCard extends React.Component {
   @action('validator has already voted')
   getHasAlreadyVoted = async () => {
     const { contractsStore, id, votingType } = this.props
+    if (contractsStore.miningKey === '0x0000000000000000000000000000000000000000') {
+      this.hasAlreadyVoted = false
+      return
+    }
     let _hasAlreadyVoted = false
     try {
       _hasAlreadyVoted = await this.getContract(contractsStore, votingType).hasAlreadyVoted(
