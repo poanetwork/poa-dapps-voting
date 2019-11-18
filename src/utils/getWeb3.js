@@ -4,9 +4,8 @@ import { constants } from './constants'
 
 const defaultNetId = helpers.netIdByBranch(constants.CORE)
 
-export default async function getWeb3(netId = defaultNetId, onAccountChange) {
+export default async function getWeb3(netId, onAccountChange) {
   let web3 = null
-  netId = Number(netId)
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (window.ethereum) {
@@ -22,6 +21,20 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
     web3 = new Web3(window.web3.currentProvider)
     console.log('Injected web3 detected.')
   }
+
+  if (!netId) {
+    if (web3) {
+      netId = await web3.eth.net.getId()
+      if (!(netId in constants.NETWORKS)) {
+        netId = defaultNetId
+      }
+    } else {
+      netId = defaultNetId
+    }
+    window.sessionStorage.netId = netId
+  }
+
+  netId = Number(netId)
 
   const network = constants.NETWORKS[netId]
   const injectedWeb3 = web3 !== null
