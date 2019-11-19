@@ -422,7 +422,6 @@ class ContractsStore {
   @action
   async getBallotsLimits() {
     return new Promise(async resolve => {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>')
       if (this.web3Instance && this.netId) {
         const limitPerValidator = await this.ballotsStorage.instance.methods.getBallotLimitPerValidator().call()
 
