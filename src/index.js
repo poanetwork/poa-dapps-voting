@@ -113,9 +113,7 @@ class AppMainRouter extends Component {
   }
 
   setKeys = async account => {
-    await contractsStore.setMiningKey(account)
-    await contractsStore.setVotingKey(account)
-
+    await contractsStore.setKeys(account)
     console.log('votingKey', contractsStore.votingKey)
     console.log('miningKey', contractsStore.miningKey)
   }

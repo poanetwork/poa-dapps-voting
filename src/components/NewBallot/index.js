@@ -17,6 +17,7 @@ import { getNetworkBranch } from '../../utils/utils'
 import { inject, observer } from 'mobx-react'
 import messages from '../../utils/messages'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
+import { enableWallet } from '../../utils/getWeb3'
 
 @inject('commonStore', 'ballotStore', 'validatorStore', 'contractsStore', 'routing', 'ballotsStore')
 @observer
@@ -252,6 +253,13 @@ export class NewBallot extends React.Component {
   onClick = async () => {
     const { commonStore, contractsStore, ballotStore, ballotsStore } = this.props
     const { push } = this.props.routing
+
+    try {
+      await enableWallet(contractsStore.setKeys)
+    } catch (error) {
+      swal('Error', error.message, 'error')
+      return
+    }
 
     if (!contractsStore.votingKey) {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')

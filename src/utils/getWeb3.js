@@ -1,8 +1,26 @@
 import Web3 from 'web3'
 import helpers from './helpers'
 import { constants } from './constants'
+import messages from './messages'
 
 const defaultNetId = helpers.netIdByBranch(constants.CORE)
+
+export async function enableWallet(setKeys) {
+  if (window.ethereum) {
+    try {
+      await window.ethereum.enable()
+    } catch (e) {
+      throw Error(messages.USER_DENIED_ACCOUNT_ACCESS)
+    }
+
+    const web3 = new Web3(window.ethereum)
+    const accounts = await web3.eth.getAccounts()
+
+    if (accounts[0]) {
+      await setKeys(accounts[0])
+    }
+  }
+}
 
 export default async function getWeb3(netId = defaultNetId, onAccountChange) {
   let web3 = null
@@ -12,11 +30,6 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
   if (window.ethereum) {
     web3 = new Web3(window.ethereum)
     console.log('Injected web3 detected.')
-    try {
-      await window.ethereum.enable()
-    } catch (e) {
-      throw Error('You have denied access to your accounts')
-    }
     window.ethereum.autoRefreshOnNetworkChange = true
   } else if (window.web3) {
     web3 = new Web3(window.web3.currentProvider)

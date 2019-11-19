@@ -10,6 +10,7 @@ import { inject, observer } from 'mobx-react'
 import messages from '../../utils/messages'
 import { observable, action, computed } from 'mobx'
 import { sendTransactionByVotingKey } from '../../utils/helpers'
+import { enableWallet } from '../../utils/getWeb3'
 
 const ACCEPT = 1
 const REJECT = 2
@@ -373,7 +374,16 @@ export class BallotCard extends React.Component {
       swal('Warning!', messages.ballotIsNotActiveMsg(this.timeTo.displayValue), 'warning')
       return
     }
+
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
+
+    try {
+      await enableWallet(contractsStore.setKeys)
+    } catch (error) {
+      swal('Error', error.message, 'error')
+      return
+    }
+
     const { push } = this.props.routing
     if (!contractsStore.votingKey) {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
@@ -463,6 +473,25 @@ export class BallotCard extends React.Component {
     const { votingState, contractsStore, commonStore, ballotsStore, votingType, id, pos } = this.props
     const { push } = this.props.routing
     const contract = this.getContract(contractsStore, votingType)
+
+    try {
+      await enableWallet(contractsStore.setKeys)
+    } catch (error) {
+      swal('Error', error.message, 'error')
+      return
+    }
+
+    if (!contractsStore.votingKey) {
+      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
+      return
+    } else if (!contractsStore.networkMatch) {
+      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
+      return
+    } else if (!contractsStore.isValidVotingKey) {
+      swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
+      return
+    }
+
     let canCancel = true
 
     if (!this.timeToCancel.val) {
@@ -515,6 +544,14 @@ export class BallotCard extends React.Component {
     }
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
+
+    try {
+      await enableWallet(contractsStore.setKeys)
+    } catch (error) {
+      swal('Error', error.message, 'error')
+      return
+    }
+
     if (!contractsStore.votingKey) {
       swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
       return

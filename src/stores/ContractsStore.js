@@ -214,6 +214,12 @@ class ContractsStore {
     }
   }
 
+  @action('Set keys')
+  setKeys = async account => {
+    this.setVotingKey(account)
+    await this.setMiningKey(account)
+  }
+
   @action('Get all keys ballots')
   getAllBallots = async () => {
     let keysNextBallotId = 0,
