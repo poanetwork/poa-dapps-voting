@@ -214,10 +214,17 @@ class ContractsStore {
     }
   }
 
-  @action('Set keys')
-  setKeys = async account => {
+  @action('Update keys')
+  updateKeys = async account => {
+    if (this.votingKey === account) return
+
     this.setVotingKey(account)
     await this.setMiningKey(account)
+
+    console.log('votingKey', this.votingKey)
+    console.log('miningKey', this.miningKey)
+
+    await this.getBallotsLimits()
   }
 
   @action('Get all keys ballots')
@@ -415,6 +422,7 @@ class ContractsStore {
   @action
   async getBallotsLimits() {
     return new Promise(async resolve => {
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>')
       if (this.web3Instance && this.netId) {
         const limitPerValidator = await this.ballotsStorage.instance.methods.getBallotLimitPerValidator().call()
 

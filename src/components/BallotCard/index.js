@@ -378,7 +378,7 @@ export class BallotCard extends React.Component {
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
 
     try {
-      await enableWallet(contractsStore.setKeys)
+      await enableWallet(contractsStore.updateKeys)
     } catch (error) {
       swal('Error', error.message, 'error')
       return
@@ -475,7 +475,7 @@ export class BallotCard extends React.Component {
     const contract = this.getContract(contractsStore, votingType)
 
     try {
-      await enableWallet(contractsStore.setKeys)
+      await enableWallet(contractsStore.updateKeys)
     } catch (error) {
       swal('Error', error.message, 'error')
       return
@@ -546,7 +546,7 @@ export class BallotCard extends React.Component {
     const { push } = this.props.routing
 
     try {
-      await enableWallet(contractsStore.setKeys)
+      await enableWallet(contractsStore.updateKeys)
     } catch (error) {
       swal('Error', error.message, 'error')
       return

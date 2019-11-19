@@ -5,7 +5,7 @@ import messages from './messages'
 
 const defaultNetId = helpers.netIdByBranch(constants.CORE)
 
-export async function enableWallet(setKeys) {
+export async function enableWallet(updateKeys) {
   if (window.ethereum) {
     try {
       await window.ethereum.enable()
@@ -17,12 +17,12 @@ export async function enableWallet(setKeys) {
     const accounts = await web3.eth.getAccounts()
 
     if (accounts[0]) {
-      await setKeys(accounts[0])
+      await updateKeys(accounts[0])
     }
   }
 }
 
-export default async function getWeb3(netId = defaultNetId, onAccountChange) {
+export default async function getWeb3(netId = defaultNetId, updateKeys) {
   let web3 = null
   netId = Number(netId)
 
@@ -55,7 +55,7 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
       const account = obj.selectedAddress
       if (account && account !== currentAccount) {
         currentAccount = account
-        onAccountChange(account)
+        updateKeys(account)
       }
     })
 

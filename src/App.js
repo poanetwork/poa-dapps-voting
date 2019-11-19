@@ -43,7 +43,7 @@ class App extends Component {
     const { commonStore, contractsStore } = this.props
 
     if (!commonStore.loading) {
-      enableWallet(contractsStore.setKeys)
+      enableWallet(contractsStore.updateKeys)
         .then(() => {
           if (!contractsStore.injectedWeb3) {
             swal({

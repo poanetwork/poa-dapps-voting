@@ -255,7 +255,7 @@ export class NewBallot extends React.Component {
     const { push } = this.props.routing
 
     try {
-      await enableWallet(contractsStore.setKeys)
+      await enableWallet(contractsStore.updateKeys)
     } catch (error) {
       swal('Error', error.message, 'error')
       return

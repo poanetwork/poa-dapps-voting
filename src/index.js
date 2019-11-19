@@ -38,7 +38,7 @@ class AppMainRouter extends Component {
 
   initChain = () => {
     const netId = window.localStorage.netId
-    getWeb3(netId, this.onAccountChange)
+    getWeb3(netId, contractsStore.updateKeys)
       .then(async web3Config => {
         await this.initialize(web3Config)
         commonStore.hideLoading()
@@ -108,12 +108,10 @@ class AppMainRouter extends Component {
     this.initChain()
   }
 
-  onAccountChange = account => {
-    this.setKeys(account)
-  }
-
   setKeys = async account => {
-    await contractsStore.setKeys(account)
+    await contractsStore.setMiningKey(account)
+    await contractsStore.setVotingKey(account)
+
     console.log('votingKey', contractsStore.votingKey)
     console.log('miningKey', contractsStore.miningKey)
   }
