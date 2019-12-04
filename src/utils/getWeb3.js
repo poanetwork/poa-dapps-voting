@@ -37,14 +37,16 @@ export default async function getWeb3(netId = defaultNetId, onAccountChange) {
       console.error('Unlock your wallet')
     }
 
-    let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
-    web3.currentProvider.publicConfigStore.on('update', function(obj) {
-      const account = obj.selectedAddress
-      if (account && account !== currentAccount) {
-        currentAccount = account
-        onAccountChange(account)
-      }
-    })
+    if (web3.currentProvider.publicConfigStore) {
+      let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
+      web3.currentProvider.publicConfigStore.on('update', function(obj) {
+        const account = obj.selectedAddress
+        if (account && account !== currentAccount) {
+          currentAccount = account
+          onAccountChange(account)
+        }
+      })
+    }
 
     const web3NetId = await web3.eth.net.getId()
     if (web3NetId === netId) {
