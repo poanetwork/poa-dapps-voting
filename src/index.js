@@ -102,6 +102,7 @@ class AppMainRouter extends Component {
 
   onNetworkChange = e => {
     commonStore.showLoading(getNetworkBranch(e.value))
+    window.localStorage.netId = e.value
     window.sessionStorage.netId = e.value
     contractsStore.resetContracts()
     ballotsStore.reset()
