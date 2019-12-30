@@ -69,6 +69,10 @@ export default class VotingToManageEmissionFunds {
     return this.instance.methods.getBallotInfo(_id).call()
   }
 
+  getMinThresholdOfVoters(_id) {
+    return this.instance.methods.getMinThresholdOfVoters(_id).call()
+  }
+
   getQuorumState(_id) {
     return this.instance.methods.getQuorumState(_id).call()
   }

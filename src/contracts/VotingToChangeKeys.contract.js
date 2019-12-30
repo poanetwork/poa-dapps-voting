@@ -62,6 +62,10 @@ export default class VotingToChangeKeys {
     return this.instance.methods.votingState(_id).call()
   }
 
+  getMinThresholdOfVoters(_id) {
+    return this.instance.methods.getMinThresholdOfVoters(_id).call()
+  }
+
   hasAlreadyVoted(_id, votingKey) {
     return this.instance.methods.hasAlreadyVoted(_id, votingKey).call()
   }

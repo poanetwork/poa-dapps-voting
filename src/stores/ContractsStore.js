@@ -330,12 +330,8 @@ class ContractsStore {
   getCard = async (id, contractType) => {
     let votingState
     try {
-      const data = await Promise.all([
-        this[contractType].getBallotInfo(id, this.votingKey),
-        this[contractType].instance.methods.getMinThresholdOfVoters(id).call()
-      ])
-      votingState = this.fillCardVotingState(data[0], contractType)
-      votingState.threshold = data[1]
+      votingState = await this[contractType].getBallotInfo(id, this.votingKey)
+      votingState = this.fillCardVotingState(votingState, contractType)
     } catch (e) {
       console.log(e.message)
     }
