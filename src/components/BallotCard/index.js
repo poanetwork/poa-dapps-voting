@@ -375,6 +375,27 @@ export class BallotCard extends React.Component {
     this.quorumState = await this.repeatGetProperty(contractsStore, votingType, id, 'getQuorumState', 0)
   }
 
+  networkAndKeyValidation = async () => {
+    const { contractsStore } = this.props
+    try {
+      await enableWallet(contractsStore.updateKeys)
+    } catch (error) {
+      swal('Error', error.message, 'error')
+      return false
+    }
+    if (contractsStore.isEmptyVotingKey) {
+      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
+      return false
+    } else if (!contractsStore.networkMatch) {
+      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
+      return false
+    } else if (!contractsStore.isValidVotingKey) {
+      swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
+      return false
+    }
+    return true
+  }
+
   vote = async ({ choice }) => {
     if (this.isCanceled) {
       swal('Warning!', messages.INVALID_VOTE_MSG, 'warning')
@@ -385,26 +406,12 @@ export class BallotCard extends React.Component {
       return
     }
 
+    if (!(await this.networkAndKeyValidation())) {
+      return
+    }
+
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
-
-    try {
-      await enableWallet(contractsStore.updateKeys)
-    } catch (error) {
-      swal('Error', error.message, 'error')
-      return
-    }
-
     const { push } = this.props.routing
-    if (!contractsStore.votingKey) {
-      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
-      return
-    } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
-      return
-    } else if (!contractsStore.isValidVotingKey) {
-      swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
-      return
-    }
     commonStore.showLoading()
     let isValidVote = await this.isValidVote()
     if (!isValidVote) {
@@ -484,21 +491,7 @@ export class BallotCard extends React.Component {
     const { push } = this.props.routing
     const contract = this.getContract(contractsStore, votingType)
 
-    try {
-      await enableWallet(contractsStore.updateKeys)
-    } catch (error) {
-      swal('Error', error.message, 'error')
-      return
-    }
-
-    if (!contractsStore.votingKey) {
-      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
-      return
-    } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
-      return
-    } else if (!contractsStore.isValidVotingKey) {
-      swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
+    if (!(await this.networkAndKeyValidation())) {
       return
     }
 
@@ -555,23 +548,10 @@ export class BallotCard extends React.Component {
     const { commonStore, contractsStore, id, votingType, ballotsStore, pos } = this.props
     const { push } = this.props.routing
 
-    try {
-      await enableWallet(contractsStore.updateKeys)
-    } catch (error) {
-      swal('Error', error.message, 'error')
+    if (!(await this.networkAndKeyValidation())) {
       return
     }
 
-    if (!contractsStore.votingKey) {
-      swal('Warning!', messages.NO_METAMASK_MSG, 'warning')
-      return
-    } else if (!contractsStore.networkMatch) {
-      swal('Warning!', messages.networkMatchError(contractsStore.netId), 'warning')
-      return
-    } else if (!contractsStore.isValidVotingKey) {
-      swal('Warning!', messages.invalidVotingKeyMsg(contractsStore.votingKey), 'warning')
-      return
-    }
     if (this.isFinalized) {
       swal('Warning!', messages.ALREADY_FINALIZED_MSG, 'warning')
       return

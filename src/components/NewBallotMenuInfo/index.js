@@ -8,11 +8,11 @@ export const NewBallotMenuInfo = ({ minThreshold, validatorsLength, keys, valida
         <li className="mn-NewBallotMenuInfo_ListItem">
           Minimum {minThreshold} from {validatorsLength} validators are required to pass the&nbsp; proposal
         </li>
-        <li className="mn-NewBallotMenuInfo_ListItem">You can create {keys} ballot(s) for keys</li>
+        <li className="mn-NewBallotMenuInfo_ListItem">You can create {Number(keys)} ballot(s) for keys</li>
         <li className="mn-NewBallotMenuInfo_ListItem">
-          You can create {validatorLimitsMinThreshold} ballot(s) for consensus
+          You can create {Number(validatorLimitsMinThreshold)} ballot(s) for consensus
         </li>
-        <li className="mn-NewBallotMenuInfo_ListItem">You can create {proxy} ballot(s) for proxy</li>
+        <li className="mn-NewBallotMenuInfo_ListItem">You can create {Number(proxy)} ballot(s) for proxy</li>
       </ul>
     </div>
   )

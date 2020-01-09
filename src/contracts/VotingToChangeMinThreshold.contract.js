@@ -82,7 +82,7 @@ export default class VotingToChangeMinThreshold {
     return _limitPerValidator - _activeBallots
   }
 
-  async minBallotDuration() {
-    return await this.instance.methods.minBallotDuration().call()
+  minBallotDuration() {
+    return this.instance.methods.minBallotDuration().call()
   }
 }

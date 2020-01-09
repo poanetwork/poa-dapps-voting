@@ -10,15 +10,14 @@ export async function enableWallet(updateKeys) {
     try {
       await window.ethereum.enable()
     } catch (e) {
+      await updateKeys(null)
       throw Error(messages.USER_DENIED_ACCOUNT_ACCESS)
     }
 
     const web3 = new Web3(window.ethereum)
     const accounts = await web3.eth.getAccounts()
 
-    if (accounts[0]) {
-      await updateKeys(accounts[0])
-    }
+    await updateKeys(accounts[0])
   }
 }
 
@@ -76,10 +75,10 @@ export default async function getWeb3(netId, updateKeys) {
     }
 
     if (web3.currentProvider.publicConfigStore) {
-      let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
+      let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : null
       web3.currentProvider.publicConfigStore.on('update', function(obj) {
         const account = obj.selectedAddress
-        if (account && account !== currentAccount) {
+        if (account !== currentAccount) {
           currentAccount = account
           updateKeys(account)
         }

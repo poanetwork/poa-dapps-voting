@@ -57,7 +57,7 @@ class App extends Component {
               html: messages.networkMatchError(contractsStore.netId),
               type: 'warning'
             })
-          } else if (contractsStore.votingKey && !contractsStore.isValidVotingKey) {
+          } else if (!contractsStore.isValidVotingKey) {
             swal({
               title: 'Warning!',
               html: messages.invalidVotingKeyMsg(contractsStore.votingKey),

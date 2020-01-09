@@ -45,7 +45,7 @@ export class BallotKeysMetadata extends React.Component {
           <FormSelect
             disabled={ballotStore.isNewValidatorPersonalData}
             hint="Mining key address of validator to vote for.<br />Example: 0xc70760D23557A4FDE612C0bE63b26EBD023C51Ee."
-            id="mining-key"
+            id="mining-key-select"
             name="form-field-name"
             networkBranch={networkBranch}
             onChange={ballotStore.setMiningKey}
