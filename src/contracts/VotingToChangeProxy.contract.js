@@ -78,7 +78,7 @@ export default class VotingToChangeProxy {
     return _limitPerValidator - _activeBallots
   }
 
-  async minBallotDuration() {
-    return await this.instance.methods.minBallotDuration().call()
+  minBallotDuration() {
+    return this.instance.methods.minBallotDuration().call()
   }
 }

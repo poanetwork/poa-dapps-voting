@@ -6,6 +6,7 @@ import { constants } from './utils/constants'
 import { getNetworkBranch } from './utils/utils'
 import { inject, observer } from 'mobx-react'
 import messages from './utils/messages'
+import { enableWallet } from './utils/getWeb3'
 
 import './assets/stylesheets/index.css'
 
@@ -42,28 +43,31 @@ class App extends Component {
     const { commonStore, contractsStore } = this.props
 
     if (!commonStore.loading) {
-      if (!contractsStore.injectedWeb3) {
-        commonStore.hideLoading()
-        swal({
-          title: 'Error',
-          html: messages.NO_METAMASK_MSG,
-          type: 'error'
+      enableWallet(contractsStore.updateKeys)
+        .then(() => {
+          if (!contractsStore.injectedWeb3) {
+            swal({
+              title: 'Error',
+              html: messages.NO_METAMASK_MSG,
+              type: 'error'
+            })
+          } else if (!contractsStore.networkMatch) {
+            swal({
+              title: 'Warning!',
+              html: messages.networkMatchError(contractsStore.netId),
+              type: 'warning'
+            })
+          } else if (!contractsStore.isValidVotingKey) {
+            swal({
+              title: 'Warning!',
+              html: messages.invalidVotingKeyMsg(contractsStore.votingKey),
+              type: 'warning'
+            })
+          }
         })
-      } else if (!contractsStore.networkMatch) {
-        commonStore.hideLoading()
-        swal({
-          title: 'Warning!',
-          html: messages.networkMatchError(contractsStore.netId),
-          type: 'warning'
+        .catch(error => {
+          swal('Error', error.message, 'error')
         })
-      } else if (contractsStore.votingKey && !contractsStore.isValidVotingKey) {
-        commonStore.hideLoading()
-        swal({
-          title: 'Warning!',
-          html: messages.invalidVotingKeyMsg(contractsStore.votingKey),
-          type: 'warning'
-        })
-      }
     }
     return <NewBallot networkBranch={this.getVotingNetworkBranch()} />
   }

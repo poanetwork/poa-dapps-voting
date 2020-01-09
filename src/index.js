@@ -38,7 +38,7 @@ class AppMainRouter extends Component {
 
   initChain = () => {
     const netId = window.sessionStorage.netId
-    getWeb3(netId, this.onAccountChange)
+    getWeb3(netId, contractsStore.updateKeys)
       .then(async web3Config => {
         await this.initialize(web3Config)
         commonStore.hideLoading()
@@ -88,13 +88,9 @@ class AppMainRouter extends Component {
 
     await Promise.all(promises)
 
-    await this.setKeys(web3Config.defaultAccount)
+    await contractsStore.updateKeys(web3Config.defaultAccount)
 
-    contractsStore.getKeysBallotThreshold()
-    contractsStore.getProxyBallotThreshold()
-    contractsStore.getBallotCancelingThreshold()
-
-    await contractsStore.getBallotsLimits()
+    await contractsStore.getMinBallotDurationsAndThresholds()
 
     await contractsStore.getAllValidatorMetadata()
     await contractsStore.getAllBallots()
@@ -107,18 +103,6 @@ class AppMainRouter extends Component {
     contractsStore.resetContracts()
     ballotsStore.reset()
     this.initChain()
-  }
-
-  onAccountChange = account => {
-    this.setKeys(account)
-  }
-
-  setKeys = async account => {
-    await contractsStore.setMiningKey(account)
-    await contractsStore.setVotingKey(account)
-
-    console.log('votingKey', contractsStore.votingKey)
-    console.log('miningKey', contractsStore.miningKey)
   }
 
   render() {
