@@ -22,9 +22,8 @@ export async function enableWallet(updateKeys) {
   }
 }
 
-export default async function getWeb3(netId = defaultNetId, updateKeys) {
+export default async function getWeb3(netId, updateKeys) {
   let web3 = null
-  netId = Number(netId)
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (window.ethereum) {
@@ -35,6 +34,32 @@ export default async function getWeb3(netId = defaultNetId, updateKeys) {
     web3 = new Web3(window.web3.currentProvider)
     console.log('Injected web3 detected.')
   }
+
+  if (!netId) {
+    // Load for the first time in the current browser's session
+    if (web3) {
+      // MetaMask (or another plugin) is injected
+      netId = await web3.eth.net.getId()
+      if (!(netId in constants.NETWORKS)) {
+        // If plugin's netId is unsupported, try to use
+        // the previously chosen netId
+        netId = window.localStorage.netId
+      }
+    } else {
+      // MetaMask (or another plugin) is not injected,
+      // so try to use the previously chosen netId
+      netId = window.localStorage.netId
+    }
+    if (!(netId in constants.NETWORKS)) {
+      // If plugin's netId and/or previously chosen netId are not supported,
+      // fallback to default netId
+      netId = defaultNetId
+    }
+    window.localStorage.netId = netId
+    window.sessionStorage.netId = netId
+  }
+
+  netId = Number(netId)
 
   const network = constants.NETWORKS[netId]
   const injectedWeb3 = web3 !== null
@@ -50,14 +75,16 @@ export default async function getWeb3(netId = defaultNetId, updateKeys) {
       console.error('Unlock your wallet')
     }
 
-    let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
-    web3.currentProvider.publicConfigStore.on('update', function(obj) {
-      const account = obj.selectedAddress
-      if (account && account !== currentAccount) {
-        currentAccount = account
-        updateKeys(account)
-      }
-    })
+    if (web3.currentProvider.publicConfigStore) {
+      let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : ''
+      web3.currentProvider.publicConfigStore.on('update', function(obj) {
+        const account = obj.selectedAddress
+        if (account && account !== currentAccount) {
+          currentAccount = account
+          updateKeys(account)
+        }
+      })
+    }
 
     const web3NetId = await web3.eth.net.getId()
     if (web3NetId === netId) {

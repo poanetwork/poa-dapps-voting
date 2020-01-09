@@ -37,7 +37,7 @@ class AppMainRouter extends Component {
   }
 
   initChain = () => {
-    const netId = window.localStorage.netId
+    const netId = window.sessionStorage.netId
     getWeb3(netId, contractsStore.updateKeys)
       .then(async web3Config => {
         await this.initialize(web3Config)
@@ -103,6 +103,7 @@ class AppMainRouter extends Component {
   onNetworkChange = e => {
     commonStore.showLoading(getNetworkBranch(e.value))
     window.localStorage.netId = e.value
+    window.sessionStorage.netId = e.value
     contractsStore.resetContracts()
     ballotsStore.reset()
     this.initChain()

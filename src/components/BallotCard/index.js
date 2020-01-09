@@ -60,6 +60,7 @@ export class BallotCard extends React.Component {
   @observable memo
   @observable quorumState
   @observable minBallotDuration
+  @observable minThreshold
 
   @computed
   get cancelOrFinalizeButtonDisplayName() {
@@ -303,6 +304,9 @@ export class BallotCard extends React.Component {
       this.getHasAlreadyVoted()
     }
 
+    // minThreshold
+    this.getMinThreshold()
+
     if (votingType === 'votingToManageEmissionFunds') {
       this.getQuorumState()
     }
@@ -316,6 +320,12 @@ export class BallotCard extends React.Component {
     hours = hours < 10 ? '0' + hours : hours
     let formattedMs = hours + moment.utc(ms).format(':mm:ss')
     return formattedMs
+  }
+
+  @action('ballot min threshold of voters')
+  getMinThreshold = async () => {
+    const { contractsStore, id, votingType } = this.props
+    this.minThreshold = await this.getContract(contractsStore, votingType).getMinThresholdOfVoters(id)
   }
 
   @action('validator has already voted')
@@ -647,21 +657,6 @@ export class BallotCard extends React.Component {
     }
   }
 
-  getThreshold(contractsStore, votingType) {
-    switch (votingType) {
-      case 'votingToChangeKeys':
-        return contractsStore.keysBallotThreshold
-      case 'votingToChangeMinThreshold':
-        return contractsStore.minThresholdBallotThreshold
-      case 'votingToChangeProxy':
-        return contractsStore.proxyBallotThreshold
-      case 'votingToManageEmissionFunds':
-        return contractsStore.emissionFundsBallotThreshold
-      default:
-        return contractsStore.keysBallotThreshold
-    }
-  }
-
   getMinBallotDuration(contractsStore, votingType) {
     switch (votingType) {
       case 'votingToChangeKeys':
@@ -719,10 +714,9 @@ export class BallotCard extends React.Component {
   }
 
   render() {
-    let { contractsStore, votingType, children } = this.props
+    let { votingType, children } = this.props
     let votes
 
-    const threshold = this.getThreshold(contractsStore, votingType)
     const networkBranch = this.getVotingNetworkBranch()
 
     if (votingType === 'votingToManageEmissionFunds') {
@@ -781,12 +775,7 @@ export class BallotCard extends React.Component {
           />
         </div>
         <Votes networkBranch={networkBranch} votes={votes} />
-        <BallotInfoContainer
-          memo={this.memo}
-          networkBranch={networkBranch}
-          threshold={threshold}
-          validatorsLength={contractsStore.validatorsLength}
-        />
+        <BallotInfoContainer memo={this.memo} networkBranch={networkBranch} threshold={this.minThreshold} />
         <BallotFooter
           buttonState={this.cancelOrFinalizeButtonState}
           buttonText={this.cancelOrFinalizeButtonDisplayName}
