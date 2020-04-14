@@ -53,7 +53,6 @@ constants.navigationData = [
 
 constants.SOKOL = 'sokol'
 constants.CORE = 'core'
-constants.DAI = 'dai'
 constants.KOVAN = 'kovan'
 
 constants.NETWORKS = {
@@ -77,13 +76,6 @@ constants.NETWORKS = {
     RPC: 'https://core.poa.network',
     BRANCH: constants.CORE,
     SORTORDER: 1
-  },
-  '100': {
-    NAME: 'xDai',
-    FULLNAME: 'xDai Stable Chain',
-    RPC: 'https://dai.poa.network',
-    BRANCH: constants.DAI,
-    SORTORDER: 2
   }
 }
 

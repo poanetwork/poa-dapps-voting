@@ -3,9 +3,6 @@ import messages from '../utils/messages'
 import swal from 'sweetalert2'
 
 function addressesURL(branch) {
-  if (branch === constants.DAI) {
-    branch = 'ce2c77256f0d37fc48baa9b6cab806261d034785'
-  }
   const URL = `https://raw.githubusercontent.com/${constants.organization}/${constants.repoName}/${branch}/${
     constants.addressesSourceFile
   }`
@@ -13,9 +10,6 @@ function addressesURL(branch) {
 }
 
 function ABIURL(branch, contract) {
-  if (branch === constants.DAI) {
-    branch = 'ce2c77256f0d37fc48baa9b6cab806261d034785'
-  }
   const URL = `https://raw.githubusercontent.com/${constants.organization}/${constants.repoName}/${branch}/abis/${
     constants.ABIsSources[contract]
   }`
