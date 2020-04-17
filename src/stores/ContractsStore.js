@@ -242,12 +242,13 @@ class ContractsStore {
       console.log(e.message)
     }
 
-    const allKeysPromise = this.getCards(keysNextBallotId, 'votingToChangeKeys')
-    const allMinThresholdPromise = this.getCards(minThresholdNextBallotId, 'votingToChangeMinThreshold')
-    const allProxyPromise = this.getCards(proxyNextBallotId, 'votingToChangeProxy')
-    const allEmissionFundsPromise = this.getCards(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
-
-    await Promise.all([allKeysPromise, allMinThresholdPromise, allProxyPromise, allEmissionFundsPromise])
+    const [keysCards, minTresholdCards, proxyCards, emissionFundsCards] = await Promise.all([
+      this.getCards(keysNextBallotId, 'votingToChangeKeys'),
+      this.getCards(minThresholdNextBallotId, 'votingToChangeMinThreshold'),
+      this.getCards(proxyNextBallotId, 'votingToChangeProxy'),
+      this.getCards(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
+    ])
+    ballotsStore.ballotCards = [...keysCards, ...minTresholdCards, ...proxyCards, ...emissionFundsCards]
 
     const allBallotsIDsLength =
       keysNextBallotId + minThresholdNextBallotId + proxyNextBallotId + emissionFundsNextBallotId
@@ -350,7 +351,7 @@ class ContractsStore {
           <BallotKeysCard
             id={id}
             type={ballotStore.BallotType.keys}
-            key={ballotsStore.ballotCards.length}
+            key={contractType + id}
             pos={ballotsStore.ballotCards.length}
             votingState={votingState}
           />
@@ -361,7 +362,7 @@ class ContractsStore {
           <BallotMinThresholdCard
             id={id}
             type={ballotStore.BallotType.minThreshold}
-            key={ballotsStore.ballotCards.length}
+            key={contractType + id}
             pos={ballotsStore.ballotCards.length}
             votingState={votingState}
           />
@@ -372,7 +373,7 @@ class ContractsStore {
           <BallotProxyCard
             id={id}
             type={ballotStore.BallotType.proxy}
-            key={ballotsStore.ballotCards.length}
+            key={contractType + id}
             pos={ballotsStore.ballotCards.length}
             votingState={votingState}
           />
@@ -383,7 +384,7 @@ class ContractsStore {
           <BallotEmissionFundsCard
             id={id}
             type={ballotStore.BallotType.emissionFunds}
-            key={ballotsStore.ballotCards.length}
+            key={contractType + id}
             pos={ballotsStore.ballotCards.length}
             votingState={votingState}
           />
@@ -397,9 +398,10 @@ class ContractsStore {
   }
 
   getCards = async (nextBallotId, contractType) => {
-    for (let id = nextBallotId - 1; id >= 0; id--) {
-      ballotsStore.ballotCards.push(await this.getCard(id, contractType))
-    }
+    const promises = Array(nextBallotId)
+      .fill(undefined)
+      .map((item, index) => this.getCard(index, contractType))
+    return Promise.all(promises)
   }
 
   @action('Get all keys next ballot ids')
