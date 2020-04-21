@@ -242,14 +242,14 @@ class ContractsStore {
       console.log(e.message)
     }
 
-    const [keysBallots, minTresholdBallots, proxyBallots, emissionFundsBallots] = await Promise.all([
+    const [keysBallots, minThresholdBallots, proxyBallots, emissionFundsBallots] = await Promise.all([
       this.getBallots(keysNextBallotId, 'votingToChangeKeys'),
       this.getBallots(minThresholdNextBallotId, 'votingToChangeMinThreshold'),
       this.getBallots(proxyNextBallotId, 'votingToChangeProxy'),
       this.getBallots(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
     ])
 
-    const ballots = [...keysBallots, ...minTresholdBallots, ...proxyBallots, ...emissionFundsBallots]
+    const ballots = [...keysBallots, ...minThresholdBallots, ...proxyBallots, ...emissionFundsBallots]
     ballotsStore.ballotCards = this.mapBallotsToCards(ballots)
 
     const finalizedOrCancelled = item => item.isFinalized || item.isCanceled
@@ -257,7 +257,7 @@ class ContractsStore {
       `ballots-${this.netId}`,
       JSON.stringify({
         votingToChangeKeys: keysBallots.filter(finalizedOrCancelled),
-        votingToChangeMinThreshold: minTresholdBallots.filter(finalizedOrCancelled),
+        votingToChangeMinThreshold: minThresholdBallots.filter(finalizedOrCancelled),
         votingToChangeProxy: proxyBallots.filter(finalizedOrCancelled),
         votingToManageEmissionFunds: emissionFundsBallots.filter(finalizedOrCancelled)
       })
@@ -348,16 +348,16 @@ class ContractsStore {
     return votingState
   }
 
-  mapBallotsToCards = cards => {
-    return cards.map(card => {
+  mapBallotsToCards = ballots => {
+    return ballots.map((ballot, pos) => {
       let component
       let params = {
-        id: card.id,
-        key: card.contractType + card.id,
-        pos: ballotsStore.ballotCards.length,
-        votingState: card
+        id: ballot.id,
+        key: ballot.type + ballot.id,
+        pos,
+        votingState: ballot
       }
-      switch (card.contractType) {
+      switch (ballot.type) {
         case 'votingToChangeKeys':
           component = <BallotKeysCard {...params} type={ballotStore.BallotType.keys} />
           break
@@ -382,7 +382,7 @@ class ContractsStore {
     try {
       votingState = await this[contractType].getBallotInfo(id, this.votingKey)
       votingState = this.fillCardVotingState(votingState, contractType)
-      votingState.contractType = contractType
+      votingState.type = contractType
       votingState.id = id
     } catch (e) {
       console.log(e.message)
