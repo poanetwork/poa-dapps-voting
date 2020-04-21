@@ -242,12 +242,26 @@ class ContractsStore {
       console.log(e.message)
     }
 
-    const allKeysPromise = this.getCards(keysNextBallotId, 'votingToChangeKeys')
-    const allMinThresholdPromise = this.getCards(minThresholdNextBallotId, 'votingToChangeMinThreshold')
-    const allProxyPromise = this.getCards(proxyNextBallotId, 'votingToChangeProxy')
-    const allEmissionFundsPromise = this.getCards(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
+    const [keysBallots, minThresholdBallots, proxyBallots, emissionFundsBallots] = await Promise.all([
+      this.getBallots(keysNextBallotId, 'votingToChangeKeys'),
+      this.getBallots(minThresholdNextBallotId, 'votingToChangeMinThreshold'),
+      this.getBallots(proxyNextBallotId, 'votingToChangeProxy'),
+      this.getBallots(emissionFundsNextBallotId, 'votingToManageEmissionFunds')
+    ])
 
-    await Promise.all([allKeysPromise, allMinThresholdPromise, allProxyPromise, allEmissionFundsPromise])
+    const ballots = [...keysBallots, ...minThresholdBallots, ...proxyBallots, ...emissionFundsBallots]
+    ballotsStore.ballotCards = this.mapBallotsToCards(ballots)
+
+    const finalizedOrCancelled = item => item.isFinalized || item.isCanceled
+    window.localStorage.setItem(
+      `ballots-${this.netId}`,
+      JSON.stringify({
+        votingToChangeKeys: keysBallots.filter(finalizedOrCancelled),
+        votingToChangeMinThreshold: minThresholdBallots.filter(finalizedOrCancelled),
+        votingToChangeProxy: proxyBallots.filter(finalizedOrCancelled),
+        votingToManageEmissionFunds: emissionFundsBallots.filter(finalizedOrCancelled)
+      })
+    )
 
     const allBallotsIDsLength =
       keysNextBallotId + minThresholdNextBallotId + proxyNextBallotId + emissionFundsNextBallotId
@@ -334,72 +348,59 @@ class ContractsStore {
     return votingState
   }
 
-  getCard = async (id, contractType) => {
+  mapBallotsToCards = ballots => {
+    return ballots.map((ballot, pos) => {
+      let component
+      let params = {
+        id: ballot.id,
+        key: ballot.type + ballot.id,
+        pos,
+        votingState: ballot
+      }
+      switch (ballot.type) {
+        case 'votingToChangeKeys':
+          component = <BallotKeysCard {...params} type={ballotStore.BallotType.keys} />
+          break
+        case 'votingToChangeMinThreshold':
+          component = <BallotMinThresholdCard {...params} type={ballotStore.BallotType.minThreshold} />
+          break
+        case 'votingToChangeProxy':
+          component = <BallotProxyCard {...params} type={ballotStore.BallotType.proxy} />
+          break
+        case 'votingToManageEmissionFunds':
+          component = <BallotEmissionFundsCard {...params} type={ballotStore.BallotType.emissionFunds} />
+          break
+        default:
+          break
+      }
+      return component
+    })
+  }
+
+  getBallot = async (id, contractType) => {
     let votingState
     try {
       votingState = await this[contractType].getBallotInfo(id, this.votingKey)
       votingState = this.fillCardVotingState(votingState, contractType)
+      votingState.type = contractType
+      votingState.id = id
     } catch (e) {
       console.log(e.message)
     }
-
-    let card
-    switch (contractType) {
-      case 'votingToChangeKeys':
-        card = (
-          <BallotKeysCard
-            id={id}
-            type={ballotStore.BallotType.keys}
-            key={ballotsStore.ballotCards.length}
-            pos={ballotsStore.ballotCards.length}
-            votingState={votingState}
-          />
-        )
-        break
-      case 'votingToChangeMinThreshold':
-        card = (
-          <BallotMinThresholdCard
-            id={id}
-            type={ballotStore.BallotType.minThreshold}
-            key={ballotsStore.ballotCards.length}
-            pos={ballotsStore.ballotCards.length}
-            votingState={votingState}
-          />
-        )
-        break
-      case 'votingToChangeProxy':
-        card = (
-          <BallotProxyCard
-            id={id}
-            type={ballotStore.BallotType.proxy}
-            key={ballotsStore.ballotCards.length}
-            pos={ballotsStore.ballotCards.length}
-            votingState={votingState}
-          />
-        )
-        break
-      case 'votingToManageEmissionFunds':
-        card = (
-          <BallotEmissionFundsCard
-            id={id}
-            type={ballotStore.BallotType.emissionFunds}
-            key={ballotsStore.ballotCards.length}
-            pos={ballotsStore.ballotCards.length}
-            votingState={votingState}
-          />
-        )
-        break
-      default:
-        break
-    }
-
-    return card
+    return votingState
   }
 
-  getCards = async (nextBallotId, contractType) => {
-    for (let id = nextBallotId - 1; id >= 0; id--) {
-      ballotsStore.ballotCards.push(await this.getCard(id, contractType))
-    }
+  getBallots = async (nextBallotId, contractType) => {
+    const ballotsObject = JSON.parse(window.localStorage.getItem(`ballots-${this.netId}`) || '{}')
+    const existingBallots = ballotsObject[contractType] || []
+    const existingBallotsIds = existingBallots.map(item => item.id)
+    const allBallotsIds = Array(nextBallotId)
+      .fill(undefined)
+      .map((item, index) => index)
+    const newBallotsIds = allBallotsIds.filter(item => !existingBallotsIds.includes(item))
+    const promises = newBallotsIds.map(id => this.getBallot(id, contractType))
+    const newBallots = await Promise.all(promises)
+    return existingBallots.concat(newBallots)
   }
 
   @action('Get all keys next ballot ids')
