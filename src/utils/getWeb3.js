@@ -18,9 +18,8 @@ async function getAccounts(web3) {
 async function getNetId(web3) {
   let netId
   if (window.ethereum) {
-    netId = web3.utils.isHex(window.ethereum.chainId)
-      ? web3.utils.hexToNumber(window.ethereum.chainId)
-      : window.ethereum.chainId
+    const { chainId } = window.ethereum
+    netId = web3.utils.isHex(chainId) ? web3.utils.hexToNumber(chainId) : chainId
   } else {
     netId = await web3.eth.net.getId()
   }
