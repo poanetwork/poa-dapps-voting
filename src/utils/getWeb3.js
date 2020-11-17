@@ -49,9 +49,11 @@ export default async function getWeb3(netId, updateKeys) {
   if (window.ethereum) {
     web3 = new Web3(window.ethereum)
     console.log('Injected web3 detected.')
-    window.ethereum.on('chainChanged', () => {
-      window.location.reload()
-    })
+    if (!window.ethereum.autoRefreshOnNetworkChange) {
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload()
+      })
+    }
   } else if (window.web3) {
     web3 = new Web3(window.web3.currentProvider)
     console.log('Injected web3 detected.')
