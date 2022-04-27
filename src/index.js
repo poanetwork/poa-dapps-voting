@@ -17,6 +17,7 @@ import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import { constants } from './utils/constants'
 import { getContractsAddresses } from './contracts/addresses'
 import { getNetworkBranch } from './utils/utils'
+import messages from './utils/messages'
 
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
@@ -42,6 +43,15 @@ class AppMainRouter extends Component {
       .then(async web3Config => {
         await this.initialize(web3Config)
         commonStore.hideLoading()
+        if (web3Config.netId === 99) {
+          // if it's POA Core network
+          const currentTimestamp = Math.floor(Date.now() / 1000)
+          swal({
+            title: 'Attention',
+            html: generateElement(currentTimestamp < 1651698000 ? messages.poaGnoMerging : messages.poaGnoMerged),
+            type: 'warning'
+          })
+        }
       })
       .catch(error => {
         console.error(error.message)

@@ -3,7 +3,6 @@
 ## Base supported networks
 
 - Core POA network (RPC endpoint: `https://core.poa.network`)
-- xDai chain (RPC endpoint: `https://dai.poa.network`)
 - Sokol testnet (RPC endpoint: `https://sokol.poa.network`)
 - Kovan testnet (RPC endpoint: `https://kovan.infura.io/`)
 
@@ -24,7 +23,7 @@ Please check related posts in wiki [Governance Overview](https://github.com/poan
 ## Configuration
 Governance DApp is configured with [POA Network governance contracts](https://github.com/poanetwork/poa-network-consensus-contracts)
 
-There are contracts' addresses for [Sokol](https://github.com/poanetwork/poa-chain-spec/blob/sokol/contracts.json), [Core](https://github.com/poanetwork/poa-chain-spec/blob/core/contracts.json), [xDai](https://github.com/poanetwork/poa-chain-spec/blob/dai/contracts.json), and [Kovan](https://github.com/poanetwork/poa-chain-spec/blob/kovan/contracts.json).
+There are contracts' addresses for [Sokol](https://github.com/poanetwork/poa-chain-spec/blob/sokol/contracts.json), [Core](https://github.com/poanetwork/poa-chain-spec/blob/core/contracts.json), and [Kovan](https://github.com/poanetwork/poa-chain-spec/blob/kovan/contracts.json).
 
 
 ## Building from source
